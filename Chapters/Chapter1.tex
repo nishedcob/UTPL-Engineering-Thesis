@@ -18,64 +18,75 @@
 
 %----------------------------------------------------------------------------------------
 
-Hoy en día se encuentra una necesidad creciente para programadores, informáticos y personas que pueden leer y entender codigo debido a una tendencia a tratar de siempre automatizar más tareas humanas con la tecnología. Actualmente la Universidad Técnica Particular de Loja cuenta con metodos clasicos y manuales para enseñar y calificar codigo que estudiantes programan lo cual ni es beneficioso para los docentes, quienes pierden mucho tiempo realizando tareas que se podría realizar la tecnologia, ni estudiantes quienes tengan menos atención de sus docentes debido a que tienen mucho codigo que calificar.
-
-Frente eso, se propone un sistema para editar código en línea que a su vez integra LMS externos (para autenticación y notas), un servidor de control de versiones externo (para la persistencia de código), y un servicio web de ejecución de código en línea de una forma segura, eficaz y eficiente (para dar un ambiente de ejecución y pruebas tanto para los usuarios del sistema como para calificar de una forma automática). Para dar mayor contexto al problema frente el cual se enfrenta en el curso de este trabajo, a continuación se explica la problemática del mismo.
+Hoy en día se encuentra una necesidad creciente para programadores, informáticos y personas que pueden leer y entender codigo debido a una tendencia a tratar de siempre automatizar a un mayor grado las tareas humanas con la tecnología. Actualmente la Universidad Técnica Particular de Loja cuenta con métodos clásicos y manuales para enseñar y calificar codigo que estudiantes programan lo cual no es beneficioso para los docentes, quienes pierden mucho tiempo realizando tareas que se podría realizar de forma automática, ni estudiantes quienes tengan menos atención de sus docentes debido a que tienen mucho codigo que calificar.
+ 
+Dentro del mercado actual, existen varias sistemas que permiten escribir, ejecutar y probar código en línea. Repl.it se integra con sistemas que disponen el protocolo de integración entre sistemas de aprendizaje LTI [Repl.it] y puede calificar codigo de estudiantes en base a pruebas unitarias pero el mismo tiene un alto coste que no se escala bien y no está orientando tanto al aprendizaje o colaboración si no a evaluación [Lopez]. Io.livecode.ch vuelta es un sistema libre que utiliza contenedores de Docker para permitir la ejecución de código en línea, pero el problema de este sistema es que solo está orientado a enseñanza de programación, no a realizar pruebas en línea y además no implementa nada de seguridad para proteger el servidor contra usuarios maliciosos [io.livecode.ch]. Cloud9 IDE es otra herramienta popular para programar en linea ya que el mismo integra máquinas virtuales de Ubuntu con el mismo para permitir hacer pruebas en tiempo real [Cloud9IDE], pero el mismo tampoco es factible por su falta de interoperabilidad con LTI y falta de enfoque ni en enseñanza ni en evaluación y calificación.
+ 
+Como cualquier otro tipo de institución con fines comerciales, las universidades y otras tipos de instituciones educativas siempre deben estar buscando la manera en que pueden mantener su competitividad para dar la mejor educación posible al menor costo. La tecnología de hoy en día ha alcanzado una madurez en donde puede apoyar en temas de automatizar algunos procesos dentro de la enseñanza, evaluación y calificación de estudiantes y de la misma forma liberar el tiempo de professores para que puedan ayudar a aquellos estudiantes realmente necesitan un poco de ayuda adicional.
+ 
+Frente este problema, se propone un sistema para editar código en línea que a su vez integra LMS externos (para autenticación y notas), un servidor de control de versiones externo (para la persistencia de código), y un servicio web de ejecución de código en línea de una forma segura, eficaz y eficiente (para dar un ambiente de ejecución y pruebas tanto para los usuarios del sistema como para calificar de una forma automática). A continuación se presenta la problemática para definir el contexto del tema frente el cual se espera resolver dentro de este trabajo de titulación.
 
 \section{Problematica}
-Dentro de la universidad, existe la necesidad de la carrera de contar con una mejor forma de enseñar y evaluar conocimientos de programación en los estudiantes de las titulaciones de Sistemas y Electrónica, especialmente quienes estudian a distancia. Para solucionar este problema, existen sistemas alternativos que se analizan en el capítulo 2, pero estos resultan demasiado costosos para su implementación completa con los recursos actualmente disponibles.
+Dentro de la universidad, existe la necesidad de contar con una mejor forma de enseñar y evaluar conocimientos de programación en los estudiantes de las titulaciones de Sistemas Informáticos y Computación y Electrónica, especialmente quienes estudian a distancia. Para solucionar este problema, existen sistemas alternativos que se analizan en el capítulo 2, pero estos resultan demasiado costosos para su implementación completa con los recursos actualmente disponibles.
+ 
+Se considera que cualquier sistema implementada como solución debe ser capaz de captar información acerca de su propio uso con un fin de ayudar con la administración del mismo, debe guardar de alguna manera segura y confiable codigo escrito dentro del mismo y debe proporcionar de las herramientas que requieren estudiantes y sus profesores para desarrollar, probar y calificar de manera eficaz, segura y eficiente codigo escrito en linea. Además como plataforma en línea se considera que se podría aprovechar para temas de colaboración como programación en pares y otras técnicas que apliquen los equipos de desarrollo para cumplir con sus responsabilidades de una forma paralela.
 
-Para llevar a cabo exitosamente este proyecto de tesis se considera necesario un perfil con conocimientos avanzados de Programacion, Analisis de Sistemas, Bases de Datos, Gestión de Entregas de Software y Arquitectura de Software. En adición, tomando en consideración que se debe tener conocimientos auxiliares en Gestión de Proyectos, Inteligencia Artificial y Redes. Con el mismo fin de solucionar el problema de la manera más organizada posible, a continuación se da la organización de este documento.
+\section{Metodología}
+La fase de investigación se consiste en realizar un breve recopilación de que hay dentro del entorno de despliegue para realizar un estudio del mismo. Además se realiza un estudio de aquellas tecnologías se utiliza dentro de la solución planteada. Para la investigación de todos los anteriores, se basa solo en fuentes confiables de los cuales muchas veces son fuentes académicos o comerciales con un fin de explicar alguna tecnología para vender la misma.
+ 
+Después de la fase de investigación, donde se formula buenas bases y entendimiento del contexto del ambiente en que se encuentra se empieza una fase de análisis el cual se basa en una documento de visión que desglose las necesidades existentes para el sistema seguido por un ERS o especificación de requerimientos que demuestra de forma más exacta que debe tener capacidad de hacer el sistema.
+ 
+Una vez que se tiene entendido qué capacidades debe tener el sistema, se procede a una fase de diseño en donde se realiza diagramas para definir la arquitectura, despliegue e interacción que el sistema tendrá con sus usuarios.
+ 
+Con la definición de los requerimientos y el diseño del sistema como tal, lo que sigue es una fase de desarrolla el cual se plantea llevar bajo una metodología de desarrollo iterativo incremental marcado por prototipos que se revisan de forma contínua con los stakeholders principales del proyecto. De esta forma se puede mantener un poco de agilidad en el desarrollo y de esta manera, desarrollar un producto que cumple con las necesidades de los usuarios mientras que se mantiene dentro de los límites de tiempo y recursos preestablecidos.
+ 
+Además se propone tener solo iteraciones (basados en entregables) que duren máximo un mes, de lo cual solo se lo propone para los dos entregables más grandes; el subsistema de ejecución de código por su complejidad y el capítulo seis que se trata del despliegue de la aplicación final. Todos los demás iteraciones son de dos semanas para tratar de mantener el proyecto en un estado fluido de actividad y entrega de entregables de forma contínua.
+ 
+Las pruebas se llevaran igual en fases donde primero en una prueba alfa se integra con sistemas reales para probar temas de integración. En base a los resultados de estas pruebas se realiza recomendaciones y mejoras previo a la próxima fase de pruebas que son constituidos por unas pruebas beta donde se prueba la aplicación en un entorno real con usuarios finales, tanto estudiantes como profesores para que puedan dar retroalimentación previo al despliegue de una versión final.
+ 
+Finalmente se trabaja juntamente con los que serán encargados de mantener la aplicación para el despliegue del mismo. Esto se lleva en fases en donde se levantan primero las dependencias necesarias como bases de datos y servicios externos entre otros previo al levantamiento y configuración del sistema. La última fase del despliegue consiste en levantar los proxies y servicios auxiliares que ayuden mejorar temas de seguridad y rendimiento a la aplicación desplegado.
+
+\section{Objetivos}
+El objetivo principal es mejorar la enseñanza y evaluación de estudiantes de programación de la Universidad Técnica Particular de Loja. Para cumplir este objetivo se propone un sistema de editar y probar código en línea que ayuda a docentes calificar código que escriben sus estudiantes en base a pruebas unitarias e integra funcionalidades de sistemas LMS institucionales en adición a servidores de control de versiones institucionales. Para alcanzar este fin, también se plantea cumplir con algunos objetivos específicos en vía al principal.
+
+\begin{itemize}
+	\item Autenticar contra LTI de los sistemas LMS institucionales. Esto permite que los estudiantes pueden autenticarse dentro del sistema sin crear nuevos cuentas de usuario con los nuevos nombres de usuario y contraseñas que el mismo involucra.
+    \item Proveer la capacidad de poder ejecutar código en línea. Con esta funcionalidad, el sistema se acerca más a un entorno completo de desarrollo donde estudiantes requieren un mínimo de programas instalados en sus equipos personales.
+    \item Autocalificar código en base a pruebas unitarias. El fin de esta característica es que el sistema sea un apoyo a los docentes en ayudarles automatizar y por lo tanto optimizar su flujo de calificar para que tengan más tiempo para estar enseñando y ayudando sus alumnos. Las mismas pruebas unitarias, por la forma en que automatizan la forma en que se pueden usar para calificar código en base a las funcionalidades que tiene y cómo reacciona frente ciertas entradas, también hace el proceso completamente objetivo debido a que elimina el factor humano del proceso.
+    \item Sincronizar las notas con sistemas LMS institucionales a través de LTI. Eso dejará que estudiantes pueden revisar instantáneamente su nota una vez que está publicado y también que professores no tienen que estar transfiriendo notas entre sistemas distintas.
+    \item Utilizar servidores de sistemas de control de versiones de la institución para recolectar código en los mismos. Eso permitirá, de una forma transparente y sin mayor interacción del usuario, ver un historial de código escrito en la plataforma y también servir de respaldo continuo del trabajos que realizan los estudiantes.
+    \item Recolectar datos para la toma de decisiones estratégicas. Esta característica permite a la administración de la aplicación sea la universidad o equipo de mantenimiento puede sacar datos y estadísticas de uso de la aplicación para en base a ello realizar análisis de cómo se está siendo usado, que son los comportamientos de los estudiantes y otras decisiones estratégicas que se pueden tomar en base a los datos de uso del sistema.
+\end{itemize}
+
+\section{Resultados Esperados}
+En el presente trabajo de titulación pretende obtener los siguientes resultados:
+\begin{description}
+	\item[Sistema para Editar Código en Línea] que permite a los estudiantes y sus docentes tener una herramienta para mejorar el proceso de enseñanza, aprendizaje y evaluación de la programación.
+    \item[Sistema para Ejecutar Código en Línea que se integra con lo anterior] y facilita las pruebas que requieren las estudiantes o profesores con respeto a algún código al cual tengan acceso.
+    \item[Repositorio de datos recolectados para la toma de decisiones estratégicos] que permite a la titulación ver cómo se está utilizando el sistema y en base a ello planificar decisiones futuras.
+    \item[Manual de Programador] que sea una ayuda para futuros desarrolladores que deseen extender la funcionalidades del sistema inicial.
+    \item[Manual de Usuario] que apoya a estudiantes y docentes que quieren aprender a usar el nuevo sistema.
+    \item[Manual de Mantenimiento/Administrador] que ayuda al equipo de mantenimiento poder mantener la aplicación al corto, mediano y largo plazo.
+\end{description}
 
 \section{Organización del Documento}
 Dentro del capítulo uno, se introduce el tema y problemática, se organiza el documento y se plantea la metodología y objetivos que guían el proyecto desde su inicio hasta su fin.
-
+ 
 En el capítulo dos, se ve el estado del arte que contenga un análisis de trabajos relacionados y sistemas similares a la que se plantea desarrollar. También dentro del capítulo dos se encuentra un subsistema del estado del arte en la forma de marco teórico, el cual desglosa la situación actual y permite ver la teoría de las tecnologías de apoyo para el sistema final.
-
+ 
 En el capítulo tres, se da un análisis profundo del problema para entenderlo de forma completa previa a las fases siguientes. Dentro del mismo capítulo, en base al análisis, se plantea un diseño para el producto final, el cual se refleja más adelante en el desarrollo durante el curso del capítulo cuatro.
-
+ 
 A lo largo del capítulo cuatro, se lleva al lector por el proceso de desarrollo. Por lo tanto el mismo se divide en los varios módulos que se necesitan desarrollar para el proyecto; un módulo de autenticación LTI que permite a los estudiantes autenticarse contra sistemas LMS ya existentes, un módulo de editar código en línea, un módulo de persistencia de código en servidores de control de versiones institucionales, un subsistema de ejecución de código en línea, un módulo de pruebas unitarias para calificaciones automáticas y un módulo para sincronizar calificaciones con sistemas LMS institucionales.
-
+ 
 El quinto capítulo se basa en la fase anterior de desarrollo para planificar y realizar pruebas de funcionamiento e integración. De esta manera se encuentran las fallas existentes para resolver los mismos antes de seguir con el despliegue en el sexto capítulo.
-
+ 
 A continuación, en el capítulo sexto se planifica y se despliega la aplicación final para que pueda empezar su vida útil dentro de la universidad.
-
+ 
 Dentro del séptimo capítulo se concluye el trabajo realizado en base al cumplimiento de los objetivos planteados dentro del capítulo uno.
-
+ 
 En el octavo capítulo se da recomendaciones e ideas para trabajos futuros en base al proyecto realizado y para la evolución continua del producto final.
-
+ 
 Al final de todos los capítulos anteriores se encuentran los anexos con documentos de apoyo como un manual de usuario tanto para profesores como alumnos, un manual de programadores para los que deseen extender el sistema al futuro y un manual de mantenimiento para la administración que se encarga de mantener la aplicación al largo plazo. Adicionalmente se incluye de donde se puede descargar el código de la aplicación como un anexo más al final para asegurar su disponibilidad para futuros desarrolladores que deseen extender las funcionalidades del sistema.
-
-\section{Metodología}
-Se plantea llevar este proyecto bajo una metodología de desarrollo iterativo incremental marcado por prototipos que se revisan de forma contínua con los stakeholders principales del proyecto. De esta forma se puede mantener un poco de agilidad en el desarrollo y de esta manera, desarrollar un producto que cumple con las necesidades de los usuarios mientras que se mantiene dentro de los límites de tiempo y recursos preestablecidos. Dentro de la metodología que se plantea para el proyecto, se propone no tener ninguna iteración (basado en un entregable) que dure más de un mes, de lo cual solo se lo propone para los dos entregables más grandes; el subsistema de ejecución de código por su complejidad y el capítulo seis que se trata del despliegue de la aplicación final. Todos los demás iteraciones son de dos semanas para tratar de mantener el proyecto en un estado fluido de actividad y entrega de entregables de forma contínua.
-
-\section{Objetivos}
-El objetivo principal es mejorar la enseñanza y evaluación de estudiantes de programación de la Universidad Técnica Particular de Loja. Para cumplir este objetivo se propone un sistema de editar y probar código en línea que ayuda a docentes calificar código que escriben sus estudiantes en base a pruebas unitarias e integra funcionalidades de sistemas LMS institucionales en adición a servidores de control de versiones institucionales. Para alcanzar este fin, también se plantea cumplir con algunos objetivos secundarios en vía al principal. 
-
-Primero, se necesita una capacidad de poder autenticar contra LTI de los sistemas LMS institucionales. Esto permite que los estudiantes pueden autenticarse dentro del sistema sin crear nuevos cuentas de usuario con los nuevos nombres de usuario y contraseñas que el mismo involucra.
-
-Segundo, se requiere la capacidad de poder ejecutar código en línea. Con esta funcionalidad, el sistema se acerca más a un entorno completo de desarrollo donde estudiantes requieren un mínimo de programas instalados en sus equipos personales.
-
-Tercero, una vez que se puede ejecutar código en línea, se puede también autocalificar código en base a pruebas unitarias. El fin de esta característica es que el sistema sea un apoyo a los docentes en ayudarles automatizar y por lo tanto optimizar su flujo de calificar para que tengan más tiempo para estar enseñando y ayudando sus alumnos. Las mismas pruebas unitarias, por la forma en que automatizan la forma en que se pueden usar para calificar código en base a las funcionalidades que tiene y cómo reacciona frente ciertas entradas, también hace el proceso completamente objetivo debido a que elimina el factor humano del proceso.
-
-Cuarto, con el código calificado de forma automática o en algunos casos especiales a mano por el profesor (por ejemplo cuando no hay posibilidad de probar la funcionalidad pedida con solo pruebas unitarias), se requiere que puede sincronizar las notas con sistemas LMS institucionales a través de LTI. Eso dejará que estudiantes pueden revisar instantáneamente su nota una vez que está publicado y también que professores no tienen que estar transfiriendo notas entre sistemas distintas.
-
-Quinto, como capa de persistencia, se propone utilizar servidores de sistemas de control de versiones de la institución para recolectar código en los mismos. Eso permitirá, de una forma transparente y sin mayor interacción del usuario, ver un historial de código escrito en la plataforma y también servir de respaldo continuo del trabajos que realizan los estudiantes.
-
-Sexto, hay una necesidad para recolectar datos para la toma de decisiones estratégicas. Esta característica permite a la administración de la aplicación sea la universidad o equipo de mantenimiento puede sacar datos y estadísticas de uso de la aplicación para en base a ello realizar análisis de cómo se está siendo usado, que son los comportamientos de los estudiantes y otras decisiones estratégicas que se pueden tomar en base a los datos de uso del sistema.
-
-\section{Resultados Esperados}
-\textbf{Sistema para Editar Código en Línea} que permite a los estudiantes y sus docentes tener una herramienta más para mejorar el proceso de enseñanza, aprendizaje y evaluación de la programación.
-
-\textbf{Sistema de Ejecutar Código en Línea} que se integra con lo anterior que facilita las pruebas que quieren realizar un estudiante o profesor con respeto a algún codigo al cual tengan acceso.
-
-\textbf{Repositorio de datos recolectados para la toma de decisiones estratégicos} que permite a la titulación ver cómo se está utilizando el sistema y en base a ello planificar decisiones futuras.
-
-\textbf{Manual de Programador} que sea una ayuda para futuros desarrolladores que deseen extender la funcionalidades del sistema inicial.
-
-\textbf{Manual de Usuario} que apoya a estudiantes y docentes que quieren aprender a usar el nuevo sistema.
-
-\textbf{Manual de Mantenimiento/Administrador} que ayuda al equipo de mantenimiento poder mantener la aplicación al corto, mediano y largo plazo.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% OLD CONTENT FROM TEMPLATE

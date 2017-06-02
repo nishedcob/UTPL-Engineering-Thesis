@@ -295,7 +295,7 @@ Virtualización es la creación de recursos virtuales en software para usar los 
 
 \begin{figure}
   \begin{center}
-      \includegraphics[width=\textwidth]{Figures/ibm-virtualization.gif}
+      \includegraphics[width=0.5\textwidth]{Figures/ibm-virtualization.png}
   \end{center}
   \caption{Antes y después de virtualizar aplicaciones.} \center{Fuente [IBM-Hypervisors].}
   \label{IBM-Virtualization}
@@ -324,10 +324,11 @@ Virtualización de Escritorios se trata de usar recursos centralizados para dar 
 Un hipervisor es una capa intermedia de software que gestiona la interacción entre lo virtualizado y hardware o otro software que ayuda realizar las peticiones de lo virtualizado [VMWare-Virtualization]. De la misma manera, el mismo hipervisor se encargan de seguridad para asegurar que lo que sea virtualizado no pueda salir de su ambiente y atacar otras partes virtualizados o no virtualizados [VMWare-HypervisorSecurity][IBM-KVM-Security].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/ibm-hypervisortypes.gif}
-\caption{Tipos Clásicos de Hipervisor.} \center{Fuente [IBM-Hypervisors].}
-\label{IBM-HypervisorTypes}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/ibm-hypervisortypes.png}
+  \end{center}
+  \caption{Tipos Clásicos de Hipervisor.} \center{Fuente [IBM-Hypervisors].}
+  \label{IBM-HypervisorTypes}
 \end{figure}
 
 \paragraph{Hipervisores de Tipo 1}
@@ -345,10 +346,11 @@ Para el mismo, se considera las siguientes características:
 \end{itemize}
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/arq-xen.png}
-\caption{La arquitectura de Xen.} \center{Fuente [Xen-Project-Overview].}
-\label{arq-xen}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/arq-xen.png}
+  \end{center}
+  \caption{La arquitectura de Xen.} \center{Fuente [Xen-Project-Overview].}
+  \label{arq-xen}
 \end{figure}
 
 \paragraph{Hipervisores de Tipo 2}
@@ -358,10 +360,11 @@ Un Hipervisor de Tipo 2 se ejecuta por encima de un sistema operativo que le ayu
 QEMU es un proyecto de software abierto con el fin de crear un emulador y virtualizador de procesadores de varias arquitecturas para una variedad de sistemas operativos. Permite el uso de backends como KVM o Xen para dar rendimiento casi nativo [QEMU]. Aunque su despliegue normal requiere un sistema operativo, basado en Linux, intermedio debido a que es un módulo que se integra directamente en el núcleo de la misma sistema operativo, Wilson et. al. consideran KVM como un hipervisor de tipo 1 debido a sus características y implementación a bajo nivel cerca al nivel hardware física, mientras que su arquitectura lo hace aparecer como un hipervisor de tipo 2, que es como se lo está considerando aquí dentro del contexto de este trabajo (mientras que otros autores lo consideran un hipervisor de tipo 1.5, ni uno ni el otro si no algo híbrido dentro de la taxonomía de hipervisores). KVM es la “hipervisor estratégica para IBM” debido a (1) su bajo costo por ser tecnología completamente abierta, (2) su alta evolución y madurez, (3) alta evolución y madurez de Linux (su tecnología fundamental atras), (4) eficiencia y rendimiento alto, (5) una comunidad de desarrollo muy activa y responsable frente fallos de seguridad, (6) la idea de que muchos ojos viendo código lo hace más seguro\footnote{Uno de las características principales de Código Abierto}, (7) varias tecnologías de seguridad que integra que falta la competencia, (8) mayor flexibilidad que ofrece frente otros hipervisores competidores y (7) control que IBM puede ejercer sobre el proyecto de KVM [IBM-KVM-Security].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/kvm-arq.png}
-\caption{Arquitectura de KVM/QEMU.} \center{Fuente [IBM-KVM-Security].}
-\label{KVM-Arq}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/kvm-arq.png}
+  \end{center}
+  \caption{Arquitectura de KVM/QEMU.} \center{Fuente [IBM-KVM-Security].}
+  \label{KVM-Arq}
 \end{figure}
 
 \subparagraph{VirtualBox}
@@ -385,26 +388,29 @@ Desde la antes de la incepción de los sistemas Linux, los sistemas de la famili
 \end{itemize}
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/que-son-contenedores.jpg}
-\caption{Un concepto básico de que son los contenedores.} \center{Fuente [Teimouri-Davoud-OS-level-virt].}
-\label{que-son-contenedores}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/que-son-contenedores.jpg}
+  \end{center}
+  \caption{Un concepto básico de que son los contenedores.} \center{Fuente [Teimouri-Davoud-OS-level-virt].}
+  \label{que-son-contenedores}
 \end{figure}
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/differencia-hipervisores-contenedores.jpg}
-\caption{La diferencia que abarca contenedores de los tipos de hipervisores.} \center{Fuente [Teimouri-Davoud-OS-level-virt].}
-\label{differencia-hipervisores-contenedores}
+  \begin{center}
+      \includegraphics[width=0.75\textwidth]{Figures/differencia-hipervisores-contenedores.png}
+  \end{center}
+  \caption{La diferencia que abarca contenedores de los tipos de hipervisores.} \center{Fuente [Teimouri-Davoud-OS-level-virt].}
+  \label{differencia-hipervisores-contenedores}
 \end{figure}
 
 Debido al hecho de que muchas veces cada máquina virtual necesita su propio hardware virtual y también sistema operativo, se termina consumiendo mucho más RAM y ciclos de CPU de tal manera que un servidor típicamente puede soportar dos a tres veces más servicios si están en contenedores en lugar de si son virtualizados [Teimouri-Davoud-OS-level-virt].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/contenedores-vms.png}
-\caption{Los contenedores también pueden estar dentro de una máquina virtual para dar mayor seguridad y flexibilidad.} \center{Fuente [Docker-Containers].}
-\label{contenedores-vms}
+  \begin{center}
+      \includegraphics[width=0.75\textwidth]{Figures/contenedores-vms.png}
+  \end{center}
+  \caption{Los contenedores también pueden estar dentro de una máquina virtual para dar mayor seguridad y flexibilidad.} \center{Fuente [Docker-Containers].}
+  \label{contenedores-vms}
 \end{figure}
 
 Entre las ventajas de contenedores está que permiten tener ambientes aislados livianos para prevenir conflictos de dependencias y estandarizar versiones utilizadas en ambientes de desarrollo y producción mientras que al mismo tiempo requieren mucho menos recursos que una máquina virtual. Las mismas se pueden levantar casi instantáneamente a diferencia de máquinas virtuales que requieren tiempo para arrancarse. Como se puede ver en la figura (contenedores-vms), también se puede tener un motor de contenedores dentro de una máquina virtual, el cual nos ofrece beneficios como mayor aislamiento (seguridad) y flexibilidad al momento de migrar aplicaciones entre servidores [Docker-Containers].
@@ -435,10 +441,11 @@ SSH es un protocolo de túnel muy popular [Kaspersky-Tunneling] ya que ofrece mu
 SSL es un estándar tecnológico para cifrar tráfico [info.SSL.com-SSL] [GlobalSign-SSL] de protocolos que normalmente no son cifrados por ejemplo HTTP, SMTP e IMAP. Esto se hace con un fin de proteger datos sensitivos transferidos (en adición a asegurar su integridad [info.SSL.com-SSL]) entre un cliente y servidor, los cuales normalmente se transfieren en texto plano y podrían ser leídos por cualquier agente intermedio. El proceso de comunicación se puede encontrar en la figura (SSL-Proceso). Para iniciarse la conexión cifrada, primero el cliente pide que el servidor se identifica (1) con la llave pública que forma parte de su certificado (2). Una vez que lo tiene, el cliente procede a validar el certificado para ver si confía en su origen (a través de firmas digitales por autoridades centrales) y en caso de que haya confianza, se procede a generar una llave criptográfica para la sesión, lo cual se lo transmite cifrada al servidor con la llave pública del mismo (3). El servidor descifra la clave de sesión con su llave privada de su certificado, avisa el cliente que la transacción ha sido exitosa (4) y ambos proceden a transferir los datos adecuados, cifrados con la llave de sesión que tanto cliente como servidor comparten (5) [DigiCert-SSL].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/ssl-proceso.png}
-\caption{El proceso para comunicación con el protocolo SSL.} \center{Fuente [DigiCert-SSL].}
-\label{SSL-Proceso}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/ssl-proceso.png}
+  \end{center}
+  \caption{El proceso para comunicación con el protocolo SSL.} \center{Fuente [DigiCert-SSL].}
+  \label{SSL-Proceso}
 \end{figure}
 
 Para ayudar con el proceso de validación, el certificado SSL sabe contener detalles como la llave pública del servidor, el nombre de dominio, nombre de empresa, dirección, ciudad, estado o provincia y país. Es firmado por un autoridad de certificados para dar confianza a los clientes que revisarán el certificado [info.SSL.com-SSL]. Antes de firmar un certificado, una autoridad de certificados primero valida la identidad del servidor que ha realizado la petición para el certificado para que más adelante puede confirmar a clientes que es el mismo servidor [GlobalSign-SSL].

@@ -58,7 +58,6 @@ Overleaf es una plataforma en línea para editar y publicar de forma colaborativ
 \subsection{Google Drive}
 Google Drive ofrece 15 Gigabytes de Almacenamiento gratis para guardar cualquier tipo de archivo, los mismos que pueden ser compartidos con cualquier persona para facilitar colaboración entre personas. Tiene para editar en línea documentos, hojas de cálculo, presentaciones, formularios (para hacer encuestas), dibujos y más con una API que permite mayor expansión por terceros. También controla las versiones de forma automática para que se puede volver a revisar versiones anteriores y quienes han introducido cambios y como fueron los mismos cambios. Además en caso de requerir acceder ciertos archivos sin internet, se puede señalar a la plataforma de Google Drive que se deben sincronizar en segundo plano cada vez que hay internet para también tener la disponible y actualizada cada vez que se encuentre sin conexión [Google-Drive-Usage].
 
-% TODO
 \subsection{Comparación de Sistemas Similares}
 \begin{table}[h!]
     \begin{tabular}{|p{0.16\textwidth}|p{0.115\textwidth}|p{0.105\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.17\textwidth}|}
@@ -226,45 +225,50 @@ Un sistema de control de versiones mantiene y organiza un historial de versiones
 Inicialmente esos eran sumamente locales, como RCS, que mantiene una base de datos con todas las versiones (almacenadas como los cambios que hubieron en comparación con la versión anterior, una práctica conocida como respaldo incremental) y en base a eso permitir acceso a la versión actual o cualquiera de los otros guardadas previamente, mira figura (LVCS). [PROGIT-VCS].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/lvcs.png}
-\caption{Sistema de Control de Versionamiento Local.} \center{Fuente [PROGIT-VCS].}
-\label{LVCS}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{Figures/lvcs.png}
+  \end{center}
+  \caption{Sistema de Control de Versionamiento Local.} \center{Fuente [PROGIT-VCS].}
+  \label{LVCS}
 \end{figure}
 
 Después se dieron cuenta que seria bueno poder colaborar sobre las mismas versiones entonces se inventó lo que se conoce como Sistemas de Control de Versionamiento Centralizados los cuales permiten un alto grado de control y seguridad sobre quién puede editar y cuando puede editar que dentro de la base de datos de contenido ya que las mismas siguen un modelo arquitectónico cliente-servidor [PROGIT-VCS]. Eso ha resultado que en empresas grandes que necesitan desarrollar sistemas grandes en paralelo con un cierto grado de seguridad, les resulta bien usar un sistema de control de versionamiento de esta clase aunque esto está cambiando ya que las empresas están dándose cuenta que pueden optar por una solución híbrida [CollabNet-Dist-or-Cent]. Ejemplos de estos CVCS son CVS, Subversión y Perforce. Pero el problema viene a ser que todo el repositorio tiene un solo punto de falla porque si cae el servidor o le pasa algo, se pone en riesgo la productividad continua de quien colabora y en el peor de los casos, la integridad del repositorio. Esta propiedad se puede ver en la figura (CVCS) [PROGIT-VCS].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/cvcs.png}
-\caption{Sistema de Control de Versionamiento Centralizado.} \center{Fuente [PROGIT-VCS].}
-\label{CVCS}
+  \begin{center}
+  	\includegraphics[width=0.5\textwidth]{Figures/cvcs.png}
+  \end{center}
+  \caption{Sistema de Control de Versionamiento Centralizado.} \center{Fuente [PROGIT-VCS].}
+  \label{CVCS}
 \end{figure}
 
 Con la explosión de desarrollo de software libre, hubo una necesidad de poder trabajar grandes cantidades de personas desconocidas en paralelo [raymond1999cathedral], y para resolver este problema y también la de integridad de datos que presenta el único punto de falla de los Sistemas de Control de Versionamiento Centralizado, se inventó Sistemas de Control de Versionamiento Distribuidos como Git, Mercurial, Bazaar y Darcs. Cada repositorio es un espejo de los demás en una arquitectura distribuida o red de iguales. Con esta arquitectura (mira figura (DVCS)), ningún nodo viene a ser un punto de falla ya que se puede espejar entre cualquiera de ellos debido al hecho de que todos tienen una copia local de todo lo que tienen los demás [PROGIT-VCS].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/dvcs.png}
-\caption{Sistema de Control de Versionamiento Distribuido.} \center{Fuente [PROGIT-VCS].}
-\label{DVCS}
+  \begin{center}
+      \includegraphics[width=0.5\textwidth]{Figures/dvcs.png}
+  \end{center}
+  \caption{Sistema de Control de Versionamiento Distribuido.} \center{Fuente [PROGIT-VCS].}
+  \label{DVCS}
 \end{figure}
 
 \subsubsection{Git}
 Git es un sistema de control de versiones distribuido que a diferencia de otros VCS guarda con cada versión una copia entera de los archivos modificados (otros sistemas de control de versionamiento saben guardar solo las diferencias entre versiones de forma incremental, mira la diferencia entre la figura (VCS-Incremental) y la figura (VCS-Backup)) [PROGIT-Git-Intro].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/vcs-incremental.png}
-\caption{Un Sistema de Control de Versiones llevado de forma incremental.} \center{(la manera en que muchos VCS funcionan). Fuente [PROGIT-Git-Intro].}
-\label{VCS-Incremental}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/vcs-incremental.png}
+  \end{center}
+  \caption{Un Sistema de Control de Versiones llevado de forma incremental.} \center{(la manera en que muchos VCS funcionan). Fuente [PROGIT-Git-Intro].}
+  \label{VCS-Incremental}
 \end{figure}
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/vcs-backup.png}
-\caption{Un Sistema de Control de Versiones llevado con archivos enteros.} \center{(la manera en que funciona Git). Fuente [PROGIT-Git-Intro].}
-\label{VCS-Backup}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/vcs-backup.png}
+  \end{center}
+  \caption{Un Sistema de Control de Versiones llevado con archivos enteros.} \center{(la manera en que funciona Git). Fuente [PROGIT-Git-Intro].}
+  \label{VCS-Backup}
 \end{figure}
 
 Esto hace que Git se convierte más en como un pseudo sistema de ficheros que un simple VCS. Además significa mayor integridad de los datos guardados a costo de mayor consumo de almacenamiento. Trabaja de esta manera distribuida, es decir el repositorio existe en esta forma en todo lado donde se encuentra y por lo tanto la mayoría de operaciones de Git se puede realizar de manera local sin ninguna conexión de red [PROGIT-Git-Intro].
@@ -276,10 +280,11 @@ La mayoría de operaciones normales  que se hacen en Git no eliminan datos ya gu
 Cada repositorio de Git trabaja con tres fases que son el directorio de trabajo donde se realiza cambios, un área de preparación donde se marca cambios listos para guardar y una base de datos junto un sistema de ficheros donde se guardan los cambios. Al saltarse entre versiones, se sobre escribe los contenidos del directorio de trabajo con lo que se extrae del sistema de ficheros que tiene los cambios guardados. Esas tres fases y su relación se puede ver en la figura (Git-Fases) [PROGIT-Git-Intro].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/git-fases.png}
-\caption{Los tres fases de Git y sus relaciones.} \center{Fuente [PROGIT-Git-Intro].}
-\label{Git-Fases}
+  \begin{center}
+      \includegraphics[width=0.5\textwidth]{Figures/git-fases.png}
+  \end{center}
+  \caption{Los tres fases de Git y sus relaciones.} \center{Fuente [PROGIT-Git-Intro].}
+  \label{Git-Fases}
 \end{figure}
 
 \paragraph{GitLab}
@@ -289,10 +294,11 @@ GitLab es un servidor de Git ofrecido por GitLab Inc. Se ofrece en dos versiones
 Virtualización es la creación de recursos virtuales en software para usar los mismos en lugar de un recurso físico. Este puede ser usado en áreas diversas como aplicaciones, servidores, almacenamiento y redes. Según la empresa VMware, que se dedica a vender productos de virtualización, la misma es la estrategia más efectiva para reducir costos de TI mientras que se aumenta la eficiencia y agilidad de un negocio de cualquier tamaño. Llegan a esta conclusión porque es tan común que se ha convertido en estándar industrial que solo se ocupa en entre 5\% y 15\% de la capacidad de los servidores debido a que se les pone solo un sistema operativo y aplicación a la vez. Virtualización permite resolver estas deficiencias en permitir la división lógica de equipos y distribuir estas partes donde más se los necesitan para aumentar la tasa de eficiencia y reducir la cantidad de recursos físicos necesarios. Con esta clase de tecnología, se puede reducir y en algunos casos eliminar tiempo fuera de servicio. La facilidades de portabilidad y agilidad de ajustar recursos hace que se puede reducir los tiempos y costos de administración. Se domina hipervisor un software que gestiona virtualización [VMWare-Virtualization].
 
 \begin{figure}
-% import image here
-%\includegraphics[width=\textwidth]{Figures/ibm-virtualization.gif}
-\caption{Antes y después de virtualizar aplicaciones.} \center{Fuente [IBM-Hypervisors].}
-\label{IBM-Virtualization}
+  \begin{center}
+      \includegraphics[width=\textwidth]{Figures/ibm-virtualization.gif}
+  \end{center}
+  \caption{Antes y después de virtualizar aplicaciones.} \center{Fuente [IBM-Hypervisors].}
+  \label{IBM-Virtualization}
 \end{figure}
 
 \paragraph{Las Máquinas Virtuales}

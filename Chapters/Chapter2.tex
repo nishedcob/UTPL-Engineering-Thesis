@@ -19,33 +19,139 @@ Se buscó utilizar la manera en que la moda de lectura-escritura en la Web 2.0 s
 Los autores, Abdullah Almurayh y Sudhanshu Semwal, propusieron e implementaron una arquitectura de cliente-servidor para la distribución de recursos educativos y en el proceso enseñar a estudiantes de Linux, programación orientada a la nube y gestión de nubes/servidores. Su aplicación web ofrece terminales SSH donde cada estudiante y docente disponía de una máquina virtual de tal forma que tenían su propio ambiente con permisos de superusuario y al mismo tiempo eran aislados de la infraestructura real y de los demás usuarios, motivo por el cual se podía dar una solución flexible y a su vez segura. Como hipervisor ocuparon un sistema de Xen que controlan remotamente con su servidor de aplicación (servidor web) [almurayh2014xen].
 
 \subsection{Comparación de Trabajos Relacionados}
-\begin{tabular}{|p|p|p|p|p|p|}
-	\hline
-		& Editar Código en Línea & Persistir Código en Línea & Recolección y Análisis de Datos para decisiones estratégicas en tiempo real & Metodología de Enseñanza Online & Ambientes Virtualizados \\
-	\hline
-    GitEduERP & x & x & & & \\
-    \hline
-    Sistema de Encuestas Online & & & x & & \\
-    \hline
-    Metodología de Enseñanza con la Web 2.0 & & & & x & \\
-    \hline
-    Xen Web-based Terminal for Learning Virtualization & x & x &  & x & x \hline
-\end{tabular}
+\begin{table}[h!]
+    \begin{tabular}{|p{0.17\textwidth}|p{0.105\textwidth}|p{0.105\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.17\textwidth}|}
+        \hline
+            & Editar Código en Línea & Persistir Código en Línea & \mbox{Recolección} y \mbox{Análisis} de \mbox{Datos} para \mbox{decisiones} \mbox{estratégicas} en tiempo real & Metodología de \mbox{Enseñanza} Online & Ambientes Virtualizados \\
+        \hline
+        GitEduERP & x & x & & & \\
+        \hline
+        Sistema de Encuestas Online & & & x & & \\
+        \hline
+        Metodología de \mbox{Enseñanza} con la Web 2.0 & & & & x & \\
+        \hline
+        Xen Web-based Terminal for Learning \mbox{Virtualization} & x & x &  & x & x \\
+        \hline
+    \end{tabular}
+	\caption{Comparación de Trabajos Relacionados.}
+    \label{trabajos-relacionados-comparacion}
+\end{table}
 
 \section{Sistemas Similares}
+De la misma manera donde se analiza investigaciones similares dentro de la parte de trabajos relacionados, es importante conocer también el contexto actual del mercado para ver las alternativas que ofrece la competencia y saber si ya hay alguna solución que sea de mayor beneficio a la universidad que el mismo sistema que se plantea (y por tal razón sería más factible implementar dicha solución en lugar de desarrollar algo nuevo).
+
 \subsection{Repl.it}
+Repl.it es una plataforma en línea para escribir y probar código en tiempo real como un IDE en línea. Su producto tiene un componente educativo que permite integración con otros sistemas de aprendizaje, organización por aulas, texto que guía las tareas, calificación automática de tareas a través de pruebas unitarias entre otras características que mejoran la interacción entre docentes y sus alumnos en su aprendizaje de código. Actualmente usa “máquinas completas de linux” para soportar “más de 30 lenguajes” de una manera “fiable y segura” [Repl.it-Home].
+
 \subsection{io.livecode.ch}
+io.livecode.ch es una plataforma prototipo que convierte repositorios públicos de GitHub en tutoriales interactivos y documentados de programación. Permite la ejecución de código en contenedores de Docker en tiempo real. El mismo utiliza máquinas virtuales alojados en DigitalOcean y permite la extensión por terceras personas con mas tutoriales [io.livecode.ch].
+
 \subsection{Cloud9 IDE}
+Cloud9 IDE ofrece un espacio de trabajo personal rápido y escalable (pero administrado por la misma empresa) basado en contenedores de Ubuntu encima de Docker para cada usuario, con soporte para 40 lenguajes de programación. Permite ver aplicaciones web en tiempo real con una variedad de navegadores y sistemas operativos. También permiten conectarse a servidores privados del usuario por SSH para utilizar estos en lugar de los servidores que ellos proveen. También tiene la capacidad de compartir código entre varios usuarios bajo permisos de lectura o lectura y escritura, permitiendo que los mismos editan en tiempo real (visible a todos) y que pueden comunicarse a través de chat. El mismo código, una vista previa de ello o su versión completa también se puede compartir públicamente con usuarios que no pertenecen a la plataforma. Todo esto es con un fin de reemplazar todo el ambiente de desarrollo local con un entorno completamente en la nube; ofrece un terminal, editores avanzados de código, división de pantalla, un debugger, temas, personalización de atajos, comandos communes, modo vim y modo sublime para el editor y un editor de imágenes [Cloud9-Home].
+
 \subsection{GitLab}
+GitLab en adición a ser un servidor de Git, y por lo tanto llevar un control de versiones de los datos que aloja, también ofrece otras características asociados con entornos profesionales de desarrollo como seguimiento de incidentes, revisión de código, un IDE para editar código en línea, la capacidad de tener wikis asociado con proyectos, un sistema de integración continua para probar, compilar y desplegar código en una variedad de ambientes. Su versión de pago también soporta el consumo de un servidor de LDAP para autenticar usuarios, hooks de Git para tomar acciones personalizadas en respuesta a eventos de Git y capacidades para auditoria por parte de administradores [GitLab]. Además, GitLab puede importar proyectos de otros plataformas y servidores de Git a través de una URI, gestión de snippets, ramas protegidas, un API que permite controlar al servidor de GitLab y un registro de contenedores de Docker asociados con cada proyecto [GitLab-Features].
+
 \subsection{OverLeaf}
+Overleaf es una plataforma en línea para editar y publicar de forma colaborativo documentos de LaTeX. Permite editar LaTeX directamente o usar un editor WYSIWG para quienes no conozcan bien el sistema TeX. La plataforma compila el documento de LaTeX en tiempo real como se lo va editando para disponer una vista previa con los últimos cambios y de la misma forma avisa de errores que genera al compilador. Como es una plataforma en línea, se puede editar el mismo documento varias personas al mismo tiempo desde distintos clases de dispositivos y cómo el sistema que respalda los documentos es un motor completo de LaTeX/TeX, permite una gran variedad de tipos de documentos y contenido en ellos [Overleaf]. También se integra Overleaf con Git ya que el mismo dispone de un servidor interno de Git para interactuar con sus proyectos a través de este sistema de control de versiones [Overleaf-Git].
+
 \subsection{Google Drive}
+Google Drive ofrece 15 Gigabytes de Almacenamiento gratis para guardar cualquier tipo de archivo, los mismos que pueden ser compartidos con cualquier persona para facilitar colaboración entre personas. Tiene para editar en línea documentos, hojas de cálculo, presentaciones, formularios (para hacer encuestas), dibujos y más con una API que permite mayor expansión por terceros. También controla las versiones de forma automática para que se puede volver a revisar versiones anteriores y quienes han introducido cambios y como fueron los mismos cambios. Además en caso de requerir acceder ciertos archivos sin internet, se puede señalar a la plataforma de Google Drive que se deben sincronizar en segundo plano cada vez que hay internet para también tener la disponible y actualizada cada vez que se encuentre sin conexión [Google-Drive-Usage].
+
+% TODO
 \subsection{Comparación de Sistemas Similares}
+\begin{table}[h!]
+    \begin{tabular}{|p{0.16\textwidth}|p{0.115\textwidth}|p{0.105\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.17\textwidth}|}
+        \hline
+            & Escribir Código Online & Probar Código Online & Integración LTI & Sistema de Autocalificación & Compilación en Tiempo Real \\
+        \hline
+        Repl.it & Si & Si & Si & Si & No \\
+        \hline
+        io.livecode.ch & Si & Si & No & No & No, pero si permite ejeccución de código en linea \\
+        \hline
+        Cloud9 IDE & Si & Si & No & No & Si para ciertos lenguajes \\
+        \hline
+        GitLab & Si & No & No & No & No \\
+        \hline
+        Overleaf & Solo \LaTeX & Solo \LaTeX & No & No & Si, \LaTeX \\
+        \hline
+        Google Drive & No, \mbox{solo} se lo \mbox{considera} \mbox{como} texto & No & No & No & No \\
+        \hline
+    \end{tabular}
+	\caption{Comparación de Características Generales entre \mbox{Sistemas} Similares.}
+    \label{comparacion-sistemas-similares-1}
+\end{table}
+
+\begin{table}[h!]
+    \begin{tabular}{|p{0.16\textwidth}|p{0.105\textwidth}|p{0.16\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.13\textwidth}|}
+        \hline
+            & Control \mbox{Interno} de \mbox{Versiones} & Integración de algún \mbox{sistema} de \mbox{control} de versiones & Sistema de \mbox{Permisos} & Sistema de \mbox{Compartir} & Compartir / Editar en Tiempo Real \\
+        \hline
+        Repl.it & No & No & Si, basado en docente / alumno & No & No \\
+        \hline
+        io.livecode.ch & No & No & No & Todo es Público & No \\
+        \hline
+        Cloud9 IDE & Si & No & Si, \mbox{basado} en \mbox{usuarios} & Si, \mbox{basado} en \mbox{usuarios} & Si \\
+        \hline
+        GitLab & Si & Si, Git & Si, \mbox{basado} en \mbox{usuarios} y grupos & Si, \mbox{basado} en \mbox{usuarios} y grupos & No \\
+        \hline
+        Overleaf & Si & Si, Git & Si, \mbox{basado} en \mbox{usuarios} & Si, \mbox{basado} en \mbox{usuarios} & Si \\
+        \hline
+        Google Drive & Si & No & Si, \mbox{basado} en \mbox{usuarios} & Si, \mbox{basado} en \mbox{usuarios} & Si \\
+        \hline
+    \end{tabular}
+	\caption{Comparación de Características Sociales entre Sistemas Similares.}
+    \label{comparacion-sistemas-similares-2}
+\end{table}
+
+\begin{table}[h!]
+    \begin{tabular}{|p{0.08\textwidth}|p{0.17\textwidth}|p{0.16\textwidth}|p{0.2\textwidth}|p{0.16\textwidth}|p{0.21\textwidth}|}
+        \hline
+            & Control Completo sobre \mbox{ambiente} de ejecución de código & Acceso \mbox{Remoto} al ambiente de Ejecución de Código & Sistema de Documentación & API sobre HTTP(S) & Acceso fuera de línea \\
+        \hline
+        Repl.it & Si para \mbox{instalación} de \mbox{dependencias} & No & Si, \mbox{documentación} del ejercicio & Si, \mbox{pero} \mbox{está} \mbox{cerrado} a nuevos clientes & No \\
+        \hline
+        io\ldots\footnote{io.livecode.ch} & Si, script de Bash & No en \mbox{tiempo} real & Si, HTML & No \mbox{mantiene} estados & No \\
+        \hline
+        Cloud9 IDE & Si, Terminal & Si, SSH & No, fuera de \mbox{documentos} en el servidor & Si & No \\
+        \hline
+        GitLab & No & No & Si, Wikis con GitHub Markdown & Si & Si, si es que se ha bajado todo anteriormente con Git \\
+        \hline
+        Ov\ldots\footnote{Overleaf} & No & No & No, todo el sistema es de \mbox{documentación} & Si & Si, si es que se ha bajado todo anteriormente con Git \\
+        \hline
+        Google Drive & No & No & No, todo el sistema es de \mbox{documentación} & Si & Si \\
+        \hline
+    \end{tabular}
+	\caption{Comparación de Características Avanzadas entre \mbox{Sistemas} Similares.}
+    \label{comparacion-sistemas-similares-3}
+\end{table}
 
 \section{Marco Teorico}
+Para llevar a cabo de forma exitosa el trabajo de titulación y entender el contexto del ambiente en que sea implementado es importante establecer una línea base de conocimiento que se ve a continuación y dividido de la siguiente forma:
+\begin{description}
+	\item[Aspectos de Propiedad Intelectual] que se topa con las licencias y culturas de código abierto y libre que se encuentra actualmente en el entorno.
+    \item[Aspectos Ambientales del Entorno de Desarrollo] se trata de dar mejor contexto al entorno en el cual se encuentra la aplicación planteada. Esto incluye pero no está limitado a conceptos teóricos, aplicaciones y protocolos.
+\end{description}
 
 \subsection{Aspectos de Propiedad Intelectual}
+Hoy en día, en un mundo cada vez más conectado y con cada vez más informacion compartida entre personas distintas, es importante conocer bien temas de derechos de autor y propiedad intelectual, no sólo para desarrollar y despues dar licencia a un trabajo de titulación, si no también para entender lo que se puede y no se puede hacer dentro de un entorno de desarrollo que cada vez involucra más algún codigo o trabajo que fue desarrollado alguna licencia abierta o libre.
 
 \subsubsection{Software Libre}
+Software Libre es un movimiento sociopolítico que busca liberar códigos fuentes. Se divide en dos campos que son: los de Open Source (Fuentes Libres) que quieren liberar código fuente sólo en base a los méritos de desarrollo colaborativo y los de Free/Libre Software (Software Libre) que buscan liberar código fuente en base a ciertos derechos de compartir, colaborar y tener control de lo que hacen sus dispositivos que se les pertenecen (su propiedad) para todos los usuarios que ocupan el software [GNU-FLOSS-vs-FOSS] [GNU-Open-vs-Free]. En el contexto de esta tesis, Software Libre se refiere al segundo campo, no al primero. Para el mismo, la fundación GNU con su fundador Richard M. Stallman define 4 libertades mínimas que deben ser cumplidas para constituir Software Libre y los cuales se los enumera desde el 0 hasta el 3 [GNU-Freedom] [GNU-Free-Software]:
+
+\begin{enumerate}
+\item La libertad de ejecutar el programa para cualquier propósito que desee
+\item La libertad de estudiar cómo funciona el programa y poderlo modificar como desee. Un requisito para esta libertad es que el usuario tenga acceso al código fuente original.
+\item La libertad de distribuir copias del programa original con terceros.
+\item La libertad de distribuir copias de sus versiones modificadas a terceros. Un requisito para esta libertad es que el usuario tenga acceso al código fuente original.
+\end{enumerate}
+
+[GNU-Freedom] [GNU-Free-Software]
+
+Donde el software no cumpla con uno de los anteriores, ya deja de ser considerado libre. Sólo por ser software libre no significa que no puede ser comercializado, únicamente se requiere nuevos modelos de negocio los cuales si se los puede encontrar en uso diario [GNU-Free-Software]. Como sociedad, Stallman argumenta, es importante proteger esas libertades porque avanzan la humanidad, como la libertad de expresión, ya que las libertades que se proponen proteger, buscan sostener una sociedad que trabaja por el bien de todos, no de solo unos pocos que saben más de la funcionalidad de ciertos aspectos tecnológicos [GNU-Open-vs-Free]. En la época actual de gobiernos y empresas que espían sin vergüenza, se ha revivido el movimiento político y se ha convertido en algo más necesario debido a que todos tenemos y  queremos nuestro derecho a la privacidad [GNU-Freedom].
+
+\paragraph{OAS}
+OAS o Adopción de Software Libre es la tendencia que hay en el mundo empresarial de adoptar soluciones de tecnologías abiertas como los que ofrecen el mundo de software libre ya que las mismas pueden llegar a ser superiores en cuanto su eficacia y costo, que lo que ofrece su competencia comercial. Se estima que más del 78\% de instituciones usan software  de Fuentes Abiertas y menos del 3\% indican que no utilizan nada de software de fuentes abiertas. Eso demuestra un enorme mercado creciente y emergente a nivel mundial [ACCEL-OAS].
 
 \subsection{Aspectos Ambientales del Entorno de Desarrollo}
 

@@ -44,6 +44,13 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{palatino} % Use the Palatino font by default
 
+\usepackage{float}
+\floatstyle{plaintop}
+\restylefloat{table}
+%\restylefloat{figure}
+%\restylefloat{longtable}
+
+
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 %\addbibresource{example.bib} % The filename of the bibliography
@@ -339,7 +346,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-\nocite{*}
+%\nocite{*}
 
 \printbibliography[heading=bibintoc]
 

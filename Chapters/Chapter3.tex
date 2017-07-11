@@ -10,9 +10,183 @@
 \subsection{Especificacion de Requerimientos}
 
 \section{Diseño}
+Previo a la implementación de cualquier sistema es importante analizar su funcionamiento y en base a lo mismo realizar un diseño que provee estas funcionalidades que se requiere. Por lo tanto, a continuación se demuestra las fases del diseño realizado desde la definición de sistemas, subsistemas y módulos y la interacción entre ellos, hasta la arquitectura interna y de despliegue.
 
 \subsection{Sistemas, Subsistemas y Módulos}
+Debido a la naturaleza del alcance de este trabajo de titulación, se considera que se debe dividir la plataforma en dos sistemas que sean capaces de interactuar entre sí. El primer sistema es la que ofrece el editor de código en línea, integración con los LMS institucionales y a su vez integración con un servidor de control de versiones. El segundo sistema solo se encarga de ejecución de código en línea a través de algún tipo de virtualización y aislamiento de procesos. De esta forma se puede aislar el sistema que está bajo mayor riesgo de ser atacado (el de ejecución de código arbitrariamente) del sistema con mayor riesgo de impacto negativo (el sistema de escribir código en línea, el cual también se encarga de las calificaciones). A continuación se presenta la interacción entre los sistemas y actores en el Diagrama de Contexto de Sistemas.
+
+% figure 
+
+Los tres tipos de usuarios que se considera para el sistema son administradores, quienes administran y mantienen todo el sistema en su ambiente de despliegue, docentes, quienes generan contenido didactica para sus estudiantes y califican los mismos motivo por el cual que tienen acceso a los LMS, el sistema de editar codigo (que les permite generar nuevas tareas / exámenes / pruebas / talleres para sus estudiantes y ver el progreso y calificaciones de los mismos) y el sistema de control de versiones (donde puede ver y bajar codigo que escriben estudiantes y ver a un nivel más profundo el historial y evolución del mismo), y estudiantes, quienes tengan acceso a los mismos tres sistemas de los docentes. Los estudiantes acceden al LMS donde vean los tareas / exámenes / pruebas / talleres nuevos que hay y al abrirlos se les lleva, identifica y autentica el sistema de editar código en línea mediante LTI. Los estudiantes realizan sus obligaciones de código, mientras que los mismos se respaldan de forma automática en un servidor de control de versiones independiente de tal forma que se lo puede revisar tanto los estudiantes involucrados como su docente a futuro. Aquello control adicional podría llegar a ser una evidencia importante para la resolución de conflictos entre estudiantes y/o docentes a futuro.
+
+El sistema de editar codigo, apartir de aqui conocido simplemente bajo el nombre GitEDU, controla remotamente por medio de comandos, mediante posiblemente una mezcla de protocolos (SSH, HTTP sobre SSH [SHTTP] y HTTPS), dependiendo de cómo se da el caso, un sistema de ejecucion de código, conocido a partir de aquí en adelante como EduNube, para señalar acciones que debe tomar el segundo y/o datos que necesita sincronizar con la primera. Al mismo tiempo, GitEDU comunica con el servidor de control de versiones mediante su API externa (una API REST) sobre HTTP o HTTPS para controlar el mismo y prepararle para flujos continuos de código editado que puede viajar por una variedad de protocolos como SHTTP, HTTPS, HTTP, SFTP, FTP o FTPS como requiere la situación y ambiente de despliegue. Siempre y cuando EduNube requiere de codigo de algun usuario para realizar una calificación o algún otro tipo de interacción con un usuario que requiere probar el mismo, primero se procede a descargar el código involucrado desde el servidor de control de versiones sobre uno de los protocolos mencionado previamente para el mismo. En base a la naturaleza de las operaciones que está haciendo, comunica sus resultados con GitEDU para que puede manejar las mismas de la forma adecuada. En el caso de notas, GitEDU se encarga de sincronizar las mismas con los LMS institucionales con los cuales está integrado mediante el protocolo LTI.
+
+\subsubsection{GitEdu}
+
+% figure
+
+\paragraph{Subsistema de Gestión de Usuarios}
+El subsistema de gestión de usuarios de encarga de temas de seguridad y acceso por usuarios a varios componentes de la aplicación. Para lo mismo autentica usuarios mediante dos módulos (uno clásico y el otro mediante el protocolo LTI) y lleva un sistema de permisos orientado a usuarios, grupos y roles.
+
+\subparagraph{Módulo de Autenticación Clásica de Usuarios}
+El módulo de autenticación clásica de usuarios permite que los usuarios finales pueden iniciarse session mediante un usuario y contraseña.
+
+\subparagraph{Módulo de Autenticación por LTI}
+El módulo de autenticación por LTI permite que usuarios finales puede iniciar su sesión mediante una sesión existente en algún sistema externa que soporta LTI.
+
+\subparagraph{Módulo de Grupos de Usuarios}
+El módulo de grupos de usuarios permite definir grupos específicos de usuarios cuyo membresía les cambia el nivel y naturaleza del acceso que tengan a la aplicación.
+
+\subparagraph{Módulo de Permisos de Usuarios y Grupos}
+El módulo de permisos de usuarios y grupos define la naturaleza de acceso que tengan usuarios autorizados y los grupos a los cuales pertenecen dentro de la aplicación.
+
+\subparagraph{Módulo de Roles de Usuarios y Grupos}
+El módulo de roles de usuarios y grupos define las responsabilidades de varios grupos de usuarios y usuarios específicos y en base a los mismos les asigna permisos adecuados tanto para proteger la aplicación contra uso y accesos indebidos y al mismo tiempo permitir a los usuarios poder realizar sus actividades normalmente sin impedimentos.
+
+\paragraph{Subsistema de Editar Código}
+El subsistema de editar codigo forma el núcleo de la funcionalidad del sistema GitEdu. Eso lo realiza a través de funcionalidades de editar codigo, persistirlo y permitir la interacción adecuada y social entre usuarios.
+
+\subparagraph{Modulo de Editar Codigo}
+El módulo de editar código en línea ofrece funcionalidades básicas de un editor de código (IDE) en línea.
+
+\subparagraph{Modulo de Persistencia de Codigo}
+El módulo de persistencia de código persiste codigo versionado en servidores de control de versiones externas que usuarios escriben y editan, y al momento de necesitar abrir un código previo, recupera el mismo de los servidores de control de versiones externas para que puede seguir editando lo mismo.
+
+\subparagraph{Módulo de Control de Acceso de Código}
+El módulo de control de acceso de código permite a usuarios definir y modificar los permisos que tiene su código para controlar la naturaleza del acceso que tienen otros usuarios, grupos y roles.
+
+\subparagraph{Modulo de Compartir}
+El módulo de compartir permite compartir el acceso al código con otros usuarios y grupos.
+
+\subparagraph{Módulo de Interacción Social}
+El módulo de interacción social permite que usuarios pueden interactuar en tiempo real mientras que editan juntos el código.
+
+\paragraph{Subsistema de Docentes}
+El subsistema de docentes ofrece muchas de las funcionalidades que requieren los docentes para llevar exitosamente su materia de programación. Estas funcionalidades incluyen gestión de estudiantes, materias y notas. La gestión de materias y notas también involucra un gestión y calificación de talleres, deberes, pruebas y exámenes. Además por el hecho de que se genera nuevas notas y calificaciones a través de GitEdu, también se encarga de sincronizar notas con otras sistemas externas como los LMS a través de LTI.
+
+\subparagraph{Modulo de Gestion de Estudiantes}
+El módulo de gestión de estudiantes permite que docentes pueden ver notas de un estudiante suyo. Además estudiantes pueden revisar sus notas y tanto administradores como docentes pueden asignar estudiantes a aulas o cambiar o eliminar asignaciones previas.
+
+\subparagraph{Módulo de Gestión de Materias}
+El módulo de gestión de materias permite a docentes y administradores ver estadísticas de una materia, la creación de grupos de estudiantes dentro de una materia (por ejemplo para un proyecto grupal) tanto por parte de un docente o por parte de un estudiante, modificar grupos de estudiantes (por ejemplo botar un integrante), y asignar talleres, deberes, pruebas o exámenes a un estudiante, grupo o materia. Además dentro de la gestión de materias, docentes pueden establecer el peso de cada taller, deber, prueba y examen para en base a ello calcular los promedio de un estudiante.
+
+\subparagraph{Módulo de Talleres, Deberes, Pruebas y Exámenes}
+El módulo de talleres, deberes, pruebas y exámenes permite a docentes definir nuevos talleres, deberes, pruebas, exámenes, etc y los criterios de evaluación de los mismos. Involucrado en eso son pruebas unitarias (si desee calificación automatizada) y documentación que explica lo que hay que hacer al estudiante.
+
+\subparagraph{Módulo de Notas y Sincronización}
+El módulo de notas y sincronización gestiona las notas que mantiene GitEdu y se encarga de sincronizar cambios en las mismas. Aunque realiza este trabajo por detrás normalmente, también proporciona una interfaz gráfica para interacción con los docentes respectivos y adecuados. Además por el tema de seguridad y integridad de las notas, se lleva las mismas versionado y con un registro preciso de cuando fueron modificados y por quien.
+
+\paragraph{Subsistema de Ejecución de Código}
+El subsistema de ejecución de código se encarga de comunicar con el sistema externa EduNube con un fin de aprovechar las funcionalidades del mismo y proveer funcionalidades de ejecución en línea, aplicación de pruebas unitarias y calificación automática de código sin exponer el sistema EduNube a usuarios finales. Para aumentar la seguridad que logra llevar EduNube, GitEdu communica con lo mismo a través de canales seguros como HTTPS y SSH utilizando métodos de autenticación orientados a una schema de llaves públicas y privadas (criptografía asimétrica) para asegurarse de la identidad de ambos previo al envío de comandos y comunicación de datos y notas.
+
+\subparagraph{Modulo de Comandos}
+El módulo de comandos se encarga de controlar el sistema de EduNube a través de su API externa para indicar al mismo cuando debe bajar, ejecutar o calificar algún código.
+
+\subparagraph{Módulo de Comunicación de Datos y Notas}
+El módulo de comunicación de datos y notas permite la sincronización de los mismos cuando sea necesario entre EduNube y GitEdu.
+
+\paragraph{Subsistema de Administración}
+El subsistema de administración ayuda a administradores de GitEdu recolectar datos acerca del uso del mismo y analizar lo datos en adición a ser capaces de configurar y monitorear el rendimiento del sistema.
+
+\subparagraph{Módulo de Configuración}
+El módulo de configuración permite la configuración en tiempo real del sistema GitEdu, por ejemplo conexiones con sistemas externas y gestión de usuarios.
+
+\subparagraph{Modulo de Monitoreo}
+El módulo de monitoreo permite ver en tiempo real el consumo del sistema.
+
+\subparagraph{Módulo de Recolección de Datos}
+El módulo de recolección de datos lleva un registro continuo del uso del sistema para su revisión y análisis por parte de operadores humanos después tanto para temas de auditoría como toma de decisiones estratégicas.
+
+\subparagraph{Módulo de Análisis de Datos}
+El módulo de análisis de datos proporciona las herramientas necesarias para que un operador humano puede interpretar los mismos y sacar sus conclusiones.
+
+\subsubsection{EduNube}
+
+% figure
+
+\paragraph{Subsistema de Gestión de Usuarios}
+El subsistema de gestión de usuarios de encarga de temas de seguridad y acceso indirecto por usuarios (a través de GitEdu) y acceso directo por parte de administradores a varios componentes de la aplicación. Para lo mismo autentica usuarios mediante dos módulos (uno clásico solo para administración del mismo y el otro mediante llaves públicas/privadas [criptografía asimétrica] para aplicaciones externas) y lleva un sistema de permisos orientado a usuarios, grupos y roles.
+
+\subparagraph{Módulo de Autenticación Clásica de Usuarios}
+El módulo de autenticación clásica de usuarios permite que administradores pueden iniciarse sesión mediante un usuario y contraseña.
+
+\subparagraph{Módulo de Autenticación por Criptografía Asimétrica}
+El módulo de autenticación por criptografía asimétrica permite que usuarios finales, a través de GitEdu puede iniciarse sesión mediante para la ejecución controlada y remoto de comandos y código.
+
+\subparagraph{Módulo de Grupos de Usuarios}
+El módulo de grupos de usuarios permite definir grupos específicos de usuarios cuyo membresía les cambia el nivel y naturaleza del acceso que tengan a la aplicación.
+
+\subparagraph{Módulo de Permisos de Usuarios y Grupos}
+El módulo de permisos de usuarios y grupos define la naturaleza de acceso que tengan usuarios autorizados y los grupos a los cuales pertenecen dentro de la aplicación.
+
+\subparagraph{Módulo de Roles de Usuarios y Grupos}
+El módulo de roles de usuarios y grupos define las responsabilidades de varios grupos de usuarios y usuarios específicos y en base a los mismos les asigna permisos adecuados tanto para proteger la aplicación contra uso y accesos indebidos y al mismo tiempo permitir a los usuarios poder realizar sus actividades normalmente sin impedimentos.
+
+\paragraph{Subsistema de Ejecución}
+El subsistema de ejecución de código se encarga de recibir y procesar  comandos del sistema externa GitEdu con un fin de aprovechar los hipervisores que tiene a su cargo y proveer funcionalidades de ejecución en línea, aplicación de pruebas unitarias y calificación automática de código sin exponer dichos hipervisores a usuarios finales. Para aumentar la seguridad que logra llevar EduNube, GitEdu communica con lo mismo a través de canales seguros como HTTPS y SSH utilizando métodos de autenticación orientados a una schema de llaves públicas y privadas (criptografía asimétrica) para asegurarse de la identidad de ambos previo al envío de comandos y comunicación de datos y notas.
+
+\subparagraph{Módulo de Recepción de Comandos}
+El módulo de recepción de comandos se encarga de recibir comandos externos enviados a través del API externa que provee para que otras aplicaciones pueden indicar al mismo cuando debe bajar, ejecutar o calificar algún código.
+
+\subparagraph{Módulo de Permisos y Restricciones de Comandos}
+El módulo de permisos y restricciones de comandos se encarga de limitar o permitir comandos externos recibidos por el sistema EduNube. Se basa en políticas establecidos previamente que definen los horarios de trabajo de ciertos procesos y dependencias de los mismos (por ejemplo no se debe calificar los exámenes de un parallelo hasta que todos terminan). Junto al modulo de control de acceso a codigo, eso permite a docentes y administradores tener control refinado sobre cuando y que está permitido hacer usuarios que están usando EduNube a través de GitEdu.
+
+\subparagraph{Módulo de Control de Hipervisores}
+El módulo de control de hipervisores se encarga de cumplir con la funcionalidades críticos del sistema EduNube de compilar, ejecutar y calificar código. Esto lo hace a través de tres respectivos submódulos para cada fase. De manera más general, este módulo también controla hipervisores conectados al sistema EduNube con un fin de poder realizar las operaciones listados previamente.
+\begin{description}
+	\item[Submódulo de Compilación de Código]
+	El submódulo de compilación de código se encarga de compilar codigo que se le entrega en base a procedimientos que define el profesor anteriormente y reporta resultados del mismo, sea exitosa o sea errores de compilación. Para la implementación del mismo submódulo, se aprovecha de las máquinas virtuales que provee el hipervisor con un fin de realizar la compilación en un ambiente controlado y aislado.
+    \item[Submódulo de Ejecución de Código]
+	El submódulo de ejecucion de codigo recibe de entradas codigo compilado y comandos que se desee ejecutar en el ambiente de ejecución y pruebas con un fin de proveer, a través de las máquinas virtuales controladas y aisladas, un ambiente interactivo donde estudiantes, tanto estudiantes como docentes pueden trabajar de una forma interactiva con código desarrollado dentro de la plataforma.
+    \item[Submódulo de Calificación Automatizado de Código]
+	El submódulo de calificación automatizado de código se basa en pruebas unitarias escritas previamente por un docente y que van contra la funcionalidad que se pide en el código de los estudiantes con un fin de calificar el código de una forma autónoma. Una vez que termina de calificar un código, reporta los resultados a gestores de los mismos.
+\end{description}
+
+\subparagraph{Módulo de Persistencia de Código}
+El módulo de persistencia de código recupere codigo versionado en servidores de control de versiones externas que usuarios han escrito y editado con un fin de permitir la compilación, ejecución y calificación del mismo dentro del sistema EduNube.
+
+\subparagraph{Módulo de Control de Acceso a Código}
+El módulo de control de acceso a codigo se encarga de restringir y permitir en base a reglas las operaciones de compilación, ejecución y calificación automatizada de códigos que usuarios editan. De la misma forma permite definir flujos de trabajo y dependencias para el procesamiento de proyectos en adición a establecer horarios y restricciones de procesamiento para los mismos.
+
+\subparagraph{Módulo de Comunicación de Datos y Notas}
+El módulo de comunicación de datos y notas permite la sincronización de los mismos cuando sea necesario entre EduNube y GitEdu.
+
+\paragraph{Subsistema de Administración}
+El subsistema de administración ayuda a administradores de EduNube recolectar datos acerca del uso del mismo y analizar lo datos en adición a ser capaces de configurar y monitorear el rendimiento del sistema.
+
+\subparagraph{Módulo de Configuración}
+El módulo de configuración permite la configuración en tiempo real del sistema EduNube, por ejemplo conexiones con sistemas externas, gestión de llaves públicas y privadas, y gestión de usuarios.
+
+\subparagraph{Modulo de Monitoreo}
+El módulo de monitoreo permite ver en tiempo real el consumo del sistema y sus hipervisores respectivos.
+
+\subparagraph{Módulo de Recolección de Datos}
+El módulo de recolección de datos lleva un registro continuo del uso del sistema para su revisión y análisis por parte de operadores humanos después tanto para temas de auditoría como toma de decisiones estratégicas.
+
+\subparagraph{Módulo de Análisis de Datos}
+El módulo de análisis de datos proporciona las herramientas necesarias para que un operador humano puede interpretar los mismos y sacar sus conclusiones.
+
+\subsubsection{Ventajas del Diseño de Sistemas, Subsistemas y Módulos}
+La ventaja de un diseño orientado a módulos como se lo presenta aquí es la división de funcionalidad para ayudar en la extensibilidad y mantenibilidad de los sistemas al largo plazo. Por ejemplo este diseño permite agregar funcionalidad adicional a futuro como autenticación por otros medios (por ejemplo LDAP) o la integración de mecanismos anti-plagio. Esta propiedad puede dar una vida útil mayor a los sistemas desarrolladas porque muchas veces no se conoce todo lo que puede requerir un software a futuro para el diseño e implementación inicial. A continuación se presenta la arquitectura de estos dos sistemas, tanto GitEdu como su ambiente de ejecución de código virtualizado, EduNube.
 
 \subsection{Arquitectura}
+
+% figure
+
+Como se puede observar en la figura (diag-arq-gitedu), a un nivel global, el sistema GitEdu consiste en 5 capas que son:
+\begin{itemize}
+	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
+    \begin{itemize}
+    	\item \textbf Autenticación por LTI usa interfaces LTI de aplicaciones externas como LMS institucionales para autenticar usuarios.
+		\item Autenticación Clásica permite el login (autenticación) de usuarios mediante la forma clásica de un usuario y contraseña.
+		\item Permisos permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser acceso a la administración de una materia, por ejemplo el control que se da a un docente o grupo de docentes sobre una materia.
+		\item Grupos permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de usuarios suficiente privilegiados dentro del sistema. Ejemplos de grupos podrían ser miembros de una cierta materia o tipo de materia, por ejemplo ''Base de Datos''.
+		\item Roles permite definir usuarios por su propósito del sistema con un fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario es. Ejemplos de roles podrían ser Estudiante, Docente y Administrador.
+    \end{itemize}
+    \item \textbf{Administración} permite la administración, mantenimiento y recolección de datos por usuarios dentro del sistema. Para cumplir con estas responsabilidades se divide en:
+    \item \textbf{Presentación} que se encarga de presentar interfaces web a varias tipos de usuario, incluyendo:
+    \item \textbf{Lógica de Negocios} que se encarga de llevar a cabo los procesos de negocio por el cual la aplicación tiene propósito. Esto se subdivida en cuatro subsistemas:
+    \item \textbf{Persistencia} que se encarga de asegurar que se persisten datos importantes para uso futuro y también la recuperación de los mismos. Esto se subdivide en tres clases de persistencia:
+\end{itemize}
 
 \subsection{Despliegue}

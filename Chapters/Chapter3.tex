@@ -16,6 +16,15 @@ Previo a la implementación de cualquier sistema es importante analizar su funci
 Debido a la naturaleza del alcance de este trabajo de titulación, se considera que se debe dividir la plataforma en dos sistemas que sean capaces de interactuar entre sí. El primer sistema es la que ofrece el editor de código en línea, integración con los LMS institucionales y a su vez integración con un servidor de control de versiones. El segundo sistema solo se encarga de ejecución de código en línea a través de algún tipo de virtualización y aislamiento de procesos. De esta forma se puede aislar el sistema que está bajo mayor riesgo de ser atacado (el de ejecución de código arbitrariamente) del sistema con mayor riesgo de impacto negativo (el sistema de escribir código en línea, el cual también se encarga de las calificaciones). A continuación se presenta la interacción entre los sistemas y actores en el Diagrama de Contexto de Sistemas.
 
 % figure 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=1.0\textwidth]{Figures/contexto.png}
+  \end{center}
+  \caption{Diagrama de Contexto para GitEdu y EduNube.}
+  \label{context}
+\end{figure}
+
+El diagrama de contexto visualizado en la figura \ref{context} demuestra la relación entre los tres clases de usuarios, sistemas existentes, los sistemas que se plantea desarrollar y los protocolos de interacción entre sistemas distintas y también entre humanos y sistemas.
 
 Los tres tipos de usuarios que se considera para el sistema son administradores, quienes administran y mantienen todo el sistema en su ambiente de despliegue, docentes, quienes generan contenido didactica para sus estudiantes y califican los mismos motivo por el cual que tienen acceso a los LMS, el sistema de editar codigo (que les permite generar nuevas tareas / exámenes / pruebas / talleres para sus estudiantes y ver el progreso y calificaciones de los mismos) y el sistema de control de versiones (donde puede ver y bajar codigo que escriben estudiantes y ver a un nivel más profundo el historial y evolución del mismo), y estudiantes, quienes tengan acceso a los mismos tres sistemas de los docentes. Los estudiantes acceden al LMS donde vean los tareas / exámenes / pruebas / talleres nuevos que hay y al abrirlos se les lleva, identifica y autentica el sistema de editar código en línea mediante LTI. Los estudiantes realizan sus obligaciones de código, mientras que los mismos se respaldan de forma automática en un servidor de control de versiones independiente de tal forma que se lo puede revisar tanto los estudiantes involucrados como su docente a futuro. Aquello control adicional podría llegar a ser una evidencia importante para la resolución de conflictos entre estudiantes y/o docentes a futuro.
 
@@ -24,6 +33,15 @@ El sistema de editar codigo, apartir de aqui conocido simplemente bajo el nombre
 \subsubsection{GitEdu}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/mod_ge.png}
+  \end{center}
+  \caption{Diagrama de Subsistemas y Modulos de GitEdu.}
+  \label{mod_ge}
+\end{figure}
+
+La figura \ref{mod_ge} presenta todos los componentes en forma de subsistemas y módulos que forman parte del diseño propuesta para el sistema GitEdu.
 
 \paragraph{Subsistema de Gestión de Usuarios}
 El subsistema de gestión de usuarios de encarga de temas de seguridad y acceso por usuarios a varios componentes de la aplicación. Para lo mismo autentica usuarios mediante dos módulos (uno clásico y el otro mediante el protocolo LTI) y lleva un sistema de permisos orientado a usuarios, grupos y roles.
@@ -103,6 +121,15 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 \subsubsection{EduNube}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/mod_en.png}
+  \end{center}
+  \caption{Diagrama de Subsistemas y Modulos de EduNube.}
+  \label{mod_en}
+\end{figure}
+
+La figura \ref{mod_en} presenta todos los componentes en forma de subsistemas y módulos que forman parte del diseño propuesta para el sistema EduNube.
 
 \paragraph{Subsistema de Gestión de Usuarios}
 El subsistema de gestión de usuarios de encarga de temas de seguridad y acceso indirecto por usuarios (a través de GitEdu) y acceso directo por parte de administradores a varios componentes de la aplicación. Para lo mismo autentica usuarios mediante dos módulos (uno clásico solo para administración del mismo y el otro mediante llaves públicas/privadas [criptografía asimétrica] para aplicaciones externas) y lleva un sistema de permisos orientado a usuarios, grupos y roles.
@@ -172,8 +199,15 @@ La ventaja de un diseño orientado a módulos como se lo presenta aquí es la di
 \subsection{Arquitectura}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/arq_ge.png}
+  \end{center}
+  \caption{Diagrama de arquitectura para el sistema GitEdu.}
+  \label{arq_ge}
+\end{figure}
 
-Como se puede observar en la figura (diag-arq-gitedu), a un nivel global, el sistema GitEdu consiste en 5 capas que son:
+Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema GitEdu consiste en 5 capas que son:
 \begin{itemize}
 	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
     \begin{itemize}
@@ -212,8 +246,15 @@ Como se puede observar en la figura (diag-arq-gitedu), a un nivel global, el sis
 \end{itemize}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/arq_en.png}
+  \end{center}
+  \caption{Diagrama de arquitectura para el sistema EduNube.}
+  \label{arq_en}
+\end{figure}
 
-Como se puede observar en la figura (diag-arq-edunube), a un nivel global, el sistema EduNube consiste en 5 capas que son:
+Como se puede observar en la figura \ref{arq_en}, a un nivel global, el sistema EduNube consiste en 5 capas que son:
 \begin{itemize}
 	\item \textbf{Seguridad} auténtica administradores y sistemas externos y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
     \begin{itemize}
@@ -257,8 +298,15 @@ Se ha considerado para ambos sistemas una arquitectura de n-capas debido a su ca
 \subsection{Despliegue}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/desp_ge_en.png}
+  \end{center}
+  \caption{Diagrama de Despliegue para los sistemas GitEdu y EduNube.}
+  \label{desp_ge_en}
+\end{figure}
 
-Como se puede observar en la figura (diag-despl-gitedu-edunube), el despliegue del sistema GitEdu junto al sistema EduNube, consiste en dos redes, una externa que contiene los usuarios finales (Estudiantes, Docentes, Administradores) en adición a sistemas externas como los dos LMS institucionales (Moodle y OpenEdX) y el servidor de Git (GitLab Community Edition), mientras que la red interna contiene las varias componentes que forman el conjunto de sistemas:
+Como se puede observar en la figura \ref{desp_ge_en}, el despliegue del sistema GitEdu junto al sistema EduNube, consiste en dos redes, una externa que contiene los usuarios finales (Estudiantes, Docentes, Administradores) en adición a sistemas externas como los dos LMS institucionales (Moodle y OpenEdX) y el servidor de Git (GitLab Community Edition), mientras que la red interna contiene las varias componentes que forman el conjunto de sistemas:
 \begin{itemize}
 	\item \textbf{Cortafuegos} divide la red interna de la red externa y permite únicamente que pasa tráfico HTTP y HTTPS de manera bidireccional (con posibilidad de llamadas LTI sobre estos protocolos) y la salida de SSH al servidor de Git (para ofrecer mayor seguridad que transferencias sobre HTTP(S)).
     \item \textbf{Proxy de Terminación SSL} accepta HTTP y HTTPS, pero para asegurar la seguridad de usuarios finales y aplicaciones externas redirecciona toda uso del protocolo HTTP a HTTPS. Además descifra conexiones HTTPS entrantes para manejarlos por HTTP dentro de la red interna (reduciendo la carga en otros servidores sin abandonar seguridad en la red externa) y cifra conexiones salientes. Se utiliza NGinX por su bajo consumo de recursos en comparación con sus competidores como Apache.
@@ -291,8 +339,15 @@ A continuación se presenta el alcance del desarrollo, pruebas y despliegue para
 Debido al hecho de que se cuenta con tiempo y recursos limitados para realizar y acabar el trabajo de titulación, se considera un alcance limitado en ciertos aspectos con un fin de acabar con los componentes críticos del sistema dentro del tiempo dado.
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/alc_mod_ge.png}
+  \end{center}
+  \caption{Alcance de Módulos para GitEdu.}
+  \label{alc_mod_ge}
+\end{figure}
 
-Para el sistema GitEdu se considera los siguientes subsistemas y módulos críticos:
+Para el sistema GitEdu se considera los siguientes subsistemas y módulos críticos como se puede observar en la figura \ref{alc_mod_ge}:
 \begin{itemize}
 	\item \textbf{Todo el subsistema de Gestión de Usuarios.} Todos los módulos de este sistema son críticos porque se encargan de cómo los usuarios se autentican contra el mismo y el control de acceso que tienen cada uno. Por lo tanto el subsistema en sí es una parte importante para garantizar seguridad en el sistema final.
     \item \textbf{Parte del subsistema de Editar Código.} El subsistema de editar codigo se considera crítico los módulos tanto de editar como de persistir codigo. El módulo de editar codigo es crítico porque forma la funcionalidad principal de que se trata el sistema mientras que el modulo de persistir codigo viene a ser critico para sincronizar codigo entre los dos sistemas. No se toma en consideración como críticos los módulos de interacción social, compartir codigo ni control de acceso a codigo porque las mismas se tratan de llevar el sistema más allá de su propósito original y son más adecuados para un futuro trabajo.
@@ -301,7 +356,16 @@ Para el sistema GitEdu se considera los siguientes subsistemas y módulos críti
     \item \textbf{Todo el subsistema de Ejecución.} Todos los módulos de este sistema son críticos porque se encargan de la comunicación con el sistema EduNube. El módulo de comandos prepara comandos para ejecutar a través del módulo de comunicación de datos y notas se los envía en adición a conseguir resultados y sincronizar notas y calificaciones generadas por EduNube.
 \end{itemize}
 
-Para el sistema EduNube, se considera los siguientes subsistemas y módulos como críticos:
+% figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/alc_mod_en.png}
+  \end{center}
+  \caption{Alcance de Módulos para EduNube.}
+  \label{alc_mod_en}
+\end{figure}
+
+Para el sistema EduNube, se considera los siguientes subsistemas y módulos como críticos, de la forma que estan demostradas en la figura \ref{alc_mod_en}:
 \begin{itemize}
 	\item \textbf{Todo el subsistema de Gestión de Usuarios.} Todos los módulos de este sistema son críticos porque se encargan de cómo los usuarios se autentican contra el mismo y el control de acceso que tienen cada uno. Por lo tanto el subsistema en sí es una parte importante para garantizar seguridad en el sistema final.
 	\item \textbf{Parte del subsistema de Ejecución.} Dentro del subsistema de ejecución se consideran críticos los módulos de comandos (para procesar comandos entrantes), de control de hipervisores (para gestionar recursos virtuales), y de persistencia de código (para recuperar código para su compilación, compilación y ejecución).  Además como componentes del módulo de control de hipervisores, se considera crítico los submódulos de compilación de código (para aquellos lenguajes que lo requieren), de ejecución (para ejecutar código), y de calificación automatizado de código (para calificar codigo de estudiantes). Se considera que los módulos de seguridad adicionales dentro de este subsistema no son necesarios por el momento debido al que único sistema que tendrá acceso a esta será la de GitEdu. A futuro, donde más sistemas y servicios empiezan a necesitar consumir el API de EduNube, llegará a ser necesario que tenga aquellos módulos de seguridad para proveer protección adicional.
@@ -309,5 +373,12 @@ Para el sistema EduNube, se considera los siguientes subsistemas y módulos como
 \end{itemize}
 
 % figure
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{Figures/alc_desp_ge_en.png}
+  \end{center}
+  \caption{Alcance de Despliegue.}
+  \label{alc_desp_ge_en}
+\end{figure}
 
-En cuanto el despliegue, los sistemas externas que se toma en consideración para el alcance son Moodle como LMS, y GitLab Community Edition como servidor de control de versiones. En relación a los ambientes virtuales, solo se considera un hipervisor y un sistema operativo para las máquinas virtuales dentro de la versión final (durante el desarrollo se presenta los candidatos, comparación y selección de los mismos). También se incluye dentro del alcance el desarrollo y despliegue de los dos sistemas GitEdu y EduNube con sus respectivas bases de datos utilizando uWSGI como servidor de aplicación. No se incluye dentro del alcance OpenEdX o ningún otro LMS externa fuera de la mencionada previamente ni las configuraciones del cortafuego y servidores web, estos quedan como responsabilidades institucionales en cuanto como deseen implementar estos partes del despliegue. Lo que se presenta aquí es una sugerencia del autor basado en su experiencia práctica.
+En cuanto el despliegue (figura \ref{alc_desp_ge_en}), los sistemas externas que se toma en consideración para el alcance son Moodle como LMS, y GitLab Community Edition como servidor de control de versiones. En relación a los ambientes virtuales, solo se considera un hipervisor y un sistema operativo para las máquinas virtuales dentro de la versión final (durante el desarrollo se presenta los candidatos, comparación y selección de los mismos). También se incluye dentro del alcance el desarrollo y despliegue de los dos sistemas GitEdu y EduNube con sus respectivas bases de datos utilizando uWSGI como servidor de aplicación. No se incluye dentro del alcance OpenEdX o ningún otro LMS externa fuera de la mencionada previamente ni las configuraciones del cortafuego y servidores web, estos quedan como responsabilidades institucionales en cuanto como deseen implementar estos partes del despliegue. Lo que se presenta aquí es una sugerencia del autor basado en su experiencia práctica.

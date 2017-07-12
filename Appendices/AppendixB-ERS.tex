@@ -2,3 +2,17 @@
 % Appendix B - Software Requirements Specification
 
 \chapter{Especificacion de Requisitos de Software}
+\label{ersDoc}
+
+\section{Introduccion}
+
+\subsubsection{Proposito}
+El siguiente documento espera dar una descripción detallado de los requisitos del Sistema Git Education (GitEDU) con las finalidades de definir la intención de la misma, declarar de forma completa todos los componentes a ser desarrollados del sistema, y también explicar limitaciones del sistema además de sus interacciones y interfaces con otros sistemas. Se destina el siguiente documento para revisión por el equipo de asesores y como una referencia de alcance para el equipo de desarrollo.
+
+\subsection{Alcance}
+GitEDU es un sistema de integración para promover la programación estudiantil y el sistema educativo que soporta el mismo. El sistema final debe disponer de buena documentación y alta calidad de código para sostener su futuro desarrollo y mantenimiento por parte de una comunidad de profesionales y profesionales en formación.
+
+Docentes de las carreras que involucran la enseñanza de programación, actualmente tanto la carrera de Sistemas Informáticos y Computación como la carrera de Electrónica y Telecomunicaciones, pueden crear dentro de la plataforma, deberes, talleres, pruebas y exámenes, y a través de los LMS institucionales, compartir las mismas con sus alumnos. Los alumnos pueden entrar a través de un enlace que les comparte su docente dentro del LMS institucional y con un canal de comunicación LTI, la plataforma GitEDU les identifica y autentica sin interacción del usuario para que el estudiante puede empezar directamente con el trabajo que tiene que realizar sin digitar sus credenciales. En el curso de su actividad, se va guardando su progreso periódicamente contra un servidor de control de versiones institucional (GitLab CE) y en cualquier momento el estudiante puede probar e interactuar con su código a través de un terminal virtual de Linux que se encuentra dentro de la misma interfaz. Una vez que se termine su trabajo y desee enviarlo, se lo envía y el código escrito se auto califica contra un conjunto de pruebas unitarias ocultas que el docente agregó a la actividad al crearlo. La nota que se genera se lo envía al LMS institucional a través del mismo canal LTI. En caso de que el docente decide no utilizar pruebas unitarias o calificar cada trabajo a mano o realizar una calificación híbrida entre las pruebas unitarias y la parte a mano, no se reflejarán las notas en el LMS hasta que el docente se ha terminado de calificar el código en la plataforma de GitEDU.
+
+
+\ldots

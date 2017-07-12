@@ -4,10 +4,63 @@
 \label{capitulo3}
 
 \section{Analisis}
+La resolución de los problemas siempre debe empezar con un análisis acerca de su alcance y características. En base a aquello análisis se empieza a salir las ideas de soluciones para en base a ellas diseñar una resolución del mismo problema. Para la fase de análisis se ha realizado un Documento de Visión (Apéndice \ref{visionDoc}) y una Especificación de Requerimientos (Apéndice \ref{ersDoc}).
 
 \subsection{Vision}
+El resto del documento de visión se puede encontrar en el Apéndice \ref{visionDoc}. Aquí se ha incluido la parte de mayor consideración.
+
+\subsubsection{Proposito}
+Ayudar a mejorar los métodos de enseñanza que ofrece la Universidad Técnica Particular de Loja en cuanto a la programación y uso de base de datos para las carreras de Sistemas y Electrónica.
+
+\subsubsection{Alcance}
+Se propone un sistema de editar código en línea que a su vez integra LMS externos (para autenticación y notas), un servidor de control de versiones externo (para la persistencia de código), y un servicio web de ejecución de código en línea de una forma segura, eficaz y eficiente (para dar un ambiente de ejecución y pruebas tanto para los usuarios del sistema como para calificar de una forma automática).
+
+\subsubsection{Oportunidad de Negocios}
+Con el avance continuo de la tecnología y su introducción en mas aspectos de la vida diaria de cada uno, hay una necesidad creciente de ingenieros en sistemas e electrónica que pueden programar e entender el software que hace todo funcionar en adición a los bases de datos que están por detrás de estos mismos sistemas.
+
+Es por aquella razón que ahora está de moda ofrecer plataformas en línea para la enseñanza dinámica de la programación. GitEDU espere ofrecer las mismas funcionalidades a un costo institucional menor a travez de integración con sistemas existentes e innovación para proveer una mejor experiencia de usuario, tanto estudiantes como profesores para llevarse a cabo un mejor proceso de aprendizaje.
+
+\subsubsection{Demográfica del Mercado}
+En el año 2011, la Universidad Técnica Particular de Loja contaba con aproximadamente 4000 estudiantes presenciales y 24000 estudiantes a distancia con una tendencia creciente \citep{UTPL-Datos-Estadisticos}. En la experiencia personal del autor, las carreras de Sistemas y Electrónica, por lo menos en la modalidad presencial, juntos representan aproximadamente un 10\% de todos los estudiantes en la universidad lo cual daría un mercado de estudiantes afectados por un nuevo sistema de aproximadamente un mínimo 2800 estudiantes. Según el directorio de docentes de la universidad, son 60 profesores en el departamento de Ciencias de la Computación y Electrónica \citep{UTPL-Directorio-Docentes}. Con eso se puede estimar un mínimo de 2860 usuarios lo los cuales el sistema propuesto podría llegar a afectar.
+
+Es precisamente la parte de la población, de usuario potenciales mencionado anteriormente, que está en el proceso de enseñar, evaluar y aprender habilidades de programación y consultar bases de datos que forman la base de usuarios de la aplicación.
 
 \subsection{Especificacion de Requerimientos}
+El resto del documento de especificación de requerimientos se puede encontrar en el Apéndice \ref{ersDoc}. Aquí se ha incluido la parte de mayor consideración.
+
+\subsubsection{Proposito}
+El siguiente documento espera dar una descripción detallado de los requisitos del Sistema Git Education (GitEDU) con las finalidades de definir la intención de la misma, declarar de forma completa todos los componentes a ser desarrollados del sistema, y también explicar limitaciones del sistema además de sus interacciones y interfaces con otros sistemas. Se destina el siguiente documento para revisión por el equipo de asesores y como una referencia de alcance para el equipo de desarrollo.
+
+\subsubsection{Alcance}
+GitEDU es un sistema de integración para promover la programación estudiantil y el sistema educativo que soporta el mismo. El sistema final debe disponer de buena documentación y alta calidad de código para sostener su futuro desarrollo y mantenimiento por parte de una comunidad de profesionales y profesionales en formación.
+
+Docentes de las carreras que involucran la enseñanza de programación, actualmente tanto la carrera de Sistemas Informáticos y Computación como la carrera de Electrónica y Telecomunicaciones, pueden crear dentro de la plataforma, deberes, talleres, pruebas y exámenes, y a través de los LMS institucionales, compartir las mismas con sus alumnos. Los alumnos pueden entrar a través de un enlace que les comparte su docente dentro del LMS institucional y con un canal de comunicación LTI, la plataforma GitEDU les identifica y autentica sin interacción del usuario para que el estudiante puede empezar directamente con el trabajo que tiene que realizar sin digitar sus credenciales. En el curso de su actividad, se va guardando su progreso periódicamente contra un servidor de control de versiones institucional (GitLab CE) y en cualquier momento el estudiante puede probar e interactuar con su código a través de un terminal virtual de Linux que se encuentra dentro de la misma interfaz. Una vez que se termine su trabajo y desee enviarlo, se lo envía y el código escrito se auto califica contra un conjunto de pruebas unitarias ocultas que el docente agregó a la actividad al crearlo. La nota que se genera se lo envía al LMS institucional a través del mismo canal LTI. En caso de que el docente decide no utilizar pruebas unitarias o calificar cada trabajo a mano o realizar una calificación híbrida entre las pruebas unitarias y la parte a mano, no se reflejarán las notas en el LMS hasta que el docente se ha terminado de calificar el código en la plataforma de GitEDU.
+
+\subsubsection{Perspectiva de Producto}
+La plataforma GitEDU se descompone en dos subsistemas: el subsistema de editar código y el subsistema de ejecutar código. El subsistema de editar código consiste en la integración de autenticación y notas por el lado del LMS, el uso de persistencia del código por el servidor de control de versiones por otro lado, el consumo de un servicio de ejecución de código por un tercer lado y un editor de código en línea. El subsistema de ejecutar código consiste en esperar llamadas del subsistema anterior, validar la autenticidad, establecer permisos, limitaciones y parámetros de ejecución, gestionar recursos para ejecución, la ejecución interactiva y devolución de resultados al otro subsistema.
+
+Debido a la necesidad de mantener seguridad y prevenir la ejecución indebido de código, el subsistema para lo mismo debe ser aislado de todos los usuarios y solo accedido desde el otro subsistema a través de un API que permite su interoperabilidad. La solución para la ejecución de código debe ser liviana debido a número grande de usuarios concurrentes que puede tener a la vez.
+
+\subsubsection{Funcionalidades de Producto}
+Para entrar al subsistema de editar código en línea, se debe autenticarse contra el LMS institucional. El editor de código en línea debe soportar una variedad grande de lenguajes y estar abierto a la agregación de más lenguajes en un futuro. La persistencia de código en un servidor de control de versiones debe ser transparente y no requerir ningún interacción del usuario. El interfaz para interactuar con el ambiente virtual debe ser simple y fácil de manejar sin mayor conocimiento de las tecnologías que le respaldan. Se debe poder acompañar el editor de código con documentación que guía el estudiante en explicar o resolver el problema actual. La manera en que docentes pueden generar nuevos ejercicios, su documentación y pruebas unitarias para la calificación debe ser intuitivo.
+
+\subsubsection{Caracteristicas de Usuario}
+Los tres tipos de usuarios que interactúan con el sistema son Docentes, Alumnos y Administradores. Cada tipo de usuario tiene sus propias necesidades y requerimientos.
+
+Docentes necesitan un sistema que sea fácil de manejar y que les simplifica y automatiza el proceso de enseñar y evaluar a sus estudiantes. Eso significa tener una interfaz intuitiva para docentes que les permite escribir, documentar y generar pruebas unitarias para probar funcionalidad de código que escribe estudiantes para los ejercicios.
+
+Alumnos necesitan un sistema que les brinde una buena experiencia de aprendizaje y les proporciona todas las herramientas que requieren para desarrollar en linea. Igual que sus profesores, deben disponer de una interfaz intuitiva que les ayuda cumplir con sus responsabilidades de estudiar, aprender y demostrar conocimientos en una cantidad de tiempo óptimo.
+
+Administradores necesitan un sistema que sea seguro y cuyos componentes sean fáciles de mantener y extender a lo largo del tiempo. Para ello se necesita tener una buena documentación del funcionamiento del sistema y todos sus componentes para tener la misma como referencia.
+
+\subsubsection{Limitaciones}
+Se requiere de hardware con alta capacidad de virtualización y conectividad al internet y la intranet institucional para poder brindar la mejor experiencia al usuario.
+
+\subsubsection{Suposiciones y Dependencias}
+Se supone que siempre habrá la conectividad necesaria para poder usar todos los componentes del sistema.
+
+\subsubsection{División de Requerimientos}
+En caso de que falta recursos de tiempo o algún otro recurso, se limitará el alcance del proyecto para enfocarse en los requerimientos de una prioridad más alta y dejar los demás requerimientos para trabajos futuros.
 
 \section{Diseño}
 Previo a la implementación de cualquier sistema es importante analizar su funcionamiento y en base a lo mismo realizar un diseño que provee estas funcionalidades que se requiere. Por lo tanto, a continuación se demuestra las fases del diseño realizado desde la definición de sistemas, subsistemas y módulos y la interacción entre ellos, hasta la arquitectura interna y de despliegue.

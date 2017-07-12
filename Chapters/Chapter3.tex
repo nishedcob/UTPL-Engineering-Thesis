@@ -177,16 +177,137 @@ Como se puede observar en la figura (diag-arq-gitedu), a un nivel global, el sis
 \begin{itemize}
 	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
     \begin{itemize}
-    	\item \textbf Autenticación por LTI usa interfaces LTI de aplicaciones externas como LMS institucionales para autenticar usuarios.
-		\item Autenticación Clásica permite el login (autenticación) de usuarios mediante la forma clásica de un usuario y contraseña.
-		\item Permisos permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser acceso a la administración de una materia, por ejemplo el control que se da a un docente o grupo de docentes sobre una materia.
-		\item Grupos permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de usuarios suficiente privilegiados dentro del sistema. Ejemplos de grupos podrían ser miembros de una cierta materia o tipo de materia, por ejemplo ''Base de Datos''.
-		\item Roles permite definir usuarios por su propósito del sistema con un fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario es. Ejemplos de roles podrían ser Estudiante, Docente y Administrador.
+    	\item \textbf{Autenticación por LTI} usa interfaces LTI de aplicaciones externas como LMS institucionales para autenticar usuarios.
+		\item \textbf{Autenticación Clásica} permite el login (autenticación) de usuarios mediante la forma clásica de un usuario y contraseña.
+		\item \textbf{Permisos} permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser acceso a la administración de una materia, por ejemplo el control que se da a un docente o grupo de docentes sobre una materia.
+		\item \textbf{Grupos} permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de usuarios suficiente privilegiados dentro del sistema. Ejemplos de grupos podrían ser miembros de una cierta materia o tipo de materia, por ejemplo ''Base de Datos''.
+		\item \textbf{Roles} permite definir usuarios por su propósito del sistema con un fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario es. Ejemplos de roles podrían ser Estudiante, Docente y Administrador.
     \end{itemize}
     \item \textbf{Administración} permite la administración, mantenimiento y recolección de datos por usuarios dentro del sistema. Para cumplir con estas responsabilidades se divide en:
+    \begin{itemize}
+    	\item \textbf{Subsistema de Gestión de Configuraciones} que permite a administradores cambiar de forma rapida y facil las configuraciones internas del sistema.
+        \item \textbf{Subsistema de Recolección de Datos de Uso} que collecta automáticamente datos del uso del sistema.
+        \item \textbf{Subsistema de Análisis de Datos de Uso} que permite a administradores visualizar y analizar los datos que ha recolectado el Subsistema de Recolección de Datos de Uso.
+        \item \textbf{Subsistema de Administración y Mantenimiento} que permite a administradores ver en tiempo real y también registros históricos de consumo de recursos. Este subsistema también proporciona a administradores las herramientas que necesita para gestionar y controlar problemas como usuarios maliciosos, sistemas caídos entre otros problemas detectados.
+    \end{itemize}
     \item \textbf{Presentación} que se encarga de presentar interfaces web a varias tipos de usuario, incluyendo:
+    \begin{itemize}
+    	\item \textbf{Estudiantes}
+		\item \textbf{Docentes}
+		\item \textbf{Administradores}
+    \end{itemize}
     \item \textbf{Lógica de Negocios} que se encarga de llevar a cabo los procesos de negocio por el cual la aplicación tiene propósito. Esto se subdivida en cuatro subsistemas:
+    \begin{itemize}
+    	\item \textbf{Subsistema de Docentes y Educación} que se lleva a cabo procesos de negocio que tienen que ver con enseñanza y evaluación. Dentro de esta subsistema también se lleva las tareas de administración asociadas con un docente y sus aulas de alumnos.
+        \item \textbf{Subsistema de Gestión de Código} lleva el control del código y los procesos asociados en cuanto.
+        \item \textbf{Subsistema de Gestión de Notas} maneja los procesos de negocio asociados con la sincronización y auditoría de notas generadas dentro del sistema.
+        \item \textbf{Subsistema de Ejecución de Código} que lleva a cabo procesos de negocio que tienen que ver con ejecución arbitraria de código y por lo tanto requiere un cierto nivel de seguridad y aislamiento elevado a través de entornos virtualizados. Dentro de los procesos que se incluyen aquí, hay compilación, ejecución y calificación de código automatizado mediante pruebas unitarias.
+    \end{itemize}
     \item \textbf{Persistencia} que se encarga de asegurar que se persisten datos importantes para uso futuro y también la recuperación de los mismos. Esto se subdivide en tres clases de persistencia:
+    \begin{itemize}
+    	\item Persistencia a través de un \textbf{ORM Relacional} que guarda y recupera datos estructurados de la aplicación en bases de datos relacionales y orienta los mismos datos a objetos dentro de la aplicación para permitir su facil manipulacion.
+        \item Persistencia a través de un \textbf{ORM NoSQL} que guarda y recupera datos no estructurados de la aplicación en bases de datos no relacionales y orienta los mismos datos a objetos dentro de la aplicación para permitir su facil manipulacion.
+        \item Persistencia de código a través de un \textbf{Gestor de Persistencia de Código Externo} que guarda y recupera codigo de usuarios para su manipulación dentro de la aplicación y persistencia fuera del mismo.
+    \end{itemize}
 \end{itemize}
 
+% figure
+
+Como se puede observar en la figura (diag-arq-edunube), a un nivel global, el sistema EduNube consiste en 5 capas que son:
+\begin{itemize}
+	\item \textbf{Seguridad} auténtica administradores y sistemas externos y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
+    \begin{itemize}
+    	\item \textbf{Autenticación por Criptografía Asimétrica} usa pares de llaves públicas y privadas suficientemente grandes para ser difíciles de falsificar matemáticamente para autenticar sistemas externas.
+    	\item \textbf{Autenticación Clásica} permite el login (autenticación) de administradores mediante la forma clásica de un usuario y contraseña.
+    	\item \textbf{Permisos} permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser quien puede crear máquinas virtuales o ver el consumo de recursos del sistema.
+    	\item \textbf{Grupos} permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de administradores suficiente privilegiados dentro del sistema. Ejemplos de grupos podrían ser ciertos tipos de usuario que representa algun tipo de estudiante en algún tipo de materia, por ejemplo para la materia de ''Base de Datos''.
+    	\item \textbf{Roles} permite definir usuarios por su propósito del sistema con un fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario es. Ejemplos de roles podrían ser Sistema Externa y Administrador.
+    \end{itemize}
+	\item \textbf{Administración} permite la administración, mantenimiento y recolección de datos por usuarios dentro del sistema. Para cumplir con estas responsabilidades se divide en:
+    \begin{itemize}
+    	\item \textbf{Subsistema de Gestión de Configuraciones} que permite a administradores cambiar de forma rapida y facil las configuraciones internas del sistema.
+    	\item \textbf{Subsistema de Recolección de Datos de Uso} que collecta automáticamente datos del uso del sistema.
+    	\item \textbf{Subsistema de Análisis de Datos de Uso} que permite a administradores visualizar y analizar los datos que ha recolectado el Subsistema de Recolección de Datos de Uso.
+    	\item \textbf{Subsistema de Monitoreo} que permite a administradores ver en tiempo real y también registros históricos de consumo de recursos. Este subsistema también proporciona a administradores las herramientas que necesita para gestionar y controlar problemas como usuarios maliciosos, sistemas caídos entre otros problemas detectados.
+    \end{itemize}
+	\item \textbf{Presentación} que se encarga de presentar interfaces web a varias tipos de usuario, incluyendo:
+    \begin{itemize}
+    	\item \textbf{Compilación/Ejecución de Código y Pruebas Unitarias} proporciona las interfaces gráficas utilizadas durante la compilacion y ejecucion de codigo en adición a la aplicación de pruebas unitarias contra un codigo para ayudar en la calificación del mismo.
+        \item \textbf{Notas} permite a docentes y sistemas externos ver las notas asignados a un código.
+        \item \textbf{Administradores} proporciona las interfaces gráficas necesarias para ayudar un administrador cumplir con sus responsabilidades de monitoreo, control y mantenimiento del sistema en ambientes de producción.
+    \end{itemize}
+	\item \textbf{Lógica de Negocios} que se encarga de llevar a cabo los procesos de negocio por el cual la aplicación tiene propósito. Esto se subdivida en cuatro subsistemas:
+    \begin{itemize}
+    	\item \textbf{Subsistema de Recepción de Comandos} que se lleva a cabo procesos de negocio que tienen que ver con recibir comandos de sistemas externas y procesar las mismas.
+        \item \textbf{Subsistema de Control de Hipervisores} lleva el control de los hipervisores conectados y les guía en el proceso de virtualizar y ejecutar código dentro de máquinas virtuales de los mismos hipervisores.
+        \item \textbf{Subsistema de Calificaciones} maneja los procesos de negocio asociados con la calificación, sincronización y auditoría de notas generadas dentro del sistema.
+        \item \textbf{Subsistema de Ejecución de Código y Pruebas Unitarias} que lleva a cabo procesos de negocio que tienen que ver con ejecución arbitraria de código en entornos virtualizados. Dentro de los procesos que se incluyen aquí, hay compilación, ejecución y calificación de código automatizado mediante pruebas unitarias.
+    \end{itemize}
+	\item \textbf{Persistencia} que se encarga de asegurar que se persisten datos importantes para uso futuro y también la recuperación de los mismos. Esto se subdivide en tres clases de persistencia:
+    \begin{itemize}
+    	\item Persistencia a través de un \textbf{ORM Relacional} que guarda y recupera datos estructurados de la aplicación en bases de datos relacionales y orienta los mismos datos a objetos dentro de la aplicación para permitir su facil manipulacion.
+		\item Persistencia a través de un \textbf{ORM NoSQL} que guarda y recupera datos no estructurados de la aplicación en bases de datos no relacionales y orienta los mismos datos a objetos dentro de la aplicación para permitir su facil manipulacion.
+		\item Persistencia de código a través de un \textbf{Gestor de Persistencia de Código Externo} que guarda y recupera codigo de usuarios para su manipulación dentro de la aplicación y persistencia fuera del mismo.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Ventajas del Diseño Arquitectónico}
+Se ha considerado para ambos sistemas una arquitectura de n-capas debido a su capacidad de escalabilidad sobre varios niveles físicos. Además la separación lógica entre capas permite mayor mantenibilidad al largo plazo donde solo se necesitan reemplazar los componentes que requieren cambios en lugar de todo el sistema. El nivel de aislamiento entre estas mismas capas brinde mejor seguridad contra usuarios externos sean maliciosos o que quieren dar mal uso (un uso inadecuado) al sistema. A continuación se presenta la arquitectura de despliegue propuesta dentro de este trabajo de titulación.
+
 \subsection{Despliegue}
+
+% figure
+
+Como se puede observar en la figura (diag-despl-gitedu-edunube), el despliegue del sistema GitEdu junto al sistema EduNube, consiste en dos redes, una externa que contiene los usuarios finales (Estudiantes, Docentes, Administradores) en adición a sistemas externas como los dos LMS institucionales (Moodle y OpenEdX) y el servidor de Git (GitLab Community Edition), mientras que la red interna contiene las varias componentes que forman el conjunto de sistemas:
+\begin{itemize}
+	\item \textbf{Cortafuegos} divide la red interna de la red externa y permite únicamente que pasa tráfico HTTP y HTTPS de manera bidireccional (con posibilidad de llamadas LTI sobre estos protocolos) y la salida de SSH al servidor de Git (para ofrecer mayor seguridad que transferencias sobre HTTP(S)).
+    \item \textbf{Proxy de Terminación SSL} accepta HTTP y HTTPS, pero para asegurar la seguridad de usuarios finales y aplicaciones externas redirecciona toda uso del protocolo HTTP a HTTPS. Además descifra conexiones HTTPS entrantes para manejarlos por HTTP dentro de la red interna (reduciendo la carga en otros servidores sin abandonar seguridad en la red externa) y cifra conexiones salientes. Se utiliza NGinX por su bajo consumo de recursos en comparación con sus competidores como Apache.
+    \item \textbf{Proxy Inversa / Balanceador de Carga} accepta todo el tráfico HTTPS (ahora por el protocolo HTTP dentro de la red interna) entrante y elige en base a la ruta cual servidor se lo puede responder. A futuro este componente permite que se puede escalar el sistema en lo que permite dividir tráfico entre varios servidores del mismo tipo (por ejemplo dos servidores de aplicación: GitEdu1 y GitEdu2). Se considera que NGinX es la solución más óptima para realizar este rol.
+    \item \textbf{Servidor Web de Archivos Estáticos} se responsabiliza por peticiones de archivos estáticos que no conviene enviar a los servidores de aplicación (quienes los procesaría con mayor lentitud). Estos mismos tienen una conexión NFS o SSHFS con los mismos servidores de aplicación para que estos sean capaces de actualizar remotamente los archivos estáticos en caso de que los mismos cambien (por ejemplo cuando un usuario actualiza su foto de perfil). Estudios de rendimiento demuestran que NGinX cumple este rol de ser servidor web de archivos estáticos mejor que Apache.
+    \item \textbf{Servidor de Aplicación ''GitEdu''} se aloja el sistema GitEdu, desarrollado bajo el marco Django y el lenguaje de programación Python (version 3.x). Comunica con el servidor externo de Git sobre SSH y dispone tanto de un base de datos relacional como uno no relacional para persistir los distintos tipos de datos que tiene que manejar. Se conecta directamente al Servidor de Aplicación “EduNube” mediante SHTTP (HTTP sobre un túnel SSH) utilizando un par de llaves (pública y privada) como schéma de criptografía asimétrica. Se considera uWSGI como mejor servidor de aplicación para el sistema debido a que, a diferencia de su competencia (Gunicorn), esta suporta Websockets.
+    \item \textbf{Motores de Base de Datos Relacional} se alojan datos estructurados para ambos sistemas, tanto GitEdu como NubeEdu.
+    \item \textbf{Motores de Base de Datos NoSQL} se alojan datos no estructurados para ambos sistemas, tanto GitEdu como NubeEdu.
+    \item \textbf{Proxy Inversa de Control de Acceso} restringe acceso al servidor de aplicaciones de EduNube cuando se accede al mismo desde la red externa (a través del proxy inversa).
+    \item \textbf{Servidor de Aplicación ''EduNube''} se aloja el sistema EduNube, desarrollado bajo el marco Django y el lenguaje de programación Python (version 3.x). Comunica con el servidor externo de Git sobre SSH y dispone tanto de un base de datos relacional como uno no relacional para persistir los distintos tipos de datos que tiene que manejar. Utiliza un shell local (dentro del mismo servidor) para manejo de un hipervisor local o en el caso de un hipervisor remoto, maneja el mismo sobre SSH. Las máquinas virtuales que se levanta el hipervisor, también se los controla con SSH. Se considera uWSGI como mejor servidor de aplicación para el sistema debido a que, a diferencia de su competencia (Gunicorn), esta suporta Websockets.
+    \item \textbf{Hipervisores} gestionan máquinas virtuales por parte del sistema EduNube quien le envía comandos por SSH o un shell local. A su vez, controla sus máquinas virtuales mediantes SSH. Como tecnologías de hipervisor se considera Xen, KVM y Docker como buenas opciones para diferentes necesidades. Cada sistema de hipervisores soporta el uso de plantillas para la creación masiva de máquinas virtuales iguales para cada estudiante de una materia.
+    \item \textbf{Máquinas Virtuales} ejecutan código de usuarios y reportan los resultados.
+\end{itemize}
+
+\subsubsection{Ventajas de la Arquitectura de Despliegue}
+De la misma moda como el diseño de sistemas, subsistemas y módulos en adición al diseño arquitectónico, el diseño de arquitectura de despliegue está orientado a extensibilidad a través de modularidad, mantenibilidad por la naturaleza de sus capas y módulos, además de escalabilidad y seguridad mantenido a través de mecanismos de aislamiento de componentes que sean libres de escalar independientemente entre ellos, la arquitectura de despliegue se orienta a los mismos principios.
+
+La separación de deberes dentro del sistema permite que cada servicio dentro de la arquitectura de despliegue se puede dedicar a hacer bien su parte de la manera más eficiente posible sin responsabilidades que no puede sostener de forma inadecuada, algo importante para empezar a poder garantizar rendimiento óptimo del sistema. El uso de un cortafuegos y varias proxies inversas adelantes de cada sistema también ayuda aislar las mismas del mundo externo a un nivel de protocolos reduce los superficies de ataque contra las mismas para ofrecer seguridad sin sacrificar rendimiento de una manera similar al punto anterior de separación de trabajo en roles y asignación al actor más adecuado para el mismo.
+
+Este mismo uso de trabajadores, especializado cada uno en sus responsabilidades y posible carga de trabajo también sigue ofreciendo escalabilidad a futuro. Esto se realiza con comunicación entre servicios que está sobre protocolos de red para que las mismas o pueden estar en un solo recurso (sea servidor fisica o virtual) o en varios apartados lo cual permite a futuro la asignación de recursos físicos o virtuales como se lo ve la necesidad. Esta capacidad para escalar se puede ofrecer gracias al hecho de que los servicios semi independientes unos de otros, permitiendo n-capas sobre m-niveles físicos/lógicos.
+
+Donde haya dependencias de, por ejemplo, sistema de ficheros compartidos para dos capas distintas se puede implementar con protocolos que permiten acceso remoto para las operaciones necesarios, en este caso que los servidores de aplicación sean capaces de actualizar los archivos estáticos en el servidor para el mismo (se lo está considerando esta parte con un NFS o SSHFS). Obviamente en el caso de que estén en el mismo servidor, no se da la necesidad de establecer aquello conexión.
+
+En casos donde se considera una necesidad de mayor seguridad en proteger canales de comunicación, se ha considerado que la mejor forma de brindar lo mismo es con tunnels SSH que encapsulan trafico que por si sola ocupa un protocolo adecuado según la necesidad. Por ejemplo para consumir el API de EduNube, GitEdu utiliza HTTP sobre SSH (también conocido como SHTTP). De esta forma se puede aprovechar lo que ya existe y que está comprobada como segura y eficiente (SSH como protocolo, especialmente en su segunda versión, obliga fuertes mecanismos de autenticación y seguridad mientras que al mismo tiempo ofrece menor sacrificio de rendimiento y alta funcionalidad).
+
+A continuación se presenta el alcance del desarrollo, pruebas y despliegue para este trabajo de titulación.
+
+\subsection{Alcance}
+
+Debido al hecho de que se cuenta con tiempo y recursos limitados para realizar y acabar el trabajo de titulación, se considera un alcance limitado en ciertos aspectos con un fin de acabar con los componentes críticos del sistema dentro del tiempo dado.
+
+% figure
+
+Para el sistema GitEdu se considera los siguientes subsistemas y módulos críticos:
+\begin{itemize}
+	\item \textbf{Todo el subsistema de Gestión de Usuarios.} Todos los módulos de este sistema son críticos porque se encargan de cómo los usuarios se autentican contra el mismo y el control de acceso que tienen cada uno. Por lo tanto el subsistema en sí es una parte importante para garantizar seguridad en el sistema final.
+    \item \textbf{Parte del subsistema de Editar Código.} El subsistema de editar codigo se considera crítico los módulos tanto de editar como de persistir codigo. El módulo de editar codigo es crítico porque forma la funcionalidad principal de que se trata el sistema mientras que el modulo de persistir codigo viene a ser critico para sincronizar codigo entre los dos sistemas. No se toma en consideración como críticos los módulos de interacción social, compartir codigo ni control de acceso a codigo porque las mismas se tratan de llevar el sistema más allá de su propósito original y son más adecuados para un futuro trabajo.
+    \item \textbf{Parte del subsistema de Docentes.} Dentro del subsistema de docentes, se considera crítico un módulo de crear talleres, pruebas y exámenes en adición a un módulo de notas y su sincronización. Entre estos dos se forma el núcleo de funcionalidad que requieren docentes dentro de la versión inicial. Dentro de trabajos futuros, se podría extender esta funcionalidad crítica con temas más administrativas como los módulos de gestión de materias y gestión de estudiantes que por el momento no se los considera como funcionalidades críticas para una primera versión estable, el producto de este trabajo de titulación.
+    \item \textbf{Parte del subsistema de Administración.} Dentro del subsistema de administración, solo se considera que los componentes críticos se tratan de colección de datos y el análisis de los mismos debido a que esos dos módulos respectivamente ayudan en la toma de decisiones estratégicas que tienen que ver con la escuela de Ciencias de Computación y Electrónica y el uso del sistema. Los módulos de monitoreo y configuración, aunque podrían ser muy útiles en un ambiente de producción no caen dentro del alcance inicial de este tesis y por lo tanto no se los considera críticos bajo los parámetros del proyecto. De todas formas su implementación podría ser una funcionalidad adicional interesante para un futuro proyecto.
+    \item \textbf{Todo el subsistema de Ejecución.} Todos los módulos de este sistema son críticos porque se encargan de la comunicación con el sistema EduNube. El módulo de comandos prepara comandos para ejecutar a través del módulo de comunicación de datos y notas se los envía en adición a conseguir resultados y sincronizar notas y calificaciones generadas por EduNube.
+\end{itemize}
+
+Para el sistema EduNube, se considera los siguientes subsistemas y módulos como críticos:
+\begin{itemize}
+	\item \textbf{Todo el subsistema de Gestión de Usuarios.} Todos los módulos de este sistema son críticos porque se encargan de cómo los usuarios se autentican contra el mismo y el control de acceso que tienen cada uno. Por lo tanto el subsistema en sí es una parte importante para garantizar seguridad en el sistema final.
+	\item \textbf{Parte del subsistema de Ejecución.} Dentro del subsistema de ejecución se consideran críticos los módulos de comandos (para procesar comandos entrantes), de control de hipervisores (para gestionar recursos virtuales), y de persistencia de código (para recuperar código para su compilación, compilación y ejecución).  Además como componentes del módulo de control de hipervisores, se considera crítico los submódulos de compilación de código (para aquellos lenguajes que lo requieren), de ejecución (para ejecutar código), y de calificación automatizado de código (para calificar codigo de estudiantes). Se considera que los módulos de seguridad adicionales dentro de este subsistema no son necesarios por el momento debido al que único sistema que tendrá acceso a esta será la de GitEdu. A futuro, donde más sistemas y servicios empiezan a necesitar consumir el API de EduNube, llegará a ser necesario que tenga aquellos módulos de seguridad para proveer protección adicional.
+	\item \textbf{Parte del subsistema de Administración.} Dentro del subsistema de administración, solo se considera que los componentes críticos se tratan de colección de datos y el análisis de los mismos debido a que esos dos módulos respectivamente ayudan en la toma de decisiones estratégicas que tienen que ver con la escuela de Ciencias de Computación y Electrónica y el uso del sistema. Los módulos de monitoreo y configuración, aunque podrían ser muy útiles en un ambiente de producción no caen dentro del alcance inicial de este tesis y por lo tanto no se los considera críticos bajo los parámetros del proyecto. De todas formas su implementación podría ser una funcionalidad adicional interesante para un futuro proyecto.
+\end{itemize}
+
+% figure
+
+En cuanto el despliegue, los sistemas externas que se toma en consideración para el alcance son Moodle como LMS, y GitLab Community Edition como servidor de control de versiones. En relación a los ambientes virtuales, solo se considera un hipervisor y un sistema operativo para las máquinas virtuales dentro de la versión final (durante el desarrollo se presenta los candidatos, comparación y selección de los mismos). También se incluye dentro del alcance el desarrollo y despliegue de los dos sistemas GitEdu y EduNube con sus respectivas bases de datos utilizando uWSGI como servidor de aplicación. No se incluye dentro del alcance OpenEdX o ningún otro LMS externa fuera de la mencionada previamente ni las configuraciones del cortafuego y servidores web, estos quedan como responsabilidades institucionales en cuanto como deseen implementar estos partes del despliegue. Lo que se presenta aquí es una sugerencia del autor basado en su experiencia práctica.

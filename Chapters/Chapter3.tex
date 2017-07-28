@@ -68,14 +68,18 @@ Previo a la implementación de cualquier sistema es importante analizar su funci
 \subsection{Sistemas, Subsistemas y Módulos}
 Debido a la naturaleza del alcance de este trabajo de titulación, se considera que se debe dividir la plataforma en dos sistemas que sean capaces de interactuar entre sí. El primer sistema es la que ofrece el editor de código en línea, integración con los LMS institucionales y a su vez integración con un servidor de control de versiones. El segundo sistema solo se encarga de ejecución de código en línea a través de algún tipo de virtualización y aislamiento de procesos. De esta forma se puede aislar el sistema que está bajo mayor riesgo de ser atacado (el de ejecución de código arbitrariamente) del sistema con mayor riesgo de impacto negativo (el sistema de escribir código en línea, el cual también se encarga de las calificaciones). A continuación se presenta la interacción entre los sistemas y actores en el Diagrama de Contexto de Sistemas.
 
+\begin{landscape}
+
 % figure 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=1.0\textwidth]{Figures/contexto.png}
+    \includegraphics[width=1.7\textwidth]{Figures/contexto.png}
   \end{center}
   \caption{Diagrama de Contexto para GitEdu y EduNube.}
   \label{context}
 \end{figure}
+
+\end{landscape}
 
 El diagrama de contexto visualizado en la figura \ref{context} demuestra la relación entre los tres clases de usuarios, sistemas existentes, los sistemas que se plantea desarrollar y los protocolos de interacción entre sistemas distintas y también entre humanos y sistemas.
 

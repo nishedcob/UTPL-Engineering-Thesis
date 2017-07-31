@@ -91,14 +91,14 @@ El sistema de editar codigo, apartir de aqui conocido simplemente bajo el nombre
 
 \begin{landscape}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=1.7\textwidth]{Figures/mod_ge.png}
-  \end{center}
-  \caption{Diagrama de Subsistemas y Modulos de GitEdu.}
-  \label{mod_ge}
-\end{figure}
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.7\textwidth]{Figures/mod_ge.png}
+	  \end{center}
+	  \caption{Diagrama de Subsistemas y Modulos de GitEdu.}
+	  \label{mod_ge}
+	\end{figure}
 
 \end{landscape}
 
@@ -181,14 +181,18 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 
 \subsubsection{EduNube}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/mod_en.png}
-  \end{center}
-  \caption{Diagrama de Subsistemas y Modulos de EduNube.}
-  \label{mod_en}
-\end{figure}
+\begin{landscape}
+
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.7\textwidth]{Figures/mod_en.png}
+	  \end{center}
+	  \caption{Diagrama de Subsistemas y Modulos de EduNube.}
+	  \label{mod_en}
+	\end{figure}
+
+\end{landscape}
 
 La figura \ref{mod_en} presenta todos los componentes en forma de subsistemas y módulos que forman parte del diseño propuesta para el sistema EduNube.
 
@@ -258,17 +262,32 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 La ventaja de un diseño orientado a módulos como se lo presenta aquí es la división de funcionalidad para ayudar en la extensibilidad y mantenibilidad de los sistemas al largo plazo. Por ejemplo este diseño permite agregar funcionalidad adicional a futuro como autenticación por otros medios (por ejemplo LDAP) o la integración de mecanismos anti-plagio. Esta propiedad puede dar una vida útil mayor a los sistemas desarrolladas porque muchas veces no se conoce todo lo que puede requerir un software a futuro para el diseño e implementación inicial. A continuación se presenta la arquitectura de estos dos sistemas, tanto GitEdu como su ambiente de ejecución de código virtualizado, EduNube.
 
 \subsection{Arquitectura}
-
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/arq_ge.png}
-  \end{center}
-  \caption{Diagrama de arquitectura para el sistema GitEdu.}
-  \label{arq_ge}
-\end{figure}
-
 Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema GitEdu consiste en 5 capas que son:
+
+%\begin{itemize}
+%	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
+%    \begin{itemize}
+%    	\item \textbf{Autenticación por LTI} usa interfaces LTI de aplicaciones externas como LMS institucionales para autenticar usuarios.
+%		\item \textbf{Autenticación Clásica} permite el login (autenticación) de usuarios mediante la forma clásica de un usuario y contraseña.
+%		\item \textbf{Permisos} permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser acceso a la administración de una materia, por ejemplo el control que se da a un docente o grupo de docentes sobre una materia.
+%		\item \textbf{Grupos} permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de usuarios suficiente privilegiados dentro del sistema. Ejemplos de grupos podrían ser miembros de una cierta materia o tipo de materia, por ejemplo ''Base de Datos''.
+%		\item \textbf{Roles} permite definir usuarios por su propósito del sistema con un fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario es. Ejemplos de roles podrían ser Estudiante, Docente y Administrador.
+%    \end{itemize}
+%\end{itemize}
+
+\begin{landscape}
+
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.0\textwidth]{Figures/arq_ge.png}
+	  \end{center}
+	  \caption{Diagrama de arquitectura para el sistema GitEdu.}
+	  \label{arq_ge}
+	\end{figure}
+
+\end{landscape}
+
 \begin{itemize}
 	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
     \begin{itemize}
@@ -306,14 +325,18 @@ Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema 
     \end{itemize}
 \end{itemize}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/arq_en.png}
-  \end{center}
-  \caption{Diagrama de arquitectura para el sistema EduNube.}
-  \label{arq_en}
-\end{figure}
+\begin{landscape}
+
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.0\textwidth]{Figures/arq_en.png}
+	  \end{center}
+	  \caption{Diagrama de arquitectura para el sistema EduNube.}
+	  \label{arq_en}
+	\end{figure}
+
+\end{landscape}
 
 Como se puede observar en la figura \ref{arq_en}, a un nivel global, el sistema EduNube consiste en 5 capas que son:
 \begin{itemize}
@@ -356,16 +379,18 @@ Como se puede observar en la figura \ref{arq_en}, a un nivel global, el sistema 
 \subsubsection{Ventajas del Diseño Arquitectónico}
 Se ha considerado para ambos sistemas una arquitectura de n-capas debido a su capacidad de escalabilidad sobre varios niveles físicos. Además la separación lógica entre capas permite mayor mantenibilidad al largo plazo donde solo se necesitan reemplazar los componentes que requieren cambios en lugar de todo el sistema. El nivel de aislamiento entre estas mismas capas brinde mejor seguridad contra usuarios externos sean maliciosos o que quieren dar mal uso (un uso inadecuado) al sistema. A continuación se presenta la arquitectura de despliegue propuesta dentro de este trabajo de titulación.
 
-\subsection{Despliegue}
+\begin{landscape}
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.4\textwidth]{Figures/desp_ge_en.png}
+	  \end{center}
+	  \caption{Diagrama de Despliegue para los sistemas GitEdu y EduNube.}
+	  \label{desp_ge_en}
+	\end{figure}
+\end{landscape}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/desp_ge_en.png}
-  \end{center}
-  \caption{Diagrama de Despliegue para los sistemas GitEdu y EduNube.}
-  \label{desp_ge_en}
-\end{figure}
+\subsection{Despliegue}
 
 Como se puede observar en la figura \ref{desp_ge_en}, el despliegue del sistema GitEdu junto al sistema EduNube, consiste en dos redes, una externa que contiene los usuarios finales (Estudiantes, Docentes, Administradores) en adición a sistemas externas como los dos LMS institucionales (Moodle y OpenEdX) y el servidor de Git (GitLab Community Edition), mientras que la red interna contiene las varias componentes que forman el conjunto de sistemas:
 \begin{itemize}
@@ -417,14 +442,18 @@ Para el sistema GitEdu se considera los siguientes subsistemas y módulos críti
     \item \textbf{Todo el subsistema de Ejecución.} Todos los módulos de este sistema son críticos porque se encargan de la comunicación con el sistema EduNube. El módulo de comandos prepara comandos para ejecutar a través del módulo de comunicación de datos y notas se los envía en adición a conseguir resultados y sincronizar notas y calificaciones generadas por EduNube.
 \end{itemize}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/alc_mod_en.png}
-  \end{center}
-  \caption{Alcance de Módulos para EduNube.}
-  \label{alc_mod_en}
-\end{figure}
+\begin{landscape}
+
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.7\textwidth]{Figures/alc_mod_en.png}
+	  \end{center}
+	  \caption{Alcance de Módulos para EduNube.}
+	  \label{alc_mod_en}
+	\end{figure}
+
+\end{landscape}
 
 Para el sistema EduNube, se considera los siguientes subsistemas y módulos como críticos, de la forma que estan demostradas en la figura \ref{alc_mod_en}:
 \begin{itemize}
@@ -433,13 +462,17 @@ Para el sistema EduNube, se considera los siguientes subsistemas y módulos como
 	\item \textbf{Parte del subsistema de Administración.} Dentro del subsistema de administración, solo se considera que los componentes críticos se tratan de colección de datos y el análisis de los mismos debido a que esos dos módulos respectivamente ayudan en la toma de decisiones estratégicas que tienen que ver con la escuela de Ciencias de Computación y Electrónica y el uso del sistema. Los módulos de monitoreo y configuración, aunque podrían ser muy útiles en un ambiente de producción no caen dentro del alcance inicial de este tesis y por lo tanto no se los considera críticos bajo los parámetros del proyecto. De todas formas su implementación podría ser una funcionalidad adicional interesante para un futuro proyecto.
 \end{itemize}
 
-% figure
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{Figures/alc_desp_ge_en.png}
-  \end{center}
-  \caption{Alcance de Despliegue.}
-  \label{alc_desp_ge_en}
-\end{figure}
-
 En cuanto el despliegue (figura \ref{alc_desp_ge_en}), los sistemas externas que se toma en consideración para el alcance son Moodle como LMS, y GitLab Community Edition como servidor de control de versiones. En relación a los ambientes virtuales, solo se considera un hipervisor y un sistema operativo para las máquinas virtuales dentro de la versión final (durante el desarrollo se presenta los candidatos, comparación y selección de los mismos). También se incluye dentro del alcance el desarrollo y despliegue de los dos sistemas GitEdu y EduNube con sus respectivas bases de datos utilizando uWSGI como servidor de aplicación. No se incluye dentro del alcance OpenEdX o ningún otro LMS externa fuera de la mencionada previamente ni las configuraciones del cortafuego y servidores web, estos quedan como responsabilidades institucionales en cuanto como deseen implementar estos partes del despliegue. Lo que se presenta aquí es una sugerencia del autor basado en su experiencia práctica.
+
+\begin{landscape}
+
+	% figure
+	\begin{figure}
+	  \begin{center}
+	    \includegraphics[width=1.4\textwidth]{Figures/alc_desp_ge_en.png}
+	  \end{center}
+	  \caption{Alcance de Despliegue.}
+	  \label{alc_desp_ge_en}
+	\end{figure}
+
+\end{landscape}

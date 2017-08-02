@@ -6,7 +6,7 @@
 
 \section{Introduccion}
 
-\subsubsection{Proposito}
+\subsection{Proposito}
 El siguiente documento espera dar una descripción detallado de los requisitos del Sistema Git Education (GitEDU) con las finalidades de definir la intención de la misma, declarar de forma completa todos los componentes a ser desarrollados del sistema, y también explicar limitaciones del sistema además de sus interacciones y interfaces con otros sistemas. Se destina el siguiente documento para revisión por el equipo de asesores y como una referencia de alcance para el equipo de desarrollo.
 
 \subsection{Alcance}
@@ -14,5 +14,270 @@ GitEDU es un sistema de integración para promover la programación estudiantil 
 
 Docentes de las carreras que involucran la enseñanza de programación, actualmente tanto la carrera de Sistemas Informáticos y Computación como la carrera de Electrónica y Telecomunicaciones, pueden crear dentro de la plataforma, deberes, talleres, pruebas y exámenes, y a través de los LMS institucionales, compartir las mismas con sus alumnos. Los alumnos pueden entrar a través de un enlace que les comparte su docente dentro del LMS institucional y con un canal de comunicación LTI, la plataforma GitEDU les identifica y autentica sin interacción del usuario para que el estudiante puede empezar directamente con el trabajo que tiene que realizar sin digitar sus credenciales. En el curso de su actividad, se va guardando su progreso periódicamente contra un servidor de control de versiones institucional (GitLab CE) y en cualquier momento el estudiante puede probar e interactuar con su código a través de un terminal virtual de Linux que se encuentra dentro de la misma interfaz. Una vez que se termine su trabajo y desee enviarlo, se lo envía y el código escrito se auto califica contra un conjunto de pruebas unitarias ocultas que el docente agregó a la actividad al crearlo. La nota que se genera se lo envía al LMS institucional a través del mismo canal LTI. En caso de que el docente decide no utilizar pruebas unitarias o calificar cada trabajo a mano o realizar una calificación híbrida entre las pruebas unitarias y la parte a mano, no se reflejarán las notas en el LMS hasta que el docente se ha terminado de calificar el código en la plataforma de GitEDU.
 
+Además el sistema requiere una conexión de internet y la disponibilidad de sistemas de apoyo como el servidor de control de versiones, el LMS y el servicio de ejecución de código.
 
-\ldots
+\subsection{Definiciones, Acrónimos y Abreviaciones}
+
+\begin{table}[h!]
+	\begin{tabular}{|p{0.45\textwidth}|p{0.45\textwidth}|}
+    	\hline
+    	\textbf{Termino} & \textbf{Definicion} \\
+        \hline
+		Docente / Professor & Alguien quien pertenece a la facultad de la institución y cuyo responsabilidad es enseñar a sus alumnos / estudiantes programación. \\
+		\hline
+		Alumno / Estudiante & Un miembro del cuerpo estudiantil de la institución y está en el proceso de aprender la programación. \\
+		\hline
+		Administrador & Quien se administra y mantiene el sistema. \\
+		\hline
+		Materia / Clase & Un conjunto de Docente(s) y Alumno(s) que están el proceso educativo de programación juntos en una aula física o virtual. \\
+		\hline
+		GitLab CE & GitLab Community Edition, un servidor de control de versiones que utiliza el VCS Git \\
+		\hline
+		LMS & Learning Management System, un sistema que apoya en la interacción educativa diaria entre Docentes y sus Alumnos \\
+		\hline
+		LTI & Learning Tools Interoperability, una estandar y protocolo que permite la comunicación e interacción entre varias herramientas educativas. \\
+		\hline
+		VCS & Sistema de Control de Versiones, permite almacenar y visualizar una historia de versiones de archivos o código para dar trazabilidad para lo mismo.  \\
+		\hline
+	\end{tabular}
+    \caption{Definiciones, Acrónimos y Abreviaciones para GitEDU}
+    \label{definiciones_ers}
+\end{table}
+
+
+\subsection{Referencias}
+Como fuente de la plantilla para el ERS, se ocupó:
+\url{http://www.cse.chalmers.se/~feldt/courses/reqeng/examples/srs_example_2010_group2.pdf}
+
+\section{Descripción General}
+\subsection{Perspectiva de Producto}
+La plataforma GitEDU se descompone en dos subsistemas: el subsistema de editar código y el subsistema de ejecutar código. El subsistema de editar código consiste en la integración de autenticación y notas por el lado del LMS, el uso de persistencia del código por el servidor de control de versiones por otro lado, el consumo de un servicio de ejecución de código por un tercer lado y un editor de código en línea. El subsistema de ejecutar código consiste en esperar llamadas del subsistema anterior, validar la autenticidad, establecer permisos, limitaciones y parámetros de ejecución, gestionar recursos para ejecución, la ejecución interactiva y devolución de resultados al otro subsistema.
+
+Debido a la necesidad de mantener seguridad y prevenir la ejecución indebido de código, el subsistema para lo mismo debe ser aislado de todos los usuarios y solo accedido desde el otro subsistema a través de un API que permite su interoperabilidad. La solución para la ejecución de código debe ser liviana debido a número grande de usuarios concurrentes que puede tener a la vez.
+
+Funcionalidades de Producto
+Para entrar al subsistema de editar código en línea, se debe autenticarse contra el LMS institucional. El editor de código en línea debe soportar una variedad grande de lenguajes y estar abierto a la agregación de más lenguajes en un futuro. La persistencia de código en un servidor de control de versiones debe ser transparente y no requerir ningún interacción del usuario. El interfaz para interactuar con el ambiente virtual debe ser simple y fácil de manejar sin mayor conocimiento de las tecnologías que le respaldan. Se debe poder acompañar el editor de código con documentación que guía el estudiante en explicar o resolver el problema actual. La manera en que docentes pueden generar nuevos ejercicios, su documentación y pruebas unitarias para la calificación debe ser intuitivo.
+
+\subsection{Caracteristicas de Usuario}
+Los tres tipos de usuarios que interactúan con el sistema son Docentes, Alumnos y Administradores. Cada tipo de usuario tiene sus propias necesidades y requerimientos.
+
+Docentes necesitan un sistema que sea fácil de manejar y que les simplifica y automatiza el proceso de enseñar y evaluar a sus estudiantes. Eso significa tener una interfaz intuitiva para docentes que les permite escribir, documentar y generar pruebas unitarias para probar funcionalidad de código que escribe estudiantes para los ejercicios.
+
+Alumnos necesitan un sistema que les brinde una buena experiencia de aprendizaje y les proporciona todas las herramientas que requieren para desarrollar en linea. Igual que sus profesores, deben disponer de una interfaz intuitiva que les ayuda cumplir con sus responsabilidades de estudiar, aprender y demostrar conocimientos en una cantidad de tiempo óptimo.
+
+Administradores necesitan un sistema que sea seguro y cuyos componentes sean fáciles de mantener y extender a lo largo del tiempo. Para ello se necesita tener una buena documentación del funcionamiento del sistema y todos sus componentes para tener la misma como referencia.
+
+\subsection{Limitaciones}
+Se requiere de hardware con alta capacidad de virtualización y conectividad al internet y la intranet institucional para poder brindar la mejor experiencia al usuario.
+
+\subsection{Suposiciones y Dependencias}
+Se supone que siempre habrá la conectividad necesaria para poder usar todos los componentes del sistema.
+
+\subsection{División de Requerimientos}
+En caso de que falta recursos de tiempo o algún otro recurso, se limitará el alcance del proyecto para enfocarse en los requerimientos de una prioridad más alta y dejar los demás requerimientos para trabajos futuros.
+
+\section{Requisitos Específicos}
+
+\subsection{Interfaces Externos}
+
+\subsubsection{Interfaces de Hardware}
+El sistema que interactúa directamente con los usuarios no tiene ningún requisito especial de hardware solo que si se debe contar con memoria, disco y procesador suficiente para un servidor web, servidor de aplicación y servidor de base de datos. El subsistema de virtualización debe contar con los recursos necesarios y el hardware adecuado para soportar la carga del muchos estudiantes a la vez utilizando la tecnología seleccionada.
+
+\subsubsection{Interfaces de Software}
+El sistema que interactúa directamente con los usuarios debe ser capaz de autenticar los mismos contra LMS existentes y sincronizar notas que tiene con el mismo sistema LMS. Además el código que se desarrolla dentro de esta plataforma debe ir contra el servidor del sistema de control de versiones institucional. Y finalmente debe haber comunicación mediante APIs que permite el intercambio de código, entradas y salidas de ejecución en adición a notas resultantes de pruebas unitarias entre el sistema de desarrollo en línea y el sistema de ejecución de código en línea.
+
+\subsubsection{Interfaces de Comunicación}
+La comunicación entre los dos subsistemas es vital para lograr el nivel de funcionalidad que los usuarios finales requieren. Además, como aplicación en línea, se supone que todos los usuarios finales deben tener conectividad previo y durante el uso del sistema.
+
+\subsection{Requerimientos Funcionales}
+
+%\subsubsection{Estudiantes}
+
+\begin{enumerate}
+	\item \textbf{Estudiantes}
+	\begin{enumerate}
+		%\paragraph{Autenticación mediante LTI}
+		\item \textbf{Autenticación mediante LTI}
+		\begin{description}
+			\item[Título:] Autenticación mediante LTI
+			\item[Descripción:] Un estudiante debe poder autenticarse en la aplicación por medio del estándar LTI a través de su sesión abierta en sistemas LMS institucionales.
+			\item[Razón:] Para reducir el número de credenciales que un estudiante necesita recordar y actualizar en adición a promover el uso del sistema en brindar mayor facilidad de acceso.
+			\item[Dependencias:] Ninguno.
+		\end{description}
+		\item \textbf{Ambiente Completo de Programación}
+		\begin{description}
+			\item[Título:] Ambiente Completa de Programación
+			\item[Descripción:] Un estudiante debe contar con un ambiente de programación completa dentro de la aplicación con el cual puede desarrollar y probar de forma continua.
+			\item[Razón:] Para dar a los estudiantes todas la herramientas necesarias para cumplir con sus responsabilidades, estudio y aprendizaje dentro de un solo entorno.
+			\item[Dependencias:] Ninguno.
+		\end{description}
+		\item \textbf{Persistencia de Codigo}
+		\begin{description}
+			\item[Título:] Persistencia de Código
+			\item[Descripción:] El código que se escribe dentro del plataforma debe constar respaldado externamente en un servidor de control de versiones independiente.
+			\item[Razón:] Para llevar incrementalmente respaldos del código que escriben estudiantes.
+			\item[Dependencias:] Ambiente Completa de Programación.
+		\end{description}
+		\item \textbf{Sistema de Documentación}
+		\begin{description}
+			\item[Título:] Sistema de Documentación
+			\item[Descripción:] Tanto estudiantes como sus profesores deben disponer de las herramientas necesarias para documentar y expresar tanto necesidades como funcionalidades de código desarrollado en el plataforma de una manera clara y efectiva.
+			\item[Razón:] Para ayudar profesores y sus alumnos llevar más efectivamente la parte de enseñanza y comunicación que requiere un sistema educativa de esta naturaleza.
+			\item[Dependencias:] Ambiente Completa de Programación.
+		\end{description}
+		\item \textbf{Sistema de Compartir}
+		\begin{description}
+			\item[Título:] Sistema de Compartir
+			\item[Descripción:] Un usuario del sistema debe poder compartir sus proyectos de programación y la documentación que acompañan los mismos con otros usuarios.
+			\item[Razón:] Para promover cooperación entre usuarios y interacción entre estudiantes y profesores que son importantes para el proceso de enseñanza y aprendizaje.
+			\item[Dependencias:] Ambiente Completa de Programación.
+		\end{description}
+        \begin{enumerate}
+			\item \textbf{Sistema de Permisos}
+            \begin{description}
+			\item[Título:] Sistema de Permisos
+			\item[Descripción:] Usuarios deben poder controlar el acceso y la naturaleza del mismo de otros usuarios con los mismos se ha compartido el código.
+			\item[Razón:] Para brindar seguridad para el sistema de compartir y para proveer la flexibilidad necesario para tener una gran variedad de usos posibles al mismo sistema, con el suficiente nivel de seguridad (a través de los permisos) para cada uno de ellos.
+			\item[Dependencias:] Sistema de Compartir.
+            \end{description}
+			\item \textbf{Editar Varios Usuarios al Mismo Tiempo}
+            \begin{description}
+				\item[Título:] Editar Varios Usuarios al Mismo Tiempo
+				\item[Descripción:] Usuarios quienes tengan acceso a un código compartido previamente y tienen permisos de editarlo deben poder editarlo al mismo tiempo de tal forma que los cambios que realizan aparecen a todos en tiempo real.
+				\item[Razón:] Para promover cooperación entre usuarios y interacción entre estudiantes y profesores que son importantes para el proceso de enseñanza y aprendizaje.
+				\item[Dependencias:] Sistema de Compartir.
+            \end{description}
+        \end{enumerate}
+        \item \textbf{Sistema de Interacción Social}
+        \begin{description}
+			\item[Título:] Sistema de Interacción Social
+			\item[Descripción:] Un usuario debe poder comunicar en tiempo real con otros usuarios con el cual se ha compartido un código y quienes lo tienen abierto al mismo tiempo.
+			\item[Razón:] Para promover cooperación entre usuarios y interacción entre estudiantes y profesores que son importantes para el proceso de enseñanza y aprendizaje.
+			\item[Dependencias:] Sistema de Compartir.
+        \end{description}
+	\end{enumerate}
+    \item \textbf{Professores}
+    \begin{enumerate}
+		\item \textbf{Organizar Estudiantes y Aulas}
+        \begin{description}
+			\item[Título:] Organizar Estudiantes y Aulas
+			\item[Descripción:] Un profesor debe poder organizar sus estudiantes y aulas para poder revisar los mismos y llevarlos del mejor forma.
+			\item[Razón:] Para reducir la cantidad de tiempo que necesita dedicar a la parte administrativo de sus materias para maximizar su tiempo para enseñanza de estudiantes.
+			\item[Dependencias:] Ninguno.
+        \end{description}
+		\item \textbf{Crear Pruebas, Exámenes, Proyectos, Talleres y Deberes para Estudiantes}
+        \begin{description}
+			\item[Título:] Crear Pruebas, Exámenes, Proyectos, Talleres y Deberes para Estudiantes
+			\item[Descripción:] Un profesor debe poder crear dentro de la aplicación pruebas, exámenes, proyectos, talleres y deberes de los cuales se les puede asignar a sus aulas y estudiantes.
+			\item[Razón:] Para reducir la cantidad de tiempo que necesita dedicar a la parte administrativo de sus materias para maximizar su tiempo para enseñanza de estudiantes.
+			\item[Dependencias:] Organizar Estudiantes y Aulas.
+        \end{description}
+		\item \textbf{Autocalificación de Código}
+        \begin{description}
+			\item[Título:] Autocalificación de Código
+			\item[Descripción:] Un profesor debe poder escribir pruebas unitarias dentro de la plataforma, los cuales califica de forma automática los pruebas/exámenes/proyectos/talleres y deberes que les asigna a los estudiantes.
+			\item[Razón:] Para reducir la cantidad de tiempo que necesita dedicar a calificar sus estudiantes dentro de sus materias para maximizar su tiempo para enseñanza de los mismos.
+			\item[Dependencias:] Crear Pruebas, Exámenes, Proyectos, Talleres y Deberes para Estudiantes.
+        \end{description}
+		\item \textbf{Sincronización de Notas}
+        \begin{description}
+			\item[Título:] Sincronización de Notas
+			\item[Descripción:] El sistema debe ser capaz de sincronizar las notas que tiene con sistemas de terceros mediante el protocolo LTI.
+			\item[Razón:] Para reducir la cantidad de tiempo que necesita dedicar a calificar sus estudiantes y a la parte administrativa dentro de sus materias para maximizar su tiempo para enseñanza de los mismos.
+			\item[Dependencias:] Autocalificación de Código.
+        \end{description}
+    \end{enumerate}
+    \item \textbf{Administradores}
+    \begin{enumerate}
+    	\item \textbf{Integración con Sistemas Existentes}
+        \begin{enumerate}
+			\item \textbf{LMS Institucionales}
+	        \begin{description}
+				\item[Título:] Integración con LMS Institucionales Existentes
+				\item[Descripción:] La integración de la plataforma con LMS Institucionales Existentes debe dar las funcionalidades requeridas de autenticación y sincronización de notas de tal forma que su despliegue y mantenimiento sea sencilla y fácil.
+				\item[Razón:] Para reducir los recursos humanos necesarios para asegurar un buen despliegue y mantenimiento de la aplicación.
+				\item[Dependencias:] Autenticación mediante LTI, Sincronización de Notas.
+	        \end{description}
+			\item \textbf{Servidores de Control de Versiones Institucionales}
+	        \begin{description}
+				\item[Título:] Integración con Servidores de Control de Versiones Institucionales Existentes
+				\item[Descripción:] La integración de la plataforma con Servidores de Control de Versiones Institucionales Existentes debe dar las funcionalidades requeridas de autenticación y sincronización de notas de tal forma que su despliegue y mantenimiento sea sencilla y fácil.
+				\item[Razón:] Para reducir los recursos humanos necesarios para asegurar un buen despliegue y mantenimiento de la aplicación.
+				\item[Dependencias:] Persistencia de Código.
+	        \end{description}
+        \end{enumerate}
+    	\item \textbf{Recolección de Datos}
+	    \begin{description}
+			\item[Título:] Recolección de Datos
+			\item[Descripción:] La plataforma debe recolectar datos acerca de su uso con un fin de ayudar en la toma de decisiones institucionales.
+			\item[Razón:] Para ser un apoyo en la decisiones estratégicos.
+			\item[Dependencias:] Sincronización de Notas.
+	    \end{description}
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Requerimientos No Funcionales}
+
+\begin{enumerate}
+	\item \textbf{Numero de Estudiantes Suportados en Paralelo}
+    \begin{description}
+        \item[Título:] Número de Estudiantes Suportados en Paralelo
+        \item[Descripción:] La plataforma debe soportar un número alto de estudiantes usando el mismo en paralelo (a la escala de 90 estudiantes).
+        \item[Razón:] Para permitir sostener un cierto número de paralelos de una materia a la vez y de esta forma tomar un examen a todos en paralelo.
+    \end{description}
+	\item \textbf{Tiempo de Respuesta}
+    \begin{description}
+		\item[Título:] Tiempo de Respuesta
+		\item[Descripción:] La plataforma debe ser capaz de responder dentro de un tiempo mínimo de un segundo a cualquier consulta de sus usuarios.
+		\item[Razón:] Para ser útil a sus usuarios finales.
+    \end{description}
+\end{enumerate}
+
+\subsection{Limitaciones de Diseño}
+
+\begin{enumerate}
+\item \textbf{Uso de Disco}
+
+Se considera que cada repositorio de código que se cree debe tener un tamaño máximo de 1 GB y el entorno virtual asociado con cualquier proyecto no debe exceder 10 GB.
+\item \textbf{Uso de Memoria}
+
+El sistema de escribir código en línea no debe necesitar más de una GB de memoria, pero se considera que el subsistema de ejecución de código en línea debe disponer de mínimo 512 MB por cada usuario que espera suportar en paralelo.
+
+\item \textbf{Uso de Processador}
+
+El sistema de escribir código en línea no debe necesitar más de cuatro núcleos físicos de procesador, pero se considera que el subsistema de ejecución de código en línea debe disponer de mínimo un núcleo equivalente a 1 GHz por cada usuario que espera suportar en paralelo.
+\end{enumerate}
+
+\subsection{Atributos del Sistema de Software}
+
+\begin{enumerate}
+	\item \textbf{Disponibilidad}
+
+El sistema debe ser disponible para peticiones en todo momento de clases cuando puede ser necesitado.
+	\item \textbf{Seguridad}
+
+El sistema debe ofrecer niveles óptimos de seguridad para prevenir modificación de notas, daño a equipos físicos y modificación de entornos virtuales de otros usuarios.
+	\item \textbf{Rendimiento}
+
+No se debe notar la diferencia en tiempos de respuesta y rendimiento entre una carga muy baja y muy alta.
+	\item \textbf{Concurrencia}
+
+Debe ser capaz de sostener 90 usuarios en paralelo.
+	\item \textbf{Mantenibilidad}
+
+Debe ser modular para permitir su mantenimiento al largo plazo y el intercambio de nuevos componentes.
+	\item \textbf{Estabilidad}
+
+A lo largo del tiempo debe presentar un mínimo de fallos que afectan a funcionalidad para el usuario final y de esta manera ofrecer una alta disponibilidad.
+	\item \textbf{Escalabilidad}
+
+Debe tener capacidad de escalar a números de usuarios mayores con la agregación de hardware adicional.
+\end{enumerate}
+
+\section{Plan de Prioridades y Despliegue}
+
+\subsection{Selección de Método de Prioridades}
+Se da prioridad a cada requerimiento en base a cuales de los mismos son críticos, es decir funcionalidades básicas del mismo sistema y cuales solo son funcionalidades de valor agregado. En base a estas mismas, se considera también las dependencias entre requerimientos para empezar el desarrollo en las funcionalidades de que dependen otras funcionalidades. Eso se realiza junto con los stakeholders del proyecto para determinar cuales funcionalidades son críticos y cuales se los puede hacer si el tiempo y los recursos se los permiten.
+
+\subsection{Plan de Entregas de Software}
+Se plantea desarrollar el sistema en cuatro fases de los cuales cada uno se termina con una entrega de software. En la primera fase se autentica por LTI, en la segunda se realiza un editor de código en línea, en la tercera se realiza la persistencia periódica en el servidor de control de versiones y en la cuarta se realiza el subsistema de virtualización y ejecución de código el mismo que permite a usuarios probar su codigo en linea y califica codigo escrito por estudiantes. Dentro de cada fase se plantea desarrollar las otras características de valor agregado mencionadas previamente siempre y cuando se da el tiempo y los recursos para su cumplimiento. Al final de las cuatro fases y una fase final de pruebas, se procede a trabajar en el despliegue del mismo sistema con los autoridades responsable para el mismo.

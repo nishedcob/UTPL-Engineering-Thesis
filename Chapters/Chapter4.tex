@@ -9,13 +9,13 @@
 
 \begin{figure}
 	\begin{center}
-    	%\includegraphics[width=0.5\textwidth]{Figures/sistema-base.png}
+    	\includegraphics[width=1.0\textwidth]{Figures/sistema-base.png}
     \end{center}
   	\caption{Información del Sistema Base.}
     \label{sistema-base}
 \end{figure}
 
-El sistema base para el desarrollo de este trabajo de titulacion fue realizado con Xen instalado con Debian Stretch (9.1) instalado en un LVM con el nombre del grupo de volumenes ''Xephyr-VG''. Originalmente se tenia planificado trabajar con Debian Jessie (8.x) debido que eso fue la version estable al momento de instalacion pero despues se opto por una actualizacion a la version beta de Debian en aquello momento (Debian Stretch). En resumen los pasos realizados fueron:
+Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarrollo de este trabajo de titulacion utiliza Xen instalado con Debian Stretch (9.1)\footnote{Como el sistema de Dom0} instalado en un LVM con el nombre del grupo de volumenes ''Xephyr-VG''. Originalmente se tenia planificado trabajar con Debian Jessie (8.x) debido que eso fue la version estable al momento de instalacion pero despues se opto por una actualizacion a la version beta de Debian en aquello momento (Debian Stretch). En resumen los pasos realizados fueron:
 \lstset{language=Bash}
 \begin{enumerate}
 	\item Instalacion Limpia de Debian 8 con un LVM.

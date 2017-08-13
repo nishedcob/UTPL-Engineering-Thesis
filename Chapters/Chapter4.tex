@@ -32,60 +32,65 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
     	\end{description}
     \item Actualizar Instalacion de Debian 8.
     	\begin{lstlisting}
-    apt update
-    apt upgrade
-    apt dist-upgrade
-    reboot
+	apt update
+	apt upgrade
+	apt dist-upgrade
+	reboot
         \end{lstlisting}
     \item Actualizar Debian 8 a Debian 9.
         \begin{lstlisting}
-    sed -i 's/jessie/stretch/g' /etc/apt/sources.list
-    apt update
-    apt upgrade
-    reboot
+	sed -i 's/jessie/stretch/g' /etc/apt/sources.list
+	apt update
+	apt upgrade
+	reboot
         \end{lstlisting}
     \item Instalacion de Herramientas de Trabajo
         \begin{lstlisting}
-    apt install tmux vim zsh
+	apt install tmux vim zsh
         \end{lstlisting}
     \item Instalacion y Configuracion de Hipervisor Xen
 		\begin{lstlisting}
-    apt install xen-hypervisor
-    dpkg-divert --divert /etc/grub.d/08_linux_xen \
-    	--rename /etc/grub.d/20_linux_xen
-    update-grub
-    cat > /etc/network/interfaces.d/xenbr << EOF
+	apt install xen-hypervisor
+	dpkg-divert --divert /etc/grub.d/08_linux_xen \
+		--rename /etc/grub.d/20_linux_xen
+	update-grub
+	cat > /etc/network/interfaces.d/xenbr << EOF
 
-    auto xenbr0
-    iface xenbr0 inet static
-       address 10.10.10.1
-       netmask 255.255.255.0
-       bridge_ports wlan0
+	auto xenbr0
+	iface xenbr0 inet static
+		address 10.10.10.1
+		netmask 255.255.255.0
+		bridge_ports wlan0
 
-    #other possibly useful options in a\
-    	virtualized environment
-      #bridge_stp off       # disable \
-      		Spanning Tree Protocol
-      #bridge_waitport 0    # no delay \
-      		before a port becomes available
-      #bridge_fd 0          # no forwarding\
-      		delay
+	#other possibly useful options in a
+	#	virtualized environment
+		#bridge_stp off		# disable
+		#		Spanning Tree Protocol
+		#bridge_waitport 0	# no delay
+		#		before a port becomes
+		#		available
+		#bridge_fd 0		# no forwarding
+		#		delay
 
-    ## configure a (separate) bridge for\
-    	the DomUs without giving Dom0 an\
-        IP on it
-    #auto xenbr1
-    #iface xenbr1 inet manual
-    #   bridge_ports eth1
+	## configure a (separate) bridge for
+	#	the DomUs without giving Dom0 an
+	#	IP on it
+	#auto xenbr1
+	#iface xenbr1 inet manual
+	#   bridge_ports eth1
 
-    EOF
+	EOF
 
-    reboot
+	reboot
 		\end{lstlisting}
 	\item Instalacion de Herramientas de Xen
 		\begin{lstlisting}
 	apt install xen-tools xen-utils
 		\end{lstlisting}
+    \item Instalacion de Herramientas de Desarrollo para Python 3
+    	\begin{lstlisting}
+	apt install python3 python3-virtualenv python3-pip
+    	\end{lstlisting}
 \end{enumerate}
 
 Estos pasos de instalacion se basaron en la guia de instalacion de Xen publicado en el wiki del proyecto de Debian \citep{Debian-Wiki-Xen}.
@@ -304,6 +309,8 @@ crontab -u www-data -e
 
 \end{lstlisting}
 
+Estos pasos fueron adaptados de la guia oficial del proyecto de Moodle para instalacion en Debian \citep{MOODLE-Install-Debian}.
+
 % <TODO>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -321,6 +328,44 @@ crontab -u www-data -e
 % </TODO>
 
 \section{GitEDU}
+
+La gestion de dependencias del sistema GitEdu se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado a detectar si es que existe el entorno virtual (lo crea en caso de que no existe) y despues instala los requiermientos faltantes como son especificados en un archivo aparte ''requirements.txt'' que da liberias y sus versiones.
+
+\begin{lstlisting}
+
+# run with `source activate.sh` 
+if [ ! -d env ]; then
+	virtualenv --python=python3 env
+fi
+source env/bin/activate
+pip3 install -r requirements.txt
+
+\end{lstlisting}
+
+El script anterior se ejecuta desde el raiz del repositorio con el comando:
+
+\begin{lstlisting}
+source activate.sh
+\end{lstlisting}
+
+Con el entorno creado y activado se puede proceder a instalar cualquier dependencia necesaria que no ha sido instalado previamente:
+
+\begin{lstlisting}
+pip install <nombre_dependencia>
+\end{lstlisting}
+
+Para el presente proyecto se instalaron las siguientes dependencias:
+\begin{itemize}
+	\item Django (1.10.6)
+    \item Psycopg2 (2.7.1)
+    \item Python-GitLab (0.20)
+\end{itemize}
+
+Con las dependencias instaladas o con cada cambio que se realiza de dependencias se ejecuta el siguiente commando para actualizar la lista de los mismos:
+
+\begin{lstlisting}
+pip freeze > requirements.txt
+\end{lstlisting}
 
 \subsection{Autenticacion por LTI}
 

@@ -90,6 +90,13 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
 
 Estos pasos de instalacion se basaron en la guia de instalacion de Xen publicado en el wiki del proyecto de Debian \citep{Debian-Wiki-Xen}.
 
+Para dar connexiones hace el exterior a las maquinas virtuales, se necesita activar una regla NAT en el cortafuego IPTables:
+
+\begin{lstlisting}
+	iptables -t nat -A POSTROUTING -o wlan0\
+    		-j MASQUERADE
+\end{lstlisting}
+
 \subsection{Ambiente Virtual de LMS (Moodle)}
 
 Para el ambiente de Moodle (LMS contra el cual se ha llevado el desarrollo), se crea una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una direccion IP fija de 10.10.10.10. Los resultados del mismo commando se puede ver en la figura \ref{vm-moodle}.
@@ -104,7 +111,7 @@ Para el ambiente de Moodle (LMS contra el cual se ha llevado el desarrollo), se 
 
 \begin{figure}
 	\begin{center}
-    	%\includegraphics[width=0.75\textwidth]{Figures/crear-moodle.png}
+    	\includegraphics[width=0.75\textwidth]{Figures/crear-moodle.png}
     \end{center}
   	\caption{Crear maquina virtual para Moodle.}
     \label{vm-moodle}
@@ -116,6 +123,202 @@ Se renombró el archivo de configuracion de la maquina virtual generado en el pa
 	mv /etc/xen/debian-moodle.cfg\
     		/etc/xen/domU-debian-moodle.cfg
 \end{lstlisting}
+
+Un bug de Xen-Tools causa que no se instala correctamente un nucleo de Linux en la maquina virtual y por lo tanto es necesario entrar al mismo con un Chroot y instalar los paquetes faltantes (y hacer las adecuadas configuraciones  para permitir su aranque independiente de ayuda externa).
+
+\begin{lstlisting}
+	mount /dev/Xephyr-VG/debian-moodle-disk /mnt
+	mount -o bind /proc /mnt/proc
+	mount -o bind /sys /mnt/sys
+	mount -o bind /dev /mnt/dev
+	cp /etc/resolv.conf /mnt/etc/resolv.conf
+	chroot /mnt /bin/bash
+	apt install linux-image-amd64
+	vim.tiny /boot/grub/menu.lst
+	# Revisar que los archivos referenciados existen
+	#		de verdad por ejemplo:
+	# Replace initrd.img- con initrd.img
+    # guarda y sale
+	exit
+	umount /mnt/proc            
+	umount /mnt/sys 
+	umount /mnt/dev 
+	umount /mnt	
+\end{lstlisting}
+
+Para levantar la maquina virtual:
+
+\begin{lstlisting}
+	xl create /etc/xen/domU-debian-moodle.cfg -c
+\end{lstlisting}
+
+Se debe selecionar la tercera opcion (Default Kernel).
+
+Se puede dar una revision a la configuracion de red para asegurarse de que esta correcto:
+
+\begin{lstlisting}
+	vim.tiny /etc/network/interfaces
+\end{lstlisting}
+
+Debe contener:
+
+\begin{lstlisting}
+auto eth0
+iface eth0 inet static
+ address 10.10.10.10
+ gateway 10.10.10.1
+ netmask 255.255.255.0
+\end{lstlisting}
+
+En el presente caso, Xen-Tools logró configurar esta parte de forma correcta.
+
+A continuacion se procede con la instalacion de Moodle:
+
+\begin{lstlisting}
+# actualiza el sistema
+apt update
+apt upgrade
+
+# instala dependencias
+apt install apache2 php7.0 mysql-server php7.0-mysql
+apt install libapache2-mod-php7.0 php7.0-gd php7.0-curl
+apt install php-xml php-zip php-mbstring php-soap
+apt install php7.0-xmlrpc php7.0-intl
+vim.tiny /etc/php/7.0/apache2/php.ini
+
+# agrega:
+extension=mysql.so 
+extension=gd.so
+
+# edita:
+
+memory_limit = 40M
+# dejado con el valor por defecto de 128M
+
+post_max_size = 80M
+upload_max_filesize = 80M
+
+# guarda y sale
+
+# reinicia apache para coger los cambios
+systemctl restart apache2
+
+\end{lstlisting}
+
+A continuacion se configura la base de datos:
+
+\begin{lstlisting}
+
+# clave de root es root
+mysqladmin -u root password "root"
+
+# logear como root
+mysql -u root -p
+
+# crear base de datos y hacer que ocupa UTF-8
+mysql> CREATE DATABASE moodle;
+mysql> ALTER DATABASE moodle charset=utf8;
+mysql> exit;
+
+## No se implemento ##
+# Moodle queja de UTF8
+
+# Se podria arreglar
+# (antes de instalar Moodle)
+# con:
+
+mysql -u root -p
+
+mysql> ALTER DATABASE moodle charset=utf8mb4;
+mysql> exit;
+######################
+
+systemctl restart mysql
+
+\end{lstlisting}
+
+Se realiza la instalacion de la ultima version de Moodle (3.3 con sus respectivos patches de fallas desde que el mismo salio):
+
+\begin{lstlisting}
+
+# descargar
+wget https://download.moodle.org/download.php/direct/stable33/moodle-latest-33.tgz
+
+# descomprimir
+tar -zxvf moodle-latest-33.tgz
+
+# meter en ubicacion para apache
+mv moodle /var/www
+
+# ir a ubicacion para apache
+cd /var/www
+
+# crear ubicacion para datos
+mkdir moodledata
+
+# arreglar permisos
+chown -R www-data:www-data moodle
+chown -R www-data:www-data moodledata
+chmod -R 755 moodle
+chmod -R 755 moodledata
+
+# modificar configuracion de apache
+vim.tiny /etc/apache2/sites-available/000-default.conf
+
+# editar
+DocumentRoot "/var/www/moodle"
+
+# guardar y salir
+
+# reiniciar apache para aplicar los cambios
+systemctl restart apache2
+
+\end{lstlisting}
+
+Arreglar la base de datos para que acepte conexiones desde Moodle:
+
+\begin{lstlisting}
+
+mysql -u root -p
+
+GRANT ALL PRIVILEGES on *.* to
+	'root'@'localhost' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES on *.* to
+	'root'@'localhost' IDENTIFIED BY 'root';
+FLUSH PRIVILEGES;
+exit;
+
+\end{lstlisting}
+
+Para seguir con la instalacion se abre un navegador con la direccion \url{http://10.10.10.10/} para seguir las instrucciones que se le lleve por toda la configuracion inicial del Moodle.
+
+Al final se agrege un trabajo de cron para ayudar con los tareas periodicas que Moodle requiere para su mantemiento continuo:
+
+\begin{lstlisting}
+
+crontab -u www-data -e
+# add line:
+*/10 * * * * /usr/bin/php
+		/var/www/moodle/admin/cli/cron.php
+        		>/dev/null
+
+\end{lstlisting}
+
+% <TODO>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Servidor de Git (GitLab CE)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Servidor de Virtualizacion (???)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Plantilla de Maquina Virtual (???)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% </TODO>
 
 \section{GitEDU}
 

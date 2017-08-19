@@ -425,6 +425,18 @@ python manage.py startapp ideApp
 
 Y de paso se lo agrega a INSTALLED\_APPS una linea 'ideApp' en el settings.py para que sus tablas definidos a futuro en models.py tambien se migran con los demas migraciones.
 
+Para resolver un problema de zonas de tiempo, se ha deactivado esta caracteristica de Django con el siguiente linea en el settings.py:
+\lstset{language=Python}
+\begin{lstlisting}
+USE_TZ = False
+\end{lstlisting}
+\lstset{language=Bash}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO
+%\subsection{Autenticacion Clasica}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Autenticacion por LTI}
 
 Primero es necesario que este activo y levantado el ambiente del LMS como se documenta en la seccion \ref{instalacion-moodle} de instalacion de Moodle. Para el desarrollo de este trabajo de titulacion se esta considerando una instalacion en un servidor aparte (virtualizado en el mismo equipo) en la direccion IP 10.10.10.10.
@@ -512,6 +524,7 @@ LTI_OAUTH_CREDENTIALS = {
 
 Tambien se edita el urls.py (dentro de la misma direccion que el settings.py) con las siguientes lineas:
 \begin{lstlisting}
+from django.conf.urls import include
 import django_app_lti.urls
 
 # dentro de:
@@ -524,11 +537,17 @@ urlpatterns = [
 
 \lstset{language=Bash}
 
-Para arreglar un problema de una version muy desactualizada de ims-lti-py, se agrego la siguiente linea al requirements.txt:
+Para arreglar un problema de una version muy desactualizada de ims-lti-py, se agrego la siguiente linea al requirements.txt (para ocupar un fork del propio liberia por el propio autor para resolver los problemas dados):
 \begin{lstlisting}
--e git+https://github.com/tophatmonocle/ims_lti_py.git
-	@979244d83c2e6420d2c1941f58e52f641c56ad12
+-e git+https://github.com/nishedcob/ims_lti_py.git
+	@c04dae729656e5c0ee689830bae1955e520f6fdb
 	#egg=ims_lti_py-develop
+\end{lstlisting}
+
+Despues se migra la base de datos:
+\begin{lstlisting}
+python manage.py makemigrations
+python manage.py migrate
 \end{lstlisting}
 
 \subsection{Editor de Codigo en Linea}

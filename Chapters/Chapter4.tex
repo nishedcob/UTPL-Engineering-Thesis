@@ -418,6 +418,11 @@ python manage.py makemigrations
 python manage.py migrate
 \end{lstlisting}
 
+Tambien creamos un superusuario de Django para temas administrativos:
+\begin{lstlisting}
+python manage.py createsuperuser
+\end{lstlisting}
+
 Tambien se puede crear el app inicial:
 \begin{lstlisting}
 python manage.py startapp ideApp
@@ -445,22 +450,21 @@ Primero es necesario que este activo y levantado el ambiente del LMS como se doc
 
 % Instalar dependencias
 
-Instalacion de dependencias desde GitHub (no se encuentran en los repositorios oficiales de Pip/Pypi):
+Instalacion de dependencias desde GitHub (no se encuentran en los repositorios oficiales de Pip/Pypi; ademas para superar problemas de dependencias en las librerias, se ha optado para ocupar forks personales del autor con las mejores necesarias para su funcionamiento):
 \begin{lstlisting}
-pip install git+https://github.com/Harvard-ATG/django-app-lti
+pip install git+https://github.com/nishedcob/django-app-lti
 	@master#egg=django-app-lti
-pip install git+https://github.com/Harvard-University-iCommons/
+pip install git+https://github.com/nishedcob/
 	django-auth-lti@master#egg=django-auth-lti
 \end{lstlisting}
 
 Como son dependencias no se encuentran en los repositorios oficiales, su manejo dentro del requirements.txt tambien tiene que ser especial ya que un `pip freeze` no los guardaran correctamente dentro del mismo. En lugar de eso hay que agregar dos lineas al requirements.txt para el manejo de estas dependencias:
 \begin{lstlisting}
--e git+https://github.com/Harvard-ATG/django-app-lti.git
-	@f7d8d3f085fbc96f5acbff405610050cffd2b274
+-e git+https://github.com/nishedcob/django-app-lti.git
+	@db5d4320fad192be1d17c849f7845e3f69d642d3
 	#egg=django-app-lti
--e git+https://github.com/Harvard-University-iCommons/
-	django-auth-lti.git
-	@76ec7e049946abbd8e2b55bbcd90dc86df0f66ea
+-e git+https://github.com/nishedcob/django-auth-lti.git
+	@0e1109ce59ea752f84c6c9e77557333ec430421d
 	#egg=django-auth-lti
 \end{lstlisting}
 
@@ -515,8 +519,8 @@ LTI_SETUP = {
             \item LTI\_OAUTH\_CREDENTIALS con texto aleatorio (fue ocupado OpenSSL, especificamente el commando \texttt{openssl rand -hex 10} para generar los valores de abajo\footnote{Un ambiente de produccion debe ocupar valores distintos}).
             	\begin{lstlisting}
 LTI_OAUTH_CREDENTIALS = {
-    "mykey": "b2e0158c3cb4ddb0202d",
-    "myotherkey": "57b3a14734566c49bcaf",
+    "GitEduLMS_Playground": "b2e0158c3cb4ddb0202d",
+    "GitEduLMS_Playground_2": "57b3a14734566c49bcaf",
 }
             	\end{lstlisting}
     	\end{itemize}
@@ -549,6 +553,14 @@ Despues se migra la base de datos:
 python manage.py makemigrations
 python manage.py migrate
 \end{lstlisting}
+
+\subsubsection{Validacion}
+
+Se levanta la aplicacion (en \url{http://localhost:8000/} con:
+\begin{lstlisting}
+python manage.py runserver
+\end{lstlisting}
+La maquina virtual de Moodle tambien debe estar levantado para navegar a \url{http://10.10.10.10/}, iniciarse session como administrador, ir a la parte administrativa, a la pestaña de "development", seleccionar "debugging", y poner "debug messages" a nivel "developer". Ahora podemos volver a la parte de administracion, volver a seleccionar la pestaña de "development" y crear un curso de prueba. Vamos a crear un curso pequeña (10 MB) con el nombre corto "Prog\_I" y nombre larga / descripcion "Introduccion a la Programacion". Una vez que nos carga el curso, activamos modo de editar y agregamos una actividad externa.
 
 \subsection{Editor de Codigo en Linea}
 

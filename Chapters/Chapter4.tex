@@ -461,7 +461,7 @@ pip install git+https://github.com/nishedcob/
 Como son dependencias no se encuentran en los repositorios oficiales, su manejo dentro del requirements.txt tambien tiene que ser especial ya que un `pip freeze` no los guardaran correctamente dentro del mismo. En lugar de eso hay que agregar dos lineas al requirements.txt para el manejo de estas dependencias:
 \begin{lstlisting}
 -e git+https://github.com/nishedcob/django-app-lti.git
-	@db5d4320fad192be1d17c849f7845e3f69d642d3
+	@38b32989e22b189345e421b183684f9b5453e99a
 	#egg=django-app-lti
 -e git+https://github.com/nishedcob/django-auth-lti.git
 	@0e1109ce59ea752f84c6c9e77557333ec430421d
@@ -544,8 +544,15 @@ urlpatterns = [
 Para arreglar un problema de una version muy desactualizada de ims-lti-py, se agrego la siguiente linea al requirements.txt (para ocupar un fork del propio liberia por el propio autor para resolver los problemas dados):
 \begin{lstlisting}
 -e git+https://github.com/nishedcob/ims_lti_py.git
-	@c04dae729656e5c0ee689830bae1955e520f6fdb
+	@a6576d7892ea4f69b76572788b118aaa4cdcf749
 	#egg=ims_lti_py-develop
+\end{lstlisting}
+
+Para arreglar un problema de limpieza de datos en oauth2, se agrego la siguiente linea al requirements.txt (para ocupar un fork del propio liberia por el propio autor para resolver los problemas dados):
+\begin{lstlisting}
+-e git+https://github.com/nishedcob/python-oauth2.git
+	@176fc35aa35d626afcb6a23459482a4c96782c88
+	#egg=oauth2
 \end{lstlisting}
 
 Despues se migra la base de datos:

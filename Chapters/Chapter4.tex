@@ -437,16 +437,13 @@ USE_TZ = False
 \end{lstlisting}
 \lstset{language=Bash}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO
-%\subsection{Autenticacion Clasica}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Autenticacion Clasica}
+
+
 
 \subsection{Autenticacion por LTI}
 
 Primero es necesario que este activo y levantado el ambiente del LMS como se documenta en la seccion \ref{instalacion-moodle} de instalacion de Moodle. Para el desarrollo de este trabajo de titulacion se esta considerando una instalacion en un servidor aparte (virtualizado en el mismo equipo) en la direccion IP 10.10.10.10.
-
-% EXPIRIMENTAL
 
 % Instalar dependencias
 
@@ -464,7 +461,7 @@ Como son dependencias no se encuentran en los repositorios oficiales, su manejo 
 	@38b32989e22b189345e421b183684f9b5453e99a
 	#egg=django-app-lti
 -e git+https://github.com/nishedcob/django-auth-lti.git
-	@0e1109ce59ea752f84c6c9e77557333ec430421d
+	@71c9da8d0aa07ebc3139bf3f113b5c521d61b1f1
 	#egg=django-auth-lti
 \end{lstlisting}
 
@@ -502,7 +499,7 @@ LTI_SETUP = {
     "TOOL_TITLE": "GitEDU",
     "TOOL_DESCRIPTION": "Sistema para Programar en Linea",
     "LAUNCH_URL": "lti:launch",
-    "LAUNCH_REDIRECT_URL": "ideApp:index",
+    "LAUNCH_REDIRECT_URL": "ideApp:decode",
     "INITIALIZE_MODELS": False,
     "EXTENSION_PARAMETERS": {
         "10.10.10.10": {
@@ -567,7 +564,33 @@ Se levanta la aplicacion (en \url{http://localhost:8000/} con:
 \begin{lstlisting}
 python manage.py runserver
 \end{lstlisting}
-La maquina virtual de Moodle tambien debe estar levantado para navegar a \url{http://10.10.10.10/}, iniciarse session como administrador, ir a la parte administrativa, a la pestaña de "development", seleccionar "debugging", y poner "debug messages" a nivel "developer". Ahora podemos volver a la parte de administracion, volver a seleccionar la pestaña de "development" y crear un curso de prueba. Vamos a crear un curso pequeña (10 MB) con el nombre corto "Prog\_I" y nombre larga / descripcion "Introduccion a la Programacion". Una vez que nos carga el curso, activamos modo de editar y agregamos una actividad externa.
+La maquina virtual de Moodle tambien debe estar levantado para navegar a \url{http://10.10.10.10/}, iniciarse session como administrador, ir a la parte administrativa, a la pestaña de ''development'', seleccionar ''debugging'', y poner ''debug messages'' a nivel ''developer''. Ahora podemos volver a la parte de administracion, volver a seleccionar la pestaña de ''development'' y crear un curso de prueba. Vamos a crear un curso pequeña (10 MB) con el nombre corto ''Prog\_I'' y nombre larga / descripcion ''Introduccion a la Programacion''. Una vez que nos carga el curso, activamos modo de editar y agregamos una actividad externa.
+
+Se da un nombre a la actividad, en este caso ''Prueba 1 Programacion''. La mejor forma de poder reutilizar la herramienta externa en varias actividades es de crear una herramienta ''Preconfigurada''. Las opciones elegidas para la misma fueron los siguientes:
+\begin{description}
+	\item[Nombre] GitEdu
+    \item[URL] \url{http://localhost:8000/lti/launch}
+    \item[Descripcion] Edit Code Online
+    \item[Llave de Consumidor] GitEduLMS\_Playground
+    \item[Secreto Compartido] b2e0158c3cb4ddb0202d
+    \item[Parametros Addicionales] lo dejamos en blanco
+    \item[Contenedor de Lanzamiento] Nueva ventana
+    \item[Compartir Nombre] Siempre
+    \item[Compartir Correo Electronico] Siempre
+    \item[Acceptar Notas] Siempre
+\end{description}
+Con la herramienta preconfigurada realizada, se puede selecionarlo asi no mas para completar la integracion. Donde se creó la actividad debe haber un enlace con el nombre del mismo, en este caso ''Prueba 1 Programacion''. Al abrir el enlace se debe llevar a la aplicacion con lo siguiente puntos interesantes:
+\begin{enumerate}
+	\item se encuentra autenticado con el mismo usuario de Moodle (incluyendo sus roles como ''administrador'', ''instructor'', ''estudiante'', etc\ldots{})
+    \item hay contexto de:
+    \begin{enumerate}
+    	\item el curso de origen de Moodle
+        \item la actividad de origen de Moodle (no es contexto completo, un problema que se tendra que resolver en el curso del desarrollo)
+        \item el llave de consumidor ocupado
+    \end{enumerate}
+\end{enumerate}
+
+Si, dentro del mismo curso creamos una segunda actividad con todo lo mismo, pero solo cambiando el nombre a ''Prueba 2 Programacion'', se encuentra que si logra distinguir entre actividades.
 
 \subsection{Editor de Codigo en Linea}
 

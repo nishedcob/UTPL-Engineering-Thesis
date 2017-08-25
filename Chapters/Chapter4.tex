@@ -382,6 +382,8 @@ systemctl restart postgresql
 systemctl status postgresql
 su - postgres
 psql
+\end{lstlisting}
+\begin{lstlisting}
 	postgres=# CREATE USER giteduser WITH PASSWORD 'g1T3d_$3r';
 	postgres=# CREATE DATABASE gitedudb WITH OWNER giteduser;
 	postgres=# \q
@@ -434,6 +436,38 @@ Para resolver un problema de zonas de tiempo, se ha deactivado esta caracteristi
 \lstset{language=Python}
 \begin{lstlisting}
 USE_TZ = False
+\end{lstlisting}
+\lstset{language=Bash}
+
+Para crear la base de datos de MongoDB:
+\begin{lstlisting}
+mongo
+\end{lstlisting}
+\lstset{language=sql}
+\begin{lstlisting}
+use gitEduDB
+db.createUser(
+    {
+        user: "gitEduUser",
+        pwd: "G1TedU$3r",
+        roles: [ "readWrite", "dbAdmin" ]
+    }
+)
+\end{lstlisting}
+\lstset{language=Bash}
+
+El mismo se define en el settings de la siguiente manera:
+\lstset{language=Python}
+\begin{lstlisting}
+NOSQL_DATABASES = {
+    'nosql': {
+        'NAME': 'gitEduDB',
+        'USER': "gitEduUser",
+        'PASSWORD': 'G1TedU$3r',
+        'HOST': '127.0.0.1',
+        'PORT': '27017',
+    }
+}
 \end{lstlisting}
 \lstset{language=Bash}
 

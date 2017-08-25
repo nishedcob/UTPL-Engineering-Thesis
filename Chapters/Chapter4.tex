@@ -314,9 +314,91 @@ Estos pasos fueron adaptados de la guia oficial del proyecto de Moodle para inst
 
 % <TODO>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \subsection{Servidor de Git (GitLab CE)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Servidor de Git (GitLab CE)}
+Para crear el servidor de Git con GitLab Community Edition, se va a empezar con las mismas piezas del servidor del LMS/Moodle, es decir una maquina virtual de Debian 9. El mismo se crea como una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una direccion IP fija de 10.10.10.11.
+\begin{lstlisting}
+	xen-create-image --hostname=debian-gitlab\
+    		--ip=10.10.10.11 --netmask=255.255.255.0\
+        	--gateway=10.10.10.1 --memory=1024mb\
+        	--vcpus=1 --lvm=Xephyr-VG --pygrub\
+        	--dist=stretch --force --size=6144mb\
+        	--swap=512mb
+\end{lstlisting}
+
+Se renombró el archivo de configuracion de la maquina virtual generado en el paso anterior para temas de consistencia.
+
+\begin{lstlisting}
+	mv /etc/xen/debian-gitlab.cfg\
+    		/etc/xen/domU-debian-gitlab.cfg
+\end{lstlisting}
+
+Un bug de Xen-Tools causa que no se instala correctamente un nucleo de Linux en la maquina virtual y por lo tanto es necesario entrar al mismo con un Chroot y instalar los paquetes faltantes (y hacer las adecuadas configuraciones  para permitir su aranque independiente de ayuda externa).
+
+\begin{lstlisting}
+	mount /dev/Xephyr-VG/debian-gitlab-disk /mnt
+	mount -o bind /proc /mnt/proc
+	mount -o bind /sys /mnt/sys
+	mount -o bind /dev /mnt/dev
+	cp /etc/resolv.conf /mnt/etc/resolv.conf
+	chroot /mnt /bin/bash
+	apt install linux-image-amd64
+	vim.tiny /boot/grub/menu.lst
+	# Revisar que los archivos referenciados existen
+	#		de verdad por ejemplo:
+	# Replace initrd.img- con initrd.img
+    # guarda y sale
+	exit
+	umount /mnt/proc            
+	umount /mnt/sys 
+	umount /mnt/dev 
+	umount /mnt	
+\end{lstlisting}
+
+Para levantar la maquina virtual:
+
+\begin{lstlisting}
+	xl create /etc/xen/domU-debian-gitlab.cfg -c
+\end{lstlisting}
+
+Se debe selecionar la tercera opcion (Default Kernel).
+
+Se puede dar una revision a la configuracion de red para asegurarse de que esta correcto:
+
+\begin{lstlisting}
+	vim.tiny /etc/network/interfaces
+\end{lstlisting}
+
+Debe contener:
+
+\begin{lstlisting}
+auto eth0
+iface eth0 inet static
+ address 10.10.10.11
+ gateway 10.10.10.1
+ netmask 255.255.255.0
+\end{lstlisting}
+
+En el presente caso, Xen-Tools logró configurar esta parte de forma correcta.
+
+A continuacion se procede con la instalacion de Gitlab:
+
+\begin{lstlisting}
+# actualiza el sistema
+apt update
+apt upgrade
+
+# Apartir del Debian 9, Gitlab CE esta ofrecido
+#    en los repositorios oficiales:
+apt install gitlab
+
+# TODO
+sudo -u gitlab -H editor /usr/share/gitlab-shell/config.yml  
+/usr/share/gitlab-shell/bin/check
+\end{lstlisting}
+
+Visitar \url{http://10.10.10.11/} y configurar el usuario root.
+
+% TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Servidor de Virtualizacion (???)}
@@ -712,6 +794,12 @@ class Migration(migrations.Migration):
 \subsection{Editor de Codigo en Linea}
 
 \subsection{Persistencia de Codigo}
+
+\subsection{Aspectos Sociales}
+Para temas de organizacion, se ha considerado que aquellos componentes de la aplicacion que tienen que ver con interaccion social deben existir independientemente de las funcionalidades principales del mismo aplicacion. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto:
+\begin{lstlisting}
+python manage.py startapp socialApp
+\end{lstlisting}
 
 \subsection{Sincronizacion de Notas por LTI}
 

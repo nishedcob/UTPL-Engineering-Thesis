@@ -398,7 +398,8 @@ vim.tiny /usr/share/gitlab-shell/config.yml
 /usr/share/gitlab-shell/bin/check
 \end{lstlisting}
 
-Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root.
+Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. Con el usuario root configurado se procede a crear un usuario especial para la aplicacion con el nombre de usuario 'GitEdu'. Este usuario lo damos permisos de administracion y tambien se genera un token en esta direccion: \url{http://10.10.10.11/profile/personal_access_tokens}. El token se debe guardar para su uso despues (GitLab nunca le vuelve a mostrar).
+
 
 % <TODO>
 
@@ -862,12 +863,121 @@ class LTICredentialsView(View):
 \subsection{Editor de Codigo en Linea}
 
 \subsection{Persistencia de Codigo}
+Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:
+\lstset{language=Python}
+\begin{lstlisting}
+GITLAB_DEFAULT_SERVER = '1'
+
+GITLAB_SERVERS = {
+    '1': {
+        'WITH_TOKEN': True,
+        'WITH_CRED': False,
+        'API_PROTOCOL': 'http://',
+        'API_PORT': '',  # por defecto:
+                        # :22 para SSH,
+                        # :443 para HTTPS,
+                        # :80 para HTTP
+        'HOST': '10.10.10.11',
+        'SSH_PORT': 22,
+        'HTTP_PORT': 80,
+        'HTTPS_PORT': 443,
+        'USER': "GitEDU",
+        'PASSWORD': 'GitEDU2017',
+        # expira el 31 de marzo 2018:
+        'TOKEN': 'JqMzkgDNvhZ7ofdPa5z5',
+        # nunca expira, pero el nivel de 
+        # acceso es menor:
+        # 'TOKEN': 'TrCfvrdsXzpLFETyc7Q5',  
+    }
+}
+\end{lstlisting}
+\lstset{language=Bash}
+
+La conexion a la API de GitLab se realiza de la siguiente manera:
+\lstset{language=Python}
+\begin{lstlisting}
+gitlab_default_srv = GITLAB_DEFAULT_SERVER
+
+
+def connect_to_gitlab_token(protocol=None,
+		host=None, port=None, token=None):
+    if host is None:
+        return None
+    # gitlab_conn = gitlab.Gitlab(protocol
+    		+ host + port, token)
+    gitlab_conn = gitlab.Gitlab(protocol
+    		+ host, token)
+    #gitlab_conn.auth()
+    return gitlab_conn
+
+
+def connect_to_settings_gitlab_token(
+		indx=GITLAB_DEFAULT_SERVER):
+    return connect_to_gitlab_token(
+    		protocol=GITLAB_SERVERS
+            	[indx]['API_PROTOCOL'],
+            host=GITLAB_SERVERS[indx]
+            	['HOST'],
+            port=GITLAB_SERVERS[indx]
+            	['API_PROTOCOL'],
+            token=GITLAB_SERVERS[indx]
+            	['TOKEN'])
+
+
+def connect_to_gitlab_user_password(protocol=None,
+		host=None, port=None, user=None,
+        password=None):
+    if host is None:
+        return None
+    gitlab_conn = gitlab.Gitlab(protocol + host
+    		+ port, email=user, password=password)
+    gitlab_conn.auth()
+    return gitlab_conn
+
+
+def connect_to_settings_gitlab_user_password(
+		indx=GITLAB_DEFAULT_SERVER):
+    return connect_to_gitlab_user_password(
+    		protocol=GITLAB_SERVERS[indx]
+            		['API_PROTOCOL'],
+            host=GITLAB_SERVERS[indx]['HOST'],
+            port=GITLAB_SERVERS[indx]
+            		['API_PROTOCOL'],
+            user=GITLAB_SERVERS[indx]['USER'],
+            password=GITLAB_SERVERS[indx]
+            		['PASSWORD'])
+
+
+def connect_to_settings_gitlab(
+		indx=GITLAB_DEFAULT_SERVER):
+    if GITLAB_SERVERS[indx]['WITH_TOKEN']:
+        return connect_to_settings_gitlab_token(
+        		indx)
+    elif GITLAB_SERVERS[indx]['WITH_CRED']:
+        return connect_to_settings_gitlab_user_password(
+        		indx)
+    else:
+        return None
+
+gitlab_srv = None
+try:
+    gitlab_srv = connect_to_settings_gitlab(
+    		gitlab_default_srv)
+except Exception as e:
+    print("No se pudo connectar a GitLab")
+    print(e)
+\end{lstlisting}
+\lstset{language=Bash}
+
+% TODO
 
 \subsection{Aspectos Sociales}
 Para temas de organizacion, se ha considerado que aquellos componentes de la aplicacion que tienen que ver con interaccion social deben existir independientemente de las funcionalidades principales del mismo aplicacion. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto:
 \begin{lstlisting}
 python manage.py startapp socialApp
 \end{lstlisting}
+
+% TODO
 
 \subsection{Sincronizacion de Notas por LTI}
 

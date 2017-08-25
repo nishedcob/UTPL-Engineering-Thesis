@@ -391,14 +391,16 @@ apt upgrade
 #    en los repositorios oficiales:
 apt install gitlab
 
-# TODO
-sudo -u gitlab -H editor /usr/share/gitlab-shell/config.yml  
+# Arreglar problema con API
+vim.tiny /usr/share/gitlab-shell/config.yml
+# cambiar gitlab_url a "http://10.10.10.11/"
+
 /usr/share/gitlab-shell/bin/check
 \end{lstlisting}
 
-Visitar \url{http://10.10.10.11/} y configurar el usuario root.
+Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root.
 
-% TODO
+% <TODO>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Servidor de Virtualizacion (???)}
@@ -641,9 +643,14 @@ LTI_SETUP = {
             \item LTI\_OAUTH\_CREDENTIALS con texto aleatorio (fue ocupado OpenSSL, especificamente el commando \texttt{openssl rand -hex 10} para generar los valores de abajo\footnote{Un ambiente de produccion debe ocupar valores distintos}).
             	\begin{lstlisting}
 LTI_OAUTH_CREDENTIALS = {
-    "GitEduLMS_Playground": "b2e0158c3cb4ddb0202d",  # test credentials
-    "GitEduLMS_Playground_Assignments": "57b3a14734566c49bcaf",  # for assignments
-    "GitEduLMS_Playground_Classes": "f7a0b6accc2631779e84",  # for classes
+    "GitEduLMS_Playground": "b2e0158c3cb4ddb0202d", 
+         # (Para pruebas)
+    "GitEduLMS_Playground_Assignments":
+         "57b3a14734566c49bcaf",
+         # (Para deberes/examenes/pruebas/talleres/etc)
+    "GitEduLMS_Playground_Classes":
+         "f7a0b6accc2631779e84",
+         # (Para materias)
 }
             	\end{lstlisting}
     	\end{itemize}
@@ -788,6 +795,67 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(fill_auth_types),
     ]
+\end{lstlisting}
+\lstset{language=Bash}
+
+\subsection{Accesibilidad a Datos de Autenticacion de LTI}
+Primero al settings se agrega dos atributos que indiquen cual llave se considera el sistema para compartir materias y otro para compartir deberes/examenes/pruebas/talleres/etc\ldots{}:
+\lstset{language=Python}
+\begin{lstlisting}
+LTI_ASSIGNMENTS_KEY = 'GitEduLMS_Playground_Assignments'
+LTI_CLASSES_KEY = 'GitEduLMS_Playground_Classes'
+\end{lstlisting}
+\lstset{language=Bash}
+
+Para controlar las partes de la configuracion que se presenta a los usuarios finales, agregamos un nuevo campo de configuracion al settings:
+\lstset{language=Python}
+\begin{lstlisting}
+LTI_CONFIG_EXPOSE = {
+    "LTI_KEYS": True,
+    "LTI_ASSIGNMENT_KEY": True,
+    "LTI_CLASS_KEY": True,
+    "LTI_OTHER_KEYS": False,
+    "LTI_SETUP": False,
+}
+\end{lstlisting}
+\lstset{language=Bash}
+
+Para que los professores (como usuario final de GitEdu) tambien tengan acceso a estos credenciales para poderlos ocupar, se cree una vista en la ubicacion '/auth/lti/credentials' que devuelve un JSON con los datos de LTI:
+\lstset{language=Python}
+\begin{lstlisting}
+class LTICredentialsView(View):
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            raise PermissionError("No tiene acceso a esta\
+                vista hasta que se autentica...")
+
+        lti_expose = settings.LTI_CONFIG_EXPOSE
+
+        lti_cred_json = {}
+
+        if lti_expose['LTI_KEYS']:
+            if lti_expose['LTI_ASSIGNMENT_KEY']:
+                lti_cred_json['LTI_ASSIGNMENT_KEY'] = {
+                    settings.LTI_ASSIGNMENTS_KEY: 
+                        settings.LTI_OAUTH_CREDENTIALS
+                            [settings.LTI_ASSIGNMENTS_KEY]
+                }
+            if lti_expose['LTI_CLASS_KEY']:
+                lti_cred_json['LTI_CLASS_KEY'] = {
+                    settings.LTI_CLASSES_KEY:
+                        settings.LTI_OAUTH_CREDENTIALS
+                            [settings.LTI_CLASSES_KEY]
+                }
+            if lti_expose['LTI_OTHER_KEYS']:
+                lti_cred_json['LTI_OTHER_KEYS'] =
+                    settings.LTI_OAUTH_CREDENTIALS
+
+        if lti_expose['LTI_SETUP']:
+            lti_cred_json['LTI_SETUP'] =
+                settings.LTI_SETUP
+
+        return JsonResponse(lti_cred_json)
 \end{lstlisting}
 \lstset{language=Bash}
 

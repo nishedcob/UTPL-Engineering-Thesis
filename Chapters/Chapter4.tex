@@ -894,7 +894,7 @@ class Administrator(models.Model):
 \lstset{language=Bash}
 Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta hearquia de clases mas bien viene a dar la infrastructura necesaria para especializar cada uno de estos en caso de que sea necesario.
 
-El modelo inicial de 
+El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como catagoria del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adicion a proveer la infrastructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo):
 \lstset{language=Python}
 \begin{lstlisting}
 class ClassSubject(models.Model):
@@ -938,6 +938,27 @@ class AcademicAssignment(models.Model):
     assignmentGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
     relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
     academicSubCategory = models.ForeignKey(AcademicSubCategory, null=False)
+\end{lstlisting}
+\lstset{language=Bash}
+ClassSubject define el tipo de materia que es, por ejemplo ''Programacion'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducion a la Programacion''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en catagorias con distintos pesos, por ejemplo ''Examenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las catagorias. AcademicAssignment es la abstracion que se da a los itemes calificadas dentro de una subcatagoria.
+
+El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo el modelo de tres niveles definido previamente de catagorias, subcatagorias y itemes de subcatagorias:
+\lstset{language=Python}
+\begin{lstlisting}
+class StudentCategoryGrade(models.Model):
+    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
+    academicCategory = models.ForeignKey(AcademicCategory, null=False)
+    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
+
+class StudentSubCategoryGrade(models.Model):
+    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
+    academicSubCategory = models.ForeignKey(AcademicSubCategory, null=False)
+    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
+
+class StudentAssignmentGrade(models.Model):
+    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
+    academicAssignment = models.ForeignKey(AcademicAssignment, null=False)
+    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
 \end{lstlisting}
 \lstset{language=Bash}
 

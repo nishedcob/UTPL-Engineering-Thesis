@@ -860,6 +860,87 @@ class LTICredentialsView(View):
 \end{lstlisting}
 \lstset{language=Bash}
 
+\subsection{Establecer un Modelo de Base de Datos}
+Para empezar con el desarrollo de la parte fuerte del sistema GitEDU, es importante considerar su modelo de base de datos preliminar. La parte mas importante de ello es las tablas o entidades y las relaciones entre las mismas. Para el mismo se ha considerado 3 grupos de funcionalidad importantes:
+\begin{enumerate}
+	\item El aspecto social y con ello los varios roles que pueden jugar usuarios dentro del sistema. Esto se representa con el app 'socialApp'.
+    \item El aspecto academico y con ello como se llevan las materias academicas dentro del sistema. Esto se representa con el app 'academicApp'.
+    \item El aspecto de notas y con ello la forma en que se llevan las notas que estudiantes sacan en las materias. Este aspecto lleva mucha en comun con el aspecto anterior de la parte academico y la linea que les divide es un poco subjetiva por el mismo hecho de que no se ha optado por la creacion de tablas adicionales para seperar los dos, pero donde ha sido posible, se ha realizado la division. Este aspecto se representa con el app 'gradesApp'. 
+\end{enumerate}
+
+\begin{lstlisting}
+python manage.py startapp socialApp
+python manage.py startapp academicApp
+python manage.py startapp gradesApp
+\end{lstlisting}
+
+Cada uno de los anteriores ha sido agregado al INSTALLED\_APPS del settings para que Django reconozca la necesidad de tomar en cuenta los modelos de cada uno.
+
+Los modelos iniciales del socialApp solo definen distintos roles sociales dentro del sistema:
+\lstset{language=Python}
+\begin{lstlisting}
+class Person(models.Model):
+    user = models.ForeignKey(User, null=False)
+
+class Student(models.Model):
+    person = models.ForeignKey(Person, null=False)
+
+class Teacher(models.Model):
+    person = models.ForeignKey(Person, null=False)
+
+class Administrator(models.Model):
+    person = models.ForeignKey(Person, null=False)
+\end{lstlisting}
+\lstset{language=Bash}
+Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta hearquia de clases mas bien viene a dar la infrastructura necesaria para especializar cada uno de estos en caso de que sea necesario.
+
+
+\lstset{language=Python}
+\begin{lstlisting}
+class ClassSubject(models.Model):
+    name = models.CharField(max_length=50, null=False)
+
+class Course(models.Model):
+    name = models.CharField(max_length=50, null=False)
+    classSubject = models.ForeignKey(ClassSubject, null=True)
+
+class Section(models.Model):
+    name = models.CharField(max_length=50, null=False)
+
+class Classroom(models.Model):
+    course = models.ForeignKey(Course, null=False)
+    section = models.ForeignKey(Section, null=False)
+
+class ClassroomTeacher(models.Model):
+    classroom = models.ForeignKey(Classroom, null=False)
+    teacher = models.ForeignKey(Teacher, null=False)
+    classroomGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
+
+class ClassroomStudent(models.Model):
+    classroom = models.ForeignKey(Classroom, null=False)
+    student = models.ForeignKey(Student, null=False)
+
+class AcademicCategory(models.Model):
+    name = models.CharField(max_length=50, null=False)
+    categoryGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
+    classroomTeacher = models.ForeignKey(ClassroomTeacher, null=False)
+
+class AcademicSubCategory(models.Model):
+    name = models.CharField(max_length=50, null=False)
+    subcategoryGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
+    academicCategory = models.ForeignKey(AcademicCategory, null=False)
+
+class AcademicAssignment(models.Model):
+    name = models.CharField(max_length=50, null=False)
+    assignmentGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
+    academicSubCategory = models.ForeignKey(AcademicSubCategory, null=False)
+\end{lstlisting}
+\lstset{language=Bash}
+
 \subsection{Editor de Codigo en Linea}
 
 \subsection{Persistencia de Codigo}
@@ -972,10 +1053,7 @@ except Exception as e:
 % TODO
 
 \subsection{Aspectos Sociales}
-Para temas de organizacion, se ha considerado que aquellos componentes de la aplicacion que tienen que ver con interaccion social deben existir independientemente de las funcionalidades principales del mismo aplicacion. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto:
-\begin{lstlisting}
-python manage.py startapp socialApp
-\end{lstlisting}
+Para temas de organizacion, se ha considerado que aquellos componentes de la aplicacion que tienen que ver con interaccion social deben existir independientemente de las funcionalidades principales del mismo aplicacion. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto 'socialApp'' como fue creada previamente.
 
 % TODO
 

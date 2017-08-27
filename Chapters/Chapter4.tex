@@ -312,7 +312,7 @@ crontab -u www-data -e
 
 Estos pasos fueron adaptados de la guia oficial del proyecto de Moodle para instalacion en Debian \citep{MOODLE-Install-Debian}.
 
-% <TODO>
+Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervencion humana.
 
 \subsection{Servidor de Git (GitLab CE)}
 Para crear el servidor de Git con GitLab Community Edition, se va a empezar con las mismas piezas del servidor del LMS/Moodle, es decir una maquina virtual de Debian 9. El mismo se crea como una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una direccion IP fija de 10.10.10.11.
@@ -400,6 +400,7 @@ vim.tiny /usr/share/gitlab-shell/config.yml
 
 Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. Con el usuario root configurado se procede a crear un usuario especial para la aplicacion con el nombre de usuario 'GitEdu'. Este usuario lo damos permisos de administracion y tambien se genera un token en esta direccion: \url{http://10.10.10.11/profile/personal_access_tokens}. El token se debe guardar para su uso despues (GitLab nunca le vuelve a mostrar).
 
+Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervencion humana.
 
 % <TODO>
 
@@ -914,8 +915,10 @@ class Classroom(models.Model):
 class ClassroomTeacher(models.Model):
     classroom = models.ForeignKey(Classroom, null=False)
     teacher = models.ForeignKey(Teacher, null=False)
-    classroomGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
+    classroomGradeWeight = models.DecimalField(decimal_places=4,
+    		max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3,
+    		max_digits=5, null=True)
 
 class ClassroomStudent(models.Model):
     classroom = models.ForeignKey(Classroom, null=False)
@@ -923,21 +926,30 @@ class ClassroomStudent(models.Model):
 
 class AcademicCategory(models.Model):
     name = models.CharField(max_length=50, null=False)
-    categoryGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
-    classroomTeacher = models.ForeignKey(ClassroomTeacher, null=False)
+    categoryGradeWeight = models.DecimalField(decimal_places=4,
+    		max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3,
+    		max_digits=5, null=True)
+    classroomTeacher = models.ForeignKey(ClassroomTeacher,
+    		null=False)
 
 class AcademicSubCategory(models.Model):
     name = models.CharField(max_length=50, null=False)
-    subcategoryGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
-    academicCategory = models.ForeignKey(AcademicCategory, null=False)
+    subcategoryGradeWeight = models.DecimalField(decimal_places=4,
+    		max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3,
+    		max_digits=5, null=True)
+    academicCategory = models.ForeignKey(AcademicCategory,
+    		null=False)
 
 class AcademicAssignment(models.Model):
     name = models.CharField(max_length=50, null=False)
-    assignmentGradeWeight = models.DecimalField(decimal_places=4, max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3, max_digits=5, null=True)
-    academicSubCategory = models.ForeignKey(AcademicSubCategory, null=False)
+    assignmentGradeWeight = models.DecimalField(
+    		decimal_places=4, max_digits=5)
+    relativeGradeWeight = models.DecimalField(decimal_places=3,
+    		max_digits=5, null=True)
+    academicSubCategory = models.ForeignKey(AcademicSubCategory,
+    		null=False)
 \end{lstlisting}
 \lstset{language=Bash}
 ClassSubject define el tipo de materia que es, por ejemplo ''Programacion'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducion a la Programacion''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en catagorias con distintos pesos, por ejemplo ''Examenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las catagorias. AcademicAssignment es la abstracion que se da a los itemes calificadas dentro de una subcatagoria.
@@ -946,19 +958,28 @@ El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo
 \lstset{language=Python}
 \begin{lstlisting}
 class StudentCategoryGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
-    academicCategory = models.ForeignKey(AcademicCategory, null=False)
-    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
+    classroomStudent = models.ForeignKey(ClassroomStudent,
+    		null=False)
+    academicCategory = models.ForeignKey(AcademicCategory,
+    		null=False)
+    grade = models.DecimalField(decimal_places=3,
+    		max_digits=6, null=True)
 
 class StudentSubCategoryGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
-    academicSubCategory = models.ForeignKey(AcademicSubCategory, null=False)
-    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
+    classroomStudent = models.ForeignKey(ClassroomStudent,
+    		null=False)
+    academicSubCategory = models.ForeignKey(AcademicSubCategory,
+    		null=False)
+    grade = models.DecimalField(decimal_places=3, max_digits=6,
+    		null=True)
 
 class StudentAssignmentGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent, null=False)
-    academicAssignment = models.ForeignKey(AcademicAssignment, null=False)
-    grade = models.DecimalField(decimal_places=3, max_digits=6, null=True)
+    classroomStudent = models.ForeignKey(ClassroomStudent,
+    		null=False)
+    academicAssignment = models.ForeignKey(AcademicAssignment,
+    		null=False)
+    grade = models.DecimalField(decimal_places=3, max_digits=6,
+    		null=True)
 \end{lstlisting}
 \lstset{language=Bash}
 

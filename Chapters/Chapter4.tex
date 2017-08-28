@@ -91,6 +91,20 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
     	\begin{lstlisting}
 	apt install python3 python3-virtualenv python3-pip
     	\end{lstlisting}
+    \item Instalacion de Servidores
+    	\begin{lstlisting}
+	apt install nginx-full postgresql mongodb\
+    		redis-server
+    	\end{lstlisting}
+    \item Instalacion de IDEs en /opt. Se descargaron los respetivos .tar\textit{.xx} y se los descomprimieron en /opt con un comando similar al siguiente:
+    	\begin{lstlisting}
+	tar -axvf nombre.tar.xx -C\
+    		/opt/ruta/raiz/donde/descomprimir
+    	\end{lstlisting}
+    \begin{enumerate}
+    	\item PyCharm (Community o Professional Edition\footnote{Se ocupo una version Professional, en parte por su buen suporte para desarrollo en Django) con una licencia estudiantil que actualmente es gratis de solicitar y renovar año tras año con un correo institucional})
+        \item DBeaver (Community o Enterprise Edition\footnote{Historicamente siempre han sido gratis ambas versiones con la diferencia siendo que Enterprise Edition no es completamente software libre a diferencia de su version libre, pero el mismo agrega suporte para bases de datos no relacionales. Se ocupo la version Enterprise, entre los ultimos ofertas gratis antes de que se convierte en un producto de pago, por este mismo motivo de requerir suporte para bases de datos NoSQL como MongoDB y Redis.})
+    \end{enumerate}
 \end{enumerate}
 
 Estos pasos de instalacion se basaron en la guia de instalacion de Xen publicado en el wiki del proyecto de Debian \citep{Debian-Wiki-Xen}.
@@ -984,6 +998,49 @@ class StudentAssignmentGrade(models.Model):
 \lstset{language=Bash}
 
 \subsection{Editor de Codigo en Linea}
+Una de las funcionalidades principales del sistema GitEDU es la capacidad de editar codigo en linea, la logica del mismo se realiza en la app 'ideApp'.
+
+\subsubsection{Modelo de Base de Dato para Editor de Codigo}
+Para el editor de codigo en linea, es necesaria extender la funcionalidad del modelo de base de datos introducido previamente. Primero se agrega dos entidades a socialapp que representan grupos de personas (usuarios) y miembresia dentro de estos mismos grupos:
+\lstset{language=Python}
+\begin{lstlisting}
+class Group(models.Model):
+    name = models.CharField(max_length=50, null=False)
+
+class GroupMembership(models.Model):
+    person = models.ForeignKey(Person, null=False)
+    group = models.ForeignKey(Group, null=False)
+\end{lstlisting}
+\lstset{language=Bash}
+
+Dentro de ideApp se crea 4 entidades para representar respositorios (una coleccion de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y opcionalmente grupo dueño quien esta encargado de la administracion del mismo, archivo mismo que entre sus metadatos esta un lenguaje associado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestion (como ejeccucion y compilacion), y finalmente membresia de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre codigo por usuarios no autorizados.
+\lstset{language=Python}
+\begin{lstlisting}
+class Repository(models.Model):
+    namespace = models.CharField(max_length=50, null=False)
+    name = models.CharField(max_length=50, null=False)
+    owner = models.ForeignKey(Person, null=False)
+    owning_group = models.ForeignKey(Group, null=True)
+
+class File(models.Model):
+    path = models.CharField(max_length=255, null=False)
+    repository = models.ForeignKey(Repository, null=False)
+    language = models.CharField(max_length=50,
+    		choices=constants.LANGUAGE_NAMES)
+
+class RepositoryPersonMembership(models.Model):
+    person = models.ForeignKey(Person, null=False)
+    repository = models.ForeignKey(Repository, null=False)
+
+class RepositoryGroupMembership(models.Model):
+    group = models.ForeignKey(Group, null=False)
+    repository = models.ForeignKey(Repository, null=False)
+\end{lstlisting}
+\lstset{language=Bash}
+
+% <TODO>
+%\subsubsection{Sincronizar y guardar en tiempo real}
+% </TODO>
 
 \subsection{Persistencia de Codigo}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:

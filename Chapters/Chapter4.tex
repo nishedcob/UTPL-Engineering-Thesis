@@ -1046,6 +1046,13 @@ class RepositoryGroupMembership(models.Model):
 % </TODO>
 
 \subsection{Persistencia de Codigo}
+Para la Persistencia de Codigo se considera dos backends de persistencia para codigo:
+\begin{itemize}
+	\item MongoDB como base de datos NoSQL para acceso rapido y recuperacion de codigo persistido de una manera similar a GitEduERP.
+    \item GitLab CE, como servidor de Git, manejado con una combinacion de la API del mismo y comandos de Git para el manejo de cambios en repositorios.
+\end{itemize}
+
+\subsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:
 \lstset{language=Python}
 \begin{lstlisting}

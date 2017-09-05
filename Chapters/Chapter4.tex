@@ -594,19 +594,19 @@ Primero es necesario que este activo y levantado el ambiente del LMS como se doc
 Instalacion de dependencias desde GitHub (no se encuentran en los repositorios oficiales de Pip/Pypi; ademas para superar problemas de dependencias en las librerias, se ha optado para ocupar forks personales del autor con las mejores necesarias para su funcionamiento):
 \begin{lstlisting}
 pip install git+https://github.com/nishedcob/django-app-lti
-	@master#egg=django-app-lti
+    @master#egg=django-app-lti
 pip install git+https://github.com/nishedcob/
-	django-auth-lti@master#egg=django-auth-lti
+    django-auth-lti@master#egg=django-auth-lti
 \end{lstlisting}
 
 Como son dependencias no se encuentran en los repositorios oficiales, su manejo dentro del requirements.txt tambien tiene que ser especial ya que un `pip freeze` no los guardaran correctamente dentro del mismo. En lugar de eso hay que agregar dos lineas al requirements.txt para el manejo de estas dependencias:
 \begin{lstlisting}
 -e git+https://github.com/nishedcob/django-app-lti.git
-	@38b32989e22b189345e421b183684f9b5453e99a
-	#egg=django-app-lti
+    @38b32989e22b189345e421b183684f9b5453e99a
+    #egg=django-app-lti
 -e git+https://github.com/nishedcob/django-auth-lti.git
-	@71c9da8d0aa07ebc3139bf3f113b5c521d61b1f1
-	#egg=django-auth-lti
+    @71c9da8d0aa07ebc3139bf3f113b5c521d61b1f1
+    #egg=django-auth-lti
 \end{lstlisting}
 
 % Modificar settings
@@ -691,15 +691,15 @@ urlpatterns = [
 Para arreglar un problema de una version muy desactualizada de ims-lti-py, se agrego la siguiente linea al requirements.txt (para ocupar un fork del propio liberia por el propio autor para resolver los problemas dados):
 \begin{lstlisting}
 -e git+https://github.com/nishedcob/ims_lti_py.git
-	@a6576d7892ea4f69b76572788b118aaa4cdcf749
-	#egg=ims_lti_py-develop
+    @a6576d7892ea4f69b76572788b118aaa4cdcf749
+    #egg=ims_lti_py-develop
 \end{lstlisting}
 
 Para arreglar un problema de limpieza de datos en oauth2, se agrego la siguiente linea al requirements.txt (para ocupar un fork del propio liberia por el propio autor para resolver los problemas dados):
 \begin{lstlisting}
 -e git+https://github.com/nishedcob/python-oauth2.git
-	@176fc35aa35d626afcb6a23459482a4c96782c88
-	#egg=oauth2
+    @176fc35aa35d626afcb6a23459482a4c96782c88
+    #egg=oauth2
 \end{lstlisting}
 
 Despues se migra la base de datos:
@@ -931,9 +931,9 @@ class ClassroomTeacher(models.Model):
     classroom = models.ForeignKey(Classroom, null=False)
     teacher = models.ForeignKey(Teacher, null=False)
     classroomGradeWeight = models.DecimalField(decimal_places=4,
-    		max_digits=5)
+            max_digits=5)
     relativeGradeWeight = models.DecimalField(decimal_places=3,
-    		max_digits=5, null=True)
+            max_digits=5, null=True)
 
 class ClassroomStudent(models.Model):
     classroom = models.ForeignKey(Classroom, null=False)
@@ -942,29 +942,29 @@ class ClassroomStudent(models.Model):
 class AcademicCategory(models.Model):
     name = models.CharField(max_length=50, null=False)
     categoryGradeWeight = models.DecimalField(decimal_places=4,
-    		max_digits=5)
+            max_digits=5)
     relativeGradeWeight = models.DecimalField(decimal_places=3,
-    		max_digits=5, null=True)
+            max_digits=5, null=True)
     classroomTeacher = models.ForeignKey(ClassroomTeacher,
-    		null=False)
+            null=False)
 
 class AcademicSubCategory(models.Model):
     name = models.CharField(max_length=50, null=False)
     subcategoryGradeWeight = models.DecimalField(decimal_places=4,
-    		max_digits=5)
+            max_digits=5)
     relativeGradeWeight = models.DecimalField(decimal_places=3,
-    		max_digits=5, null=True)
+            max_digits=5, null=True)
     academicCategory = models.ForeignKey(AcademicCategory,
-    		null=False)
+            null=False)
 
 class AcademicAssignment(models.Model):
     name = models.CharField(max_length=50, null=False)
     assignmentGradeWeight = models.DecimalField(
-    		decimal_places=4, max_digits=5)
+            decimal_places=4, max_digits=5)
     relativeGradeWeight = models.DecimalField(decimal_places=3,
-    		max_digits=5, null=True)
+            max_digits=5, null=True)
     academicSubCategory = models.ForeignKey(AcademicSubCategory,
-    		null=False)
+            null=False)
 \end{lstlisting}
 \lstset{language=Bash}
 ClassSubject define el tipo de materia que es, por ejemplo ''Programacion'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducion a la Programacion''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en catagorias con distintos pesos, por ejemplo ''Examenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las catagorias. AcademicAssignment es la abstracion que se da a los itemes calificadas dentro de una subcatagoria.
@@ -974,27 +974,27 @@ El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo
 \begin{lstlisting}
 class StudentCategoryGrade(models.Model):
     classroomStudent = models.ForeignKey(ClassroomStudent,
-    		null=False)
+            null=False)
     academicCategory = models.ForeignKey(AcademicCategory,
-    		null=False)
+            null=False)
     grade = models.DecimalField(decimal_places=3,
-    		max_digits=6, null=True)
+            max_digits=6, null=True)
 
 class StudentSubCategoryGrade(models.Model):
     classroomStudent = models.ForeignKey(ClassroomStudent,
-    		null=False)
+            null=False)
     academicSubCategory = models.ForeignKey(AcademicSubCategory,
-    		null=False)
+            null=False)
     grade = models.DecimalField(decimal_places=3, max_digits=6,
-    		null=True)
+            null=True)
 
 class StudentAssignmentGrade(models.Model):
     classroomStudent = models.ForeignKey(ClassroomStudent,
-    		null=False)
+            null=False)
     academicAssignment = models.ForeignKey(AcademicAssignment,
-    		null=False)
+            null=False)
     grade = models.DecimalField(decimal_places=3, max_digits=6,
-    		null=True)
+            null=True)
 \end{lstlisting}
 \lstset{language=Bash}
 
@@ -1030,7 +1030,7 @@ class File(models.Model):
     path = models.CharField(max_length=255, null=False)
     repository = models.ForeignKey(Repository, null=False)
     language = models.CharField(max_length=50,
-    		choices=constants.LANGUAGE_NAMES)
+            choices=constants.LANGUAGE_NAMES)
 
 class RepositoryPersonMembership(models.Model):
     person = models.ForeignKey(Person, null=False)
@@ -1113,14 +1113,14 @@ class CodePersistenceBackend:
         pass
 
     def create_file(self, namespace, repository, file_path,\
-    		file_contents):
+            file_contents):
         pass
 
     def delete_file(self, namespace, repository, file_path):
         pass
 
     def save_file(self, namespace, repository, file_path,\
-    		file_contents):
+            file_contents):
         pass
 \end{lstlisting}
 \lstset{language=Bash}
@@ -1131,12 +1131,12 @@ Para el manejo de datos dentro del API interna, se estandariza los objectos de d
 def validate_string(value, parameter_name=None):
     if value is None:
         raise ValueError("%s can't be None" %\
-        	(parameter_name if parameter_name\
-            	else "Parameter"))
+            (parameter_name if parameter_name\
+                else "Parameter"))
     if not isinstance(value, str):
         raise ValueError("%s should be a String" %\
-        	(parameter_name if parameter_name\
-            	else "Parameter"))
+            (parameter_name if parameter_name\
+                else "Parameter"))
 
 class GenericNamespace:
     namespace = None
@@ -1169,7 +1169,7 @@ class GenericRepository:
             raise ValueError("Namespace can't be None")
         if not isinstance(namespace, GenericNamespace):
             raise ValueError(\
-            	"Namespace should be a Namespace Object")
+                "Namespace should be a Namespace Object")
 
     def __init__(self, namespace, repository):
         self.validate_namespace(namespace)
@@ -1199,7 +1199,7 @@ class GenericRepository:
 
     def __str__(self):
         return "REPO: (%s) :: %s" %\
-        	(self.namespace, self.repository)
+            (self.namespace, self.repository)
 
 class GenericRepositoryFile:
     repository = None
@@ -1210,7 +1210,7 @@ class GenericRepositoryFile:
             raise ValueError("Repository can't be None")
         if not isinstance(repository, GenericRepository):
             raise ValueError(\
-            	"Repository should be a Repository Object")
+                "Repository should be a Repository Object")
 
     def __init__(self, repository, file_path):
         self.validate_repository(repository)
@@ -1240,7 +1240,7 @@ class GenericRepositoryFile:
 
     def __str__(self):
         return "RepoFile: (%s) :: %s" %\
-        	(self.repository, self.file_path)
+            (self.repository, self.file_path)
 \end{lstlisting}
 \lstset{language=Bash}
 
@@ -1248,9 +1248,9 @@ En el settings, hay una necesidad de definir los backends de codigo y su priorid
 \lstset{language=Python}
 \begin{lstlisting}
 from ideApp.CodePersistenceBackends.MongoDB.backend\
-		import MongoDBCodePersistenceBackend
+        import MongoDBCodePersistenceBackend
 from ideApp.CodePersistenceBackends.GitLab.backend\
-		import GitLabCodePersistenceBackend
+        import GitLabCodePersistenceBackend
 
 CODE_PERSISTENCE_BACKENDS = {
     'mongodb': {
@@ -1268,7 +1268,7 @@ CODE_PERSISTENCE_BACKENDS = {
 }
 
 CODE_PERSISTENCE_BACKEND_READ_PREFERENCE =\
-		['mongodb', 'gitlab']
+        ['mongodb', 'gitlab']
 CODE_PERSISTENCE_BACKEND_WRITE_OUT = ['mongodb', 'gitlab']
 
 MONGODB_CONNECT_TO = 'mongodb'
@@ -1291,9 +1291,9 @@ El codigo completo de este backend se encuentra a continuacion:
 \lstset{language=Python}
 \begin{lstlisting}
 from ideApp.CodePersistenceBackends.generics\
-		import CodePersistenceBackend
+        import CodePersistenceBackend
 from GitEDU.settings import CODE_PERSISTENCE_BACKENDS,\
-		CODE_PERSISTENCE_BACKEND_READ_PREFERENCE,\
+        CODE_PERSISTENCE_BACKEND_READ_PREFERENCE,\
         CODE_PERSISTENCE_BACKEND_WRITE_OUT
 
 class CodePersistenceBackendManager(CodePersistenceBackend):
@@ -1304,141 +1304,147 @@ class CodePersistenceBackendManager(CodePersistenceBackend):
 
     def __init__(self):
         for backend_key, backend_config in\
-        		CODE_PERSISTENCE_BACKENDS.items():
+                CODE_PERSISTENCE_BACKENDS.items():
             if backend_config['use']:
                 connection_profile =\
-                	backend_config['connection_profiles']\
+                    backend_config['connection_profiles']\
                         [backend_config\
-                        	['connection_profile']]
+                            ['connection_profile']]
                 self.code_persistence_backends[backend_key] =\
-                		backend_config['backend']\
-                        	(connection_profile)
+                        backend_config['backend']\
+                            (connection_profile)
         for backend_key in\
-        		CODE_PERSISTENCE_BACKEND_READ_PREFERENCE:
+                CODE_PERSISTENCE_BACKEND_READ_PREFERENCE:
             connection = self.code_persistence_backends\
-            		.get(backend_key, None)
+                    .get(backend_key, None)
             if connection:
                 self.code_persistence_backends_read\
-                		.append({"key": backend_key,\
-                        		"backend": connection})
+                        .append({"key": backend_key,\
+                                "backend": connection})
         for backend_key in CODE_PERSISTENCE_BACKEND_WRITE_OUT:
             connection = self.code_persistence_backends\
-            		.get(backend_key, None)
+                    .get(backend_key, None)
             if connection:
                 self.code_persistence_backends_write\
-                		.append({"key": backend_key,\
-                        		"backend": connection})
+                        .append({"key": backend_key,\
+                                "backend": connection})
 
     def list_namespaces(self, include_read=True,\
-    		include_write=True):
+            include_write=True):
         namespaces = {}
         if include_read:
             if include_write:
                 namespaces['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     namespaces['read'][backend['key']] =\
-                    		backend['backend'].list_namespaces()
+                            backend['backend']\
+                                .list_namespaces()
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     namespaces[backend['key']] =\
-                    		backend['backend'].list_namespaces()
+                            backend['backend']\
+                                .list_namespaces()
         if include_write:
             if include_read:
                 namespaces['write'] = {}
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces['write'][backend['key']] =\
-                    		backend['backend']\
-                            		.list_namespaces()
+                            backend['backend']\
+                                    .list_namespaces()
             else:
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces[backend['key']] =\
-                    		backend['backend']\
-                            		.list_namespaces()
+                            backend['backend']\
+                                    .list_namespaces()
         return namespaces
 
     def search_namespaces(self, query, include_read=True,\
-    		include_write=True):
+            include_write=True):
         namespaces = {}
         if include_read:
             if include_write:
                 namespaces['read'] = {}
                 for backend in\
-                		self.code_persistence_backends_read:
+                        self.code_persistence_backends_read:
                     namespaces['read'][backend['key']] =\
-                    		backend['backend']\
-                            		.search_namespaces(query)
+                            backend['backend']\
+                                    .search_namespaces(query)
             else:
                 for backend in\
-                		self.code_persistence_backends_read:
+                        self.code_persistence_backends_read:
                     namespaces[backend['key']] =\
-                    		backend['backend']\
-                            		.search_namespaces(query)
+                            backend['backend']\
+                                    .search_namespaces(query)
         if include_write:
             if include_read:
                 namespaces['write'] = {}
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces['write'][backend['key']] =\
-                    		backend['backend']\
-                            		.search_namespaces(query)
+                            backend['backend']\
+                                    .search_namespaces(query)
             else:
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces[backend['key']] =\
-                    		backend['backend']\
-                            		.search_namespaces(query)
+                            backend['backend']\
+                                    .search_namespaces(query)
         return namespaces
 
     def namespace_exists(self, namespace, include_read=True,\
-    		include_write=True):
+            include_write=True):
         exists = False
         if include_read:
-            for backend in self.code_persistence_backends_read:
+            for backend in\
+                    self.code_persistence_backends_read:
                 exists = exists or backend['backend']\
-                		.namespace_exists(namespace)
+                        .namespace_exists(namespace)
         if include_write:
-            for backend in self.code_persistence_backends_write:
+            for backend in\
+                    self.code_persistence_backends_write:
                 exists = exists or backend['backend']\
-                		.namespace_exists(namespace)
+                        .namespace_exists(namespace)
         return exists
 
     def get_namespace(self, namespace, include_read=True,\
-    		include_write=True):
+            include_write=True):
         namespaces = {}
         if include_read:
             if include_write:
                 namespaces['read'] = {}
                 for backend in\
-                		self.code_persistence_backends_read:
+                        self.code_persistence_backends_read:
                     namespaces['read'][backend['key']] =\
-                    		backend['backend']\
-                            		.get_namespace(namespace)
+                            backend['backend']\
+                                    .get_namespace(namespace)
             else:
                 for backend in\
-                		self.code_persistence_backends_read:
+                        self.code_persistence_backends_read:
                     namespaces[backend['key']] =\
-                    		backend['backend']\
-                            		.get_namespace(namespace)
+                            backend['backend']\
+                                    .get_namespace(namespace)
         if include_write:
             if include_read:
                 namespaces['write'] = {}
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces['write'][backend['key']] =\
-                    		backend['backend']\
-                            		.get_namespace(namespace)
+                            backend['backend']\
+                                    .get_namespace(namespace)
             else:
                 for backend in\
-                		self.code_persistence_backends_write:
+                        self.code_persistence_backends_write:
                     namespaces[backend['key']] =\
-                    		backend['backend']\
-                            		.get_namespace(namespace)
+                            backend['backend']\
+                                    .get_namespace(namespace)
         return namespaces
 
     def create_namespace(self, namespace, include_read=False,\
-    		include_write=True):
+            include_write=True):
         if include_read:
             for backend in self.code_persistence_backends_read:
                 backend['backend'].create_namespace(namespace)
@@ -1447,7 +1453,7 @@ class CodePersistenceBackendManager(CodePersistenceBackend):
                 backend['backend'].create_namespace(namespace)
 
     def delete_namespace(self, namespace, include_read=False,\
-    		include_write=True):
+            include_write=True):
         if include_read:
             for backend in self.code_persistence_backends_read:
                 backend['backend'].delete_namespace(namespace)
@@ -1456,7 +1462,7 @@ class CodePersistenceBackendManager(CodePersistenceBackend):
                 backend['backend'].delete_namespace(namespace)
 
     def save_namespace(self, namespace, include_read=False,\
-    		include_write=True):
+            include_write=True):
         if include_read:
             for backend in self.code_persistence_backends_read:
                 backend['backend'].save_namespace(namespace)
@@ -1465,238 +1471,350 @@ class CodePersistenceBackendManager(CodePersistenceBackend):
                 backend['backend'].save_namespace(namespace)
 
     def list_repositories(self, namespace, include_read=True,\
-    		include_write=True):
+            include_write=True):
         repositories = {}
         if include_read:
             if include_write:
                 repositories['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
                     repositories['read'][backend_key] =\
-                    		backend['backend']\
-                            		.list_repositories(namespace)
+                            backend['backend']\
+                                    .list_repositories(\
+                                        namespace)
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
                     repositories[backend_key] =\
-                    		backend['backend']
-                            		.list_repositories(namespace)
+                            backend['backend']
+                                    .list_repositories(\
+                                        namespace)
         if include_write:
             if include_read:
                 repositories['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
                     repositories['write'][backend_key] =\
-                    		backend['backend']\
-                            		.list_repositories(namespace)
+                            backend['backend']\
+                                    .list_repositories(\
+                                        namespace)
             else:
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
                     repositories[backend_key] =\
-                    		backend['backend']\
-                            		.list_repositories(namespace)
+                            backend['backend']\
+                                    .list_repositories(\
+                                        namespace)
         return repositories
 
-    def search_repositories(self, namespace, query, include_read=True, include_write=True):
+    def search_repositories(self, namespace, query,\
+            include_read=True, include_write=True):
         repositories = {}
         if include_read:
             if include_write:
                 repositories['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
                     repositories['read'][backend_key] =\
-                    		backend['backend']\
-                            		.search_repositories(namespace,\
-                                    		query)
+                            backend['backend']\
+                                    .search_repositories(\
+                                        namespace, query)
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
                     repositories[backend_key] =\
-                    		backend['backend']\
-                            		.search_repositories(namespace,\
-                                    		query)
+                            backend['backend']\
+                                    .search_repositories(\
+                                        namespace, query)
         if include_write:
             if include_read:
                 repositories['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
                     repositories['write'][backend_key] =\
-                    		backend['backend']\
-                            		.search_repositories(namespace,\
-                                    		query)
+                            backend['backend']\
+                                    .search_repositories(\
+                                        namespace, query)
             else:
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
                     repositories[backend_key] =\
-                    		backend['backend']\
-                            		.search_repositories(namespace,\
-                                    		query)
+                            backend['backend']\
+                                    .search_repositories(\
+                                        namespace, query)
         return repositories
 
-    def repository_exists(self, namespace, repository, include_read=True,\
-    		include_write=True):
+    def repository_exists(self, namespace, repository,\
+            include_read=True, include_write=True):
         exists = False
         if include_read:
             for backend in self.code_persistence_backends_read:
-                exists = exists or backend['backend'].repository_exists(namespace, repository)
+                exists = exists or backend['backend']\
+                    .repository_exists(namespace, repository)
         if include_write:
             for backend in self.code_persistence_backends_write:
-                exists = exists or backend['backend'].repository_exists(namespace, repository)
+                exists = exists or backend['backend']
+                    .repository_exists(namespace, repository)
         return exists
 
-    def get_repository(self, namespace, repository, include_read=True, include_write=True):
+    def get_repository(self, namespace, repository,\
+            include_read=True, include_write=True):
         repositories = {}
         if include_read:
             if include_write:
                 repositories['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    repositories['read'][backend_key] = backend['backend'].get_repository(namespace, repository)
+                    repositories['read'][backend_key] =\
+                        backend['backend']\
+                            .get_repository(namespace,\
+                                repository)
             else:
                 for backend in self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    repositories[backend_key] = backend['backend'].get_repository(namespace, repository)
+                    repositories[backend_key] =\
+                        backend['backend']\
+                            .get_repository(namespace,\
+                                repository)
         if include_write:
             if include_read:
                 repositories['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    repositories['write'][backend_key] = backend['backend'].get_repository(namespace, repository)
+                    repositories['write'][backend_key] =\
+                        backend['backend']\
+                            .get_repository(namespace,\
+                                repository)
             else:
                 for backend in self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    repositories[backend_key] = backend['backend'].get_repository(namespace, repository)
+                    repositories[backend_key] =\
+                        backend['backend']\
+                            .get_repository(namespace,\
+                                repository)
         return repositories
 
-    def create_repository(self, namespace, repository, include_read=False, include_write=True):
+    def create_repository(self, namespace, repository,\
+            include_read=False, include_write=True):
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                backend['backend'].create_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_read:
+                backend['backend']\
+                    .create_repository(namespace, repository)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                backend['backend'].create_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_write:
+                backend['backend']\
+                    .create_repository(namespace, repository)
 
-    def delete_repository(self, namespace, repository, include_read=False, include_write=True):
+    def delete_repository(self, namespace, repository,\
+            include_read=False, include_write=True):
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                backend['backend'].delete_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_read:
+                backend['backend']\
+                        .delete_repository(namespace,\
+                            repository)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                backend['backend'].delete_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_write:
+                backend['backend']\
+                    .delete_repository(namespace, repository)
 
-    def save_repository(self, namespace, repository, include_read=False, include_write=True):
+    def save_repository(self, namespace, repository,\
+            include_read=False, include_write=True):
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                backend['backend'].save_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_read:
+                backend['backend']\
+                    .save_repository(namespace, repository)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                backend['backend'].save_repository(namespace, repository)
+            for backend in\
+                    self.code_persistence_backends_write:
+                backend['backend']\
+                    .save_repository(namespace, repository)
 
-    def list_files(self, namespace, repository, include_read=True, include_write=True):
+    def list_files(self, namespace, repository,\
+            include_read=True, include_write=True):
         files = {}
         if include_read:
             if include_write:
                 files['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files['read'][backend_key] = backend['backend'].list_files(namespace, repository)
+                    files['read'][backend_key] =\
+                        backend['backend']\
+                            .list_files(namespace, repository)
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].list_files(namespace, repository)
+                    files[backend_key] =\
+                        backend['backend']\
+                            .list_files(namespace, repository)
         if include_write:
             if include_read:
                 files['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files['write'][backend_key] = backend['backend'].list_files(namespace, repository)
+                    files['write'][backend_key] =\
+                        backend['backend']\
+                            .list_files(namespace, repository)
             else:
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].list_files(namespace, repository)
+                    files[backend_key] = backend['backend']\
+                        .list_files(namespace, repository)
         return files
 
-    def search_files(self, namespace, repository, query, include_read=True, include_write=True):
+    def search_files(self, namespace, repository, query,\
+            include_read=True, include_write=True):
         files = {}
         if include_read:
             if include_write:
                 files['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files['read'][backend_key] = backend['backend'].search_files(namespace, repository, query)
+                    files['read'][backend_key] =\
+                        backend['backend']\
+                            .search_files(namespace,\
+                                repository, query)
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].search_files(namespace, repository, query)
+                    files[backend_key] =\
+                        backend['backend']\
+                            .search_files(namespace,\
+                                repository, query)
         if include_write:
             if include_read:
                 files['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files['write'][backend_key] = backend['backend'].search_files(namespace, repository, query)
+                    files['write'][backend_key] =\
+                        backend['backend']\
+                            .search_files(namespace,\
+                                repository, query)
             else:
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].search_files(namespace, repository, query)
+                    files[backend_key] =\
+                        backend['backend']\
+                            .search_files(namespace,\
+                                repository, query)
         return files
 
-    def file_exists(self, namespace, respository, file_path, include_read=True, include_write=True):
+    def file_exists(self, namespace, respository, file_path,\
+            include_read=True, include_write=True):
         exists = False
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                exists = exists or backend['backend'].file_exists(namespace, respository, file_path)
+            for backend in\
+                    self.code_persistence_backends_read:
+                exists = exists or backend['backend']\
+                    .file_exists(namespace, respository,\
+                        file_path)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                exists = exists or backend['backend'].file_exists(namespace, respository, file_path)
+            for backend in\
+                    self.code_persistence_backends_write:
+                exists = exists or backend['backend']\
+                    .file_exists(namespace, respository,\
+                        file_path)
         return exists
 
-    def get_file(self, namespace, respository, file_path, include_read=True, include_write=True):
+    def get_file(self, namespace, respository, file_path,\
+            include_read=True, include_write=True):
         files = {}
         if include_read:
             if include_write:
                 files['read'] = {}
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files['read'][backend_key] = backend['backend'].get_file(namespace, respository, file_path)
+                    files['read'][backend_key] =\
+                        backend['backend']\
+                            .get_file(namespace, respository,\
+                                file_path)
             else:
-                for backend in self.code_persistence_backends_read:
+                for backend in\
+                        self.code_persistence_backends_read:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].get_file(namespace, respository, file_path)
+                    files[backend_key] = backend['backend']\
+                        .get_file(namespace, respository,\
+                            file_path)
         if include_write:
             if include_read:
                 files['write'] = {}
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files['write'][backend_key] = backend['backend'].get_file(namespace, respository, file_path)
+                    files['write'][backend_key] =\
+                        backend['backend']\
+                            .get_file(namespace, respository,\
+                                file_path)
             else:
-                for backend in self.code_persistence_backends_write:
+                for backend in\
+                        self.code_persistence_backends_write:
                     backend_key = backend['key']
-                    files[backend_key] = backend['backend'].get_file(namespace, respository, file_path)
+                    files[backend_key] = backend['backend']\
+                        .get_file(namespace, respository,\
+                            file_path)
         return files
 
-    def create_file(self, namespace, repository, file_path, file_contents, include_read=False, include_write=True):
+    def create_file(self, namespace, repository, file_path,\
+            file_contents, include_read=False,\
+            include_write=True):
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                backend['backend'].create_file(namespace, repository, file_path, file_contents)
+            for backend in\
+                    self.code_persistence_backends_read:
+                backend['backend'].create_file(namespace,\
+                    repository, file_path, file_contents)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                backend['backend'].create_file(namespace, repository, file_path, file_contents)
+            for backend in\
+                    self.code_persistence_backends_write:
+                backend['backend'].create_file(namespace,\
+                    repository, file_path, file_contents)
 
-    def delete_file(self, namespace, repository, file_path, include_read=False, include_write=True):
+    def delete_file(self, namespace, repository, file_path,\
+            include_read=False, include_write=True):
         if include_read:
-            for backend in self.code_persistence_backends_read:
-                backend['backend'].delete_file(namespace, repository, file_path)
+            for backend in\
+                    self.code_persistence_backends_read:
+                backend['backend'].delete_file(namespace,\
+                    repository, file_path)
         if include_write:
-            for backend in self.code_persistence_backends_write:
-                backend['backend'].delete_file(namespace, repository, file_path)
+            for backend in\
+                    self.code_persistence_backends_write:
+                backend['backend'].delete_file(namespace,\
+                    repository, file_path)
 
-    def save_file(self, namespace, repository, file_path, file_contents, include_read=False, include_write=True):
+    def save_file(self, namespace, repository, file_path,\
+            file_contents, include_read=False,\
+            include_write=True):
         if include_read:
             for backend in self.code_persistence_backends_read:
-                backend['backend'].save_file(namespace, repository, file_path, file_contents)
+                backend['backend'].save_file(namespace,\
+                    repository, file_path, file_contents)
         if include_write:
             for backend in self.code_persistence_backends_write:
-                backend['backend'].save_file(namespace, repository, file_path, file_contents)
+                backend['backend'].save_file(namespace,\
+                    repository, file_path, file_contents)
 \end{lstlisting}
 \lstset{language=Bash}
 
@@ -1704,9 +1822,9 @@ Tambien se define el gestor del backend de persistencia de codigo en el Settings
 \lstset{language=Python}
 \begin{lstlisting}
 from ideApp.CodePersistenceBackends.backend_manager\
-		import CodePersistenceBackendManager
+        import CodePersistenceBackendManager
 CODE_PERSISTENCE_BACKEND_MANAGER =\
-		CodePersistenceBackendManager
+        CodePersistenceBackendManager
 \end{lstlisting}
 \lstset{language=Bash}
 
@@ -1752,69 +1870,69 @@ gitlab_default_srv = GITLAB_DEFAULT_SERVER
 
 
 def connect_to_gitlab_token(protocol=None,
-		host=None, port=None, token=None):
+        host=None, port=None, token=None):
     if host is None:
         return None
     # gitlab_conn = gitlab.Gitlab(protocol
-    		+ host + port, token)
+            + host + port, token)
     gitlab_conn = gitlab.Gitlab(protocol
-    		+ host, token)
+            + host, token)
     #gitlab_conn.auth()
     return gitlab_conn
 
 
 def connect_to_settings_gitlab_token(
-		indx=GITLAB_DEFAULT_SERVER):
+        indx=GITLAB_DEFAULT_SERVER):
     return connect_to_gitlab_token(
-    		protocol=GITLAB_SERVERS
-            	[indx]['API_PROTOCOL'],
+            protocol=GITLAB_SERVERS
+                [indx]['API_PROTOCOL'],
             host=GITLAB_SERVERS[indx]
-            	['HOST'],
+                ['HOST'],
             port=GITLAB_SERVERS[indx]
-            	['API_PROTOCOL'],
+                ['API_PROTOCOL'],
             token=GITLAB_SERVERS[indx]
-            	['TOKEN'])
+                ['TOKEN'])
 
 
 def connect_to_gitlab_user_password(protocol=None,
-		host=None, port=None, user=None,
+        host=None, port=None, user=None,
         password=None):
     if host is None:
         return None
     gitlab_conn = gitlab.Gitlab(protocol + host
-    		+ port, email=user, password=password)
+            + port, email=user, password=password)
     gitlab_conn.auth()
     return gitlab_conn
 
 
 def connect_to_settings_gitlab_user_password(
-		indx=GITLAB_DEFAULT_SERVER):
+        indx=GITLAB_DEFAULT_SERVER):
     return connect_to_gitlab_user_password(
-    		protocol=GITLAB_SERVERS[indx]
-            		['API_PROTOCOL'],
+            protocol=GITLAB_SERVERS[indx]
+                    ['API_PROTOCOL'],
             host=GITLAB_SERVERS[indx]['HOST'],
             port=GITLAB_SERVERS[indx]
-            		['API_PROTOCOL'],
+                    ['API_PROTOCOL'],
             user=GITLAB_SERVERS[indx]['USER'],
             password=GITLAB_SERVERS[indx]
-            		['PASSWORD'])
+                    ['PASSWORD'])
 
 
 def connect_to_settings_gitlab(
-		indx=GITLAB_DEFAULT_SERVER):
+        indx=GITLAB_DEFAULT_SERVER):
     if GITLAB_SERVERS[indx]['WITH_TOKEN']:
         return connect_to_settings_gitlab_token(
-        		indx)
+                indx)
     elif GITLAB_SERVERS[indx]['WITH_CRED']:
         return connect_to_settings_gitlab_user_password(
-        		indx)
+                indx)
     else:
         return None
 
 gitlab_srv = None
 try:
     gitlab_srv = connect_to_settings_gitlab(
-    		gitlab_default_srv)
+            gitlab_default_srv)
 except Exception as e:
     print("No se pudo connectar a GitLab")
     print(e)

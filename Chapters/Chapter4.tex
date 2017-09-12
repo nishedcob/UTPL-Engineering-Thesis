@@ -1128,6 +1128,30 @@ class CodePersistenceBackend:
     def save_file(self, namespace, repository, file_path,\
             file_contents):
         pass
+    
+    def list_changes(self, namespace, repository):
+        pass
+
+    def search_changes(self, namespace, repository, query):
+        pass
+
+    def change_exists(self, namespace, respository, change):
+        return False
+
+    def get_change(self, namespace, respository, change):
+        pass
+
+    def create_change(self, namespace, repository, author,\
+            comment=None, timestamp=datetime.datetime.\
+                fromtimestamp(time.time()).\
+                strftime('%Y-%m-%d %H:%M:%S')):
+        pass
+
+    def delete_change(self, namespace, repository, change):
+        pass
+
+    def save_change(self, namespace, repository, change):
+        pass
 \end{lstlisting}
 \lstset{language=Bash}
 
@@ -1924,6 +1948,159 @@ class CodePersistenceBackendManager(CodePersistenceBackend):
             for backend in self.code_persistence_backends_write:
                 backend['backend'].save_file(namespace,\
                     repository, file_path, file_contents)
+
+    def list_changes(self, namespace, repository,\
+            include_read=True, include_write=True):
+        changes = {}
+        if include_read:
+            if include_write:
+                changes['read'] = {}
+                for backend in\
+                        self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['read']\
+                        ['backend'].list_changes(namespace,\
+                            repository)
+            else:
+                for backend in\
+                        self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .list_changes(namespace, repository)
+        if include_write:
+            if include_read:
+                changes['write'] = {}
+                for backend in\
+                        self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['write']\
+                        ['backend'].list_changes(namespace,\
+                            repository)
+            else:
+                for backend in\
+                        self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .list_changes(namespace, repository)
+        return changes
+
+    def search_changes(self, namespace, repository, query,\
+            include_read=True, include_write=True):
+        changes = {}
+        if include_read:
+            if include_write:
+                changes['read'] = {}
+                for backend in\
+                        self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['read']\
+                        ['backend'].search_changes(namespace,\
+                            repository, query)
+            else:
+                for backend in\
+                        self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .search_changes(namespace, repository,\
+                            query)
+        if include_write:
+            if include_read:
+                changes['write'] = {}
+                for backend in\
+                        self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['write']\
+                        ['backend'].search_changes(namespace,\
+                            repository, query)
+            else:
+                for backend in\
+                        self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .search_changes(namespace, repository,\
+                            query)
+        return changes
+
+    def change_exists(self, namespace, respository, change,\
+            include_read=True, include_write=True):
+        exists = False
+        if include_read:
+            for backend in self.code_persistence_backends_read:
+                exists = exists or backend['backend']\
+                    .change_exists(namespace, respository,\
+                        change)
+        if include_write:
+            for backend in self.code_persistence_backends_write:
+                exists = exists or backend['backend']\
+                    .change_exists(namespace, respository,\
+                        change)
+        return exists
+
+    def get_change(self, namespace, respository, change,\
+            include_read=True, include_write=True):
+        changes = {}
+        if include_read:
+            if include_write:
+                changes['read'] = {}
+                for backend in\
+                        self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes['read'][backend_key] = backend['backend']\
+                        .get_change(namespace, respository, change)
+            else:
+                for backend in self.code_persistence_backends_read:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .get_change(namespace, respository, change)
+        if include_write:
+            if include_read:
+                changes['write'] = {}
+                for backend in self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes['write'][backend_key] = backend['backend']\
+                        .get_change(namespace, respository, change)
+            else:
+                for backend in self.code_persistence_backends_write:
+                    backend_key = backend['key']
+                    changes[backend_key] = backend['backend']\
+                        .get_change(namespace, respository, change)
+        return changes
+
+    def create_change(self, namespace, repository, author,\
+            comment=None, timestamp=datetime.datetime\
+                .fromtimestamp(time.time())\
+                .strftime('%Y-%m-%d %H:%M:%S'),\
+            include_read=False, include_write=True):
+        if include_read:
+            for backend in self.code_persistence_backends_read:
+                backend['backend'].create_change(namespace,\
+                    repository, author, comment, timestamp)
+        if include_write:
+            for backend in self.code_persistence_backends_write:
+                backend['backend'].create_change(namespace,\
+                    repository, author, comment, timestamp)
+
+    def delete_change(self, namespace, repository, change,\
+            include_read=False, include_write=True):
+        if include_read:
+            for backend in self.code_persistence_backends_read:
+                backend['backend'].delete_change(namespace,\
+                    repository, change)
+        if include_write:
+            for backend in self.code_persistence_backends_write:
+                backend['backend'].delete_change(namespace,\
+                    repository, change)
+
+    def save_change(self, namespace, repository, change,\
+            include_read=False, include_write=True):
+        if include_read:
+            for backend in self.code_persistence_backends_read:
+                backend['backend'].save_change(namespace,\
+                    repository, change)
+        if include_write:
+            for backend in self.code_persistence_backends_write:
+                backend['backend'].save_change(namespace,\
+                    repository, change)
 \end{lstlisting}
 \lstset{language=Bash}
 

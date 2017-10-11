@@ -745,51 +745,8 @@ Si, dentro del mismo curso creamos una segunda actividad con todo lo mismo, pero
 \subsection{Integracion de Dos Schemas de Autenticacion}
 Los dos schemas de autenticacion implemententadas, sea la forma clasica con nombre de usuario y contraseña corespondiente o por LTI donde una aplicacion externa autentica un usuario autenticado previamente por el mismo, tienen un mismo fin de permitir que el sistema conozca quien esta accediendo el sistema con un fin de dar el comportamiento adecuado y en base a ello proveer seguridad y funcionalidad adecuado a todos los usuarios segun su rol.
 
-% TODO: Fix up and replace with a figure
-Para el mismo se propone tres tablas en la base de datos expresados como modelos de Django:
-\lstset{language=Python}
-\begin{lstlisting}
-class EquivalentUser(models.Model):
-    normal_user = models.ForeignKey(auth_models.User,
-                                    on_delete=models.CASCADE,
-                                    related_name=
-                                      "equivalent_normal_user",
-                                    null=False)
-    lti_user = models.ForeignKey(auth_models.User,
-                                 on_delete=models.CASCADE,
-                                 related_name=
-                                   "equivalent_lti_user",
-                                 null=False)
+Para el mismo se propone tres tablas (EquivalentUser, AuthenticationType, UserAuthentication) en la base de datos expresados como modelos de Django, los cual se encargara de generar las tablas adecuadas en la base de datos atraves de su ORM interna.
 
-    def __str__(self):
-        return "EqU: %s = %s" % (self.normal_user.username,
-                                 self.lti_user.username)
-
-
-class AuthenticationType(models.Model):
-    name = models.CharField(max_length=50, unique=True,
-                            null=False)
-
-    def __str__(self):
-        return "AuT: %s" % self.name
-
-
-class UserAuthentication(models.Model):
-    authentication_type = models.ForeignKey(AuthenticationType,
-                                            null=False,
-                                            on_delete=
-                                              models.CASCADE)
-    user = models.ForeignKey(auth_models.User, on_delete=
-                                                 models.CASCADE,
-                             null=False)
-
-    def __str__(self):
-        return "UAuTy: %s - %s" % (self.user.username, 
-                                   self
-                                     .authentication_type
-                                     .name)
-\end{lstlisting}
-\lstset{language=Bash}
 La tabla EquivalentUser relaciona usuarios autenticados de forma clasica con usuarios autenticados por LTI (porque por cada metodo de autenticacion se cree un nuevo usuario para su propio uso interno) con un fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. El idea es por ejemplo, si un docente se autentica por LTI y tambien por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catalogo de formas de autenticacion que suporta el sistema y por su naturaleza de catalogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticacion asociado con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios.
 
 Con una migracion se puede llenar de forma automatica el catalogo de AuthenticacionType:
@@ -893,25 +850,16 @@ python manage.py startapp gradesApp
 
 Cada uno de los anteriores ha sido agregado al INSTALLED\_APPS del settings para que Django reconozca la necesidad de tomar en cuenta los modelos de cada uno.
 
-Los modelos iniciales del socialApp solo definen distintos roles sociales dentro del sistema:
-\lstset{language=Python}
-\begin{lstlisting}
-class Person(models.Model):
-    user = models.ForeignKey(User, null=False)
-
-class Student(models.Model):
-    person = models.ForeignKey(Person, null=False)
-
-class Teacher(models.Model):
-    person = models.ForeignKey(Person, null=False)
-
-class Administrator(models.Model):
-    person = models.ForeignKey(Person, null=False)
-\end{lstlisting}
-\lstset{language=Bash}
+Los modelos iniciales del socialApp solo definen distintos roles sociales dentro del sistema y ocupan de cuatro tablas:
+\begin{enumerate}
+	\item Person
+	\item Student
+	\item Teacher
+	\item Administrator
+\end{enumerate}
 Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta hearquia de clases mas bien viene a dar la infrastructura necesaria para especializar cada uno de estos en caso de que sea necesario.
 
-El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como catagoria del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adicion a proveer la infrastructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo):
+El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como catagoria del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adicion a proveer la infrastructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo). Esto involucra 
 \lstset{language=Python}
 \begin{lstlisting}
 class ClassSubject(models.Model):

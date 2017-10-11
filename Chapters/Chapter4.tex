@@ -859,93 +859,26 @@ Los modelos iniciales del socialApp solo definen distintos roles sociales dentro
 \end{enumerate}
 Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta hearquia de clases mas bien viene a dar la infrastructura necesaria para especializar cada uno de estos en caso de que sea necesario.
 
-El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como catagoria del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adicion a proveer la infrastructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo). Esto involucra 
-\lstset{language=Python}
-\begin{lstlisting}
-class ClassSubject(models.Model):
-    name = models.CharField(max_length=50, null=False)
-
-class Course(models.Model):
-    name = models.CharField(max_length=50, null=False)
-    classSubject = models.ForeignKey(ClassSubject, null=True)
-
-class Section(models.Model):
-    name = models.CharField(max_length=50, null=False)
-
-class Classroom(models.Model):
-    course = models.ForeignKey(Course, null=False)
-    section = models.ForeignKey(Section, null=False)
-
-class ClassroomTeacher(models.Model):
-    classroom = models.ForeignKey(Classroom, null=False)
-    teacher = models.ForeignKey(Teacher, null=False)
-    classroomGradeWeight = models.DecimalField(decimal_places=4,
-            max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3,
-            max_digits=5, null=True)
-
-class ClassroomStudent(models.Model):
-    classroom = models.ForeignKey(Classroom, null=False)
-    student = models.ForeignKey(Student, null=False)
-
-class AcademicCategory(models.Model):
-    name = models.CharField(max_length=50, null=False)
-    categoryGradeWeight = models.DecimalField(decimal_places=4,
-            max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3,
-            max_digits=5, null=True)
-    classroomTeacher = models.ForeignKey(ClassroomTeacher,
-            null=False)
-
-class AcademicSubCategory(models.Model):
-    name = models.CharField(max_length=50, null=False)
-    subcategoryGradeWeight = models.DecimalField(decimal_places=4,
-            max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3,
-            max_digits=5, null=True)
-    academicCategory = models.ForeignKey(AcademicCategory,
-            null=False)
-
-class AcademicAssignment(models.Model):
-    name = models.CharField(max_length=50, null=False)
-    assignmentGradeWeight = models.DecimalField(
-            decimal_places=4, max_digits=5)
-    relativeGradeWeight = models.DecimalField(decimal_places=3,
-            max_digits=5, null=True)
-    academicSubCategory = models.ForeignKey(AcademicSubCategory,
-            null=False)
-\end{lstlisting}
-\lstset{language=Bash}
+El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como catagoria del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adicion a proveer la infrastructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo). Esto involucra nueve tablas en la base de datos:
+\begin{enumerate}
+  \item ClassSubject
+  \item Course
+  \item Section
+  \item Classroom
+  \item ClassroomTeacher
+  \item ClassroomStudent
+  \item AcademicCategory
+  \item AcademicSubCategory
+  \item AcademicAssignment
+\end{enumerate}
 ClassSubject define el tipo de materia que es, por ejemplo ''Programacion'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducion a la Programacion''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en catagorias con distintos pesos, por ejemplo ''Examenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las catagorias. AcademicAssignment es la abstracion que se da a los itemes calificadas dentro de una subcatagoria.
 
-El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo el modelo de tres niveles definido previamente de catagorias, subcatagorias y itemes de subcatagorias:
-\lstset{language=Python}
-\begin{lstlisting}
-class StudentCategoryGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent,
-            null=False)
-    academicCategory = models.ForeignKey(AcademicCategory,
-            null=False)
-    grade = models.DecimalField(decimal_places=3,
-            max_digits=6, null=True)
-
-class StudentSubCategoryGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent,
-            null=False)
-    academicSubCategory = models.ForeignKey(AcademicSubCategory,
-            null=False)
-    grade = models.DecimalField(decimal_places=3, max_digits=6,
-            null=True)
-
-class StudentAssignmentGrade(models.Model):
-    classroomStudent = models.ForeignKey(ClassroomStudent,
-            null=False)
-    academicAssignment = models.ForeignKey(AcademicAssignment,
-            null=False)
-    grade = models.DecimalField(decimal_places=3, max_digits=6,
-            null=True)
-\end{lstlisting}
-\lstset{language=Bash}
+El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo el modelo de tres niveles definido previamente de catagorias, subcatagorias y itemes de subcatagorias con tres tablas:
+\begin{enumerate}
+  \item StudentCategoryGrade
+  \item StudentSubCategoryGrade
+  \item StudentAssignmentGrade
+\end{enumerate}
 
 \subsection{Editor de Codigo en Linea}
 Una de las funcionalidades principales del sistema GitEDU es la capacidad de editar codigo en linea, la logica del mismo se realiza en la app 'ideApp'.
@@ -954,42 +887,19 @@ Con relacion al editor de codigo en linea, inicialmente se empezo con el trabajo
 % TODO
 
 \subsubsection{Modelo de Base de Dato para Editor de Codigo}
-Para el editor de codigo en linea, es necesaria extender la funcionalidad del modelo de base de datos introducido previamente. Primero se agrega dos entidades a socialapp que representan grupos de personas (usuarios) y miembresia dentro de estos mismos grupos:
-\lstset{language=Python}
-\begin{lstlisting}
-class Group(models.Model):
-    name = models.CharField(max_length=50, null=False)
+Para el editor de codigo en linea, es necesaria extender la funcionalidad del modelo de base de datos introducido previamente. Primero se agrega dos entidades a socialapp que representan grupos de personas (usuarios) y miembresia dentro de estos mismos grupos con dos tablas:
+\begin{enumerate}
+\item Group
+\item GroupMembership
+\end{enumerate}
 
-class GroupMembership(models.Model):
-    person = models.ForeignKey(Person, null=False)
-    group = models.ForeignKey(Group, null=False)
-\end{lstlisting}
-\lstset{language=Bash}
-
-Dentro de ideApp se crea 4 entidades para representar respositorios (una coleccion de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y opcionalmente grupo dueño quien esta encargado de la administracion del mismo, archivo mismo que entre sus metadatos esta un lenguaje associado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestion (como ejeccucion y compilacion), y finalmente membresia de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre codigo por usuarios no autorizados.
-\lstset{language=Python}
-\begin{lstlisting}
-class Repository(models.Model):
-    namespace = models.CharField(max_length=50, null=False)
-    name = models.CharField(max_length=50, null=False)
-    owner = models.ForeignKey(Person, null=False)
-    owning_group = models.ForeignKey(Group, null=True)
-
-class File(models.Model):
-    path = models.CharField(max_length=255, null=False)
-    repository = models.ForeignKey(Repository, null=False)
-    language = models.CharField(max_length=50,
-            choices=constants.LANGUAGE_NAMES)
-
-class RepositoryPersonMembership(models.Model):
-    person = models.ForeignKey(Person, null=False)
-    repository = models.ForeignKey(Repository, null=False)
-
-class RepositoryGroupMembership(models.Model):
-    group = models.ForeignKey(Group, null=False)
-    repository = models.ForeignKey(Repository, null=False)
-\end{lstlisting}
-\lstset{language=Bash}
+Dentro de ideApp se crea 4 entidades para representar respositorios (una coleccion de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y opcionalmente grupo dueño quien esta encargado de la administracion del mismo, archivo mismo que entre sus metadatos esta un lenguaje associado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestion (como ejeccucion y compilacion), y finalmente membresia de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre codigo por usuarios no autorizados. Estos entidades como tablas en la base de datos son:
+\begin{enumerate}
+\item Repository
+\item File
+\item RepositoryPersonMembership
+\item RepositoryGroupMembership
+\end{enumerate}
 
 % <TODO>
 %\subsubsection{Sincronizar y guardar en tiempo real}
@@ -1002,355 +912,30 @@ Para la Persistencia de Codigo se considera dos backends de persistencia para co
     \item GitLab CE, como servidor de Git, manejado con una combinacion de la API del mismo y comandos de Git para el manejo de cambios en repositorios.
 \end{itemize}
 
-Para el mismo es necesario manejar un API interna estandarizada. La solucion propuesta utiliza programacion orientado a objetos y un modelo estandar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos logicos de archivos) y a su vez contienen dichos archivos. La clase base para esta estandarizacion es el siguiente:
-\lstset{language=Python}
-\begin{lstlisting}
-class CodePersistenceBackend:
-    
-    namespace_class = GenericNamespace
-    repository_class = GenericRepository
-    repository_file_class = GenericRepositoryFile
-    change_class = GenericChange
-    change_file_class = GenericChangeFile
-
-    def list_namespaces(self):
-        pass
-
-    def search_namespaces(self, query):
-        pass
-
-    def namespace_exists(self, namespace):
-        return False
-
-    def get_namespace(self, namespace):
-        pass
-
-    def create_namespace(self, namespace):
-        pass
-
-    def delete_namespace(self, namespace):
-        pass
-
-    def save_namespace(self, namespace):
-        pass
-
-    def list_repositories(self, namespace):
-        pass
-
-    def search_repositories(self, namespace, query):
-        pass
-
-    def repository_exists(self, namespace, repository):
-        return False
-
-    def get_repository(self, namespace, repository):
-        pass
-
-    def create_repository(self, namespace, repository):
-        pass
-
-    def delete_repository(self, namespace, repository):
-        pass
-
-    def save_repository(self, namespace, repository):
-        pass
-
-    def list_files(self, namespace, repository):
-        pass
-
-    def search_files(self, namespace, repository, query):
-        pass
-
-    def file_exists(self, namespace, respository, file_path):
-        return False
-
-    def get_file(self, namespace, respository, file_path):
-        pass
-
-    def create_file(self, namespace, repository, file_path,\
-            file_contents):
-        pass
-
-    def delete_file(self, namespace, repository, file_path):
-        pass
-
-    def save_file(self, namespace, repository, file_path,\
-            file_contents):
-        pass
-    
-    def list_changes(self, namespace, repository):
-        pass
-
-    def search_changes(self, namespace, repository, query):
-        pass
-
-    def change_exists(self, namespace, respository, change):
-        return False
-
-    def get_change(self, namespace, respository, change):
-        pass
-
-    def create_change(self, namespace, repository, author,\
-            comment=None, timestamp=datetime.datetime.\
-                fromtimestamp(time.time()).\
-                strftime('%Y-%m-%d %H:%M:%S')):
-        pass
-
-    def delete_change(self, namespace, repository, change):
-        pass
-
-    def save_change(self, namespace, repository, change):
-        pass
-\end{lstlisting}
-\lstset{language=Bash}
-
-Para el manejo de datos dentro del API interna, se estandariza los objectos de datos con las siguientes clases genericas, las cuales pueden ser sobreescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente:
-\lstset{language=Python}
-\begin{lstlisting}
-def validate_string(value, parameter_name=None):
-    if value is None:
-        raise ValueError("%s can't be None" %\
-            (parameter_name if parameter_name\
-                else "Parameter"))
-    if not isinstance(value, str):
-        raise ValueError("%s should be a String" %\
-            (parameter_name if parameter_name\
-                else "Parameter"))
-
-def validate_repository(repository):
-    if repository is None:
-        raise ValueError("Repository can't be None")
-    if not isinstance(repository, GenericRepository):
-        raise ValueError("Repository should be a " + \
-            "Repository Object")
-
-class GenericNamespace:
-    namespace = None
-
-    def __init__(self, namespace):
-        validate_string(namespace, "Namespace")
-        self.namespace = namespace
-        self.save()
-
-    def set_namespace(self, namespace):
-        validate_string(namespace, "Namespace")
-        self.namespace = namespace
-        self.save()
-
-    def get_namespace(self):
-        return self.namespace
-
-    def save(self):
-        pass
-
-    def __str__(self):
-        return "NSPC: %s" % self.namespace
-
-class GenericRepository:
-    namespace = None
-    repository = None
-
-    def validate_namespace(self, namespace):
-        if namespace is None:
-            raise ValueError("Namespace can't be None")
-        if not isinstance(namespace, GenericNamespace):
-            raise ValueError(\
-                "Namespace should be a Namespace Object")
-
-    def __init__(self, namespace, repository):
-        self.validate_namespace(namespace)
-        self.namespace = namespace
-        validate_string(repository, "Repository")
-        self.repository = repository
-        self.save()
-
-    def set_namespace(self, namespace):
-        self.validate_namespace(namespace)
-        self.namespace = namespace
-        self.save()
-
-    def get_namespace(self):
-        return self.namespace
-
-    def set_repository(self, repository):
-        validate_string(repository, "Repository")
-        self.repository = repository
-        self.save()
-
-    def get_repository(self):
-        return self.repository
-
-    def save(self):
-        pass
-
-    def __str__(self):
-        return "REPO: (%s) :: %s" %\
-            (self.namespace, self.repository)
-
-class GenericRepositoryFile:
-    repository = None
-    file_path = None
-
-    def __init__(self, repository, file_path):
-        self.validate_repository(repository)
-        self.repository = repository
-        validate_string(file_path, "File_Path")
-        self.file_path = file_path
-        self.save()
-
-    def set_repository(self, repository):
-        self.validate_repository(repository)
-        self.repository = repository
-        self.save()
-
-    def get_repository(self):
-        return self.repository
-
-    def set_file_path(self, file_path):
-        validate_string(file_path, "File_Path")
-        self.file_path = file_path
-        self.save()
-
-    def get_file_path(self):
-        return self.file_path
-
-    def save(self):
-        pass
-
-    def __str__(self):
-        return "RepoFile: (%s) :: %s" %\
-            (self.repository, self.file_path)
-
-class GenericChange:
-    repository = None
-    comment = None
-    timestamp = None
-    author = None
-
-    def validate_timestamp(self, timestamp):
-        validate_string(timestamp, "Timestamp")
-
-    def validate_author(self, author):
-        validate_string(author, "Author")
-
-    def __init__(self, repository, comment, timestamp,\
-            author):
-        validate_repository(repository)
-        self.repository = repository
-        validate_string(comment, "Comment")
-        self.comment = comment
-        self.validate_timestamp(timestamp)
-        self.timestamp = timestamp
-        validate_string(author)
-        self.author = author
-        self.save()
-
-    def set_repository(self, repository):
-        validate_repository(repository)
-        self.repository = repository
-        self.save()
-
-    def get_repository(self):
-        return self.repository
-
-    def set_comment(self, comment):
-        validate_string(comment, "Comment")
-        self.comment = comment
-        self.save()
-
-    def get_comment(self):
-        return self.comment
-
-    def set_timestamp(self, timestamp):
-        self.validate_timestamp(timestamp)
-        self.timestamp = timestamp
-        self.save()
-
-    def get_timestamp(self):
-        return self.timestamp
-
-    def set_author(self, author):
-        self.validate_author(author)
-        self.author = author
-        self.save()
-
-    def save(self):
-        pass
-
-    def __str__(self):
-        return "Change: (%s) :: \"%s\" :: %s :: %s" %\
-            (self.repository, self.comment, self.author,\
-                self.timestamp)
-
-
-class GenericChangeFile:
-    change = None
-    file_path = None
-
-    def validate_change(self, change):
-        if change is None:
-            raise ValueError("Change can't be None")
-        if not isinstance(change, GenericChange):
-            raise ValueError("Change should be a " + \
-                "Change Object")
-
-    def __init__(self, change, file_path):
-        self.validate_change(change)
-        self.change = change
-        validate_string(file_path, "File_Path")
-        self.file_path = file_path
-        self.save()
-
-    def set_change(self, change):
-        self.validate_change(change)
-        self.change = change
-        self.save()
-
-    def get_change(self):
-        return self.change
-
-    def set_file_path(self, file_path):
-        validate_string(file_path, "File_Path")
-        self.file_path = file_path
-        self.save()
-
-    def get_file_path(self):
-        return self.file_path
-
-    def save(self):
-        pass
-
-    def __str__(self):
-        return "ChangeFile: (%s) :: %s" %\
-            (self.change, self.file_path)
-\end{lstlisting}
-\lstset{language=Bash}
+Para el mismo es necesario manejar un API interna estandarizada. La solucion propuesta utiliza programacion orientado a objetos y un modelo estandar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos logicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarizacion se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objectos de datos con las siguientes clases genericas, las cuales pueden ser sobreescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos tambien se encuentran en el mismo archivo de generics.py.
 
 En el settings, hay una necesidad de definir los backends de codigo y su prioridad:
 \lstset{language=Python}
 \begin{lstlisting}
-from ideApp.CodePersistenceBackends.MongoDB.backend\
-        import MongoDBCodePersistenceBackend
-from ideApp.CodePersistenceBackends.GitLab.backend\
-        import GitLabCodePersistenceBackend
-
 CODE_PERSISTENCE_BACKENDS = {
     'mongodb': {
         'use': True,
-        'backend': MongoDBCodePersistenceBackend,
+        'backend': 'ideApp.CodePersistenceBackends.MongoDB\
+            .backend.MongoDBCodePersistenceBackend',
         'connection_profiles': NOSQL_DATABASES,
         'connection_profile': 'nosql',
     },
     'gitlab': {
         'use': True,
-        'backend': GitLabCodePersistenceBackend,
+        'backend': 'ideApp.CodePersistenceBackends.GitLab\
+            .backend.GitLabCodePersistenceBackend',
         'connection_profiles': GITLAB_SERVERS,
         'connection_profile': GITLAB_DEFAULT_SERVER,
     }
 }
 
-CODE_PERSISTENCE_BACKEND_READ_PREFERENCE =\
-        ['mongodb', 'gitlab']
+CODE_PERSISTENCE_BACKEND_READ_PREFERENCE = ['mongodb',\
+    'gitlab']
 CODE_PERSISTENCE_BACKEND_WRITE_OUT = ['mongodb', 'gitlab']
 
 MONGODB_CONNECT_TO = 'mongodb'

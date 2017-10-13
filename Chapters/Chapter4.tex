@@ -912,7 +912,7 @@ Para la Persistencia de Codigo se considera dos backends de persistencia para co
     \item GitLab CE, como servidor de Git, manejado con una combinacion de la API del mismo y comandos de Git para el manejo de cambios en repositorios.
 \end{itemize}
 
-Para el mismo es necesario manejar un API interna estandarizada. La solucion propuesta utiliza programacion orientado a objetos y un modelo estandar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos logicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarizacion se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objectos de datos con las siguientes clases genericas, las cuales pueden ser sobreescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos tambien se encuentran en el mismo archivo de generics.py.
+Para el mismo es necesario manejar un API interna estandarizada. La solucion propuesta utiliza programacion orientado a objetos y un modelo estandar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos logicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarizacion se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objectos de datos con las siguientes clases genericas, las cuales pueden ser sobreescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos tambien se encuentran en el mismo archivo de generics.py. Estos archivos se puede encontrar en el Apendice \ref{AnexoF}.
 
 En el settings, hay una necesidad de definir los backends de codigo y su prioridad:
 \lstset{language=Python}
@@ -954,7 +954,7 @@ Y permite para toda operacion que se especifique sobre cual grupo se debe realiz
 	\item CODE\_PERSISTENCE\_BACKEND\_READ\_PREFERENCE (que tambien da preferencia del orden en que se debe leer de los backends de persistencia de codigo)
 	\item CODE\_PERSISTENCE\_BACKEND\_WRITE\_OUT que define cuales son y da el orden en que se debe escribir a los backends de persistencia de codigo.
 \end{itemize}
-El codigo completo de este backend se encuentra en el paquete ideApp.CodePersistenceBackends en el archivo backend\_manager.py con el nombre de clase CodePersistenceBackendManager.
+El codigo completo de este backend se encuentra en el paquete ideApp.CodePersistenceBackends en el archivo backend\_manager.py con el nombre de clase CodePersistenceBackendManager que se puede encontrar en el Apendice \ref{AnexoF}.
 
 Tambien se define el gestor del backend de persistencia de codigo en el Settings y el codigo necesario para cargarlo en el momento adecuado:
 \lstset{language=Python}

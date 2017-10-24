@@ -989,6 +989,7 @@ def load_code_persistence_backend_manager(load_class=CODE_PERSISTENCE_BACKEND_MA
 
 \subsubsection{MongoDB}
 Para la persistencia de codigo en MongoDB se define unos modelos de base de datos en Python para su utilizacion con el ORM PyModm. A continuacion se presenta el model de base de datos para MongoDB:
+% TODO: maybe a figure/diagram would be better here
 \lstset{language=Python}
 \begin{lstlisting}[breaklines]
 class NamespaceModel(MongoModel):
@@ -1075,7 +1076,13 @@ class TemporaryChangeFileModel(MongoModel):
 
 El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma unica. El RepositoryModel representa un repositorio y tiene un nombre en addicion a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinacion unica.
 
-El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual, de lo cual se presenta mas adelante. El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID (que viene a ser un hash SHA1
+El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la ultima modificacion realizada en el mismo, de lo cual se presenta mas adelante.
+
+El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID que se lo maneja nosotros (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio), un commentario, un autor, una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio, el repositorio en que se hizo el cambio y una referencia al cambio anterior para que se puede construir una historial de cambios.
+
+El ChangeFileModel es como el RepositoryFileModel en que representa archivos, pero en este caso son archivos modificados dentro de un cambio. Por lo tanto lleva los mismos atributos que RepositoryFile solo que en lugar de tener referencias a un repositorio directamente se referencia a un cambio realizado (el cual tiene metadatos como un commentario, autor, cambio previo y momento de modificacion) y al archivo del repositorio que modifica (de esta forma puede modificar tambien la direccion de los archivos quienes no habria otra forma de buscarlos).
+
+Finalmente el TemporaryChangeFileModel no se utiliza actualmente pero como los dos FileModels vistos anteriormente, esta lleva atributos basicos de un archivo. Originalmente se lo planteo para realizar una operacion intermedio como la fase del Git Stage en donde se selecciona previo a un commit los cambios que van a estar incluidos dentro del mismo. Pero al final, aunque el modelo de datos esta para suportar varios archivos cambiados dentro de un solo cambio, no esta implementado asi. Por temas de tiempo, retraso y alcance, se ha optado por llevar un mini control de versiones de cada archivo dentro de un repositorio, asi que en realidad cada cambio en el repositorio solo refleja un archivo cambiado de forma independiente y no hay necesidad para la complejidad del paso intermedio que este modelo representa. 
 
 \subsubsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:

@@ -1073,7 +1073,9 @@ class TemporaryChangeFileModel(MongoModel):
 \end{lstlisting}
 \lstset{language=Bash}
 
-El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma unica. El RepositoryModel representa un repositorio y tiene un nombre en addicion a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinacion unica. El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual, de lo cual se presenta mas adelante. 
+El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma unica. El RepositoryModel representa un repositorio y tiene un nombre en addicion a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinacion unica.
+
+El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual, de lo cual se presenta mas adelante. El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID (que viene a ser un hash SHA1
 
 \subsubsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:

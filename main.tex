@@ -56,6 +56,8 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{listings}
 
+\usepackage{multicol}
+
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 %\addbibresource{example.bib} % The filename of the bibliography
@@ -161,6 +163,7 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{declaration}
 %\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+% TODO: Revisar modelo de la universidad
 \addchaptertocentry{Declaracion de Autoria} % Add the declaration to the table of contents
 \noindent Yo, \authorname, declaro que esta tesis titulado, \enquote{\ttitle} y que el trabajo presentado aqui es mi propio. Yo afirmo que:
 
@@ -200,6 +203,7 @@ headsepline, % Uncomment to get a line under the header
 %	ABSTRACT PAGE
 %----------------------------------------------------------------------------------------
 
+% TODO: Rewrite at the end
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 Para mejorar el entorno educativo para los estudiantes de carreras que involucran programación, es necesario el desarrollo de un sistema que integra los LMS de ahora a través del estándar LTI con GitLab CE, un editor de código en línea y un entorno para la ejeccución del mismo conlleva varias fases. En una fase inicial, es importante analizar la problemática, el entorno existente y características de sistemas similares para poder formular una solución facible y novedoso desde sus requisitos funcionales y diseño. Con un marco de diseño, se puede proceder a definir una arquiectura que asegurará que se cumple con los requisitos no funcionales. Con el entorno bien estudiado y un diseño robusto, se puede inicializar con varias fases ágiles e incrementales de desarrollo, pruebas y desplegue hasta llegar a un producto final.
@@ -210,6 +214,7 @@ Para mejorar el entorno educativo para los estudiantes de carreras que involucra
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
 
+% TODO
 \begin{acknowledgements}
 %\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
 \addchaptertocentry{Agradecimientos} % Add the acknowledgements to the table of contents
@@ -220,6 +225,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
 %----------------------------------------------------------------------------------------
 
+% TODO: look over accent marks
 \tableofcontents % Prints the main table of contents
 
 \listoffigures % Prints the list of figures
@@ -230,6 +236,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
+% TODO: Accents
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
 \textbf{CSS} & \textbf{C}ascading \textbf{S}yle \textbf{S}heets (Hojas de Estilo en Cascada)\\

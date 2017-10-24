@@ -988,7 +988,92 @@ def load_code_persistence_backend_manager(load_class=CODE_PERSISTENCE_BACKEND_MA
 \lstset{language=Bash}
 
 \subsubsection{MongoDB}
-Para la persistencia de codigo en MongoDB se define unos modelos de base de datos en Python para su utilizacion con el ORM PyModm
+Para la persistencia de codigo en MongoDB se define unos modelos de base de datos en Python para su utilizacion con el ORM PyModm. A continuacion se presenta el model de base de datos para MongoDB:
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+class NamespaceModel(MongoModel):
+    name = CharField()
+
+    class Meta:
+        indexes = [IndexModel('name', unique=True)]
+
+    def __str__(self):
+        return "NamespaceMongoModel: %s" % self.name
+
+
+class RepositoryModel(MongoModel):
+    name = CharField()
+    namespace = ReferenceField(NamespaceModel)
+
+    class Meta:
+        indexes = [IndexModel([('name', TEXT), ('namespace', TEXT)], unique=True)]
+
+    def __str__(self):
+        return "RepositoryMongoModel: %s [%s]" % (self.name, self.namespace)
+
+
+class RepositoryFileModel(MongoModel):
+    contents = CharField(required=False, blank=True)
+    repository = ReferenceField(RepositoryModel)
+    prog_language = CharField(choices=constants.LANGUAGE_NAMES)
+    file_path = CharField()
+    current_change_file = ReferenceField("ChangeFileModel", blank=True)
+
+    class Meta:
+        indexes = [IndexModel([('file_path', TEXT), ('repository', TEXT)], unique=True)]
+
+    def __str__(self):
+        return "RepositoryFileMongoModel: %s :: %s :: [%s] :: %s" % (self.file_path, self.prog_language, self.repository, self.contents)
+
+
+class ChangeModel(MongoModel):
+    change_id = CharField()
+    comment = CharField()
+    author = CharField()
+    timestamp = TimestampField()
+    repository = ReferenceField(RepositoryModel)
+    parent_change = ReferenceField("ChangeModel", blank=True)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        if isinstance(self.timestamp, Timestamp):
+            timestamp = self.timestamp.as_datetime().__str__()
+        else:
+            timestamp = self.timestamp
+        return "ChangeMongoModel: %s :: \"%s\" :: %s :: %s :: [%s]" % (self.change_id, self.comment, self.author, timestamp, self.repository)
+
+
+class ChangeFileModel(MongoModel):
+    contents = CharField()
+    change = ReferenceField(ChangeModel)
+    prog_language = CharField(choices=constants.LANGUAGE_NAMES)
+    file_path = CharField()
+    file = ReferenceField(RepositoryFileModel)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return "ChangeFileMongoModel: [%s] :: %s :: %s :: %s" % (self.change, self.file_path, self.prog_language, self.contents)
+
+
+class TemporaryChangeFileModel(MongoModel):
+    contents = CharField()
+    repository = ReferenceField(RepositoryModel)
+    language = CharField(choices=constants.LANGUAGE_NAMES)
+    file_path = CharField()
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return "TemporaryChangeFileMongoModel: [%s] :: %s :: %s :: %s" % (self.repository, self.file_path, self.language, self.contents)
+\end{lstlisting}
+\lstset{language=Bash}
+
+El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma unica. El RepositoryModel representa un repositorio y tiene un nombre en addicion a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinacion unica. El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual, de lo cual se presenta mas adelante. 
 
 \subsubsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:

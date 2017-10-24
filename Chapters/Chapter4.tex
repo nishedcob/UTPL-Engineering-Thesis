@@ -890,7 +890,7 @@ Con relacion al editor de codigo en linea, inicialmente se empezó con el trabaj
     \begin{itemize}
       \item Ser extensible con una orientacion orientado a objetos
       \item Manejar versiones de codigo con un sistema de control de versiones interna llevada por archivos completos
-      \item Manejo de jerarquías de 
+      \item Manejo de jerarquías de sistemas de persistencia para llevar varias sistemas de persistencia en parallelo
     \end{itemize}
 \end{itemize}
 
@@ -924,34 +924,32 @@ Para el mismo es necesario manejar un API interna estandarizada. La solucion pro
 
 En el settings, hay una necesidad de definir los backends de codigo y su prioridad:
 \lstset{language=Python}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines]
 CODE_PERSISTENCE_BACKENDS = {
     'mongodb': {
         'use': True,
-        'backend': 'ideApp.CodePersistenceBackends.MongoDB\
-            .backend.MongoDBCodePersistenceBackend',
+        'backend': 'ideApp.CodePersistenceBackends.MongoDB.backend.MongoDBCodePersistenceBackend',
         'connection_profiles': NOSQL_DATABASES,
         'connection_profile': 'nosql',
     },
     'gitlab': {
-        'use': True,
-        'backend': 'ideApp.CodePersistenceBackends.GitLab\
-            .backend.GitLabCodePersistenceBackend',
+        'use': False,
+        'backend': 'ideApp.CodePersistenceBackends.GitLab.backend.GitLabCodePersistenceBackend',
         'connection_profiles': GITLAB_SERVERS,
         'connection_profile': GITLAB_DEFAULT_SERVER,
     }
 }
 
-CODE_PERSISTENCE_BACKEND_READ_PREFERENCE = ['mongodb',\
-    'gitlab']
-CODE_PERSISTENCE_BACKEND_WRITE_OUT = ['mongodb', 'gitlab']
+CODE_PERSISTENCE_BACKEND_READ_PREFERENCE = ['mongodb']
+CODE_PERSISTENCE_BACKEND_WRITE_OUT = ['mongodb']
 
 MONGODB_CONNECT_TO = 'mongodb'
 GITLAB_CONNECT_TO = 'gitlab'
 \end{lstlisting}
 \lstset{language=Bash}
 
-% TODO: Gestor de Persistencia de Codigo
+Por el momento se ha optado por dejar desactivado el backend de GitLab ya que el mismo no esta implementado para ser utilizado.
+
 El gestor de persistencia de codigo se carga todas las backends de persistencia de codigo que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asimismo como un CodePersistenceBackend para permitir que se puede remplazar facilmente a futuro si se da el caso. Implementa dos clases de persistencia:
 \begin{itemize}
 	\item Lectura (read)
@@ -962,11 +960,11 @@ Y permite para toda operacion que se especifique sobre cual grupo se debe realiz
 	\item CODE\_PERSISTENCE\_BACKEND\_READ\_PREFERENCE (que tambien da preferencia del orden en que se debe leer de los backends de persistencia de codigo)
 	\item CODE\_PERSISTENCE\_BACKEND\_WRITE\_OUT que define cuales son y da el orden en que se debe escribir a los backends de persistencia de codigo.
 \end{itemize}
-El codigo completo de este backend se encuentra en el paquete ideApp.CodePersistenceBackends en el archivo backend\_manager.py con el nombre de clase CodePersistenceBackendManager que se puede encontrar en el Apendice \ref{AnexoF}.
+El codigo completo de este backend se encuentra en el paquete ideApp.CodePersis-tenceBackends en el archivo backend\_manager.py con el nombre de clase CodePersistenceBackendManager que se puede encontrar en el Apendice \ref{AnexoF}.
 
 Tambien se define el gestor del backend de persistencia de codigo en el Settings y el codigo necesario para cargarlo en el momento adecuado:
 \lstset{language=Python}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines]
 CODE_PERSISTENCE_BACKEND_MANAGER_CLASS = 'ideApp.CodePersistenceBackends.backend_manager.CodePersistenceBackendManager'
 
 
@@ -989,9 +987,8 @@ def load_code_persistence_backend_manager(load_class=CODE_PERSISTENCE_BACKEND_MA
 \end{lstlisting}
 \lstset{language=Bash}
 
-% <TODO>
-%\subsubsection{MongoDB}
-% </TODO>
+\subsubsection{MongoDB}
+Para la persistencia de codigo en MongoDB se define unos modelos de base de datos en Python para su utilizacion con el ORM PyModm
 
 \subsubsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexion con GitLab:

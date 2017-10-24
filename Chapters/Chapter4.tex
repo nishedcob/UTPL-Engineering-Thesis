@@ -883,8 +883,16 @@ El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo
 \subsection{Editor de Codigo en Linea}
 Una de las funcionalidades principales del sistema GitEDU es la capacidad de editar codigo en linea, la logica del mismo se realiza en la app 'ideApp'.
 
-Con relacion al editor de codigo en linea, inicialmente se empezo con el trabajo realizado anteriormente en el proyecto GitEduERP y encima del mismo se fue expandiendo las caracteristicas necesarias en el nuevo sistema.
-% TODO
+Con relacion al editor de codigo en linea, inicialmente se empezó con el trabajo realizado anteriormente en el proyecto GitEduERP y encima del mismo se fue expandiendo las caracteristicas necesarias en el nuevo sistema. Al largo del desarrollo, se observo una necesidad de desarrollar la mayoria de los componentes desde cero y con el mismo se pudo dar mejores a lo que estaba antes. A diferencia de GitEduERP, GitEDU espera ofrecer:
+\begin{itemize}
+  \item Un model de permisos mas robusta y flexible basado en grupos y usuarios.
+  \item Un sistema de persistencia de codigo el cual ofrece la siguientes caracteristicas:
+    \begin{itemize}
+      \item Ser extensible con una orientacion orientado a objetos
+      \item Manejar versiones de codigo con un sistema de control de versiones interna llevada por archivos completos
+      \item Manejo de jerarquías de 
+    \end{itemize}
+\end{itemize}
 
 \subsubsection{Modelo de Base de Dato para Editor de Codigo}
 Para el editor de codigo en linea, es necesaria extender la funcionalidad del modelo de base de datos introducido previamente. Primero se agrega dos entidades a socialapp que representan grupos de personas (usuarios) y miembresia dentro de estos mismos grupos con dos tablas:

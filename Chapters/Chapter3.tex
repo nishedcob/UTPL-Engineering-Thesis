@@ -87,7 +87,7 @@ Los tres tipos de usuarios que se considera para el sistema son administradores,
 
 El sistema de editar codigo, apartir de aqui conocido simplemente bajo el nombre GitEDU, controla remotamente por medio de comandos, mediante posiblemente una mezcla de protocolos (SSH, HTTP sobre SSH [SHTTP] y HTTPS), dependiendo de cómo se da el caso, un sistema de ejecucion de código, conocido a partir de aquí en adelante como EduNube, para señalar acciones que debe tomar el segundo y/o datos que necesita sincronizar con la primera. Al mismo tiempo, GitEDU comunica con el servidor de control de versiones mediante su API externa (una API REST) sobre HTTP o HTTPS para controlar el mismo y prepararle para flujos continuos de código editado que puede viajar por una variedad de protocolos como SHTTP, HTTPS, HTTP, SFTP, FTP o FTPS como requiere la situación y ambiente de despliegue. Siempre y cuando EduNube requiere de codigo de algun usuario para realizar una calificación o algún otro tipo de interacción con un usuario que requiere probar el mismo, primero se procede a descargar el código involucrado desde el servidor de control de versiones sobre uno de los protocolos mencionado previamente para el mismo. En base a la naturaleza de las operaciones que está haciendo, comunica sus resultados con GitEDU para que puede manejar las mismas de la forma adecuada. En el caso de notas, GitEDU se encarga de sincronizar las mismas con los LMS institucionales con los cuales está integrado mediante el protocolo LTI.
 
-\subsubsection{GitEdu}
+\pagebreak
 
 \begin{landscape}
 
@@ -101,6 +101,8 @@ El sistema de editar codigo, apartir de aqui conocido simplemente bajo el nombre
 	\end{figure}
 
 \end{landscape}
+
+\subsubsection{GitEdu}
 
 La figura \ref{mod_ge} presenta todos los componentes en forma de subsistemas y módulos que forman parte del diseño propuesta para el sistema GitEdu.
 
@@ -179,7 +181,7 @@ El módulo de recolección de datos lleva un registro continuo del uso del siste
 \subparagraph{Módulo de Análisis de Datos}
 El módulo de análisis de datos proporciona las herramientas necesarias para que un operador humano puede interpretar los mismos y sacar sus conclusiones.
 
-\subsubsection{EduNube}
+\pagebreak
 
 \begin{landscape}
 
@@ -193,6 +195,8 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 	\end{figure}
 
 \end{landscape}
+
+\subsubsection{EduNube}
 
 La figura \ref{mod_en} presenta todos los componentes en forma de subsistemas y módulos que forman parte del diseño propuesta para el sistema EduNube.
 
@@ -261,9 +265,6 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 \subsubsection{Ventajas del Diseño de Sistemas, Subsistemas y Módulos}
 La ventaja de un diseño orientado a módulos como se lo presenta aquí es la división de funcionalidad para ayudar en la extensibilidad y mantenibilidad de los sistemas al largo plazo. Por ejemplo este diseño permite agregar funcionalidad adicional a futuro como autenticación por otros medios (por ejemplo LDAP) o la integración de mecanismos anti-plagio. Esta propiedad puede dar una vida útil mayor a los sistemas desarrolladas porque muchas veces no se conoce todo lo que puede requerir un software a futuro para el diseño e implementación inicial. A continuación se presenta la arquitectura de estos dos sistemas, tanto GitEdu como su ambiente de ejecución de código virtualizado, EduNube.
 
-\subsection{Arquitectura}
-Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema GitEdu consiste en 5 capas que son:
-
 %\begin{itemize}
 %	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
 %    \begin{itemize}
@@ -275,18 +276,24 @@ Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema 
 %    \end{itemize}
 %\end{itemize}
 
+\pagebreak
+
 \begin{landscape}
 
 	% figure
 	\begin{figure}
 	  \begin{center}
+      	% TODO: Bigger?
 	    \includegraphics[width=1.0\textwidth]{Figures/arq_ge.png}
 	  \end{center}
-	  \caption{Diagrama de arquitectura para el sistema GitEdu.}
+	  \caption{Diagrama de Arquitectura para el Sistema GitEdu.}
 	  \label{arq_ge}
 	\end{figure}
 
 \end{landscape}
+
+\subsection{Arquitectura}
+Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema GitEdu consiste en 5 capas que son:
 
 \begin{itemize}
 	\item \textbf{Seguridad} auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
@@ -330,9 +337,11 @@ Como se puede observar en la figura \ref{arq_ge}, a un nivel global, el sistema 
 	% figure
 	\begin{figure}
 	  \begin{center}
+      	% TODO: Fix Security
+        % TODO: Bigger?
 	    \includegraphics[width=1.0\textwidth]{Figures/arq_en.png}
 	  \end{center}
-	  \caption{Diagrama de arquitectura para el sistema EduNube.}
+	  \caption{Diagrama de Arquitectura para el Sistema EduNube.}
 	  \label{arq_en}
 	\end{figure}
 
@@ -385,7 +394,7 @@ Se ha considerado para ambos sistemas una arquitectura de n-capas debido a su ca
 	  \begin{center}
 	    \includegraphics[width=1.4\textwidth]{Figures/desp_ge_en.png}
 	  \end{center}
-	  \caption{Diagrama de Despliegue para los sistemas GitEdu y EduNube.}
+	  \caption{Diagrama de Despliegue para los Sistemas GitEdu y EduNube.}
 	  \label{desp_ge_en}
 	\end{figure}
 \end{landscape}
@@ -420,9 +429,7 @@ En casos donde se considera una necesidad de mayor seguridad en proteger canales
 
 A continuación se presenta el alcance del desarrollo, pruebas y despliegue para este trabajo de titulación.
 
-\subsection{Alcance}
-
-Debido al hecho de que se cuenta con tiempo y recursos limitados para realizar y acabar el trabajo de titulación, se considera un alcance limitado en ciertos aspectos con un fin de acabar con los componentes críticos del sistema dentro del tiempo dado.
+\pagebreak
 
 \begin{landscape}
 
@@ -436,6 +443,10 @@ Debido al hecho de que se cuenta con tiempo y recursos limitados para realizar y
 \end{figure}
 
 \end{landscape}
+
+\subsection{Alcance}
+
+Debido al hecho de que se cuenta con tiempo y recursos limitados para realizar y acabar el trabajo de titulación, se considera un alcance limitado en ciertos aspectos con un fin de acabar con los componentes críticos del sistema dentro del tiempo dado.
 
 Para el sistema GitEdu se considera los siguientes subsistemas y módulos críticos como se puede observar en la figura \ref{alc_mod_ge}:
 \begin{itemize}

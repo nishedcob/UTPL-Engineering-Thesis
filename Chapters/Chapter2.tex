@@ -259,21 +259,25 @@ VirtualBox es un hipervisor para virtualización de arquitecturas estándar x86 
 
 \paragraph{Virtualización a Nivel de Sistema Operativo (Contenerización)}
 Desde la antes de la incepción de los sistemas Linux, los sistemas de la familia Unix han tenido un mecanismo de aislamiento conocido como chroot el cual genera un espacio aislado de usuario para contener alguna aplicacion o varias aplicaciones mientras que todos siguen compartiendo el mismo sistema operativo o kernel por detrás. La tendencia de contenerización que existe hoy en día sigue por la misma línea pero lo implementa de una forma aún más avanzada. Eso permite a muchos usuarios que se desconfían mutuamente unos en otros utilizar el mismo hardware mientras que al mismo tiempo quedan completamente aislados unos de otros con menor impacto al rendimiento o una necesidad de hardware que soporta la carga adicional que virtualizacion genera \citep{Teimouri-Davoud-OS-level-virt}, mira la figura \ref{que-son-contenedores}. Algunos sistemas de este tipo de aislamiento que son populares hoy en día son:
-\begin{multicols}[2]
-\begin{itemize}
-	\item chroot
-    \item Docker
-    \item LXC
-    \item LXD
-    \item Linux-VServer
-    \item OpenVZ
-    \item Solaris Containers
-    \item FreeBSD jail
-    \item Hyper-V containers (Microsoft)
-    \item Photon (VMware)
-    \item vSphere Integrated Container (VMware)
-    \item Windows Containers (a partir de Windows Server 2016)
-\end{itemize}
+\begin{multicols}{3}
+  \begin{itemize}
+      \item chroot
+      \item Docker
+      \item LXC
+      \item LXD
+      \item Linux-VServer
+      \item OpenVZ
+      \item Solaris Containers
+      \item FreeBSD jail
+      \item Hyper-V containers (Microsoft)
+      \item Photon (VMware)
+  \end{itemize}
+\end{multicols}
+\begin{multicols}{2}
+	\begin{itemize}
+	    \item vSphere Integrated Container (VMware)
+	    \item Windows Containers (a partir de Windows Server 2016)
+	\end{itemize}
 \end{multicols}
 
 \begin{figure}
@@ -336,7 +340,7 @@ SSL es un estándar tecnológico para cifrar tráfico \citep{info.SSL.com-SSL} \
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/ssl-proceso.png}
   \end{center}
-  \caption{El proceso para comunicación con el protocolo SSL. Fuente: \citep{DigiCert-SSL}}
+  \caption{El proceso para comunicación con el protocolo SSL. \citep{DigiCert-SSL}}
   \label{SSL-Proceso}
 \end{figure}
 
@@ -371,7 +375,7 @@ Donde usuario, clave son opcionales y la ruta del recurso y sus parámetros tamb
         JavaScript & JavaScript es un lenguaje de programación que tiene un fin de permitir que páginas de HTML sean dinámicas y pueden interactuar con el usuario en tiempo real \citep{Webopedia-JavaScript}.. \\
         \hline
     \end{tabular}
-	\caption{Algunos de las tecnologías que son importantes en la funcionamiento de la web.}
+	\caption{Algunos de las tecnologías de la web.}
     \label{tecnologias-web}
 \end{table}
 

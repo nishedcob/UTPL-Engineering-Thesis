@@ -883,15 +883,16 @@ El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo
 \subsection{Editor de Codigo en Linea}
 Una de las funcionalidades principales del sistema GitEDU es la capacidad de editar codigo en linea, la logica del mismo se realiza en la app 'ideApp'.
 
-Con relacion al editor de codigo en linea, inicialmente se empezó con el trabajo realizado anteriormente en el proyecto GitEduERP y encima del mismo se fue expandiendo las caracteristicas necesarias en el nuevo sistema. Al largo del desarrollo, se observo una necesidad de desarrollar la mayoria de los componentes desde cero y con el mismo se pudo dar mejores a lo que estaba antes. A diferencia de GitEduERP, GitEDU espera ofrecer:
+Con relacion al editor de codigo en linea, inicialmente se empezó con el trabajo realizado anteriormente en el proyecto GitEduERP y en base al mismo se fue expandiendo las caracteristicas necesarias en el nuevo sistema. Durante el proceso del desarrollo, se observó una necesidad de desarrollar la mayoria de los componentes desde cero y con el mismo se pudo dar mejoras a la propuesta anterior. A diferencia de GitEduERP, GitEDU espera ofrecer:
 \begin{itemize}
-  \item Un model de permisos mas robusta y flexible basado en grupos y usuarios.
-  \item Un sistema de persistencia de codigo el cual ofrece la siguientes caracteristicas:
+  \item Un modelo de permisos más robusto y flexible basado en grupos y usuarios.
+  \item Un sistema de persistencia de código el cúal ofrece la siguientes caracteristicas:
     \begin{itemize}
-      \item Ser extensible con una orientacion orientado a objetos
+      \item Ser extensible con una programación orientada a objetos.
       \item Manejar versiones de codigo con un sistema de control de versiones interna llevada por archivos completos
       \item Manejo de jerarquías de sistemas de persistencia para llevar varias sistemas de persistencia en parallelo
     \end{itemize}
+   \item Integración con sistemas externas que permiten la ejecucción de código.
 \end{itemize}
 
 \subsubsection{Modelo de Base de Dato para Editor de Codigo}
@@ -1074,9 +1075,15 @@ class TemporaryChangeFileModel(MongoModel):
 \end{lstlisting}
 \lstset{language=Bash}
 
+% Con Maria del Carmen
+% TODO: Remplazar codigo con un diagrama
+% TODO: listar atributos aqui de cada tabla con vientes
+% TODO: actualizar cronograma con fechas de revision de documentacion
+% TODO: revisiones mas profunda de generos y tildes
+
 El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma unica. El RepositoryModel representa un repositorio y tiene un nombre en addicion a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinacion unica.
 
-El proximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programacion para que el editor puede cambiar su comportamiento para el lenguaje especifico, la ubicacion del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la ultima modificacion realizada en el mismo, de lo cual se presenta mas adelante.
+El próximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programación para que el editor puede cambiar su comportamiento para el lenguaje específico, la ubicación del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la última modificación realizada en el mismo, de lo cual se presenta más adelante.
 
 El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID que se lo maneja nosotros (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio), un commentario, un autor, una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio, el repositorio en que se hizo el cambio y una referencia al cambio anterior para que se puede construir una historial de cambios.
 

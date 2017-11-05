@@ -1235,6 +1235,110 @@ Para temas de organizacion, se ha considerado que aquellos componentes de la apl
 % <TODO>
 \section{EduNube}
 
+% TODO: Document Process
+
+\begin{lstlisting}
+#! /usr/bin/head -n 2
+# run with `source activate-en.sh`
+PROJECT=en
+ENV_DIR=env-$PROJECT
+if [ ! -d $ENV_DIR ]; then
+        virtualenv --python=python3 $ENV_DIR
+fi
+source $ENV_DIR/bin/activate
+pip3 install -r requirements.$PROJECT.txt
+\end{lstlisting}
+
+\begin{lstlisting}
+source activate-en.sh
+\end{lstlisting}
+
+\begin{lstlisting}
+pip3 install django==1.10.6 psycopg2==2.7.1 pymodm==0.4.0 ipython
+\end{lstlisting}
+
+\begin{lstlisting}
+django-admin startproject EduNube
+\end{lstlisting}
+
+% TODO: BEGIN EXECUTION HERE
+
+\begin{lstlisting}
+su - postgres
+psql
+\end{lstlisting}
+\begin{lstlisting}
+	postgres=# CREATE USER edunubeser WITH PASSWORD '3d?N_6E';
+	postgres=# CREATE DATABASE edunubedb WITH OWNER edunubeser;
+	postgres=# \q
+psql edunubedb -U postgres
+	edunubedb=# CREATE SCHEMA edunubeapp AUTHORIZATION edunubeser;
+	edunubedb=# ALTER USER edunubeser SET search_path TO edunubeapp;
+	edunubedb=# \q
+psql edunubedb -U edunubeser
+	edunubedb=> SELECT current_schema();
+		Debe decir: edunubeapp
+	edunubedb=> \q
+\end{lstlisting}
+
+\lstset{language=Python}
+\begin{lstlisting}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'edunubedb',
+        'USER': 'edunubeser',
+        'PASSWORD': '3d?N_6E',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+\end{lstlisting}
+\lstset{language=Bash}
+
+Ahora se puede migrar las tablas iniciales de Django:
+\begin{lstlisting}
+cd EduNube
+python manage.py makemigrations
+python manage.py migrate
+\end{lstlisting}
+
+Tambien creamos un superusuario de Django para temas administrativos:
+\begin{lstlisting}
+python manage.py createsuperuser
+\end{lstlisting}
+
+Tambien se puede crear el app inicial (para logica del editor de codigo):
+\begin{lstlisting}
+python manage.py startapp apiApp
+\end{lstlisting}
+
+Y de paso se lo agrega a INSTALLED\_APPS una linea 'ideApp' en el settings.py para que sus tablas definidos a futuro en models.py tambien se migran con los demas migraciones.
+
+Para resolver un problema de zonas de tiempo, se ha deactivado esta caracteristica de Django con el siguiente linea en el settings.py:
+\lstset{language=Python}
+\begin{lstlisting}
+USE_TZ = False
+\end{lstlisting}
+\lstset{language=Bash}
+
+Para crear la base de datos de MongoDB:
+\begin{lstlisting}
+mongo
+\end{lstlisting}
+\lstset{language=sql}
+\begin{lstlisting}
+use eduNubeDB
+db.createUser(
+    {
+        user: "eduNubeUser",
+        pwd: "3d?N_6E",
+        roles: [ "readWrite", "dbAdmin" ]
+    }
+)
+\end{lstlisting}
+\lstset{language=Bash}
+
 \subsection{Ejeccucion de Codigo en Linea}
 
 \subsection{Calificacion Automatizada con Pruebas Unitarias}

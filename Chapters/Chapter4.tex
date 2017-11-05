@@ -572,6 +572,25 @@ NOSQL_DATABASES = {
 \end{lstlisting}
 \lstset{language=Bash}
 
+\subsubsection{Compatibilidad con EduNube en el Mismo Repositorio}
+Para reducir el numero de repositorios involucrados en este trabajo de titulacion, se ha optado por llevar el desarrollo de EduNube dentro del mismo repositorio, con una seperacion de dependencias con otro entorno virtual y aislamiento de codigo en desarrollo con varias ramas de Git. Por lo tanto, se realizo una nueva rama de Git con el commando:
+\begin{lstlisting}
+git checkout -b gitedu
+\end{lstlisting}
+
+Y una refacturacion del entorno virtual a ser ''env-ge'' en lugar de ''env'', en lugar de ''requirements.txt'', utilizar ''requirements.ge.txt'' y un nuevo script de activar el entorno, el cual se activa ahora con ''source activate-ge.sh'':
+\begin{lstlisting}
+#! /usr/bin/head -n 2 
+# run with `source activate-ge.sh`
+PROJECT=ge
+ENV_DIR=env-$PROJECT
+if [ ! -d $ENV_DIR ]; then
+	virtualenv --python=python3 $ENV_DIR
+fi
+source $ENV_DIR/bin/activate
+pip3 install -r requirements.$PROJECT.txt
+\end{lstlisting}
+
 \subsection{Autenticacion Clasica}
 
 Primero se crea una nueva aplicacion para autenticacion clasica:

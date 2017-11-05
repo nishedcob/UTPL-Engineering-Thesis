@@ -469,6 +469,12 @@ Con las dependencias instaladas o con cada cambio que se realiza de dependencias
 pip freeze > requirements.txt
 \end{lstlisting}
 
+Se inicia el proyecto de Django con el commando:
+
+\begin{lstlisting}
+django-admin startproject GitEdu
+\end{lstlisting}
+
 Tambien antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo. Primero es necesario crear y configurar un usuario y base de datos para ser ocupado:
 \begin{lstlisting}
 postgresql-setup initdb
@@ -1237,6 +1243,8 @@ Para temas de organizacion, se ha considerado que aquellos componentes de la apl
 
 % TODO: Document Process
 
+La gestion de dependencias del sistema EduNube se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado a detectar si es que existe el entorno virtual (lo crea en caso de que no existe) y despues instala los requiermientos faltantes como son especificados en un archivo aparte ''requirements.en.txt'' que da liberias y sus versiones.
+
 \begin{lstlisting}
 #! /usr/bin/head -n 2
 # run with `source activate-en.sh`
@@ -1249,19 +1257,40 @@ source $ENV_DIR/bin/activate
 pip3 install -r requirements.$PROJECT.txt
 \end{lstlisting}
 
+El script anterior se ejecuta desde el raiz del repositorio con el comando:
+
 \begin{lstlisting}
 source activate-en.sh
 \end{lstlisting}
 
+Con el entorno creado y activado se puede proceder a instalar cualquier dependencia necesaria que no ha sido instalado previamente:
+
 \begin{lstlisting}
 pip3 install django==1.10.6 psycopg2==2.7.1 pymodm==0.4.0 ipython
 \end{lstlisting}
+
+Para el presente proyecto se instalaron las siguientes dependencias:
+\begin{itemize}
+	\item Django (1.10.6) como framework para el desarrollo del backend.
+    \item Psycopg2 (2.7.1) como liberia para connectarse a bases de datos PostgreSQL.
+    \item ipython (6.1.0) como interprete interactivo de Python para hacer pruebas en el curso del desarrollo.
+\end{itemize}
+
+Con las dependencias instaladas o con cada cambio que se realiza de dependencias se ejecuta el siguiente commando para actualizar la lista de los mismos:
+
+\begin{lstlisting}
+pip freeze > requirements.txt
+\end{lstlisting}
+
+Se inicia el proyecto de Django con el commando:
 
 \begin{lstlisting}
 django-admin startproject EduNube
 \end{lstlisting}
 
 % TODO: BEGIN EXECUTION HERE
+
+Tambien antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo. Primero es necesario crear y configurar un usuario y base de datos para ser ocupado:
 
 \begin{lstlisting}
 su - postgres
@@ -1281,6 +1310,7 @@ psql edunubedb -U edunubeser
 	edunubedb=> \q
 \end{lstlisting}
 
+Segundo, se abre el settings.py (dentro de la carpeta EduNube/EduNube) y se remplaza (para desarrollo, en produccion debe llevar valores distintos) el atributo DATABASES con lo siguiente:
 \lstset{language=Python}
 \begin{lstlisting}
 DATABASES = {
@@ -1313,7 +1343,7 @@ Tambien se puede crear el app inicial (para logica del editor de codigo):
 python manage.py startapp apiApp
 \end{lstlisting}
 
-Y de paso se lo agrega a INSTALLED\_APPS una linea 'ideApp' en el settings.py para que sus tablas definidos a futuro en models.py tambien se migran con los demas migraciones.
+Y de paso se lo agrega a INSTALLED\_APPS una linea 'apiApp' en el settings.py para que sus tablas definidos a futuro en models.py tambien se migran con los demas migraciones.
 
 Para resolver un problema de zonas de tiempo, se ha deactivado esta caracteristica de Django con el siguiente linea en el settings.py:
 \lstset{language=Python}
@@ -1336,6 +1366,21 @@ db.createUser(
         roles: [ "readWrite", "dbAdmin" ]
     }
 )
+\end{lstlisting}
+\lstset{language=Bash}
+
+El mismo se define en el settings de la siguiente manera:
+\lstset{language=Python}
+\begin{lstlisting}
+NOSQL_DATABASES = {
+    'nosql': {
+        'NAME': 'eduNubeDB',
+        'USER': "eduNubeUser",
+        'PASSWORD': '3d?N_6E',
+        'HOST': '127.0.0.1',
+        'PORT': '27017',
+    }
+}
 \end{lstlisting}
 \lstset{language=Bash}
 

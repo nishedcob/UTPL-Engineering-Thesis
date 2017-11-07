@@ -422,24 +422,75 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 Para la ejecucion de codigo se lo considera necesario la virtualizacion ya que la ejecuccion puramente nativa de codigo da mayor superficie de ataque al servidor fisico en addicion a no permitir mayor flexibilidad necesaria para sustener una gran variedad de usuarios y necesidades.
 
 \subsubsection{Comparacion de Hipervisores}
-Para la selecion de una tecnologia de virtualizacion, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoracion caracteristicas de cada ecosistema de hipervisor para generar una calificacion ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto. En el cuadro \ref{tab:hipervisor-compar} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas.
+Para la selecion de una tecnologia de virtualizacion, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoracion caracteristicas de cada ecosistema de hipervisor para generar una calificacion ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto. En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas segun las investigaciones, experiencias y opiniones del autor.
 
-%\begin{table}
-%	\begin{tabular}[|l|l|l|l|l|l|l|l|l|]
-%    	\hline
-%		Hipervisor & Rendimiento & Seguridad & Facilidad de Uso (CLI) & Facilidad de Uso (GUI) & Facilidad de Uso (WUI) & Facilidad de Instalacion & Facilidad de Mantenimiento & Experiencia Personal del Autor \\
-%        \hline
-%        Xen & 4 & 5 & 4 & 3 & 2 & 3 & 2 & 4 \\
-%        \hline
-%        KVM & 3 & 5 & 4 & 3 & 3 & 4 & 2 & 2 \\
-%        \hline
-%        Docker & 5 & 3 & 5 & 3 & 4 & 5 & 4 & 4 \\
-%        \hline
-%	\end{tabular}
-%    \caption{Caracteristicas de Comparacion: Hipervisores Considerados}
-%    \label{tab:hipervisor-compar}
-%\end{table}
+\begin{table}
+	\centering
+	\begin{tabular}{|p{1.85cm}|p{2.25cm}|p{1.8cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|}
+    	\hline
+		\textbf{Hipervisor} & \textbf{Rendimiento} & \textbf{Seguridad} & \textbf{Facilidad de Uso (CLI)} & \textbf{Facilidad de Uso (GUI)} & \textbf{Facilidad de Uso (WUI)} \\
+        \hline
+        \textit{Xen} & 4 & 5 & 4 & 3 & 2 \\
+        \hline
+        \textit{KVM} & 3 & 5 & 4 & 3 & 3 \\
+        \hline
+        \textit{Docker} & 5 & 3 & 5 & 3 & 4 \\
+        \hline
+	\end{tabular}
+    \caption{Caracteristicas de Comparacion I: Hipervisores Considerados}
+    \label{tab:hipervisor-compar-i}
+\end{table}
 
+\begin{table}
+	\centering
+	\begin{tabular}{|p{1.85cm}|p{2.2cm}|p{3.0cm}|p{1.9cm}|}
+    	\hline
+		\textbf{Hipervisor} & \textbf{Facilidad de Instalacion} & \textbf{Facilidad de Mantenimiento} & \textbf{Experiencia Personal del Autor} \\
+        \hline
+        \textit{Xen} & 3 & 2 & 4 \\
+        \hline
+        \textit{KVM} & 4 & 2 & 2 \\
+        \hline
+        \textit{Docker} & 5 & 4 & 4 \\
+        \hline
+	\end{tabular}
+    \caption{Caracteristicas de Comparacion II: Hipervisores Considerados}
+    \label{tab:hipervisor-compar-ii}
+\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|r|}
+    	\hline
+		\textbf{Caracteristica} & \textbf{Peso} \\
+        \hline
+        \textit{Rendimiento} & 10 \\
+        \textit{Seguridad} & 10 \\
+        \textit{Facilidad de Uso (CLI)} & 10 \\
+        \textit{Facilidad de Uso (GUI)} & 5 \\
+        \textit{Facilidad de Uso (WUI)} & 5 \\
+        \textit{Facilidad de Instalacion} & 5 \\
+        \textit{Facilidad de Mantenimiento} & 5 \\
+        \textit{Experiencia Personal del Autor} & 10 \\
+        \hline
+        \textbf{Total de Pesos} & 60 \\
+        \hline
+	\end{tabular}
+    \caption{Pesos de las Caracteristicas de Comparacion para Hipervisores Considerados}
+    \label{tab:hipervisor-compar-pesos}
+\end{table}
+
+El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada catagoria de la comparacion para poder realizar un promedio poderado de las valoraciones con mayor peso en las catagorias que se consideraban mas importantes.
+
+Para calcular los pesos promediados de forma ponderada se aplico la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro\ldots{} % TODO
+
+\begin{figure}
+	\[
+		Promedio = \sum_{c = [Catagorias]} CalificacionCatagoria_c * \left ( \frac{PesoCatagoria_c}{TotalPesos} \right )
+	\]
+	\caption{Ecuacion para Calcular los Promedios Ponderados en base a Pesos para los Hipervisores Comparados}
+    \label{fig:hipervisor-calif-equ}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Plantilla de Maquina Virtual (???)}

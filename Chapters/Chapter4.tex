@@ -418,9 +418,28 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 
 % <TODO>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \subsection{Servidor de Virtualizacion (???)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Servidor de Virtualizacion}
+Para la ejecucion de codigo se lo considera necesario la virtualizacion ya que la ejecuccion puramente nativa de codigo da mayor superficie de ataque al servidor fisico en addicion a no permitir mayor flexibilidad necesaria para sustener una gran variedad de usuarios y necesidades.
+
+\subsubsection{Comparacion de Hipervisores}
+Para la selecion de una tecnologia de virtualizacion, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoracion caracteristicas de cada ecosistema de hipervisor para generar una calificacion ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto. En el cuadro \ref{tab:hipervisor-compar} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas.
+
+%\begin{table}
+%	\begin{tabular}[|l|l|l|l|l|l|l|l|l|]
+%    	\hline
+%		Hipervisor & Rendimiento & Seguridad & Facilidad de Uso (CLI) & Facilidad de Uso (GUI) & Facilidad de Uso (WUI) & Facilidad de Instalacion & Facilidad de Mantenimiento & Experiencia Personal del Autor \\
+%        \hline
+%        Xen & 4 & 5 & 4 & 3 & 2 & 3 & 2 & 4 \\
+%        \hline
+%        KVM & 3 & 5 & 4 & 3 & 3 & 4 & 2 & 2 \\
+%        \hline
+%        Docker & 5 & 3 & 5 & 3 & 4 & 5 & 4 & 4 \\
+%        \hline
+%	\end{tabular}
+%    \caption{Caracteristicas de Comparacion: Hipervisores Considerados}
+%    \label{tab:hipervisor-compar}
+%\end{table}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Plantilla de Maquina Virtual (???)}

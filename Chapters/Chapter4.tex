@@ -461,8 +461,6 @@ El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron 
 \end{description}
 Se ha considerado con mayor importancia Rendimiento y Seguridad como necesidades del mismo proyecto. Facilidad de Uso desde Linea de Commandos y la Experiencia Personal del Autor tambien se ha considerado importante para que se pueda implementar de forma mas concisa, rapida y presisa la tecnologia de virtualizacion elegida. Facilidad de Uso tanto Grafico como Web en addicion a la complejidad de Instalacion y Mantenimiento se consideraba importantes pero menos importantes debido a que son caracteristicas de menor impacto para el desarrollo actual y al largo plazo donde tienen mayor impacto se puede implementar otra solucion mas adecuada frente esos temas si sea necesario. 
 
-En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas segun las investigaciones, experiencias y opiniones del autor.
-
 \begin{table}
 	\centering
 	\begin{tabular}{|p{1.85cm}|p{2.25cm}|p{1.8cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|}
@@ -497,13 +495,14 @@ En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se
     \label{tab:hipervisor-compar-ii}
 \end{table}
 
-% TODO: Explain why each hypervisor was scored as such in each category
-
-Para calcular los pesos promediados de forma ponderada se aplico la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. A continuacion se explica el porque de las valoraciones:
+En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas segun las investigaciones, experiencias y opiniones del autor. A continuacion se explica el porque de las valoraciones:
 \begin{description}
-	\item[Xen] como un hipervisor de tipo 1 se cuenta con rendimiento muy alta, especialmente cuando se toma en cuenta la paravirtualizacion que tambien suporte con sistemas operativos modificados, casi a un nivel nativo, pero al mismo tiempo un modelo de seguridad muy buena. Falla en las herramientas de administracion de los cuales hay muy pocos que estan actualizados. El mejor herramienta de administracion es en el Linea de Commandos. Sus cambios frequentes y documentacion desactualizada son un problema para instalacion y mantenimiento. La experiencia del autor con esta tecnologia ha sido muy positivo.
-    \item[KVM] como un hipervisor de tipo 1 y medio\ldots % TODO
+	\item[Xen] como un hipervisor de tipo 1 se cuenta con rendimiento muy alta, especialmente cuando se toma en cuenta la paravirtualizacion que tambien suporte con sistemas operativos modificados, casi a un nivel nativo, logra virtualizar todas las capas de un sistema operativo, desde su nucleo hasta el espacio de los usuarios, pero al mismo tiempo dispone de un modelo de seguridad muy buena. Falla en las herramientas de administracion de los cuales hay muy pocos que estan actualizados. El mejor herramienta de administracion es en el Linea de Commandos. Sus cambios frequentes y documentacion desactualizada son un problema para instalacion y mantenimiento. La experiencia del autor con esta tecnologia ha sido muy positivo.
+    \item[KVM] como un hipervisor de tipo 1 y medio es mas alto nivel que Xen y no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualizacion. Aunque es mas alta nivel, se ha tomado pasos addicionales para que alcanza un nivel de seguridad equivalente a la de Xen. Para su administracion cuenta con herramientas muy similares a los de Xen, pero su alta nivel de integracion con el API de Libvirt hace que cuenta con mejores interfaces para su manejo web. Posiblemente por desconocimiento de los mejores de rendimiento que se puede hacer, el autor no ha tenido una experiencia muy positiva con la aplicacion de esta tecnologia de virtualizacion.
+    \item[Docker] como un hipervisor de ''tipo 3'' es de muy alta nivel dispone de un seguridad mucho menor por tener menor aislamento entre el sistema que provee la virtualizacion y la virtualizada pero mejor rendimiento ya que se virtualiza solo los niveles mas altos de un sistema operativo y las aplicaciones que se encuentran por encima de algo con la containerizacion como un tipo de virtualizacion que puede dar mejor rendimiento que la paravirtualizacion. Se considera muy buena las interfaces para 
 \end{description}
+
+Para calcular los pesos promediados de forma ponderada se aplico la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. 
 
 \begin{figure}
 	\[

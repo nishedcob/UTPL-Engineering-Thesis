@@ -541,7 +541,8 @@ Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con D
 
 % TODO:
 \subsubsection{Tipo de Contenedor: Shell-Executor}
-El tipo de contenedor ''Shell-Executor'' 
+El tipo de contenedor ''Shell-Executor'' es para ejecutar commandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedor. Tanto en Debian como en Alpine no hay necesidad de instalar mas paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos conntenedores es un usuario menos privilegiado con que ejecutar nuestros commandos/codigo dentro del contenedor y una ubicacion, volumen desde el punto de vista de Docker, donde se puede enviar el codigo a ser ejecutado. La diferencia entre la implementacion tanto en Debian y Alpine
+
 Debian Shell-Executor:
 \begin{lstlisting}
 FROM debian:stretch

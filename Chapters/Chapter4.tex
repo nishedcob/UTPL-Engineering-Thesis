@@ -422,7 +422,44 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 Para la ejecucion de codigo se lo considera necesario la virtualizacion ya que la ejecuccion puramente nativa de codigo da mayor superficie de ataque al servidor fisico en addicion a no permitir mayor flexibilidad necesaria para sustener una gran variedad de usuarios y necesidades.
 
 \subsubsection{Comparacion de Hipervisores}
-Para la selecion de una tecnologia de virtualizacion, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoracion caracteristicas de cada ecosistema de hipervisor para generar una calificacion ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto. En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas segun las investigaciones, experiencias y opiniones del autor.
+Para la selecion de una tecnologia de virtualizacion, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoracion caracteristicas de cada ecosistema de hipervisor para generar una calificacion ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto.
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|r|}
+    	\hline
+		\textbf{Caracteristica} & \textbf{Peso} \\
+        \hline
+        \textit{Rendimiento} & 10 \\
+        \textit{Seguridad} & 10 \\
+        \textit{Facilidad de Uso (CLI)} & 10 \\
+        \textit{Facilidad de Uso (GUI)} & 5 \\
+        \textit{Facilidad de Uso (WUI)} & 5 \\
+        \textit{Facilidad de Instalacion} & 5 \\
+        \textit{Facilidad de Mantenimiento} & 5 \\
+        \textit{Experiencia Personal del Autor} & 10 \\
+        \hline
+        \textbf{Total de Pesos} & 60 \\
+        \hline
+	\end{tabular}
+    \caption{Pesos de las Caracteristicas de Comparacion para Hipervisores Considerados}
+    \label{tab:hipervisor-compar-pesos}
+\end{table}
+
+El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada catagoria de la comparacion para poder realizar un promedio poderado de las valoraciones con mayor peso en las catagorias que se consideraban mas importantes. Las caracteristicas consideradas son:
+\begin{description}
+	\item[Rendimiento] Que indica la maxima efficiencia que puede llegar a tener la virtualizacion con esta tecnologia.
+    \item[Seguridad] Que indica el nivel de aislamiento y mitigacion de riesgo que se considera los usuarios virtualizados frente la maquina host.
+    \item[Facilidad de Uso (CLI)] Que tan facil es utilizar el hipervisor desde linea de commandos (terminal).
+    \item[Facilidad de Uso (GUI)] Que tan facil es utilizar el hipervisor desde aplicacion de escritorio grafica.
+    \item[Facilidad de Uso (WUI)] Que tan facil es utilizar el hipervisor desde plataforma web.
+    \item[Facilidad de Instalacion] Que tan facil es instalar el hipervisor y realizar la configuracion inicial para que empieza a funcionar.
+    \item[Facilidad de Mantenimiento] Que tan facil es actualizar, utilizar y mantener el hipervisor.
+    \item[Experiencia Personal del Autor] Que opinion tiene el autor del hipervisor despues de años de uso y experimientacion en estas tecnologias.
+\end{description}
+Se ha considerado con mayor importancia Rendimiento y Seguridad como necesidades del mismo proyecto. Facilidad de Uso desde 
+
+En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las caracteristicas consideras y un puntaje relativo (sobre 5) dado a cada uno de las mismas segun las investigaciones, experiencias y opiniones del autor.
 
 \begin{table}
 	\centering
@@ -458,31 +495,7 @@ Para la selecion de una tecnologia de virtualizacion, se ha considerado convenie
     \label{tab:hipervisor-compar-ii}
 \end{table}
 
-\begin{table}
-	\centering
-	\begin{tabular}{|l|r|}
-    	\hline
-		\textbf{Caracteristica} & \textbf{Peso} \\
-        \hline
-        \textit{Rendimiento} & 10 \\
-        \textit{Seguridad} & 10 \\
-        \textit{Facilidad de Uso (CLI)} & 10 \\
-        \textit{Facilidad de Uso (GUI)} & 5 \\
-        \textit{Facilidad de Uso (WUI)} & 5 \\
-        \textit{Facilidad de Instalacion} & 5 \\
-        \textit{Facilidad de Mantenimiento} & 5 \\
-        \textit{Experiencia Personal del Autor} & 10 \\
-        \hline
-        \textbf{Total de Pesos} & 60 \\
-        \hline
-	\end{tabular}
-    \caption{Pesos de las Caracteristicas de Comparacion para Hipervisores Considerados}
-    \label{tab:hipervisor-compar-pesos}
-\end{table}
-
-El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada catagoria de la comparacion para poder realizar un promedio poderado de las valoraciones con mayor peso en las catagorias que se consideraban mas importantes.
-
-Para calcular los pesos promediados de forma ponderada se aplico la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro\ldots{} % TODO
+Para calcular los pesos promediados de forma ponderada se aplico la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}.
 
 \begin{figure}
 	\[
@@ -491,6 +504,23 @@ Para calcular los pesos promediados de forma ponderada se aplico la siguiente fo
 	\caption{Ecuacion para Calcular los Promedios Ponderados en base a Pesos para los Hipervisores Comparados}
     \label{fig:hipervisor-calif-equ}
 \end{figure}
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|r|}
+    	\hline
+		\textbf{Hipervisor} & \textbf{Calificacion Promedio Ponderado} \\
+        \hline
+        \textit{Xen} & 3.667 \\
+        \hline
+        \textit{KVM} & 3.333 \\
+        \hline
+        \textit{Docker} & 4.167 \\
+        \hline
+	\end{tabular}
+    \caption{Calificaciones Promediados Ponderadas para la Comparacion de los Hipervisores}
+    \label{tab:hipervisor-compar-promed}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Plantilla de Maquina Virtual (???)}

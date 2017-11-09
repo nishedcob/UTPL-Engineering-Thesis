@@ -539,11 +539,10 @@ Se considera Debian como una buena base para los contenedores debido a que es ba
 \subsubsection{Sistema Operativo: Alpine GNU/Linux}
 Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con Docker) y nube en general porque es un sistema operativo minimalista que llevan menor peso. Aqui tiene el mismo fin, aunque aveces es mas complicado de manejar y configurar, puede que valga la pena para entornos de produccion que necesitan optimizar el uso de sus recursos.
 
-% TODO:
 \subsubsection{Tipo de Contenedor: Shell-Executor}
-El tipo de contenedor ''Shell-Executor'' es para ejecutar commandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedor. Tanto en Debian como en Alpine no hay necesidad de instalar mas paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos conntenedores es un usuario menos privilegiado con que ejecutar nuestros commandos/codigo dentro del contenedor y una ubicacion, volumen desde el punto de vista de Docker, donde se puede enviar el codigo a ser ejecutado. La diferencia entre la implementacion tanto en Debian y Alpine
+El tipo de contenedor ''Shell-Executor'' es para ejecutar commandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedor. Tanto en Debian como en Alpine no hay necesidad de instalar mas paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos conntenedores es un usuario menos privilegiado con que ejecutar nuestros commandos/codigo dentro del contenedor y una ubicacion, volumen desde el punto de vista de Docker, donde se puede enviar el codigo a ser ejecutado. La diferencia entre la implementacion tanto en Debian y Alpine se encuentra justo en la forma que se crea el usuario de menores privilegios en addicion al imagen base que se toma para cada unos de los mismos.
 
-Debian Shell-Executor:
+El Debian Shell-Executor se crea con los siguientes lineas en el Dockerfile: 
 \begin{lstlisting}
 FROM debian:stretch
 
@@ -560,8 +559,16 @@ VOLUME ["/code"]
 ENTRYPOINT ["/bin/sh"]
 CMD ["/code/exec.sh"]
 \end{lstlisting}
+La primera linea, ''FROM ...'' define el imagen base, en este caso la version actual de Debian Stretch (Debian 9.x). La tercera y cuarta linea, ''ENV ...'', definen variables de entorno que se puede cambiar previa a la construccion del imagen en addicion a sus valores por defecto. La sexta y septima linea, documenta y define un paso opcional donde se instala un paquete addicional, lsb-release, que provee informacion estandarizado de la distrobuccion de Linux en ejecucion. Este paso opcional agrega mucho peso al contenedor y por lo tanto no se lo ha dejado commentado. La novena y decima linea define commandos preliminares para preparar el contenedor como:
+\begin{itemize}
+	\item Crear una carpeta "/code" donde se puede copiar el codigo a ser ejecutado desde afuera del contenedor
+	\item Visualizacion los variables de entorno para temas informativos y de debug
+	\item La creacion del usuario que vamos a utilizar dentro del contenedor
+	\item Dar el usuario los permisos adecuados para que tiene acceso a la carpeta creada
+\end{itemize}
+La onceava linea define la carpeta creada como un volumen de Docker, el cual se monta externamente al crear y ejecutar el contenedor. La decimatercera linea define el argumento cero del contenedor al momento de iniciar la misma, en este caso el shell que se encuentra del contenedor. La decimacuarta linea define los argumentos con que se debe ejecutar el commando definido previamente, en este caso el script de entrada, cargado desde un sistema de ficheros externo al contenedor.
 
-Alpine Shell-Executor:
+El Alpine Shell-Executor se crea con los siguientes lineas en el Dockerfile: 
 \begin{lstlisting}
 FROM alpine:3.6
 
@@ -576,6 +583,14 @@ VOLUME ["/code"]
 ENTRYPOINT ["/bin/sh"]
 CMD ["/code/exec.sh"]
 \end{lstlisting}
+La primera linea, ''FROM ...'' define el imagen base, en este caso la version actual de Alpine Linux (Alpine 3.6). La tercera y cuarta linea, ''ENV ...'', definen variables de entorno que se puede cambiar previa a la construccion del imagen en addicion a sus valores por defecto. La sexta, septima y octava lineas define commandos preliminares para preparar el contenedor como:
+\begin{itemize}
+	\item Crear una carpeta "/code" donde se puede copiar el codigo a ser ejecutado desde afuera del contenedor
+	\item Visualizacion los variables de entorno para temas informativos y de debug
+	\item La creacion del usuario que vamos a utilizar dentro del contenedor
+	\item Dar el usuario los permisos adecuados para que tiene acceso a la carpeta creada
+\end{itemize}
+La novena linea define la carpeta creada como un volumen de Docker, el cual se monta externamente al crear y ejecutar el contenedor. La onceava linea define el argumento cero del contenedor al momento de iniciar la misma, en este caso el shell que se encuentra del contenedor. La decimasegunda linea define los argumentos con que se debe ejecutar el commando definido previamente, en este caso el script de entrada, cargado desde un sistema de ficheros externo al contenedor.
 
 % TODO:
 \subsubsection{Tipo de Contenedor: Python3-Executor}
@@ -604,7 +619,7 @@ WORKDIR "/code"
 
 % TODO:
 \subsubsection{Tipo de Contenedor: PostgreSQL-Executor}
-Debian PostgreSQL-Executor:
+El Debian PostgreSQL-Executor se define con el siguiente Dockerfile:
 \begin{lstlisting}
 FROM \
 registry.gitlab.com/nishedcob/gitedu/shell-executor:debian-stretch
@@ -626,6 +641,7 @@ RUN echo "Starting PostgreSQL Cluster..." ; \
 VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
+
 
 Alpine PostgreSQL-Executor:
 \begin{lstlisting}

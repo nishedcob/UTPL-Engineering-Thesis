@@ -591,7 +591,7 @@ La primera linea, ''FROM ...'' define el imagen base, en este caso la version ac
 La novena linea define la carpeta creada como un volumen de Docker, el cual se monta externamente al crear y ejecutar el contenedor. La onceava linea define el argumento cero del contenedor al momento de iniciar la misma, en este caso el shell que se encuentra del contenedor. La decimasegunda linea define los argumentos con que se debe ejecutar el commando definido previamente, en este caso el script de entrada, cargado desde un sistema de ficheros externo al contenedor.
 
 \subsubsection{Tipo de Contenedor: Python3-Executor}
-El tipo de contenedor ''Python3-Executor'' es para ejecutar commandos de shell en addicion a codigo de Python 3. Tanto Debian como Alpine requieren la instalacion de Python 3, porque lastimosamente su version de Python por defecto sigue siendo 2.7 que se deberia considerar practicamente obseleta. Docker requiere que se vuelve a definir los volumenes y para la adecuada ejecuccion del codigo, tambien se define la ubicacion incial de ejecuccion como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor.
+El tipo de contenedor ''Python3-Executor'' es para ejecutar commandos de shell en addicion a codigo de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer funcionalidad de ejecutar commandos en un shell. El punto de entrada de ejecucion es el archivo ''main.py'' a nivel raiz del repositorio. Tanto Debian como Alpine requieren la instalacion de Python 3, porque lastimosamente su version de Python por defecto sigue siendo 2.7 que se deberia considerar practicamente obseleta. Docker requiere que se vuelve a definir los volumenes y para la adecuada ejecuccion del codigo, tambien se define la ubicacion incial de ejecuccion como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor.
 
 El Debian Python3-Executor se define de la siguiente manera atraves de su Dockerfile:
 \begin{lstlisting}
@@ -620,7 +620,7 @@ La primera y segunda linea define herencia del contenedor Alpine Shell-Executor 
 
 % <TODO>
 \subsubsection{Tipo de Contenedor: PostgreSQL-Executor}
-% TODO
+El tipo de contenedor ''PostgreSQL-Executor'' es para ejecutar commandos de shell en addicion a SQL de PostgreSQL. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer funcionalidad de ejecutar commandos en un shell. Tanto Debian como Alpine requieren la instalacion de PostgreSQL, tanto cliente como servidor. Docker requiere que se vuelve a definir los volumenes y para la adecuada ejecuccion del codigo, tambien se define la ubicacion incial de ejecuccion como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor.
 
 El Debian PostgreSQL-Executor se define con el siguiente Dockerfile:
 \begin{lstlisting}

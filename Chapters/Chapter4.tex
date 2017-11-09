@@ -528,8 +528,6 @@ Para calcular los pesos promediados de forma ponderada se aplico la siguiente fo
     \label{tab:hipervisor-compar-promed}
 \end{table}
 
-% <TODO>
-
 \subsection{Plantillas de Maquinas Virtuales (Docker)}
 Para la ejecuccion de codigo en Docker, es necesario tener contenedor de Docker que cumplen con las dependencias requeridas al momento de la ejecuccion. Los contenedores estan basados en Debian y en Alpine Linux.
 
@@ -592,9 +590,10 @@ La primera linea, ''FROM ...'' define el imagen base, en este caso la version ac
 \end{itemize}
 La novena linea define la carpeta creada como un volumen de Docker, el cual se monta externamente al crear y ejecutar el contenedor. La onceava linea define el argumento cero del contenedor al momento de iniciar la misma, en este caso el shell que se encuentra del contenedor. La decimasegunda linea define los argumentos con que se debe ejecutar el commando definido previamente, en este caso el script de entrada, cargado desde un sistema de ficheros externo al contenedor.
 
-% TODO:
 \subsubsection{Tipo de Contenedor: Python3-Executor}
-Debian Python3-Executor:
+El tipo de contenedor ''Python3-Executor'' es para ejecutar commandos de shell en addicion a codigo de Python 3. Tanto Debian como Alpine requieren la instalacion de Python 3, porque lastimosamente su version de Python por defecto sigue siendo 2.7 que se deberia considerar practicamente obseleta. Docker requiere que se vuelve a definir los volumenes y para la adecuada ejecuccion del codigo, tambien se define la ubicacion incial de ejecuccion como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor.
+
+El Debian Python3-Executor se define de la siguiente manera atraves de su Dockerfile:
 \begin{lstlisting}
 FROM \
 registry.gitlab.com/nishedcob/gitedu/shell-executor:debian-stretch
@@ -605,8 +604,9 @@ python3-pip virtualenv
 VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
+La primera y segunda linea define herencia del contenedor Debian Shell-Executor que definimos previamente. La tercera y cuarta linea instala Python3, Pip3 y Virtualenv dentro del contenedor. La sexta linea vuelve a declarar el volumen de Docker porque al aparecer la version actual de Docker a proposito no suporta herencia de esta linea en los Dockerfile. La septima linea define la ubicacion inicial utilizada cuando se inicia el contenedor.
 
-Alpine Python3-Executor
+El Alpine Python3-Executor se define atraves del Dockerfile que esta a continuacion:
 \begin{lstlisting}
 FROM \
 registry.gitlab.com/nishedcob/gitedu/shell-executor:alpine-3.6
@@ -616,9 +616,12 @@ RUN apk update && apk add python3 python3-dev py-virtualenv
 VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
+La primera y segunda linea define herencia del contenedor Alpine Shell-Executor que definimos previamente. La tercera linea instala Python3, Pip3 y Virtualenv dentro del contenedor. La quinta linea vuelve a declarar el volumen de Docker porque al aparecer la version actual de Docker a proposito no suporta herencia de esta linea en los Dockerfile. La sexta linea define la ubicacion inicial utilizada cuando se inicia el contenedor.
 
-% TODO:
+% <TODO>
 \subsubsection{Tipo de Contenedor: PostgreSQL-Executor}
+% TODO
+
 El Debian PostgreSQL-Executor se define con el siguiente Dockerfile:
 \begin{lstlisting}
 FROM \
@@ -641,7 +644,7 @@ RUN echo "Starting PostgreSQL Cluster..." ; \
 VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
-
+La primera y segunda linea define herencia del contenedor Debian Shell-Executor que definimos previamente. La tercera y cuarta linea instala PostgreSQL dentro del contenedor. La sexta hasta decima linea levanta el motor de base de datos PostgreSQL con la finalidad de crear un usuario y base de datos por defecto sobre el cual se puede trabajar. Finalizando este proceso se desactiva el contenedor para reducir el tamaño del mismo y no introducir comportamiento desconocido. La decimosegunda linea vuelve a declarar el volumen de Docker porque al aparecer la version actual de Docker a proposito no suporta herencia de esta linea en los Dockerfile. La decimatercera linea define la ubicacion inicial utilizada cuando se inicia el contenedor.
 
 Alpine PostgreSQL-Executor:
 \begin{lstlisting}
@@ -667,6 +670,7 @@ RUN echo "Starting PostgreSQL Cluster..." ; \
 VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
+% TODO
 
 \pagebreak
 

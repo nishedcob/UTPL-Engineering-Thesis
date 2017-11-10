@@ -317,6 +317,14 @@ Docker es una plataforma más popular hoy en dia para contenedores. Se puede usa
 
 La arquitectura de Docker permite funcionar con cualquier tecnología. La estandarización y facilidad que ofrece permite mejor colaboración entre miembros de un equipo. Por defecto Docker se trata de ser lo más seguro, flexible y extensible posible mientras que al mismo tiempo no necesitar cambios para que un proveedor de software no necesita realizar cambios ni casarse con la tecnología \citep{Docker}.
 
+Frente la percepcion comun de que Docker es insegura, McKendrick y Gallagher ofrecen buenas practicas para el uso de Docker en ambientes de produccion como: 
+\begin{itemize}
+\item Utilizar solo contenedores confiables
+\item Ejecutar el mismo contenedor con y sin un sistema ficheros y despues realizar una comparacion entre los dos para auditar comportamiento.
+\item 
+\end{itemize}
+
+\citep{McKendrickGallagher201707}.
 
 \subsubsection{Protocolo de Túnel}
 Un túnel es una técnica de permitir acceso remoto a recursos en una red a los cuales normalmente no se tendría acceso desde afuera. Se puede realizar esto en la capa 2 de redes con los protocolos como L2TP, PPTP y L2F quienes buscan encapsular paquetes previo a su viaje entre redes y desencapsularlos en ambos lados del túnel. Puede ser una solución económica para todos los involucrados ya que permite montar varios VPNs en la misma infraestructura física \citep{Cisco-Tunneling}. Los protocolos de túnel saben transmitir dos tipos de mensajes, aquellos paquetes que encapsulan datos y otros paquetes auxiliares que definen las reglas de reenvío \citep{Kaspersky-Tunneling}. Por esta razón y también la tendencia de estos protocolos de proteger los datos que transmiten con encriptación resulta en una velocidad de transferencia de datos menor que simple envío directo. Algunos otros protocolos de encapsulación buscan reemplazar TCP y UDP en la capa 4 pero su funcionalidad de transportar paquetes entre redes, que de ninguna otra forma serían conectados, es igual y forma un tipo de VPN. Los protocolos SSH y IPSec también tienen esas funcionalidades. Así se puede lograr reenviar puertos para utilizar servicios internos como portales internos de una institución o convertir una máquina con Linux/UNIX en un servidor gráfico para “terminales tontos” \citep{ENP-Tunneling} como los días clásicas de la infancia de UNIX \citep{GeerlingJeff-History-Remote-Access}. Aunque su poder y seguridad lo ha hecho un herramienta común entre profesionales que trabajan con redes \citep{ENP-Tunneling}, también por su misma naturaleza se puede ocultar tráfico y por lo tanto ahora es común que malware y actores maliciosos utilizan esos mismos protocolos para esconder su actividad y realizar actos malvados con un menor riesgo de ser detectados en tiempo real. Por lo tanto, para usuarios normales, se recomienda limitar el uso de estos protocolos \citep{Kaspersky-Tunneling}.

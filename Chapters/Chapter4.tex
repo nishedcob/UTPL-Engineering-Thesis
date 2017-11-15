@@ -1261,7 +1261,7 @@ def load_code_persistence_backend_manager(load_class=CODE_PERSISTENCE_BACKEND_MA
 \lstset{language=Bash}
 
 \subsubsection{MongoDB}
-Para la persistencia de código en MongoDB se define unos modelos de base de datos en Python para su utilización con el ORM PyModm. A continuacion se presenta el model de base de datos para MongoDB:
+Para la persistencia de código en MongoDB se define unos modelos de base de datos en Python para su utilización con el ORM PyModm. A continuacion se presenta el modelo de base de datos para MongoDB:
 % TODO: maybe a figure/diagram would be better here
 \lstset{language=Python}
 \begin{lstlisting}[breaklines]
@@ -1357,7 +1357,7 @@ El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera p
 
 El próximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programación para que el editor puede cambiar su comportamiento para el lenguaje específico, la ubicación del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la última modificación realizada en el mismo, de lo cual se presenta más adelante.
 
-El ChangeModel representa un cambio realizado en el repositorio, como los comités de Git. Tiene atributos como una ID que se lo maneja nosotros (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio), un comentario, un autor, una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio, el repositorio en que se hizo el cambio y una referencia al cambio anterior para que se puede construir una historial de cambios.
+El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID que se lo maneja nosotros (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio), un comentario, un autor, una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio, el repositorio en que se hizo el cambio y una referencia al cambio anterior para que se puede construir una historial de cambios.
 
 El ChangeFileModel es como el RepositoryFileModel en que representa archivos, pero en este caso son archivos modificados dentro de un cambio. Por lo tanto lleva los mismos atributos que RepositoryFile solo que en lugar de tener referencias a un repositorio directamente se referencia a un cambio realizado (el cual tiene metadatos como un comentario, autor, cambio previo y momento de modificación) y al archivo del repositorio que modifica (de esta forma puede modificar también la dirección de los archivos quienes no habría otra forma de buscarlos).
 

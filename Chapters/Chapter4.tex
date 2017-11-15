@@ -1634,8 +1634,10 @@ El diseño planteado para el sistema EduNube propone dos tipos de autenticacion:
 \end{itemize}
 
 \subsubsection{Autenticacion Clasica}
+Para la administracion del sistema poer operador humano se considera necesario la autenticacion clasica mediante usuario y contraseña. Para la misma se ocuparon la misma implementacion del framework Django y codigo reutilizado de GitEDU que tiene el mismo proposito.
 
 \subsubsection{Autenticacion basado en Criptografia Asimetrica}
+Para ofrecer mayor seguridad al sistema de ejecucion de codigo, EduNube, se considera mas optimo utilizar una sistema de autenticacion basado en criptografia asimetrica de una manera similar las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementacion factible para la solucion planteada, se considera alta factibilidad en utilizar un espe
 
 % <TODO>
 \subsection{Ejeccucion de Codigo en Linea}

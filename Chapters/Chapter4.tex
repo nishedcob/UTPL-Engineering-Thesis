@@ -1637,7 +1637,41 @@ El diseño planteado para el sistema EduNube propone dos tipos de autenticacion:
 Para la administracion del sistema poer operador humano se considera necesario la autenticacion clasica mediante usuario y contraseña. Para la misma se ocuparon la misma implementacion del framework Django y codigo reutilizado de GitEDU que tiene el mismo proposito.
 
 \subsubsection{Autenticacion basado en Criptografia Asimetrica}
-Para ofrecer mayor seguridad al sistema de ejecucion de codigo, EduNube, se considera mas optimo utilizar una sistema de autenticacion basado en criptografia asimetrica de una manera similar las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementacion factible para la solucion planteada, se considera alta factibilidad en utilizar un especie dde
+Para ofrecer mayor seguridad al sistema de ejecucion de codigo, EduNube, se considera mas optimo utilizar una sistema de autenticacion basado en criptografia asimetrica de una manera similar las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementacion factible para la solucion planteada, se considera alta factibilidad en utilizar un especie de API token similar a otros sistemas. Para el mismo se logró encontrar un estandar, JSON Web Tokens que tiene la finalidad de ayudar a un servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
+
+A continuacion se presenta la logica para decifrar y cifrar el token con el fin de generar/actualizarlo y tambien poderlo validar contra una tabla interna de la base de datos a lo que un cliente se lo envia:
+\begin{lstlisting}
+def decode_api_token(api_token=None):
+    if api_token is None:
+        raise ValueError("API_Token can't be None")
+    return jwt.decode(api_token.token, api_token.secret_key,\
+        algorithms=[api_token.token_algo])
+
+def update_api_token(api_token=None, regen_secret_key=False):
+    if api_token is None:
+        raise ValueError("API_Token can't be None")
+    if regen_secret_key or api_token.secret_key is None or\
+            len(api_token.secret_key) == 0:
+        api_token.secret_key = bcrypt.gensalt()
+            # Generate Random Unique Secret_Key
+    api_token.edit_date_in_token =\
+        api_token.edit_date.__str__()
+    payload = {
+        'app_name': api_token.app_name,
+        'created_date': api_token.created_date.__str__(),
+        'edit_date': api_token.edit_date_in_token,
+        'expires': api_token.expires
+    }
+    if api_token.expires:
+        if api_token.expire_date is not None:
+            payload['expire_date'] = api_token.expire_date
+    api_token.token = jwt.encode(payload,\
+        api_token.secret_key, algorithm='HS256')\
+        # Generate Token
+    api_token.save()
+\end{lstlisting}
+
+Como parte de la administracion de este aspecto del sistema de autenticacion, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokenes de autenticacion, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se cree este permiso, como es el caso de la ambiente de desarrollo, la politica de Django es solo permitir cuentas de superusuario acceder a estas vistas.
 
 % <TODO>
 \subsection{Ejeccucion de Codigo en Linea}

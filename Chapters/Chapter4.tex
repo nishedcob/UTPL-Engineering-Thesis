@@ -844,6 +844,19 @@ source $ENV_DIR/bin/activate
 pip3 install -r requirements.$PROJECT.txt
 \end{lstlisting}
 
+Para desarrollar ambos sistemas en paralelo, y poder trabajar en ramas independientes con ambos sistemas levantados al mismo tiempo para probar y desarollarar caracteristicas de integracion, se clono de forma local el repositorio:
+\begin{lstlisting}
+git clone GitEDU GitEDU-copy
+\end{lstlisting}
+
+Para el desarrollo se ocupa el puerto 8000 de localhost para GitEDU y el puerto 8001 de localhost para EduNube:
+\begin{lstlisting}
+# Levantar GitEDU en el ambiente de desarrollo:
+cd GitEDU-copy
+source activate-ge.sh
+git checkout gitedu
+\end{lstlisting}
+
 \subsection{Autenticación Clásica}
 
 Primero se crea una nueva aplicación para autenticación clásica:

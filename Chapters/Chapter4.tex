@@ -855,6 +855,15 @@ Para el desarrollo se ocupa el puerto 8000 de localhost para GitEDU y el puerto 
 cd GitEDU-copy
 source activate-ge.sh
 git checkout gitedu
+cd GitEDU
+python manage.py runserver 8000
+
+# Levantar EduNube en el ambiente de desarrollo:
+cd GitEDU
+source activate-en.sh
+git checkout edunube
+cd EduNube
+python manage.py runserver 8001
 \end{lstlisting}
 
 \subsection{Autenticación Clásica}

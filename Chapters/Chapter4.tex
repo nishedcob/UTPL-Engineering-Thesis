@@ -417,14 +417,11 @@ Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. 
 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
 
-% TODO: After review, remove pagebreak
-\pagebreak
-
 \subsection{Servidor de Virtualización}
-Para la ejecución de código se lo considera necesario la virtualización ya que la ejecución puramente nativa de código da mayor superficie de ataque al servidor físico en adición a no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
+Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico ademas de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
 
 \subsubsection{Comparación de Hipervisores}
-Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoración características de cada ecosistema de hipervisor para generar una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor para ser implementado en el presente proyecto.
+Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoración de características de cada ecosistema de hipervisor para generar una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor a ser implementado en el presente proyecto.
 
 \begin{table}
 	\centering
@@ -448,18 +445,20 @@ Para la selección de una tecnología de virtualización, se ha considerado conv
     \label{tab:hipervisor-compar-pesos}
 \end{table}
 
-El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada categoría de la comparación para poder realizar un promedio ponderado de las valoraciones con mayor peso en las categorías que se consideraban mas importantes. Las características consideradas son:
+El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada categoría de la comparación para poder realizar un promedio ponderado de las valoraciones con mayor peso en las categorías que se consideraban más importantes. Las características consideradas son:
 \begin{description}
-	\item[Rendimiento] Que indica la máxima eficiencia que puede llegar a tener la virtualización con esta tecnología.
-    \item[Seguridad] Que indica el nivel de aislamiento y mitigación de riesgo que se considera los usuarios virtualizados frente la maquina host.
-    \item[Facilidad de Uso (CLI)] Que tan fácil es utilizar el hipervisor desde linea de comandos (terminal).
-    \item[Facilidad de Uso (GUI)] Que tan fácil es utilizar el hipervisor desde aplicación de escritorio gráfica.
-    \item[Facilidad de Uso (WUI)] Que tan fácil es utilizar el hipervisor desde plataforma web.
-    \item[Facilidad de Instalación] Que tan fácil es instalar el hipervisor y realizar la configuración inicial para que empieza a funcionar.
-    \item[Facilidad de Mantenimiento] Que tan fácil es actualizar, utilizar y mantener el hipervisor.
-    \item[Experiencia Personal del Autor] Que opinión tiene el autor del hipervisor después de años de uso y experimentación en estas tecnologías.
+	\item[Rendimiento] Indica la máxima eficiencia que puede llegar a tener la virtualización con esta tecnología.
+    \item[Seguridad] Indica el nivel de aislamiento y mitigación de riesgo que se considera los usuarios virtualizados frente la maquina host.
+    \item[Facilidad de Uso (CLI)] La facilidad en utilizar el hipervisor desde linea de comandos (terminal).
+    \item[Facilidad de Uso (GUI)] La facilidad en utilizar el hipervisor desde aplicación de escritorio gráfica.
+    \item[Facilidad de Uso (WUI)] La facilidad en utilizar el hipervisor desde plataforma web.
+    \item[Facilidad de Instalación] La facilidad para instalar el hipervisor y realizar la configuración inicial para que empieza a funcionar.
+    \item[Facilidad de Mantenimiento] La facilidad para actualizar, utilizar y mantener el hipervisor.
+    \item[Experiencia Personal del Autor] La opinión tiene el autor del hipervisor después de años de uso y experimentación en estas tecnologías.
 \end{description}
-Se ha considerado con mayor importancia Rendimiento y Seguridad como necesidades del mismo proyecto. Facilidad de Uso desde Linea de Comandos y la Experiencia Personal del Autor también se ha considerado importante para que se pueda implementar de forma mas concisa, rápida y precisa la tecnología de virtualización elegida. Facilidad de Uso tanto Gráfico como Web en adición a la complejidad de Instalación y Mantenimiento se consideraba importantes pero menos importantes debido a que son características de menor impacto para el desarrollo actual y al largo plazo donde tienen mayor impacto se puede implementar otra solución mas adecuada frente esos temas si sea necesario. 
+Se ha considerado con mayor importancia el Rendimiento y la Seguridad como necesidades del presente proyecto. La Facilidad de Uso desde Línea de Comandos y la Experiencia Personal del Autor también se ha considerado importante para que se pueda implementar de forma mas concisa, rápida y precisa la tecnología de virtualización elegida. La Facilidad de Uso tanto Gráfica como Web en adición a la complejidad de Instalación y Mantenimiento se considera importantes pero menos relevantes debido a que son características de menor impacto para el desarrollo actual y al largo plazo donde tienen mayor impacto se puede implementar otra solución mas adecuada frente esos temas si es necesario. 
+
+% TODO: Revisiones de la Maria del Carmen desde aqui
 
 \begin{table}
 	\centering

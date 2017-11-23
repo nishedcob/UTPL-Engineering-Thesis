@@ -117,6 +117,18 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
     		-j MASQUERADE
 \end{lstlisting}
 
+%\subsubsection{Servidor Local de Git}
+% adduser git
+% su - git
+% # Populate with a few repositories
+% git clone --bare https://gitlab.com/nishedcob/GitEDU.git repositories/GitEDU.git
+% git clone --bare https://gitlab.com/ArqAppGrpBravoEarleyVargas/GitEduERP.git repositories/GitEduERP.git
+% # Go to repositories directory
+% cd repositories/
+% # Fix Permissions and Group to allow for git push from remote; update server index and prepare update hook to receive incoming files
+% for repo in `ls`; do cd $repo; pwd; chmod -R g+ws .; chgrp -R git .; git --bare update-server-info; cp hooks/post-update.sample hooks/post-update; chmod a+x hooks/post-update; cd ..; done
+% 
+
 \subsection{Ambiente Virtual de LMS (Moodle)}
 \label{instalacion-moodle}
 

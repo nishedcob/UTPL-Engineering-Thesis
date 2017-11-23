@@ -1660,9 +1660,9 @@ El diseño planteado para el sistema EduNube propone dos tipos de autenticación
 Para la administración del sistema por operador humano se considera necesario la autenticación clásica mediante usuario y contraseña. Para la misma se ocuparon la misma implementación del framework Django y código reutilizado de GitEDU que tiene el mismo propósito.
 
 \subsubsection{Autenticación basado en Criptografía Asimétrica}
-Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solucion utilizar una especie de API token similar a otros sistemas. Para generar el token se ha logrado encontrar un estándar, JSON Web Tokens que tiene la finalidad de ayudar a un servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
+Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solucion utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
 
-A continuacion se presenta la lógica para descifrar y cifrar el token con el fin de generar/actualizarlo y también poderlo validar contra una tabla interna de la base de datos a lo que un cliente se lo envía:
+A continuación se presenta la lógica para descifrar y cifrar los tokenes con el fin de generar/actualizarlo y también poderlo validar contra una tabla interna de la base de datos a lo que un cliente se lo envía:
 \begin{lstlisting}
 def decode_api_token(api_token=None):
     if api_token is None:
@@ -1694,7 +1694,7 @@ def update_api_token(api_token=None, regen_secret_key=False):
     api_token.save()
 \end{lstlisting}
 
-Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos token es de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se cree este permiso, como es el caso de la ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario acceder a estas vistas.
+Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokens de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se crea este permiso, como es el caso del ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario para acceder a estas vistas.
 
 % <TODO>
 \subsection{Ejecución de Código en Linea}

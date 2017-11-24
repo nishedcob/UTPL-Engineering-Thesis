@@ -91,6 +91,7 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
     	\begin{lstlisting}
 	apt install python3 python3-virtualenv python3-pip
     	\end{lstlisting}
+        % gitweb fcgiwrap
         % libffi-dev % TODO: Look for other possible dependencies?
     \item Instalación de Servidores
     	\begin{lstlisting}
@@ -127,7 +128,50 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
 % cd repositories/
 % # Fix Permissions and Group to allow for git push from remote; update server index and prepare update hook to receive incoming files
 % for repo in `ls`; do cd $repo; pwd; chmod -R g+ws .; chgrp -R git .; git --bare update-server-info; cp hooks/post-update.sample hooks/post-update; chmod a+x hooks/post-update; cd ..; done
-% 
+%
+% # NGinX Config:
+%server {
+%        listen 80;
+%        listen [::]:80;
+%        server_name git.localhost;
+%        root /usr/share/gitweb;
+%        access_log /var/log/nginx/gitweb.access.log;
+%        # static repo files for cloning over https
+%        location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+|pack/pack-[0-9a-f]+.(pack|idx))$ {
+%                root /home/git/repositories/;
+%        }
+%
+%        # requests that need to go to git-http-backend
+%        location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
+%                root /home/git/repositories;
+%
+%                fastcgi_pass unix:/var/run/fcgiwrap.socket;
+%                fastcgi_param SCRIPT_FILENAME   /usr/lib/git-core/git-http-backend;
+%                fastcgi_param PATH_INFO          $uri;
+%                fastcgi_param GIT_PROJECT_ROOT  /home/git/repositories;
+%                fastcgi_param GIT_HTTP_EXPORT_ALL "";
+%                fastcgi_param REMOTE_USER $remote_user;
+%                include fastcgi_params;
+%        }
+%
+%        # send anything else to gitweb if it's not a real file
+%        try_files $uri @gitweb;
+%        location @gitweb {
+%                fastcgi_pass unix:/var/run/fcgiwrap.socket;
+%                fastcgi_param SCRIPT_FILENAME   /usr/share/gitweb/gitweb.cgi;
+%                fastcgi_param PATH_INFO          $uri;
+%                fastcgi_param GITWEB_CONFIG      /etc/gitweb.conf;
+%                include fastcgi_params;
+%        }
+%}
+%
+%# Edit /etc/gitweb.conf
+%# path to git projects (<project>.git)
+%#$projectroot = "/var/lib/git";
+%$projectroot = "/home/git/repositories";
+%
+%Probar que funciona
+% git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
 
 \subsection{Ambiente Virtual de LMS (Moodle)}
 \label{instalacion-moodle}

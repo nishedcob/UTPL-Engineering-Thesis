@@ -176,9 +176,19 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
 
 %\subsubsection{Git Server HTTP Endpoint}
 % pipenv --three
-% pipenv install django six psycopg2 PyJWT 
+% pipenv install django six psycopg2 PyJWT bcrypt
 % pipenv run django-admin startproject GitServerHTTPEndpoint .
-% 
+% # Configurar Base de Datos, Reutilizar authApp de EduNube, migrar la base de datos, Crear un superusuario
+% vim GitServerHTTPEndpoint/settings.py
+% rsync -av --progress ~/EduNube/authApp ~/GitServerHTTPEndpoint/
+% pipenv run python manage.py makemigrations authApp
+% pipenv run python manage.py migrate
+% pipenv run python manage.py createsuperuser
+%
+% pipenv run python manage.py runserver 8002
+% # crear un api token para GitEDU
+%
+% pipenv run python manage.py startapp apiApp
 
 \subsection{Ambiente Virtual de LMS (Moodle)}
 \label{instalacion-moodle}

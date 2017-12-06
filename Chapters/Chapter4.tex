@@ -118,77 +118,117 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
     		-j MASQUERADE
 \end{lstlisting}
 
-%\subsubsection{Servidor Local de Git}
-% adduser git
-% su - git
-% # Populate with a few repositories
-% git clone --bare https://gitlab.com/nishedcob/GitEDU.git repositories/GitEDU.git
-% git clone --bare https://gitlab.com/ArqAppGrpBravoEarleyVargas/GitEduERP.git repositories/GitEduERP.git
-% # Go to repositories directory
-% cd repositories/
-% # Fix Permissions and Group to allow for git push from remote; update server index and prepare update hook to receive incoming files
-% for repo in `ls`; do cd $repo; pwd; chmod -R g+ws .; chgrp -R git .; git --bare update-server-info; cp hooks/post-update.sample hooks/post-update; chmod a+x hooks/post-update; cd ..; done
-%
-% # NGinX Config:
-%server {
-%        listen 80;
-%        listen [::]:80;
-%        server_name git.localhost;
-%        root /usr/share/gitweb;
-%        access_log /var/log/nginx/gitweb.access.log;
-%        # static repo files for cloning over https
-%        location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+|pack/pack-[0-9a-f]+.(pack|idx))$ {
-%                root /home/git/repositories/;
-%        }
-%
-%        # requests that need to go to git-http-backend
-%        location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
-%                root /home/git/repositories;
-%
-%                fastcgi_pass unix:/var/run/fcgiwrap.socket;
-%                fastcgi_param SCRIPT_FILENAME   /usr/lib/git-core/git-http-backend;
-%                fastcgi_param PATH_INFO          $uri;
-%                fastcgi_param GIT_PROJECT_ROOT  /home/git/repositories;
-%                fastcgi_param GIT_HTTP_EXPORT_ALL "";
-%                fastcgi_param REMOTE_USER $remote_user;
-%                include fastcgi_params;
-%        }
-%
-%        # send anything else to gitweb if it's not a real file
-%        try_files $uri @gitweb;
-%        location @gitweb {
-%                fastcgi_pass unix:/var/run/fcgiwrap.socket;
-%                fastcgi_param SCRIPT_FILENAME   /usr/share/gitweb/gitweb.cgi;
-%                fastcgi_param PATH_INFO          $uri;
-%                fastcgi_param GITWEB_CONFIG      /etc/gitweb.conf;
-%                include fastcgi_params;
-%        }
-%}
-%
-%# Edit /etc/gitweb.conf
-%# path to git projects (<project>.git)
-%#$projectroot = "/var/lib/git";
-%$projectroot = "/home/git/repositories";
-%
-%Probar que funciona
-% git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
-%
+\subsubsection{Servidor Local de Git}
+Para gestionar versiones de codigo escrito y facilitar la integracion con sistemas externas y el sistema de virtualizacion, se levanta un servidor sencillo de Git.
 
-%\subsubsection{Git Server HTTP Endpoint}
-% pipenv --three
-% pipenv install django six psycopg2 PyJWT bcrypt
-% pipenv run django-admin startproject GitServerHTTPEndpoint .
-% # Configurar Base de Datos, Reutilizar authApp de EduNube, migrar la base de datos, Crear un superusuario
-% vim GitServerHTTPEndpoint/settings.py
-% rsync -av --progress ~/EduNube/authApp ~/GitServerHTTPEndpoint/
-% pipenv run python manage.py makemigrations authApp
-% pipenv run python manage.py migrate
-% pipenv run python manage.py createsuperuser
-%
-% pipenv run python manage.py runserver 8002
-% # crear un api token para GitEDU
-%
-% pipenv run python manage.py startapp apiApp
+Instalar paquetes para un interfaz web sencilla de Git:
+\begin{lstlisting}
+apt install git gitweb fcgiwrap
+\end{lstlisting}
+
+Se crea un usuario del sistema operativo solo para Git:
+\begin{lstlisting}
+adduser git
+\end{lstlisting}
+
+Se autentica como el usuario creado:
+\begin{lstlisting}
+su - git
+\end{lstlisting}
+
+Para tener repositorios ejemplares, se clona algunos repositorios:
+\begin{lstlisting}
+git clone --bare https://gitlab.com/nishedcob/GitEDU.git repositories/GitEDU.git
+git clone --bare https://gitlab.com/ArqAppGrpBravoEarleyVargas/GitEduERP.git repositories/GitEduERP.git
+\end{lstlisting}
+
+Entrar al directorio de repositorios y arreglar permisos para permitir git push desde repositorios remotos:
+\begin{lstlisting}
+cd repositories/
+for repo in `ls`; do
+	cd $repo;
+    pwd;
+    chmod -R g+ws .;
+    chgrp -R git .;
+    git --bare update-server-info;
+    cp hooks/post-update.sample hooks/post-update;
+    chmod a+x hooks/post-update;
+    cd ..;
+done
+\end{lstlisting}
+
+Despues se configura NGinX para trabajar con gitweb:
+\begin{lstlisting}
+# NGinX Config:
+server {
+        listen 80;
+        listen [::]:80;
+        server_name git.localhost;
+        root /usr/share/gitweb;
+        access_log /var/log/nginx/gitweb.access.log;
+        # static repo files for cloning over https
+        location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+|pack/pack-[0-9a-f]+.(pack|idx))$ {
+                root /home/git/repositories/;
+        }
+
+        # requests that need to go to git-http-backend
+        location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
+                root /home/git/repositories;
+
+                fastcgi_pass unix:/var/run/fcgiwrap.socket;
+                fastcgi_param SCRIPT_FILENAME   /usr/lib/git-core/git-http-backend;
+                fastcgi_param PATH_INFO          $uri;
+                fastcgi_param GIT_PROJECT_ROOT  /home/git/repositories;
+                fastcgi_param GIT_HTTP_EXPORT_ALL "";
+                fastcgi_param REMOTE_USER $remote_user;
+                include fastcgi_params;
+        }
+
+        # send anything else to gitweb if it's not a real file
+        try_files $uri @gitweb;
+        location @gitweb {
+                fastcgi_pass unix:/var/run/fcgiwrap.socket;
+                fastcgi_param SCRIPT_FILENAME   /usr/share/gitweb/gitweb.cgi;
+                fastcgi_param PATH_INFO          $uri;
+                fastcgi_param GITWEB_CONFIG      /etc/gitweb.conf;
+                include fastcgi_params;
+        }
+}
+\end{lstlisting}
+
+Ademas se configura gitweb con la siguiente configuracion:
+\begin{lstlisting}
+# Edit /etc/gitweb.conf
+# path to git projects (<project>.git)
+#$projectroot = "/var/lib/git";
+$projectroot = "/home/git/repositories";
+\end{lstlisting}
+
+Prueba de que funciona:
+\begin{lstlisting}
+git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
+\end{lstlisting}
+
+\subsubsection{Git Server HTTP Endpoint}
+Para recibir llamadas HTTP y convertirlos en sus respetivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticacion que utiliza EduNube:
+\begin{lstlisting}
+pipenv --three
+pipenv install django six psycopg2 PyJWT bcrypt ipython
+pipenv run django-admin startproject GitServerHTTPEndpoint .
+# Configurar Base de Datos, Reutilizar authApp de EduNube, migrar la base de datos, Crear un superusuario
+rsync -av --progress ~/EduNube/authApp ~/GitServerHTTPEndpoint/
+vim GitServerHTTPEndpoint/settings.py
+pipenv run python manage.py makemigrations authApp
+pipenv run python manage.py migrate
+pipenv run python manage.py createsuperuser
+
+pipenv run python manage.py runserver 8002
+# crear un api token para GitEDU
+
+pipenv run python manage.py startapp apiApp
+\end{lstlisting}
+
+Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
 \subsection{Ambiente Virtual de LMS (Moodle)}
 \label{instalacion-moodle}
@@ -1772,7 +1812,8 @@ Como parte de la administración de este aspecto del sistema de autenticación, 
 % <TODO>
 \subsection{Ejecución de Código en Linea}
 
-\subsection{Calificación Automatizada con Pruebas Unitarias}
+% If Time
+%\subsection{Calificación Automatizada con Pruebas Unitarias}
 
 \subsection{API Externa}
 % </TODO>

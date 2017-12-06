@@ -8,10 +8,10 @@ Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la
 \begin{itemize}
   \item un sistema base (Debian Stretch con el Xen Hipervisor)
   \item un servidor local de Git (Git + Gitweb + NGinX),
-  \item un servicio para recibir peticiones HTTP y convertirlos en sus respetivos objetos en un repositorio de Git (Git Server HTTP Endpoint)
+  \item un servicio para recibir peticiones HTTP y convertirlos en sus respectivos objetos en un repositorio de Git (Git Server HTTP Endpoint)
   \item un LMS (Moodle),
   \item un servidor de Git (GitLab CE)
-  \item un servidor de Virtualizacion (Docker)
+  \item un servidor de Virtualización (Docker)
   \item plantillas de maquinas virtuales (en Docker)
 \end{itemize}
 
@@ -129,7 +129,7 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
 \end{lstlisting}
 
 \subsubsection{Servidor Local de Git}
-Para gestionar versiones de codigo escrito y facilitar la integracion con sistemas externas y el sistema de virtualizacion, se levanta un servidor sencillo de Git.
+Para gestionar versiones de código escrito y facilitar la integración con sistemas externas y el sistema de virtualización, se levanta un servidor sencillo de Git.
 
 Instalar paquetes para un interfaz web sencilla de Git:
 \begin{lstlisting}
@@ -167,7 +167,7 @@ for repo in `ls`; do
 done
 \end{lstlisting}
 
-Despues se configura NGinX para trabajar con gitweb:
+Después se configura NGinX para trabajar con gitweb:
 \begin{lstlisting}
 # NGinX Config:
 server {
@@ -206,7 +206,7 @@ server {
 }
 \end{lstlisting}
 
-Ademas se configura gitweb con la siguiente configuracion:
+Además se configura gitweb con la siguiente configuración:
 \begin{lstlisting}
 # Edit /etc/gitweb.conf
 # path to git projects (<project>.git)
@@ -220,7 +220,7 @@ git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
 \end{lstlisting}
 
 \subsubsection{Git Server HTTP Endpoint}
-Para recibir llamadas HTTP y convertirlos en sus respetivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticacion que utiliza EduNube:
+Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:
 \begin{lstlisting}
 pipenv --three
 pipenv install django six psycopg2 PyJWT bcrypt ipython
@@ -349,7 +349,7 @@ systemctl restart apache2
 
 \end{lstlisting}
 
-A continuacion se configura la base de datos:
+A continuación se configura la base de datos:
 
 \begin{lstlisting}
 
@@ -518,7 +518,7 @@ iface eth0 inet static
 
 En el presente caso, Xen-Tools logró configurar esta parte de forma correcta.
 
-A continuacion se procede con la instalación de Gitlab:
+A continuación se procede con la instalación de Gitlab:
 
 \begin{lstlisting}
 # actualiza el sistema
@@ -541,7 +541,7 @@ Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
 
 \subsection{Servidor de Virtualización}
-Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico ademas de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
+Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico además de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
 
 \subsubsection{Comparación de Hipervisores}
 Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoración de características de cada ecosistema de hipervisor para generar una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor a ser implementado en el presente proyecto.
@@ -616,11 +616,11 @@ Se ha considerado con mayor importancia el Rendimiento y la Seguridad como neces
 \end{table}
 
 % TODO: Correccion de la Maria del Carmen "caracteristicas consideradas"?
-En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las características consideras y un puntaje relativo (sobre 5) dada a cada una de las mismas según las investigaciones, experiencias y opiniones del autor. A continuacion se explica el porque de las valoraciones:
+En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las características consideras y un puntaje relativo (sobre 5) dada a cada una de las mismas según las investigaciones, experiencias y opiniones del autor. A continuación se explica el porque de las valoraciones:
 \begin{description}
 	\item[Xen] como un hipervisor de tipo uno se cuenta con un rendimiento muy alto, especialmente cuando se toma en cuenta la paravirtualización que también se suporta con sistemas operativos modificados, casi a un nivel nativo. Este hipervisor logra virtualizar todas las capas de un sistema operativo, desde su núcleo hasta el espacio de los usuarios, pero al mismo tiempo dispone de un modelo de seguridad muy buena. Falla en las herramientas de administración de los cuales hay muy pocas que están actualizadas. La mejor herramienta de administración es en la Línea de Comandos. Sus cambios frecuentes y documentación desactualizada son un problema para la instalación y mantenimiento. La experiencia del autor con esta tecnología ha sido muy positiva.
     \item[KVM] como un hipervisor de tipo uno y medio es más alto nivel que Xen y no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualización. Aunque es más alto nivel, se ha tomado pasos adicionales para que alcanza un nivel de seguridad equivalente a la de Xen. Para su administración cuenta con herramientas muy similares a los de Xen, pero su alto nivel de integración con el API de Libvirt hace que puente con mejores interfaces para su manejo web. Posiblemente por desconocimiento de las posibilidades para mejorar el rendimiento que se puede aplicar, el autor no ha tenido una experiencia muy positiva con la aplicación de esta tecnología de virtualización.
-    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su tecnica de containerización como un tipo de virtualización que puede dar mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel web. Puede que sea el caso por el hecho de que Docker es una tecnología que aún es bastante nueva y que esta en auge. Esto promueve una gran cantidad de personas a estar contribuyendo sus mejoras. La instalación y mantenimiento de Docker es muy sencillo en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
+    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su técnica de containerización como un tipo de virtualización que puede dar mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel web. Puede que sea el caso por el hecho de que Docker es una tecnología que aún es bastante nueva y que esta en auge. Esto promueve una gran cantidad de personas a estar contribuyendo sus mejoras. La instalación y mantenimiento de Docker es muy sencillo en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
 \end{description}
 
 Para calcular los pesos promediados de forma ponderada se aplica la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. Como se puede observar del mismo cuadro, frente los criterios previamente establecidos, Docker se puede considerar la mejor tecnología de virtualización en el proyecto actual con un puntaje de $4.167$, con medio punto mas que su competencia mas cercana Xen, $3.667$ y $\frac{5}{6}$ de un punto mas que KVM, $3.333$, que esta en último lugar.
@@ -660,7 +660,7 @@ Se considera Debian como una buena base para los contenedores debido a que es ba
 Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con Docker) y en la nube en general porque es un sistema operativo minimalista que lleva menor peso. Aquí tiene el mismo fin, aunque aveces es mas complicado de manejar y configurar, puede que valga la pena para entornos de producción que necesitan optimizar el uso de sus recursos.
 
 \subsubsection{Tipo de Contenedor: Shell-Executor}
-El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creacion de un usuario con menos privilegios en adicion a la imagen base que se toma. 
+El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. 
 
 % TODO: Mandar como anexo:
 % TODO: Solo resumir aqui
@@ -718,7 +718,7 @@ La novena linea define la carpeta creada como un volumen de Docker, el cual se m
 \subsubsection{Tipo de Contenedor: Python3-Executor}
 El tipo de contenedor ''Python3-Executor'' es para ejecutar comandos de shell en adición a código de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer funcionalidad de ejecutar comandos en un shell. El punto de entrada de ejecución es el archivo ''main.py'' a nivel raiz del repositorio. Tanto Debian como Alpine requieren la instalación de Python 3, porque lastimosamente su versión de Python por defecto sigue siendo 2.7 que se debería considerar prácticamente obsoleta. Docker requiere que se vuelve a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor.
 
-El Debian Python3-Executor se define de la siguiente manera a traves de su Dockerfile:
+El Debian Python3-Executor se define de la siguiente manera a través de su Dockerfile:
 \begin{lstlisting}
 FROM \
 registry.gitlab.com/nishedcob/gitedu/shell-executor:debian-stretch
@@ -731,7 +731,7 @@ WORKDIR "/code"
 \end{lstlisting}
 La primera y segunda linea define herencia del contenedor Debian Shell-Executor que definimos previamente. La tercera y cuarta linea instala Python3, Pip3 y Virtualenv dentro del contenedor. La sexta linea vuelve a declarar el volumen de Docker porque al aparecer la versión actual de Docker a propósito no suporta herencia de esta linea en los Dockerfile. La séptima linea define la ubicación inicial utilizada cuando se inicia el contenedor.
 
-El Alpine Python3-Executor se define a traves del Dockerfile que esta a continuacion:
+El Alpine Python3-Executor se define a través del Dockerfile que esta a continuación:
 \begin{lstlisting}
 FROM \
 registry.gitlab.com/nishedcob/gitedu/shell-executor:alpine-3.6
@@ -965,7 +965,7 @@ source $ENV_DIR/bin/activate
 pip3 install -r requirements.$PROJECT.txt
 \end{lstlisting}
 
-Para desarrollar ambos sistemas en paralelo, y poder trabajar en ramas independientes con ambos sistemas levantados al mismo tiempo para probar y desarollarar caracteristicas de integracion, se clono de forma local el repositorio:
+Para desarrollar ambos sistemas en paralelo, y poder trabajar en ramas independientes con ambos sistemas levantados al mismo tiempo para probar y desarrollar características de integración, se clono de forma local el repositorio:
 \begin{lstlisting}
 git clone GitEDU GitEDU-copy
 \end{lstlisting}
@@ -1446,7 +1446,7 @@ El próximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de
 
 El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como:
 \begin{itemize}
-\item una ID que se lo maneja la aplicacion (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio)
+\item una ID que se lo maneja la aplicación (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio)
 \item un comentario
 \item un autor
 \item una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio
@@ -1735,7 +1735,7 @@ El diseño planteado para el sistema EduNube propone dos tipos de autenticación
 Para la administración del sistema por operador humano se considera necesario la autenticación clásica mediante usuario y contraseña. Para la misma se ocuparon la misma implementación del framework Django y código reutilizado de GitEDU que tiene el mismo propósito.
 
 \subsubsection{Autenticación basado en Criptografía Asimétrica}
-Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solucion utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
+Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solución utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
 
 A continuación se presenta la lógica para descifrar y cifrar los tokenes con el fin de generar/actualizarlo y también poderlo validar contra una tabla interna de la base de datos a lo que un cliente se lo envía:
 \begin{lstlisting}

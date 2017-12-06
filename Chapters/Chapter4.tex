@@ -1404,91 +1404,15 @@ def load_code_persistence_backend_manager(load_class=CODE_PERSISTENCE_BACKEND_MA
 \lstset{language=Bash}
 
 \subsubsection{MongoDB}
-Para la persistencia de código en MongoDB se define unos modelos de base de datos en Python para su utilización con el ORM PyModm. A continuacion se presenta el modelo de base de datos para MongoDB:
-% TODO: maybe a figure/diagram would be better here
-\lstset{language=Python}
-\begin{lstlisting}[breaklines]
-class NamespaceModel(MongoModel):
-    name = CharField()
+Para la persistencia de código en MongoDB se define unos modelos de base de datos en Python para su utilización con el ORM PyModm. Se presenta el modelo de base de datos para MongoDB en la figura \ref{nosql-db}.
 
-    class Meta:
-        indexes = [IndexModel('name', unique=True)]
-
-    def __str__(self):
-        return "NamespaceMongoModel: %s" % self.name
-
-
-class RepositoryModel(MongoModel):
-    name = CharField()
-    namespace = ReferenceField(NamespaceModel)
-
-    class Meta:
-        indexes = [IndexModel([('name', TEXT), ('namespace', TEXT)], unique=True)]
-
-    def __str__(self):
-        return "RepositoryMongoModel: %s [%s]" % (self.name, self.namespace)
-
-
-class RepositoryFileModel(MongoModel):
-    contents = CharField(required=False, blank=True)
-    repository = ReferenceField(RepositoryModel)
-    prog_language = CharField(choices=constants.LANGUAGE_NAMES)
-    file_path = CharField()
-    current_change_file = ReferenceField("ChangeFileModel", blank=True)
-
-    class Meta:
-        indexes = [IndexModel([('file_path', TEXT), ('repository', TEXT)], unique=True)]
-
-    def __str__(self):
-        return "RepositoryFileMongoModel: %s :: %s :: [%s] :: %s" % (self.file_path, self.prog_language, self.repository, self.contents)
-
-
-class ChangeModel(MongoModel):
-    change_id = CharField()
-    comment = CharField()
-    author = CharField()
-    timestamp = TimestampField()
-    repository = ReferenceField(RepositoryModel)
-    parent_change = ReferenceField("ChangeModel", blank=True)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        if isinstance(self.timestamp, Timestamp):
-            timestamp = self.timestamp.as_datetime().__str__()
-        else:
-            timestamp = self.timestamp
-        return "ChangeMongoModel: %s :: \"%s\" :: %s :: %s :: [%s]" % (self.change_id, self.comment, self.author, timestamp, self.repository)
-
-
-class ChangeFileModel(MongoModel):
-    contents = CharField()
-    change = ReferenceField(ChangeModel)
-    prog_language = CharField(choices=constants.LANGUAGE_NAMES)
-    file_path = CharField()
-    file = ReferenceField(RepositoryFileModel)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return "ChangeFileMongoModel: [%s] :: %s :: %s :: %s" % (self.change, self.file_path, self.prog_language, self.contents)
-
-
-class TemporaryChangeFileModel(MongoModel):
-    contents = CharField()
-    repository = ReferenceField(RepositoryModel)
-    language = CharField(choices=constants.LANGUAGE_NAMES)
-    file_path = CharField()
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return "TemporaryChangeFileMongoModel: [%s] :: %s :: %s :: %s" % (self.repository, self.file_path, self.language, self.contents)
-\end{lstlisting}
-\lstset{language=Bash}
+\begin{figure}
+	\begin{center}
+    	\includegraphics[width=0.75\textwidth]{Figures/nosql-db.png}
+    \end{center}
+  	\caption{Modelo de Base de Datos en MongoDB.}
+    \label{nosql-db}
+\end{figure}
 
 % Con Maria del Carmen
 % TODO: Remplazar codigo con un diagrama
@@ -1496,9 +1420,28 @@ class TemporaryChangeFileModel(MongoModel):
 % TODO: actualizar cronograma con fechas de revision de documentacion
 % TODO: revisiones mas profunda de generos y tildes
 
-El NamespaceModel solo consiste del nombre del Namespace y el ID que se genera por defecto. Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma única. El RepositoryModel representa un repositorio y tiene un nombre en adición a permanecer a un Namespace. Cada par de Namespace y Repositorio debe ser una combinación única.
+El NamespaceModel solo consiste de:
+\begin{itemize}
+\item el nombre del Namespace
+\item el ID que se genera por defecto
+\end{itemize}
+Esto representa los espacios donde usuarios y grupos pueden crear repositorios. Se considera que los Namespace deben existir de forma única.
 
-El próximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son: contenidos del archivo, el repositorio a que permanece, el lenguaje de programación para que el editor puede cambiar su comportamiento para el lenguaje específico, la ubicación del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la última modificación realizada en el mismo, de lo cual se presenta más adelante.
+El RepositoryModel representa un repositorio y tiene:
+\begin{itemize}
+\item un nombre
+\item permanece a un Namespace
+\item el ID que se genera por defecto
+\end{itemize}
+Cada par de Namespace y Repositorio debe ser una combinación única.
+
+El próximo modelo, RepositoryFileModel, representa un archivo ubicado dentro de un repositorio. Sus atributos son:
+\begin{itemize}
+\item contenidos del archivo
+\item el repositorio a que permanece
+\item el lenguaje de programación para que el editor puede cambiar su comportamiento para el lenguaje específico
+\item la ubicación del archivo dentro del repositorio incluyendo su nombre y un archivo de cambio que representa el estado actual y la última modificación realizada en el mismo, de lo cual se presenta más adelante.
+\end{itemize}
 
 El ChangeModel representa un cambio realizado en el repositorio, como los commits de Git. Tiene atributos como una ID que se lo maneja nosotros (que viene a ser un hash SHA1, inspirado por Git, de los contenidos y metadatos del mismo cambio), un comentario, un autor, una estampa de tiempo que tiene tanto la hora como la fecha en que se realizó el cambio, el repositorio en que se hizo el cambio y una referencia al cambio anterior para que se puede construir una historial de cambios.
 

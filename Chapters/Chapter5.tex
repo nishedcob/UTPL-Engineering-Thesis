@@ -3,7 +3,7 @@
 \chapter{Pruebas}
 \label{capitulo5}
 
-\section{Preperaciones del Ambiente de Pruebas}
+\section{Preparaciones del Ambiente de Pruebas}
 
 \section{Plan de Pruebas}
 La validación del presente trabajo de titulación se lo ha planteado en tres fases:
@@ -15,29 +15,29 @@ La validación del presente trabajo de titulación se lo ha planteado en tres fa
 Donde se considera que estas mismas pruebas deben ser automatizados en el mayor parte posible con la finalidad de reducir variaciones que puede introducir un operador humano en aplicaciones distintas de una prueba.
 
 \subsection{Flujos completos de Funcionalidad}
-Estas pruebas son de alto nivel para revisar funcionalidad desde el punto del usuario en distintos roles de la aplicacion y llevar cada uno de esos roles por las distintas fases de su ciclo de vida dentro de la aplicacion. Se considera Selenium como buena opcion para la automatizacion de esta fase de pruebas.
+Estas pruebas son de alto nivel para revisar funcionalidad desde el punto del usuario en distintos roles de la aplicación y llevar cada uno de esos roles por las distintas fases de su ciclo de vida dentro de la aplicación. Se considera Selenium como buena opción para la automatización de esta fase de pruebas.
 
 \subsubsection{Administrador}
 Dentro del ciclo de vida del administrador se debe probar:
 \begin{enumerate}
-  \item Creacion/Lectura/Actualizacion/Eliminacion de API Tokens en los sistemas respectivos que son:
+  \item Creación/Lectura/Actualización/Eliminación de API Tokens en los sistemas respectivos que son:
   \begin{itemize}
     \item EduNube
     \item GitServerHTTPEndpoint
   \end{itemize}
-  \item Registros de Plantillas Nuevas y Actualizacion de Plantillas Existentes de Virtualizacion
+  \item Registros de Plantillas Nuevas y Actualización de Plantillas Existentes de Virtualización
   \begin{itemize}
     \item La capacidad de establecer herencia de plantillas con el .repospec
-    \item La capacidad de proteger archivos a traves del  .edunubeignore y el .edunubeignore.children
-    \item La capacidad de incluir archivos de forma automatica en extenciones de la plantilla con el .templateinclude
+    \item La capacidad de proteger archivos a través del  .edunubeignore y el .edunubeignore.children
+    \item La capacidad de incluir archivos de forma automática en extensiones de la plantilla con el .templateinclude
   \end{itemize}
 \end{enumerate}
 
 \subsubsection{Profesor}
 Dentro del ciclo de vida del profesor se debe probar:
 \begin{enumerate}
-  \item Extención de Plantillas de Virtualizacion
-  \item Ejecutación de Plantillas de Virtualización
+  \item Extensión de Plantillas de Virtualización
+  \item Ejecución de Plantillas de Virtualización
   \item Validación de las protecciones y herencia dado por los archivos de metadata en cada plantilla
 \end{enumerate}
 
@@ -49,19 +49,19 @@ Dentro del ciclo de vida del profesor se debe probar:
 \end{enumerate}
 
 \subsection{Pruebas Funcionales}
-Estas pruebas son de baja nivel y van directamente contra funcionalidades del código. Se propone llevar las mismas con las pruebas unitarias que lleva Django como marco de desarrollo pero de esta misma forma así mismo se require que la pruebas no se llevan en más que un sistema a la véz y entonces en algunos casos no se podrá realizar pruebas completas de APIs de integración con otros sistemas, si no para las mismas se podria utilizar clientes que simulan la presencia del sistema consumidor externo o incluso refrencias cruzadas (como enlaces simbolicas de UNIX y submodulos de Git) para probar estas funcionalidades.
+Estas pruebas son de baja nivel y van directamente contra funcionalidades del código. Se propone llevar las mismas con las pruebas unitarias que lleva Django como marco de desarrollo pero de esta misma forma así mismo se requiere que la pruebas no se llevan en más que un sistema a la vez y entonces en algunos casos no se podrá realizar pruebas completas de APIs de integración con otros sistemas, si no para las mismas se podría utilizar clientes que simulan la presencia del sistema consumidor externo o incluso referencias cruzadas (como enlaces simbólicas de UNIX y submódulos de Git) para probar estas funcionalidades.
 
 \subsubsection{GitEDU}
-Para las pruebas de GitEDU, se necesita desabilitar ciertas funcionalidades de consumo de los dos servicios externos EduNube y GitServerHTTPEndpoint los cuales no se encuentran activos y levantados al momento de ejecutar estas pruebas con la necesidad de que estas pruebas de integración se los extrae a ser ejecutadas directamente con las pruebas unitarias de las respectivas sistemas.
+Para las pruebas de GitEDU, se necesita deshabilitar ciertas funcionalidades de consumo de los dos servicios externos EduNube y GitServerHTTPEndpoint los cuales no se encuentran activos y levantados al momento de ejecutar estas pruebas con la necesidad de que estas pruebas de integración se los extrae a ser ejecutadas directamente con las pruebas unitarias de las respectivas sistemas.
 
 \subsubsection{EduNube}
-Las pruebas de EduNube deben llevar acabo validación de los entonos distintos de virtualización/ejecución de código atraves del API externa, el cliente estandar que utiliza GitEDU y el manejo adecuado de los API Tokens y .RepoSpec.
+Las pruebas de EduNube deben llevar acabo validación de los entornos distintos de virtualización/ejecución de código atreves del API externa, el cliente estándar que utiliza GitEDU y el manejo adecuado de los API Tokens y .RepoSpec.
 
 \subsubsection{GitServerHTTPEndpoint}
-Las pruebas de GitServerHTTPEndpoint deben validar la API externa, manejo de API Tokens, cliente estandar que utiliza GitEDU y distinas operaciónes internas de Git que realiza el mismo sistema.
+Las pruebas de GitServerHTTPEndpoint deben validar la API externa, manejo de API Tokens, cliente estándar que utiliza GitEDU y distintas operaciones internas de Git que realiza el mismo sistema.
 
-\subsection{Pruebas de Integracion}
-Como parte de las pruebas unitarias del fase anterior, se debe validar que los mismos clientes que se ha probado son los que realmente esta utilizando cada sistema para con ello asegurar el cumplimiento de la integracion esperada. Realizando esta fase de esta forma podria permitir que se realiza al mismo rato de las pruebas unitarias de Django del fase anterior.
+\subsection{Pruebas de Integración}
+Como parte de las pruebas unitarias del fase anterior, se debe validar que los mismos clientes que se ha probado son los que realmente esta utilizando cada sistema para con ello asegurar el cumplimiento de la integración esperada. Realizando esta fase de esta forma podría permitir que se realiza al mismo rato de las pruebas unitarias de Django del fase anterior.
 
 \section{Resultados}
 

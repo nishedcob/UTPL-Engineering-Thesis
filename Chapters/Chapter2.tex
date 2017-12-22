@@ -151,7 +151,7 @@ Git es un sistema de control de versiones distribuido que a diferencia de otros 
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/vcs-incremental.png}
   \end{center}
-  \caption{Sistema de Control de Versiones llevado de forma incremental. \citep{PROGIT-Git-Intro}.}
+  \caption{Sistema de Control de Versiones \index{Controlar Versiones de Código} llevado de forma incremental. \citep{PROGIT-Git-Intro}.}
   \label{VCS-Incremental}
 \end{figure}
 
@@ -159,7 +159,7 @@ Git es un sistema de control de versiones distribuido que a diferencia de otros 
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/vcs-backup.png}
   \end{center}
-  \caption{Sistema de Control de Versiones llevado con archivos enteros. \citep{PROGIT-Git-Intro}.}
+  \caption{Sistema de Control de Versiones \index{Controlar Versiones de Código} llevado con archivos enteros. \citep{PROGIT-Git-Intro}.}
   \label{VCS-Backup}
 \end{figure}
 
@@ -184,7 +184,9 @@ Cada repositorio de Git trabaja con tres fases que son el directorio de trabajo 
 GitLab es un servidor de Git ofrecido por GitLab Inc. Se ofrece en dos versiones: una versión gratis \citep{GitLab-Products} de código abierto liberado bajo el nombre GitLab Community Edition (GitLab CE) y una versión pagada que forma la línea principal de negocio de GitLab Inc. que lo venden bajo el nombre GitLab Enterprise Edition (GitLab EE) \citep{GitLab-About}. También proporcionan hosting de las mismas versiones alojados por ellos en GitLab.com (alli se puede usar GitLab EE gratis \citep{GitLab-GitLab.com} \citep{GitLab-Products}) y en GitHost.io (donde se puede arrendar servidores para alojar instancias de GitLab CE o EE y su respectivo infraestructura de apoyo \citep{GitHost.io}) \citep{GitLab-About}. Actualmente la Universidad Técnica Particular de Loja utiliza un servidor de GitLab CE como su instancia institucional de Git \citep{UTPL-GitLab}.
 
 \subsubsection{Virtualización\index{Virtualización}}
+\index{Virtualización|(}
 Virtualización es la creación de recursos virtuales en software para usar los mismos en lugar de un recurso físico. Este puede ser usado en áreas diversas como aplicaciones, servidores, almacenamiento y redes. Según la empresa VMware, que se dedica a vender productos de virtualización, la misma es la estrategia más efectiva para reducir costos de TI mientras que se aumenta la eficiencia y agilidad de un negocio de cualquier tamaño. Llegan a esta conclusión porque es tan común que se ha convertido en estándar industrial que solo se ocupa en entre 5\% y 15\% de la capacidad de los servidores debido a que se les pone solo un sistema operativo y aplicación a la vez. Virtualización permite resolver estas deficiencias en permitir la división lógica de equipos y distribuir estas partes donde más se los necesitan para aumentar la tasa de eficiencia y reducir la cantidad de recursos físicos necesarios. Con esta clase de tecnología, se puede reducir y en algunos casos eliminar tiempo fuera de servicio. Las facilidades de portabilidad y agilidad de ajustar recursos hace que se puede reducir los tiempos y costos de administración. Se domina hipervisor un software que gestiona virtualización \citep{VMWare-Virtualization}. Tholeti y IBM tienen un concepto similar de reducción de recursos físicos y gastos de operación, como se indica en la figura \ref{IBM-Virtualization}, la optimización de recursos físicos después de la virtualización.
+\index{Virtualización|)}
 
 \begin{figure}
   \begin{center}
@@ -194,6 +196,7 @@ Virtualización es la creación de recursos virtuales en software para usar los 
   \label{IBM-Virtualization}
 \end{figure}
 
+\index{Virtualización|(}
 \paragraph{Las Máquinas Virtuales}
 Una Máquina Virtual es una sistema computacional entera con sistema operativo y aplicación corriendo sobre recursos virtuales. Por lo tanto cada máquina virtual es completamente aislada e independiente de los demás de tal forma que se puede tener varios sistemas operativos y aplicaciones corriendo sobre un solo servidor físico. Eso permite tener varias características importantes:
 \begin{description}
@@ -213,17 +216,21 @@ Con virtualización de redes se puede simular todo el tráfico y funcionamiento 
 \paragraph{Virtualización de Escritorios}
 Virtualización de Escritorios se trata de usar recursos centralizados para dar escritorios de trabajo a usuarios remotos. Esto permite a cualquier organización reducir sus gastos tecnológicos debido a que el mismo permite menor inversión en tecnología para la misma cantidad de usuarios mientras al mismo tiempo facilita temas de administración de los equipos de los empleados en una organización y seguridad de la información de la misma \citep{VMWare-Virtualization}.
 
+\index{Hipervisor|(}
 \subsubsection{Hipervisores}
 Un hipervisor es una capa intermedia de software que gestiona la interacción entre lo virtualizado y hardware o otro software que ayuda realizar las peticiones de lo virtualizado \citep{VMWare-Virtualization}. De la misma manera, el mismo hipervisor se encargan de seguridad para asegurar que lo que sea virtualizado no pueda salir de su ambiente y atacar otras partes virtualizados o no virtualizados \citep{VMWare-HypervisorSecurity} \citep{IBM-KVM-Security}. La figura \ref{IBM-HypervisorTypes} muestra los tipos clásicos de hipervisor que se presentan a continuación, los hipervisores de tipo 1 que son a bajo nivel en lugar de un sistema operativo y los hipervisores de tipo 2 que son una aplicación montado encima de un sistema operativo.
+\index{Hipervisor|)}\index{Virtualización|)}
 
 \begin{figure}
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/ibm-hypervisortypes.png}
   \end{center}
-  \caption{Tipos Clásicos de Hipervisor \citep{IBM-Hypervisors}.}
+  \caption{Tipos Clásicos de Hipervisor \citep{IBM-Hypervisors}.\index{Virtualización}\index{Hipervisor}}
   \label{IBM-HypervisorTypes}
 \end{figure}
 
+\index{Virtualización|(}
+\index{Hipervisor!Tipo 1|(}
 \paragraph{Hipervisores de Tipo 1}
 Un Hipervisor de Tipo 1 se ejecuta directamente sobre hardware física \citep{IBM-Hypervisors} y por lo tanto puede llegar a conseguir mejor rendimiento y seguridad pero a un costo de requerir en muchos casos mayor configuración y administración para poder alcanzar su rendimiento óptimo.
 
@@ -237,38 +244,45 @@ Para el mismo, se considera las siguientes características:
     \item Como los drivers que controlan hardware física existen dentro de una máquina virtual, se los consideran drivers aislados. En caso de que pase algo, solo hay necesidad de reiniciar la máquina afectada, el resto del sistema puede seguir funcionando normalmente.
     \item Con una tecnología llamada paravirtualización, en lugar de optimizar al nivel de hipervisor se optimiza los sistemas operativos que son virtualizados para de esta manera mejorar su rendimiento incluso en hardware que no tiene soporte para virtualización. \citep{Xen-Project-Overview}.
 \end{itemize}
+\index{Hipervisor!Tipo 1|)}\index{Virtualización|)}
 
 \begin{figure}
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/arq-xen.png}
   \end{center}
-  \caption{La arquitectura de Xen. \citep{Xen-Project-Overview}.}
+  \caption{La arquitectura de Xen. \index{Xen} \index{Hipervisor!Tipo 1} \citep{Xen-Project-Overview}.}
   \label{arq-xen}
 \end{figure}
 
+\index{Virtualización|(} \index{Hipervisor!Tipo 2|(}
 \paragraph{Hipervisores de Tipo 2}
 Un Hipervisor de Tipo 2 se ejecuta por encima de un sistema operativo que le ayuda con su gestión interna como si fuera una aplicación más \citep{IBM-Hypervisors} lo que hace este tipos de hipervisores más lentos que hipervisores de tipo 1 (por tener un mayor número de capas y también por virtualizar partes del hardware) pero a su vez más fáciles de configurar y administrar. El mismo hecho de ejecutar por encima de un sistema operativo también vulnera la seguridad de todo el sistema en proveer un superficie de ataque más grande para actores maliciosos.
 
+\index{KVM|(}
 \subparagraph{Qemu-KVM}
 QEMU es un proyecto de software abierto con el fin de crear un emulador y virtualizador de procesadores de varias arquitecturas para una variedad de sistemas operativos. Permite el uso de backends como KVM o Xen para dar rendimiento casi nativo \citep{QEMU}. Aunque su despliegue normal requiere un sistema operativo, basado en Linux, intermedio debido a que es un módulo que se integra directamente en el núcleo de la misma sistema operativo, Wilson et. al. consideran KVM como un hipervisor de tipo 1 debido a sus características y implementación a bajo nivel cerca al nivel hardware física, mientras que su arquitectura lo hace aparecer como un hipervisor de tipo 2, que es como se lo está considerando aquí dentro del contexto de este trabajo (mientras que otros autores lo consideran un hipervisor de tipo 1.5, ni uno ni el otro si no algo híbrido dentro de la taxonomía de hipervisores). KVM es la “hipervisor estratégica para IBM” debido a (1) su bajo costo por ser tecnología completamente abierta, (2) su alta evolución y madurez, (3) alta evolución y madurez de Linux (su tecnología fundamental atras), (4) eficiencia y rendimiento alto, (5) una comunidad de desarrollo muy activa y responsable frente fallos de seguridad, (6) la idea de que muchos ojos viendo código lo hace más seguro\footnote{Uno de las características principales de Código Abierto}, (7) varias tecnologías de seguridad que integra que falta la competencia, (8) mayor flexibilidad que ofrece frente otros hipervisores competidores y (7) control que IBM puede ejercer sobre el proyecto de KVM \citep{IBM-KVM-Security}. En la figura \ref{KVM-Arq}, se puede encontrar la arquitectura lógica para entender visualmente la funcionalidad de la misma.
+\index{KVM|)} \index{Virtualización|)} \index{Hipervisor!Tipo 2|)}
 
 \begin{figure}
   \begin{center}
       \includegraphics[width=\textwidth]{Figures/kvm-arq.png}
   \end{center}
-  \caption{Arquitectura de KVM/QEMU. \citep{IBM-KVM-Security}.}
+  \caption{Arquitectura de KVM/QEMU. \citep{IBM-KVM-Security}.\index{Virtualización}\index{Hipervisor!Tipo 2}\index{KVM}}
   \label{KVM-Arq}
 \end{figure}
 
+\index{Virtualización|(} \index{Hipervisor!Tipo 2|(} \index{VirtualBox|(}
 \subparagraph{VirtualBox}
 VirtualBox es un hipervisor para virtualización de arquitecturas estándar x86 y x86\_64 tanto para uso casero como uso empresarial. Para ello ofrece muchas características, rendimiento optimizado, y un gran número de sistemas operativos que soporta tanto para virtualizar como para ser virtualizados todo bajo una licencia de software libre, la GPL versión 2 \citep{VirtualBox}. Su arquitectura de ser montado encima de cualquier sistema operativo y apoyarse en ello para realizar operaciones por parte de un sistema operativo y hardware virtualizado hacen este hipervisor un ejemplo clásico de un hipervisor de tipo 2.
+\index{VirtualBox|)} \index{Hipervisor!Tipo 2|)}
 
+\index{Contenedor|(}
 \paragraph{Virtualización a Nivel de Sistema Operativo (Contenerización)}
 Desde la antes de la incepción de los sistemas Linux, los sistemas de la familia Unix han tenido un mecanismo de aislamiento conocido como chroot el cual genera un espacio aislado de usuario para contener alguna aplicacion o varias aplicaciones mientras que todos siguen compartiendo el mismo sistema operativo o kernel por detrás. La tendencia de contenerización que existe hoy en día sigue por la misma línea pero lo implementa de una forma aún más avanzada. Eso permite a muchos usuarios que se desconfían mutuamente unos en otros utilizar el mismo hardware mientras que al mismo tiempo quedan completamente aislados unos de otros con menor impacto al rendimiento o una necesidad de hardware que soporta la carga adicional que virtualizacion genera \citep{Teimouri-Davoud-OS-level-virt}, mira la figura \ref{que-son-contenedores}. Algunos sistemas de este tipo de aislamiento que son populares hoy en día son:
 \begin{multicols}{3}
   \begin{itemize}
       \item chroot
-      \item Docker
+      \item Docker\index{Docker}
       \item LXC
       \item LXD
       \item Linux-VServer
@@ -285,6 +299,7 @@ Desde la antes de la incepción de los sistemas Linux, los sistemas de la famili
 	    \item Windows Containers (a partir de Windows Server 2016)
 	\end{itemize}
 \end{multicols}
+\index{Contenedor|)} \index{Virtualización|)}
 
 \begin{figure}
   \begin{center}
@@ -302,7 +317,9 @@ Desde la antes de la incepción de los sistemas Linux, los sistemas de la famili
   \label{differencia-hipervisores-contenedores}
 \end{figure}
 
+\index{Virtualización|(} \index{Contenedor|(}
 Debido al hecho de que muchas veces cada máquina virtual necesita su propio hardware virtual y también sistema operativo, se termina consumiendo mucho más RAM y ciclos de CPU de tal manera que un servidor típicamente puede soportar dos a tres veces más servicios si están en contenedores en lugar de si son virtualizados \citep{Teimouri-Davoud-OS-level-virt}. La diferencia se puede ver en la figura \ref{differencia-hipervisores-contenedores}.
+\index{Contenedor|)} \index{Virtualización|)}
 
 \begin{figure}
   \begin{center}
@@ -312,13 +329,15 @@ Debido al hecho de que muchas veces cada máquina virtual necesita su propio har
   \label{contenedores-vms}
 \end{figure}
 
+\index{Virtualización|(} \index{Contenedor|(}
 Entre las ventajas de contenedores está que permiten tener ambientes aislados livianos para prevenir conflictos de dependencias y estandarizar versiones utilizadas en ambientes de desarrollo y producción mientras que al mismo tiempo requieren mucho menos recursos que una máquina virtual. Las mismas se pueden levantar casi instantáneamente a diferencia de máquinas virtuales que requieren tiempo para arrancarse. Como se puede ver en la figura (contenedores-vms), también se puede tener un motor de contenedores dentro de una máquina virtual, el cual ofrece beneficios como mayor aislamiento (seguridad) y flexibilidad al momento de migrar aplicaciones entre servidores \citep{Docker-Containers}.
 
 La estandarización que ofrece la contenerización ayuda abstraer sistemas operativos que están en los servidores (permitiendo mayor flexibilidad de despliegue),  permite mayor escalabilidad si la aplicación es diseñada para eso, es fácil de versionar dado que los archivos de configuración que describen los contenedores muchas veces son de texto plano y es muy orientado a arquitecturas compuestas por servicios como SOA o las arquitecturas de Microservicios debidos a que estas ya tienen componentes donde es fácil saber dónde poner la frontera de cada contenedor \citep{DigitalOcean-Docker-Ecosystem}.
 
 Para tener seguridad adicional, también se puede ocupar contendores dentro de máquinas virtuales aisladas como se puede observar en la figura \ref{contenedores-vms} \citep{Docker-Containers}.
 
-\subparagraph{Docker}
+\index{Docker|(}
+\subparagraph{Docker\index{Docker}}
 Docker es una plataforma más popular hoy en dia para contenedores. Se puede usar para eliminar problemas de dependencias entre equipos de desarrolladores, para aumentar la capacidad computacional de equipos y también para desplegar de una forma más ágil, rápida y segura. Con contenedores de Docker, toda la complejidad está dentro del contenedor, facilitando su compilación, la forma en que son compartidos y ejecutados, lo que hace fácil que cualquier persona que tenga los archivos de configuración necesarias puede levantar la aplicación en minutos en lugar de en horas \citep{Docker-What-Is}.
 
 La arquitectura de Docker permite funcionar con cualquier tecnología. La estandarización y facilidad que ofrece permite mejor colaboración entre miembros de un equipo. Por defecto Docker se trata de ser lo más seguro, flexible y extensible posible mientras que al mismo tiempo no necesitar cambios para que un proveedor de software no necesita realizar cambios ni casarse con la tecnología \citep{Docker}.
@@ -345,6 +364,7 @@ Frente la percepcion comun de que Docker es insegura, McKendrick y Gallagher ofr
   \item Reducir el superficie de ataque dentro del contenedor en no montar archivos criticos del sistema host dentro del contenedor
 \end{itemize}
 Aunque los autores son muy claros en especificar que Docker no es un sistema de virtualizacion dan estos consejos, listados previamente, entre otros para tener mayor seguridad \citep{McKendrickGallagher201707}.
+\index{Docker|)} \index{Contenedor|)} \index{Virtualización|)}
 
 % TODO: Tecnologias de gestion de virtualizacion
 % TODO: OpenStack
@@ -418,11 +438,15 @@ El cuadro \ref{tecnologias-web} presenta conceptos de varias tecnologías que ex
 \section{Trabajos Relacionados}
 Dentro de la temática de este trabajo de titulación es importante entender trabajos relacionados los mismos que son analizados para en base a ellos entender investigaciones que ya se han realizado y de esta forma aprender de ellos. A continuación se mencionan los siguientes:
 
+\index{Editar Código|(} \index{Persistir Código|(} \index{Controlar Versiones de Código|(}
 \subsection{GitEduERP}
-En un trabajo reciente del autor con sus colegas, Marcelo Bravo y Priscilla Vargas, en la Universidad Técnica Particular de Loja, y frente el problema de necesitar ofrecer una ambiente de programación a estudiantes en línea, se realizó un editor de código en línea con sistema de permisos y la capacidad de compartir entre usuarios en un backend de Django y utilizando una librería ACE liberado por Cloud9 IDE que guardaba código editado en una instancia de GitLab CE. Además ofrece chat en línea con una liberia TogetherJS. El resultado era un prototipo que guardaba snippets en GitLab y permite compartir código de una manera muy primitiva entre usuarios. Se llevó el codigo editado en un sistema de control de versiones interna, usando MongoDB. Entre los problemas que se dieron era una falta de tiempo para el proyecto y una alta nivel de complejidad para el mismo lo cual no permitía que se lo termina según su alcance propuesta \citep{UTPL-GitEduERP}.
+En un trabajo reciente del autor con sus colegas, Marcelo Bravo y Priscilla Vargas, en la Universidad Técnica Particular de Loja, y frente el problema de necesitar ofrecer una ambiente de programación a estudiantes en línea, se realizó un editor de código en línea con sistema de permisos y la capacidad de compartir entre usuarios en un backend de Django y utilizando una librería ACE liberado por Cloud9 IDE que guardaba código editado en una instancia de GitLab CE. Además ofrece chat en línea con una liberia TogetherJS. El resultado era un prototipo que guardaba snippets en GitLab y permite compartir código de una manera muy primitiva entre usuarios. Se llevó el codigo editado en un sistema de control de versiones interna, usando MongoDB\index{MongoDB}. Entre los problemas que se dieron era una falta de tiempo para el proyecto y una alta nivel de complejidad para el mismo lo cual no permitía que se lo termina según su alcance propuesta \citep{UTPL-GitEduERP}.
+\index{Controlar Versiones de Código|)} \index{Persistir Código|)} \index{Editar Código|)}
 
+\index{Recolección de Datos|(} \index{Toma de Decisiones|(}
 \subsection{Sistema de Encuestas Online}
 En la Universidad Técnica Particular de Loja, para mejorar temas de business analytics, dos autores, Diana Ortega y Juan Carlos Sánchez, se trataron de diseñar procesos de negocio para realizar colección de datos en tiempo real a través de encuestas y analizar las mismas con un fin de ayudar la toma de decisiones estratégicas de negocio en tiempo real. Plantearon soluciones con un fin de optimizar tiempos y recursos a través del uso de soluciones tecnológicas \citep{UTPL-Thesis-Encuestas-Online}. Aunque no se trató de enseñar ni de programar en línea se considera importante este trabajo relacionado debido al hecho de que llevaron a cabo temas de business analytics y uno de las finalidades de este trabajo de titulación.
+\index{Toma de Decisiones|)} \index{Recolección de Datos|)}
 
 \subsection{Metodología de Enseñanza con la Web 2.0}
 En la Universidad Técnica Particular de Loja, Mauricio Castillo buscó utilizar la manera en que la moda de lectura-escritura en la Web 2.0 se podría crear cursos interactivos con estudiantes online como base de una nueva metodología de enseñanza. Destaca esos temas desde el punto de vista de ingeniería en sistemas para proporcionar soluciones netamente técnicas y estratégicas para dar el mejor aporte posible a quienes deseen implementar un sistema de este tipo. Estos conocimientos fueron aplicados en una materia ''Diseño de Paginas Web dinamicas con PHP'' en la modalidad abierta y a distancia de la misma universidad para comprobar la validez de la metodología desarrollado lo cual se encontró que al aplicar la metodología de integrar tecnologías de la web 2.0 y aumentar la interacción estudiantil dentro del curso, se pudo aumentar un grado significativo el porcentaje de estudiantes que aprobaron la materia \citep{UTPL-Thesis-Edu-Web-2}.

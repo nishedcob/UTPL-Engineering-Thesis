@@ -9,7 +9,7 @@ Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la
   \item un sistema base (Debian Stretch con el Xen Hipervisor)
   \item un servidor local de Git (Git + Gitweb + NGinX),
   \item un servicio para recibir peticiones HTTP y convertirlos en sus respectivos objetos en un repositorio de Git (Git Server HTTP Endpoint)
-  \item un LMS (Moodle),
+  \item un LMS \index{LMS} (Moodle),
   \item un servidor de Git (GitLab CE)
   \item un servidor de Virtualización (Docker)
   \item plantillas de maquinas virtuales (en Docker)
@@ -240,10 +240,10 @@ pipenv run python manage.py startapp apiApp
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
-\subsection{Ambiente Virtual de LMS (Moodle)}
+\subsection{Ambiente Virtual de LMS \index{LMS} (Moodle)}
 \label{instalacion-moodle}
 
-Para el ambiente de Moodle (LMS contra el cual se ha llevado el desarrollo), se crea una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una dirección IP fija de 10.10.10.10. Los resultados del mismo comando se puede ver en la figura \ref{vm-moodle}.
+Para el ambiente de Moodle (LMS \index{LMS} contra el cual se ha llevado el desarrollo), se crea una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una dirección IP fija de 10.10.10.10. Los resultados del mismo comando se puede ver en la figura \ref{vm-moodle}.
 \begin{lstlisting}
 	xen-create-image --hostname=debian-moodle\
     		--ip=10.10.10.10 --netmask=255.255.255.0\
@@ -1002,7 +1002,7 @@ Para el registro de usuarios, se considera que solo debe permitirse (en caso de 
 
 \subsection{Autenticación por LTI}
 
-Primero es necesario que este activo y levantado el ambiente del LMS como se documenta en la sección \ref{instalacion-moodle} de instalación de Moodle. Para el desarrollo de este trabajo de titulación se esta considerando una instalación en un servidor aparte (virtualizado en el mismo equipo) en la dirección IP 10.10.10.10.
+Primero es necesario que este activo y levantado el ambiente del LMS \index{LMS} como se documenta en la sección \ref{instalacion-moodle} de instalación de Moodle. Para el desarrollo de este trabajo de titulación se esta considerando una instalación en un servidor aparte (virtualizado en el mismo equipo) en la dirección IP 10.10.10.10.
 
 % Instalar dependencias
 
@@ -1158,11 +1158,11 @@ Con la herramienta preconfigurada realizada, se puede seleccionarlo así no mas 
 Si, dentro del mismo curso creamos una segunda actividad con todo lo mismo, pero solo cambiando el nombre a ''Prueba 2 Programación'', se encuentra que si logra distinguir entre actividades.
 
 \subsection{Integración de Dos Schemas de Autenticación}
-Los dos schemas de autenticación implementadas, sea la forma clásica con nombre de usuario y contraseña correspondiente o por LTI donde una aplicación externa autentica un usuario autenticado previamente por el mismo, tienen un mismo fin de permitir que el sistema conozca quien esta accediendo el sistema con un fin de dar el comportamiento adecuado y en base a ello proveer seguridad y funcionalidad adecuado a todos los usuarios según su rol.
+Los dos schemas de autenticación implementadas, sea la forma clásica con nombre de usuario y contraseña correspondiente o por LTI \index{LTI} donde una aplicación externa autentica un usuario autenticado previamente por el mismo, tienen un mismo fin de permitir que el sistema conozca quien esta accediendo el sistema con un fin de dar el comportamiento adecuado y en base a ello proveer seguridad y funcionalidad adecuado a todos los usuarios según su rol.
 
 Para el mismo se propone tres tablas (EquivalentUser, AuthenticationType, UserAuthentication) en la base de datos expresados como modelos de Django, los cual se encargara de generar las tablas adecuadas en la base de datos a traves de su ORM interna.
 
-La tabla EquivalentUser relaciona usuarios autenticados de forma clásica con usuarios autenticados por LTI (porque por cada método de autenticación se cree un nuevo usuario para su propio uso interno) con un fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. El idea es por ejemplo, si un docente se autentica por LTI y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catalogo de formas de autenticación que suporta el sistema y por su naturaleza de catalogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociado con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios.
+La tabla EquivalentUser relaciona usuarios autenticados de forma clásica con usuarios autenticados por LTI \index{LTI} (porque por cada método de autenticación se cree un nuevo usuario para su propio uso interno) con un fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. El idea es por ejemplo, si un docente se autentica por LTI \index{LTI} y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catalogo de formas de autenticación que suporta el sistema y por su naturaleza de catalogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociado con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios.
 
 Con una migración se puede llenar de forma automática el catalogo de AuthenticacionType:
 \lstset{language=Python}

@@ -89,7 +89,7 @@ Según Mindflash, un vendedor de sistemas educativos \citep{MINDFLASH-ABOUT}, lo
 Moodle es un LMS \index{LMS} de software libre, licenciada bajo el GPLv3 \citep{MOODLE-GIT-License},  que ofrece los caracteristicas típicas de un LMS \index{LMS} como herramientas de colaboración (Wikis, Foros, Glosarios, etc), gestión de y interacción con estudiantes (notificaciones, gestión de progreso y notas, etc), en adición a gestión de usuarios y matrículas \citep{MOODLE-DOCS-Features}. Actualmente es lo que usa la UTPL con sus Docentes y Alumnos a través del Entorno Virtual de Aprendizaje \citep{Lopez-Jorge}.
 
 \paragraph{OpenCampus}
-OpenCampus es un sistema para instituciones educativas para ayudar a gestionar sus estudiantes y procesos a través de una combinación de OAS y software propietario con un fin de proveer mejor acceso a recursos educativos a todos \citep{OpenCampus-Tecnology}, el mismo integra sistema de gestión de campus (CMS), gestión de escuelas de postgrado (GSM), sistema de gestión de aprendizaje (LMS), gestión de escuelas de medicina, sistema de aprendizaje electrónica, gestión de salud en el lugar de trabajo, gestión de objetivos, sistema de gestión de información estudiantil, gestión de clases, sistema de gestión de dato de investigación, sistema de gestión de ensayos clínicos, gestión de becas de investigación y gestión de laboratorios \citep{OpenCampus-Home}. De esta manera ofrece características comunes de los LMS \index{LMS} como exámenes, cursos en línea, rastreo académico para docentes, alumnos y administradores \citep{OpenCampus-Tecnology} \citep{OpenCampus-Universities}. La UTPL está ocupando esta tecnología actualmente para ofrecer “cursos en línea… de forma abierta y libre” \citep{UTPL-OpenCampus}.
+OpenCampus es un sistema para instituciones educativas para ayudar a gestionar sus estudiantes y procesos a través de una combinación de OAS y software propietario con un fin de proveer mejor acceso a recursos educativos a todos \citep{OpenCampus-Tecnology}, el mismo integra sistema de gestión de campus (CMS), gestión de escuelas de postgrado (GSM), sistema de gestión de aprendizaje (LMS\index{LMS}), gestión de escuelas de medicina, sistema de aprendizaje electrónica, gestión de salud en el lugar de trabajo, gestión de objetivos, sistema de gestión de información estudiantil, gestión de clases, sistema de gestión de dato de investigación, sistema de gestión de ensayos clínicos, gestión de becas de investigación y gestión de laboratorios \citep{OpenCampus-Home}. De esta manera ofrece características comunes de los LMS \index{LMS} como exámenes, cursos en línea, rastreo académico para docentes, alumnos y administradores \citep{OpenCampus-Tecnology} \citep{OpenCampus-Universities}. La UTPL está ocupando esta tecnología actualmente para ofrecer ''cursos en línea\ldots{} de forma abierta y libre'' \citep{UTPL-OpenCampus}.
 
 \subparagraph{Open edX}
 Una organización sin fines de lucro famosa por sus cursos abiertos masivos (MOOCs), EdX, se ha liberado con una licencia libre su plataforma bajo el nombre Open edX. El mismo ofrece:
@@ -102,15 +102,16 @@ Una organización sin fines de lucro famosa por sus cursos abiertos masivos (MOO
     \item Foros
     \item Recolección de Datos para la toma de decisiones estratégicas
 \end{itemize}
-Según la documentación del mismo, Open edX utiliza una arquitectura de NGinx con Gunicorn y Django. Para el despliegue del mismo en entornos de desarrollo se ofrece una máquina virtual preconfigurada denominado “DevStack” \citep{edX-About-Open-edX}. Como tecnología de backend, el OpenCampus de la UTPL utiliza Open edX \citep{Lopez-Jorge}.
+Según la documentación del mismo, Open edX utiliza una arquitectura de NGinX con Gunicorn y Django\index{Django}. Para el despliegue del mismo en entornos de desarrollo se ofrece una máquina virtual preconfigurada denominado “DevStack” \citep{edX-About-Open-edX}. Como tecnología de backend, el OpenCampus de la UTPL utiliza Open edX \citep{Lopez-Jorge}.
 
 \subsubsection{LTI}
 LTI \index{LTI} es un estándar para asegurar interoperabilidad entre sistemas educativos. Fue diseñada y es gestionado por IMS Global Learning Consortium \citep{IMS-Global-LTI}, un conjunto de instituciones y organizaciones que desean mejorar procesos educativos \citep{IMS-Global-Members}, con el fin de simplificar el proceso de interconección de aplicaciones de aprendizaje (conocidos en el estándar como Herramientas [de aprendizaje]), como los que saben ofrecer terceros, con ambientes educativos (conocidos en el estándar como Consumidores de Herramientas [de aprendizaje]) que pueden ser sistemas de gestión de aprendizaje (LMS), portales de aprendizaje, repositorios de objetos de aprendizaje (LOR), o otros ambientes educativos \citep{IMS-Global-LTI}. Moodle ofrece una implementación estándar para comunicarse con sistemas de terceros \citep{MOODLE-DOCS-Features}.
 
+\index{Controlar Versiones de Código|(}
 \subsubsection{Sistema de Control de Versionamiento}
 Un sistema de control de versiones mantiene y organiza un historial de versiones de uno o más archivos con el fin de poder intercambiar entre versiones rápidamente. Son muy usados para quienes trabajan con código fuente y también artistas \citep{PROGIT-Git-VCS} que necesitan llevar un historial de sus obras de arte, pero su utilidad no termina allí ya que son diversos los grupos que pueden aprovechar los beneficios que ofrecen estos sistemas. El sistema màs común que sabe usar los seres humanos actualmente es copiar archivos que deseen versionar, típicamente dándoles una nueva ubicación o nombre dado que es una solución muy simple para lograr versionar, pero eso puede ser peligroso ya que es muy fácil trabajar sobre una versión incorrecta, por lo que se inventaron los sistemas de control de versionamiento, programas especializados en ayudar los seres humanos llevar una historial de versiones en uno o más archivos.
 
-Inicialmente esos eran sumamente locales, como RCS, que mantiene una base de datos con todas las versiones (almacenadas como los cambios que hubieron en comparación con la versión anterior, una práctica conocida como respaldo incremental) y en base a eso permitir acceso a la versión actual o cualquiera de los otros guardadas previamente, mira figura \ref{LVCS}. \citep{PROGIT-Git-VCS}.
+Inicialmente esos eran sumamente locales, como RCS, que mantiene una base de datos con todas las versiones (almacenadas como los cambios que hubieron en comparación con la versión anterior, una práctica conocida como respaldo incremental) y en base a eso permitir acceso a la versión actual o cualquiera de los otros guardadas previamente, mira figura \ref{LVCS}. \citep{PROGIT-Git-VCS}. 
 
 \begin{figure}
   \begin{center}
@@ -131,6 +132,7 @@ Después se dieron cuenta que seria bueno poder colaborar sobre las mismas versi
 \end{figure}
 
 Con la explosión de desarrollo de software libre, hubo una necesidad de poder trabajar grandes cantidades de personas desconocidas en paralelo \citep{raymond1999cathedral}, y para resolver este problema y también la de integridad de datos que presenta el único punto de falla de los Sistemas de Control de Versionamiento Centralizado, se inventó Sistemas de Control de Versionamiento Distribuidos como Git, Mercurial, Bazaar y Darcs. Cada repositorio es un espejo de los demás en una arquitectura distribuida o red de iguales. Con esta arquitectura (mira figura \ref{DVCS}), ningún nodo viene a ser un punto de falla ya que se puede espejar entre cualquiera de ellos debido al hecho de que todos tienen una copia local de todo lo que tienen los demás \citep{PROGIT-Git-VCS}. 
+\index{Controlar Versiones de Código|)}
 
 \begin{figure}
   \begin{center}
@@ -140,8 +142,10 @@ Con la explosión de desarrollo de software libre, hubo una necesidad de poder t
   \label{DVCS}
 \end{figure}
 
+\index{Controlar Versiones de Código|(}
 \subsubsection{Git}
 Git es un sistema de control de versiones distribuido que a diferencia de otros VCS guarda con cada versión una copia entera de los archivos modificados (otros sistemas de control de versionamiento saben guardar solo las diferencias entre versiones de forma incremental, mira la diferencia entre la figura \ref{VCS-Incremental} y la figura \ref{VCS-Backup}) \citep{PROGIT-Git-Intro}.
+\index{Controlar Versiones de Código|)}
 
 \begin{figure}
   \begin{center}
@@ -159,12 +163,14 @@ Git es un sistema de control de versiones distribuido que a diferencia de otros 
   \label{VCS-Backup}
 \end{figure}
 
+\index{Controlar Versiones de Código|(}
 Esto hace que Git se convierte más en como un pseudo sistema de ficheros que un simple VCS. Además significa mayor integridad de los datos guardados a costo de mayor consumo de almacenamiento. Trabaja de esta manera distribuida, es decir el repositorio existe en esta forma en todo lado donde se encuentra y por lo tanto la mayoría de operaciones de Git se puede realizar de manera local sin ninguna conexión de red \citep{PROGIT-Git-Intro}.
 Volviendo al tema de integridad de datos, Git utiliza SHA-1 como algoritmo criptográfico para calcular los hash de cada cambio que se realiza en base a una combinación de qué información contiene el cambio, su metadata como autor, fecha, hora y fecha en adición a los SHA-1 de su(s) cambio(s) padre(s)\footnote{La mayoría de commits solo tienen un padre, pero aquellos que unen varios historiales, tienen dos padres} de tal forma que es difícil si no prácticamente imposible\footnote{Un equipo de investigación de Google y CWI Amsterdam ha encontrado una vulnerabilidad que recién publicaron y les permite atacar SHA-1 y encontrar colisiones hash \citep{Shattered-Paper}} para un atacante modificar el historial sin dejar evidencia de lo que se ha hecho. Por defecto funciona así \citep{PROGIT-Git-Intro}, pero si uno desea asegurar la integridad del historial aún más, se integra Git con GPG para ofrecer mayor seguridad ya que con eso se puede firmar digitalmente cambios realizados para demostrar su autenticidad \citep{PROGIT-Git-GPG}.
 
 La mayoría de operaciones normales  que se hacen en Git no eliminan datos ya guardados en el repositorio previamente lo cual lo hace una buena herramienta para personas que recien esta entrando al mundo de Sistemas de Control de Versionamiento y permite que se pueda recuperar de la mayoría de errores que se puede cometer y una recuperación casi garantizado de datos “perdidos”. Eso es gracias en parte a la filosofía que se refleja en el diseño del mismo ya que una prioridad primordial era la integridad de los datos \citep{PROGIT-Git-Intro}.
 
 Cada repositorio de Git trabaja con tres fases que son el directorio de trabajo donde se realiza cambios, una área de preparación donde se marca cambios listos para guardar y una base de datos junto un sistema de ficheros donde se guardan los cambios. Al saltarse entre versiones, se sobreescribe los contenidos del directorio de trabajo con lo que se extrae del sistema de ficheros que tiene los cambios guardados. Esas tres fases y su relación se puede ver en la figura \ref{Git-Fases} \citep{PROGIT-Git-Intro}.
+\index{Controlar Versiones de Código|)}
 
 \begin{figure}
   \begin{center}

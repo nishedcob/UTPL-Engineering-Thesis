@@ -1,10 +1,11 @@
 % Chapter 4
 
-%TODO: Correct Indexing
+%TODO: Indexing
 
 \chapter{Desarrollo}
 \label{capitulo4}
 
+\index{Autenticación LTI|textit} \index{Ejecutar Código} \index{Editar Código} \index{Calificar Código} \index{Persistir Código} \index{Sincronizar Notas por LTI|textit} \index{Controlar Versiones de Código} \index{Recolección de Datos} \index{Toma de Decisiones}
 \section{Preparaciones del Ambiente de Desarrollo}
 Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la misma con:
 \begin{itemize}
@@ -27,6 +28,7 @@ Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la
     \label{sistema-base}
 \end{figure}
 
+\index{Ejecutar Código}
 Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarrollo de este trabajo de titulación utiliza Xen instalado con Debian Stretch (9.1)\footnote{Como el sistema de Dom0} instalado en un LVM con el nombre del grupo de volúmenes ''Xephyr-VG''. Originalmente se tenia planificado trabajar con Debian Jessie (8.x) debido que eso fue la versión estable al momento de instalación pero después se opto por una actualización a la versión beta de Debian en aquello momento (Debian Stretch). En resumen los pasos realizados fueron:
 \lstset{language=Bash}
 \begin{enumerate}
@@ -130,6 +132,7 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
     		-j MASQUERADE
 \end{lstlisting}
 
+\index{Controlar Versiones de Código} \index{Persistir Código}
 \subsubsection{Servidor Local de Git}
 Para gestionar versiones de código escrito y facilitar la integración con sistemas externas y el sistema de virtualización, se levanta un servidor sencillo de Git.
 
@@ -221,6 +224,7 @@ Prueba de que funciona:
 git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
 \end{lstlisting}
 
+\index{Persistir Código} \index{Controlar Versiones de Código}
 \subsubsection{Git Server HTTP Endpoint}
 Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:
 \begin{lstlisting}
@@ -242,6 +246,7 @@ pipenv run python manage.py startapp apiApp
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
+\index{Sincronizar Notas por LTI} \index{Autenticación LTI}
 \subsection{Ambiente Virtual de LMS \index{LMS} (Moodle)}
 \label{instalacion-moodle}
 
@@ -454,6 +459,7 @@ Estos pasos fueron adaptados de la guía oficial del proyecto de Moodle para ins
 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
 
+\index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
 Para crear el servidor de Git con GitLab Community Edition, se va a empezar con las mismas piezas del servidor del LMS/Moodle, es decir una maquina virtual de Debian 9. El mismo se crea como una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una dirección IP fija de 10.10.10.11.
 \begin{lstlisting}
@@ -542,6 +548,7 @@ Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. 
 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
 
+\index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
 Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico además de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
 
@@ -1002,6 +1009,7 @@ Para la implementación de autenticación clásica, se reutilizo el modulo con e
 
 Para el registro de usuarios, se considera que solo debe permitirse (en caso de que sea habilitado por la administración) el registro de estudiantes y docentes pero no de administradores, motivo por el cual se ha considerado duplicar los formularios de registro y ofrecer uno para estudiantes y otro para docentes. Los mismos se pueden habilitar y deshabilitar con los atributos ENABLE\_STUDENT\_REGISTRATION y ENABLE\_TEACHER\_REGISTRATION respectivamente.
 
+\index{Autenticación LTI}
 \subsection{Autenticación por LTI}
 
 Primero es necesario que este activo y levantado el ambiente del LMS \index{LMS} como se documenta en la sección \ref{instalacion-moodle} de instalación de Moodle. Para el desarrollo de este trabajo de titulación se esta considerando una instalación en un servidor aparte (virtualizado en el mismo equipo) en la dirección IP 10.10.10.10.
@@ -1251,6 +1259,7 @@ class LTICredentialsView(View):
 \end{lstlisting}
 \lstset{language=Bash}
 
+\index{Calificar Código}
 \subsection{Establecer un Modelo de Base de Datos}
 Para empezar con el desarrollo de la parte fuerte del sistema GitEDU, es importante considerar su modelo de base de datos preliminar. La parte mas importante de ello es las tablas o entidades y las relaciones entre las mismas. Para el mismo se ha considerado 3 grupos de funcionalidad importantes:
 \begin{enumerate}
@@ -1297,6 +1306,7 @@ El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo
   \item StudentAssignmentGrade
 \end{enumerate}
 
+\index{Editar Código}
 \subsection{Editor de Código en Linea}
 Una de las funcionalidades principales del sistema GitEDU es la capacidad de editar código en linea, la lógica del mismo se realiza en la app 'ideApp'.
 
@@ -1331,6 +1341,7 @@ Dentro de ideApp se crea 4 entidades para representar repositorios (una colecci�
 %\subsubsection{Sincronizar y guardar en tiempo real}
 % </TODO>
 
+\index{Persistir Código}
 \subsection{Persistencia de Código}
 Para la Persistencia de Código se considera dos backends de persistencia para código con una posibilidad de introducir mas a futuro:
 \begin{itemize}
@@ -1416,12 +1427,6 @@ Para la persistencia de código en MongoDB se define unos modelos de base de dat
     \label{nosql-db}
 \end{figure}
 
-% Con Maria del Carmen
-% TODO: Remplazar codigo con un diagrama
-% TODO: listar atributos aqui de cada tabla con vientes
-% TODO: actualizar cronograma con fechas de revision de documentacion
-% TODO: revisiones mas profunda de generos y tildes
-
 El NamespaceModel solo consiste de:
 \begin{itemize}
 \item el nombre del Namespace
@@ -1460,6 +1465,7 @@ El ChangeFileModel es como el RepositoryFileModel en que representa archivos, pe
 
 Finalmente el TemporaryChangeFileModel no se utiliza actualmente pero como los dos FileModels vistos anteriormente, esta lleva atributos básicos de un archivo. Originalmente se lo planteo para realizar una operación intermedio como la fase del Git Stage en donde se selecciona previo a un commit los cambios que van a estar incluidos dentro del mismo. Pero al final, aunque el modelo de datos esta para suportar varios archivos cambiados dentro de un solo cambio, no esta implementado así. Por temas de tiempo, retraso y alcance, se ha optado por llevar un mini control de versiones de cada archivo dentro de un repositorio, así que en realidad cada cambio en el repositorio solo refleja un archivo cambiado de forma independiente y no hay necesidad para la complejidad del paso intermedio que este modelo representa. 
 
+\index{Controlar Versiones de Código}
 \subsubsection{GitLab}
 Al settings agregamos las siguientes lineas para configurar la conexión con GitLab:
 \lstset{language=Python}
@@ -1576,12 +1582,14 @@ Para temas de organización, se ha considerado que aquellos componentes de la ap
 
 %
 % TODO if time
+%\index{Sincronizar Notas por LTI}
 %\subsection{Sincronizacion de Notas por LTI}
 %
 
 \subsection{API Externa}
 % TODO
 
+\index{Ejecutar Código}
 \section{EduNube}
 
 % TODO: Mandar como anexo:
@@ -1774,9 +1782,11 @@ def update_api_token(api_token=None, regen_secret_key=False):
 Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokens de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se crea este permiso, como es el caso del ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario para acceder a estas vistas.
 
 % <TODO>
+\index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
 
 % If Time
+%\index{Calificar Código}
 %\subsection{Calificación Automatizada con Pruebas Unitarias}
 
 \subsection{API Externa}

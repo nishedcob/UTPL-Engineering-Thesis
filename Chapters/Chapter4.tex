@@ -668,10 +668,40 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
     \label{tab:hipervisor-compar-promed}
 \end{table}
 
+\index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Servidor de Virtualización Virtualizado}
 % TODO
+\paragraph{Instalación de Kubernetes}
+% TODO
+% # Kubernetes (Kubectl Client)
+% curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+% chmod +x kubectl
+% echo $PATH
+% # move into $PATH
+% mv kubectl ~/bin/
+% # verify installation
+% kubectl --help
+% # or:
+% kubectl version
+% # will give server error, we only are a client thus far
 \paragraph{MiniKube}
 % TODO
+% # Minikube
+% curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.23.0/minikube-linux-amd64
+% chmod +x minikube
+% # move into $PATH
+% mv minikube ~/bin/
+% # verify installation:
+% minikube --help
+% # or
+% minikube version
+%
+% # Start Minikube Cluster
+% minikube start
+%
+% # Shutdown Minikube Cluster
+% minikube stop
+
 \paragraph{Máquina Virtual de Xen}
 % TODO
 \subsubsection{Construción de Servidor Virtualizado para Cluster de Kubernetes}
@@ -680,6 +710,7 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 % TODO
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO
+\index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}
 Para la ejecución de código en Docker, es necesario tener un contenedor de Docker que cumpla con las dependencias requeridas al momento de la ejecución. Los contenedores están basados en Debian y en Alpine Linux.

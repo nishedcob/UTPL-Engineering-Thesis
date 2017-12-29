@@ -461,6 +461,8 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 
 \subsubsection{Contenedor de Docker}
 % TODO
+% docker pull bitnami/mariadb
+% docker pull bitnami/moodle
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
@@ -556,6 +558,7 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 
 \subsubsection{Contenedor de Docker}
 % TODO
+% docker pull gitlab/gitlab-ce
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
@@ -706,8 +709,16 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 % TODO
 \subsubsection{Construción de Servidor Virtualizado para Cluster de Kubernetes}
 % TODO
+% xen-create-image --hostname=debian-k8s-master --ip=10.10.10.12 --netmask=255.255.255.0 --gateway=10.10.10.1 --memory=2048mb --vcpus=2 --lvm=Xephyr-VG --pygrub --dist=stretch --force --size=10240mb --swap=1024mb
+% see Screenshot_2017-12-29_15-21-49.png
 \paragraph{Instalación de Docker}
 % TODO
+% apt update
+% apt upgrade
+% apt install curl
+% curl -fsSL get.docker.com -o get-docker.sh
+% sh get-docker.sh
+% see Screenshot_2017-12-29_15-31-49.png
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}

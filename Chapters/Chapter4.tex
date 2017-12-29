@@ -463,6 +463,9 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 % TODO
 % docker pull bitnami/mariadb
 % docker pull bitnami/moodle
+%docker network create moodle-tier
+%docker run -d --name mariadb -e ALLOW_EMPTY_PASSWORD=yes --net moodle-tier --restart always bitnami/mariadb
+%docker run -d -p 8201:80 -p 8243:443 --name moodle --net moodle-tier --restart always bitnami/moodle
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
@@ -558,7 +561,10 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 
 \subsubsection{Contenedor de Docker}
 % TODO
-% docker pull gitlab/gitlab-ce
+%https://hub.docker.com/r/gitlab/gitlab-ce/
+%https://docs.gitlab.com/omnibus/docker/
+%docker pull gitlab/gitlab-ce
+%docker run --detach --hostname 10.10.10.1 --publish 8143:443 --publish 8101:80 --publish 8122:22 --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab --volume /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
@@ -779,6 +785,7 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 %EOF
 %
 %apt install net-tools
+%apt install git # necesario para clonar repositorios dentro del cluster, si no se instala, solo job/pi y pod/utility funcionaran
 %# check that sshd is running/listening on external interface (port 22 is normal)
 %# otherwise apt install openssh-server
 %netstat -tupln
@@ -798,7 +805,23 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 %cp ~/.kube/config.xen ~/.kube/config
 %kubectl version
 \subparagraph{Validación de Cluster de Kubernetes}
-%
+%cd kubernetes/
+%kubectl create -f debian-pod.yaml
+%kubectl get pods/utility
+%kubectl describe pods/utility
+%kubectl create -f debian-pod-2.yaml
+%for manifest in `ls *.json`; do
+%    kubectl create -f $manifest;
+%done
+%kubectl get jobs
+%# not all will succeed, some point to git repos (http://192.168.99.1) that only minikube has access to
+%watch -n 15 "kubectl get jobs"
+%# First to finish:
+%kubectl describe jobs/pi
+%# Pod Created: pi-kf8zv
+%kubectl describe pods/pi-kf8zv
+%# see output of job
+%kubectl logs jobs/pi
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}

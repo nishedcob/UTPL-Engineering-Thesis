@@ -247,7 +247,9 @@ Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/
 \index{Sincronizar Notas por LTI} \index{Autenticación LTI}
 \subsection{Ambiente Virtual de LMS \index{LMS} (Moodle)}
 \label{instalacion-moodle}
+Originalmente fue planteada trabajar con el LMS como una máquina virtual de Xen, pero con el tiempo, se ha visto una necesidad de consumir todos los servicios possibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación de Moodle en una máquina virtual de Xen, al final se optó por un levantamiento del mismo en Docker.
 
+\subsubsection{Maquina Virtual de Xen}
 Para el ambiente de Moodle (LMS \index{LMS} contra el cual se ha llevado el desarrollo), se crea una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una dirección IP fija de 10.10.10.10. Los resultados del mismo comando se puede ver en la figura \ref{vm-moodle}.
 \begin{lstlisting}
 	xen-create-image --hostname=debian-moodle\
@@ -457,8 +459,14 @@ Estos pasos fueron adaptados de la guía oficial del proyecto de Moodle para ins
 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
 
+\subsubsection{Contenedor de Docker}
+% TODO
+
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
+Originalmente fue planteada trabajar con GitLab Community Edition como una máquina virtual de Xen, pero con el tiempo, se ha visto una necesidad de consumir todos los servicios possibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación del mismo en una máquina virtual de Xen, al final se optó por un levantamiento del mismo en Docker.
+
+\subsubsection{Máquina Virtual de Xen}
 Para crear el servidor de Git con GitLab Community Edition, se va a empezar con las mismas piezas del servidor del LMS/Moodle, es decir una maquina virtual de Debian 9. El mismo se crea como una maquina virtual de Debian Stretch (9) con 1 GiB de RAM, 1 CPU virtual, 6 GiB de disco, 512 MiB de intercambio y una dirección IP fija de 10.10.10.11.
 \begin{lstlisting}
 	xen-create-image --hostname=debian-gitlab\
@@ -545,6 +553,9 @@ vim.tiny /usr/share/gitlab-shell/config.yml
 Visitar \url{http://10.10.10.11/} y configurar la contraseña del usuario root. Con el usuario root configurado se procede a crear un usuario especial para la aplicación con el nombre de usuario 'GitEdu'. Este usuario lo damos permisos de administración y también se genera un token en esta dirección: \url{http://10.10.10.11/profile/personal_access_tokens}. El token se debe guardar para su uso después (GitLab nunca le vuelve a mostrar).
 
 Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para comentar las entradas del pyGrub que son defectuosas (los primeros dos) para que se puede levantar la maquina virtual sin intervención humana.
+
+\subsubsection{Contenedor de Docker}
+% TODO
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
@@ -657,7 +668,20 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
     \label{tab:hipervisor-compar-promed}
 \end{table}
 
-\subsection{Plantillas de Maquinas Virtuales (Docker)}
+\subsubsection{Servidor de Virtualización Virtualizado}
+% TODO
+\paragraph{MiniKube}
+% TODO
+\paragraph{Máquina Virtual de Xen}
+% TODO
+\subsubsection{Construción de Servidor Virtualizado para Cluster de Kubernetes}
+% TODO
+\paragraph{Instalación de Docker}
+% TODO
+\paragraph{Instalación de Cluster de Kubernetes}
+% TODO
+
+\subsection{Plantillas de Máquinas Virtuales (Docker)}
 Para la ejecución de código en Docker, es necesario tener un contenedor de Docker que cumpla con las dependencias requeridas al momento de la ejecución. Los contenedores están basados en Debian y en Alpine Linux.
 
 \subsubsection{Sistema Operativo: Debian GNU/Linux}

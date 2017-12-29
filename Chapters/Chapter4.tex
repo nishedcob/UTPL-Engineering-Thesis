@@ -730,8 +730,75 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 %apt-get update
 %apt-get install -y kubelet kubeadm kubectl
 
-%# Init Master
+%# Basic Init Master
 %kubeadm init
+%# Tear down cluster
+%kubeadm reset
+%# Init Master for Flannel
+%kubeadm init --pod-network-cidr=10.244.0.0/16
+
+%INIT
+% K8s Info
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%To start using your cluster, you need to run the following as a regular user:
+
+%  mkdir -p $HOME/.kube
+%  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+%  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+%You should now deploy a pod network to the cluster.
+%Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+%  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+%You can now join any number of machines by running the following on each node
+%as root:
+
+%  kubeadm join --token 655cb5.2275aa7df206fe69 10.10.10.12:6443 --discovery-token-ca-cert-hash sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a767be914e86b16660d267c8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%# permit execution on master node
+%KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-
+
+%# save credentials to home folder
+%mkdir -p $HOME/.kube
+%cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+%chown $(id -u):$(id -g) $HOME/.kube/config
+
+%# test connection
+%kubectl version
+
+%#https://kubernetes.io/docs/concepts/cluster-administration/networking/
+%# install pod network (Flannel Driver)
+%sysctl net.bridge.bridge-nf-call-iptables=1
+%cat sysctl.conf
+%cat >> /etc/sysctl.conf << EOF
+%
+%# For Kubectl Flannel
+%net.bridge.bridge-nf-call-iptables = 1
+%
+%EOF
+%
+%apt install net-tools
+%# check that sshd is running/listening on external interface (port 22 is normal)
+%# otherwise apt install openssh-server
+%netstat -tupln
+
+%vim.tiny /etc/ssh/sshd_config
+%PermitRootLogin yes
+
+%systemctl restart sshd
+
+%# from host:
+%scp root@10.10.10.12:/etc/kubernetes/admin.conf .
+%kubectl --kubeconfig ./admin.conf get nodes
+
+%mv admin.conf k8s.xen.master.admin.conf
+%cp k8s.xen.master.admin.conf ~/.kube/config.xen
+%cp ~/.kube/config ~/.kube/config.minikube
+%cp ~/.kube/config.xen ~/.kube/config
+%kubectl version
+\subparagraph{Validación de Cluster de Kubernetes}
+%
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}

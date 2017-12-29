@@ -721,6 +721,17 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 % see Screenshot_2017-12-29_15-31-49.png
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO
+%https://kubernetes.io/docs/setup/independent/install-kubeadm/
+%apt-get update && apt-get install -y apt-transport-https
+%curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+%cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+%deb http://apt.kubernetes.io/ kubernetes-xenial main
+%EOF
+%apt-get update
+%apt-get install -y kubelet kubeadm kubectl
+
+%# Init Master
+%kubeadm init
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}

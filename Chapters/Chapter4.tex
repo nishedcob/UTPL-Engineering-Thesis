@@ -461,13 +461,11 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 
 \subsubsection{Contenedor de Docker}
 % TODO
-% docker pull bitnami/mariadb
-% docker pull bitnami/moodle
-%docker network create moodle-tier
-%mkdir -p /srv/bitnami
-%chown 1001:1001 -Rc /srv/bitnami 
-%docker run -d --name mariadb -e ALLOW_EMPTY_PASSWORD=yes --net moodle-tier --volume /srv/bitnami/moodle/mariadb:/bitnami --restart always bitnami/mariadb
-%docker run -d -p 8201:80 -p 8243:443 --name moodle --net moodle-tier --volume /srv/bitnami/moodle/moodle:/bitnami --restart always bitnami/moodle
+%docker pull mysql
+%docker pull jauer/moodle
+%docker run -d --name moodledb -p 3306:3306 -v /srv/moodle/mysql:/var/lib/mysql -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle --restart always mysql
+%docker run -d -P --name moodle --link moodledb:DB -e MOODLE_URL=http://10.10.10.1:8201 -p 8201:80 -v /srv/moodle/data:/var/moodledata --restart always jhardison/moodle
+%visit http://10.10.10.1:8201/
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}

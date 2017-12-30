@@ -464,8 +464,10 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 % docker pull bitnami/mariadb
 % docker pull bitnami/moodle
 %docker network create moodle-tier
-%docker run -d --name mariadb -e ALLOW_EMPTY_PASSWORD=yes --net moodle-tier --restart always bitnami/mariadb
-%docker run -d -p 8201:80 -p 8243:443 --name moodle --net moodle-tier --restart always bitnami/moodle
+%mkdir -p /srv/bitnami
+%chown 1001:1001 -Rc /srv/bitnami 
+%docker run -d --name mariadb -e ALLOW_EMPTY_PASSWORD=yes --net moodle-tier --volume /srv/bitnami/moodle/mariadb:/bitnami --restart always bitnami/mariadb
+%docker run -d -p 8201:80 -p 8243:443 --name moodle --net moodle-tier --volume /srv/bitnami/moodle/moodle:/bitnami --restart always bitnami/moodle
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
@@ -565,6 +567,8 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 %https://docs.gitlab.com/omnibus/docker/
 %docker pull gitlab/gitlab-ce
 %docker run --detach --hostname 10.10.10.1 --publish 8143:443 --publish 8101:80 --publish 8122:22 --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab --volume /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest
+% visit http://10.10.10.1:8101/
+% user: root
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}

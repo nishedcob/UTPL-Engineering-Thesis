@@ -695,45 +695,6 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 %
 % # Shutdown Minikube Cluster
 % minikube stop
-
-
-
-
-%# otherwise apt install openssh-server
-%netstat -tupln
-
-%vim.tiny /etc/ssh/sshd_config
-%PermitRootLogin yes
-
-%systemctl restart sshd
-
-%# from host:
-%scp root@10.10.10.12:/etc/kubernetes/admin.conf .
-%kubectl --kubeconfig ./admin.conf get nodes
-
-%mv admin.conf k8s.xen.master.admin.conf
-%cp k8s.xen.master.admin.conf ~/.kube/config.xen
-%cp ~/.kube/config ~/.kube/config.minikube
-%cp ~/.kube/config.xen ~/.kube/config
-%kubectl version
-\subparagraph{Validación de Cluster de Kubernetes}
-%cd kubernetes/
-%kubectl create -f debian-pod.yaml
-%kubectl get pods/utility
-%kubectl describe pods/utility
-%kubectl create -f debian-pod-2.yaml
-%for manifest in `ls *.json`; do
-%    kubectl create -f $manifest;
-%done
-%kubectl get jobs
-%# not all will succeed, some point to git repos (http://192.168.99.1) that only minikube has access to
-%watch -n 15 "kubectl get jobs"
-%# First to finish:
-%kubectl describe jobs/pi
-%# Pod Created: pi-kf8zv
-%kubectl describe pods/pi-kf8zv
-%# see output of job
-%kubectl logs jobs/pi
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}

@@ -5,6 +5,99 @@
 
 \section{Preperaciones del Ambiente de Despliegue}
 
+\subsubsection{Moodle en Docker}
+% TODO
+%docker pull mysql
+%docker pull jauer/moodle
+%docker run -d --name moodledb -p 3306:3306 -v /srv/moodle/mysql:/var/lib/mysql -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle --restart always mysql
+%docker run -d -P --name moodle --link moodledb:DB -e MOODLE_URL=http://10.10.10.1:8201 -p 8201:80 -v /srv/moodle/data:/var/moodledata --restart always jhardison/moodle
+%visit http://10.10.10.1:8201/
+
+\subsubsection{GitLab en Docker}
+% TODO
+%https://hub.docker.com/r/gitlab/gitlab-ce/
+%https://docs.gitlab.com/omnibus/docker/
+%docker pull gitlab/gitlab-ce
+%docker run --detach --hostname 10.10.10.1 --publish 8143:443 --publish 8101:80 --publish 8122:22 --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab --volume /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest
+% visit http://10.10.10.1:8101/
+% user: root
+
+\paragraph{Máquina Virtual de Xen}
+% TODO
+\subsubsection{Construción de Servidor Virtualizado para Cluster de Kubernetes}
+% TODO
+% xen-create-image --hostname=debian-k8s-master --ip=10.10.10.12 --netmask=255.255.255.0 --gateway=10.10.10.1 --memory=2048mb --vcpus=2 --lvm=Xephyr-VG --pygrub --dist=stretch --force --size=10240mb --swap=1024mb
+% see Screenshot_2017-12-29_15-21-49.png
+\paragraph{Instalación de Docker}
+% TODO
+% apt update
+% apt upgrade
+% apt install curl
+% curl -fsSL get.docker.com -o get-docker.sh
+% sh get-docker.sh
+% see Screenshot_2017-12-29_15-31-49.png
+\paragraph{Instalación de Cluster de Kubernetes}
+% TODO
+%https://kubernetes.io/docs/setup/independent/install-kubeadm/
+%apt-get update && apt-get install -y apt-transport-https
+%curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+%cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+%deb http://apt.kubernetes.io/ kubernetes-xenial main
+%EOF
+%apt-get update
+%apt-get install -y kubelet kubeadm kubectl
+
+%# Basic Init Master
+%kubeadm init
+%# Tear down cluster
+%kubeadm reset
+%# Init Master for Flannel
+%kubeadm init --pod-network-cidr=10.244.0.0/16
+%INIT
+% K8s Info
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%To start using your cluster, you need to run the following as a regular user:
+
+%  mkdir -p $HOME/.kube
+%  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+%  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+%You should now deploy a pod network to the cluster.
+%Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+%  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+%You can now join any number of machines by running the following on each node
+%as root:
+
+%  kubeadm join --token 655cb5.2275aa7df206fe69 10.10.10.12:6443 --discovery-token-ca-cert-hash sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a767be914e86b16660d267c8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%# permit execution on master node
+%KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-
+
+%# save credentials to home folder
+%mkdir -p $HOME/.kube
+%cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+%chown $(id -u):$(id -g) $HOME/.kube/config
+
+%# test connection
+%kubectl version
+
+%#https://kubernetes.io/docs/concepts/cluster-administration/networking/
+%# install pod network (Flannel Driver)
+%sysctl net.bridge.bridge-nf-call-iptables=1
+%cat sysctl.conf
+%cat >> /etc/sysctl.conf << EOF
+%
+%# For Kubectl Flannel
+%net.bridge.bridge-nf-call-iptables = 1
+%
+%EOF
+%
+%apt install net-tools
+%apt install git # necesario para clonar repositorios dentro del cluster, si no se instala, solo job/pi y pod/utility funcionaran
+%# check that sshd is running/listening on external interface (port 22 is normal)
+
 \section{Plan de Despliegue}
 
 \section{Despliegue}

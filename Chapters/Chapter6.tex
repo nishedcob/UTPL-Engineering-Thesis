@@ -8,7 +8,7 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 \begin{itemize}
 	\item Kubernetes (backend de virtualizacion) se ubica en una maquina virtual de Xen (con paravirtualizacion activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea fisico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algun hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
     \item Los servicios auxiliares en lugar de ser maquinas virtuales de Xen ahora son contenedores de Docker.
-    \
+    \item L
 \end{itemize}
 % TODO
 % hablar de problemas de rendimiento en desarrollo/pruebas

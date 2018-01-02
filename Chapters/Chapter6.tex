@@ -7,7 +7,8 @@
 En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evidente en enorme consumo de recursos necesarios para levantar todos los servicios desarrollados y auxiliares a la vez, razon por el cual, se ha visto la necesidad de un rediseño de forma mas liviana de la manera en que se despliegue todos los componentes integrados a la aplicacion para con ello terminar las fases mencionadas anteriormente y dar paso a ejecuccion en ambientes de pocos recursos, tanto en el ambito de desarrollo como de produccion. En la implementacion original de la arquitectura fisica para el desarrollo, se habia planteado una colleccion de maquinas virtuales quienes representarian servidores distintas dentro de una red, pero para temas de optimizar recursos, se ha realizado los siguientes cambios los cuales se documentan a lo largo de este capitulo:
 \begin{itemize}
 	\item Kubernetes (backend de virtualizacion) se ubica en una maquina virtual de Xen (con paravirtualizacion activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea fisico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algun hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
-    \item
+    \item Los servicios auxiliares en lugar de ser maquinas virtuales de Xen ahora son contenedores de Docker.
+    \
 \end{itemize}
 % TODO
 % hablar de problemas de rendimiento en desarrollo/pruebas

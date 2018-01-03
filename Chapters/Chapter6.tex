@@ -100,60 +100,105 @@ gitlab/gitlab-ce:latest
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Máquina Virtual de Xen}
-% TODO
+Con el fin de proteger la maquina fisica contra usuarios finales, sean maliciosos o solo sin conocimientos adecuados, hay la necesidad de que el ambiente que ejecuta codigo sea aislado con virtualizacion. Pero el rendimiento de esta maquina virtual necesita ser maximizada para poder permitir su uso con un minimo de recursos. Es, por lo tanto, que se ha propuesta utilizar una maquina virtual de Xen de baja nivel con mejores de rendimiento con la tecnologia de paravirtualizacion con la finalidad de que esta misma logra ofrecer alta aislamiento, y por lo tanto seguridad, frente una alta rendimiento.
 
 \paragraph{Construción de Servidor Virtualizado para Cluster de Kubernetes}
-% TODO
-% xen-create-image --hostname=debian-k8s-master --ip=10.10.10.12 --netmask=255.255.255.0 --gateway=10.10.10.1 --memory=2048mb --vcpus=2 --lvm=Xephyr-VG --pygrub --dist=stretch --force --size=10240mb --swap=1024mb
+Las caracteristicas minimas que pide Kubernetes para su nodo maestro son 2 nucleos y 2 GiB de RAM, es por aquello razon que se crea una maquina virtual paravirtualizada con estas mismas caracteristicas. En el curso del año que se ha trabajado este trabajo de titulacion la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales:
+\begin{lstlisting}
+xen-create-image --hostname=debian-k8s-master \
+--ip=10.10.10.12 --netmask=255.255.255.0 \
+--gateway=10.10.10.1 --memory=2048mb --vcpus=2 \
+--lvm=Xephyr-VG --pygrub --dist=stretch --force \
+--size=10240mb --swap=1024mb
+\end{lstlisting}
+% TODO:
 % see Screenshot_2017-12-29_15-21-49.png
 
 \paragraph{Instalación de Docker}
-% TODO
-% apt update
-% apt upgrade
-% apt install curl
-% curl -fsSL get.docker.com -o get-docker.sh
-% sh get-docker.sh
-% see Screenshot_2017-12-29_15-31-49.png
+Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalacion de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendria que cambiar el gestor de paquetes apt por el respectivo de su sistema):
+\begin{enumerate}
+	\item Actualizar el sistema operativo
+    \begin{lstlisting}
+apt update
+apt upgrade
+    \end{lstlisting}
+    \item Instalar curl si es que no esta instalado previamente
+    \begin{lstlisting}
+apt install curl
+    \end{lstlisting}
+    \item Bajar el instalador actual de Docker
+    \begin{lstlisting}
+curl -fsSL get.docker.com -o get-docker.sh
+    \end{lstlisting}
+    \item Ejecutar el instalador de Docker
+    \begin{lstlisting}
+sh get-docker.sh
+    \end{lstlisting}
+\end{enumerate}
+% TODO: see Screenshot_2017-12-29_15-31-49.png
 
 \paragraph{Instalación de Cluster de Kubernetes}
-% TODO
+% TODO: Cite
 %https://kubernetes.io/docs/setup/independent/install-kubeadm/
-%apt-get update && apt-get install -y apt-transport-https
-%curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-%cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
-%deb http://apt.kubernetes.io/ kubernetes-xenial main
-%EOF
-%apt-get update
-%apt-get install -y kubelet kubeadm kubectl
+Para instalar el cluster de Kubernetes, el proceso es relativamente sencillo con una harramienta que se llama \texttt{kubeadm} que se encarga de levantar, gestionar y bajar nodos del cluster. Primero para instalar el mismo:
+\begin{enumerate}
+	\item Debemos tener suporte en el gestor de paquetes APT para el protocolo HTTPS:
+    \begin{lstlisting}
+apt update && apt install -y apt-transport-https
+    \end{lstlisting}	
+	\item Agregamos el repositorio de Kubernetes para Debian y Ubuntu:
+    \begin{lstlisting}
+curl -s \
+	https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+	| apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+    \end{lstlisting}
+    \item Actualizamos los indices de APT y procedemos a instalar:
+    \begin{lstlisting}
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+    \end{lstlisting}
+\end{enumerate}
 
-%# Basic Init Master
-%kubeadm init
-%# Tear down cluster
-%kubeadm reset
-%# Init Master for Flannel
-%kubeadm init --pod-network-cidr=10.244.0.0/16
-%INIT
-% K8s Info
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%To start using your cluster, you need to run the following as a regular user:
+El levantamiento de un nodo maestro basica se puede hacer con el commando:
+    \begin{lstlisting}
+kubeadm init
+    \end{lstlisting}
+Que utiliza todos los valores por defecto, pero Kubernetes requiere para su funcionamiento algun driver de red de los cuales se ha elegido Flannel ya que es el más sencillo y no necesitamos mayor funcionalidad como Switches programables, ni enrutamiento o ACLs en las redes de nuestro cluster debido a que no se busca levantar sistemas de produccion aqui, solo contendores independientes y obviamente otros drivers de red con mayor funcionalidad tienen un costo de rendimiento mayor. Si es que se levanto el cluster con el comando anterior, se lo puede destruir con el siguiente commando: 
+    \begin{lstlisting}
+kubeadm reset
+    \end{lstlisting}
+Ya que Flannel requiere que se define el rango de IPs con que se trabajara el cluster como 10.244.0.0/16\footnote{Si, parece que tiene que ser exactamente este rango y no suporta mas que $65,536$ contenedores al mismo tiempo, pero eso debe ser suficiente para el proposito actual.}, por lo tanto en realidad, para trabajar con Flannel es necesario agregar un argumento al commando de levantamiento del cluster como se lo indica a continuacion:
+    \begin{lstlisting}
+kubeadm init --pod-network-cidr=10.244.0.0/16
+    \end{lstlisting}
+Esto se genera una salida como la que se demuestra a continuacion:
+    \begin{lstlisting}
+To start using your cluster, you need to run the following as a regular user:
 
-%  mkdir -p $HOME/.kube
-%  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-%  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-%You should now deploy a pod network to the cluster.
-%Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-%  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
-%You can now join any number of machines by running the following on each node
-%as root:
+You can now join any number of machines by running the following on each node
+as root:
 
-%  kubeadm join --token 655cb5.2275aa7df206fe69 10.10.10.12:6443 --discovery-token-ca-cert-hash sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a767be914e86b16660d267c8
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  kubeadm join --token 655cb5.2275aa7df206fe69 10.10.10.12:6443 --discovery-token-ca-cert-hash sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a767be914e86b16660d267c8
+    \end{lstlisting}
+
+Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una politica de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta politica con el siguiente commando:
+    \begin{lstlisting}
+KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-
+    \end{lstlisting}
+El parametro de KUBECO
 
 %# permit execution on master node
-%KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-
 
 %# save credentials to home folder
 %mkdir -p $HOME/.kube

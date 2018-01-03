@@ -17,6 +17,19 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 \section{Preperaciones del Ambiente de Despliegue}
 % TODO
 % asignacion de dirreciones ip/puertos
+% Maquina Fisica para Servicios y Docker: 10.10.10.1
+%	NGinX - http://0.0.0.0:80
+%		http://10.10.10.1:80 & http://git.localhost:80 -> GitWeb
+%		http://gitedu.localhost:80 -> GitEDU
+%		http://edunube.localhost:80 -> EduNube
+%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
+%	GitEDU - http://10.10.10.1:8000
+%	EduNube - http://10.10.10.1:8001
+%	GitServerHTTPEndpoint - http://10.10.10.1:8002
+%	Docker - 10.10.10.1
+%		MySQL 0.0.0.0:3306 -> moodledb:3306
+%		Moodle 0.0.0.0:8201 -> moodle:80
+%		GitLab CE - 10.10.10.1
 
 \subsubsection{Moodle en Docker}
 % TODO

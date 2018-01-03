@@ -162,6 +162,8 @@ apt-get install -y kubelet kubeadm kubectl
     \end{lstlisting}
 \end{enumerate}
 
+% TODO: Cite 
+%https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 El levantamiento de un nodo maestro basica se puede hacer con el commando:
     \begin{lstlisting}
 kubeadm init
@@ -176,87 +178,145 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
     \end{lstlisting}
 Esto se genera una salida como la que se demuestra a continuacion:
     \begin{lstlisting}
-To start using your cluster, you need to run the following as a regular user:
+To start using your cluster, you need to run the following(...)
+as a regular user:
 
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+Run "kubectl apply -f [podnetwork].yaml" with one of the(...)
+options listed at:
+  https://kubernetes.io/docs/concepts/cluster-(...)
+  administration/addons/
 
-You can now join any number of machines by running the following on each node
+You can now join any number of machines by running the (...)
+following on each node
 as root:
 
-  kubeadm join --token 655cb5.2275aa7df206fe69 10.10.10.12:6443 --discovery-token-ca-cert-hash sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a767be914e86b16660d267c8
+  kubeadm join --token 655cb5.2275aa7df206fe69 \
+  10.10.10.12:6443 --discovery-token-ca-cert-hash \
+  sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a7\
+  67be914e86b16660d267c8
     \end{lstlisting}
 
 Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una politica de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta politica con el siguiente commando:
     \begin{lstlisting}
-KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-
+KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes \
+--all node-role.kubernetes.io/master-
     \end{lstlisting}
-El parametro de KUBECO
+El Variable de Entorno de KUBECONFIG da el archivo que se ve a continuacion que autentica el cliente con el cluster. Una vez que se configura bien el cliente, este mismo deja de ser necesario. Entonces a continuacion para configurar el cliente:
+    \begin{lstlisting}
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+    \end{lstlisting}
 
-%# permit execution on master node
+Se puede probar la conexion pidiendo la version del cliente y del servidor:
+\begin{lstlisting}
+kubectl version
+\end{lstlisting}
 
-%# save credentials to home folder
-%mkdir -p $HOME/.kube
-%cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-%chown $(id -u):$(id -g) $HOME/.kube/config
-
-%# test connection
-%kubectl version
-
+% TODO: Cite
 %#https://kubernetes.io/docs/concepts/cluster-administration/networking/
-%# install pod network (Flannel Driver)
-%sysctl net.bridge.bridge-nf-call-iptables=1
-%cat sysctl.conf
-%cat >> /etc/sysctl.conf << EOF
-%
-%# For Kubectl Flannel
-%net.bridge.bridge-nf-call-iptables = 1
-%
-%EOF
-%
-%apt install net-tools
-%apt install git # necesario para clonar repositorios dentro del cluster, si no se instala, solo job/pi y pod/utility funcionaran
-%# check that sshd is running/listening on external interface (port 22 is normal)
-%# otherwise apt install openssh-server
-%netstat -tupln
+%https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+Para instalar el driver de red Flannel (que es necesaria cualquier driver de red para Kubernetes previo a funcionamiento -- no se instala con ningun por defecto para que sea al eleccion del administrador quien instala ya que un cluster de Kubernetes solo puede ocupar un driver de red a la vez):
+\begin{lstlisting}
+sysctl net.bridge.bridge-nf-call-iptables=1
+cat sysctl.conf
+cat >> /etc/sysctl.conf << EOF
 
-%vim.tiny /etc/ssh/sshd_config
-%PermitRootLogin yes
+# For Kubernetes Flannel
+net.bridge.bridge-nf-call-iptables = 1
 
-%systemctl restart sshd
+EOF
+kubectl apply -f \
+https://raw.githubusercontent.com/coreos/flannel/v0.9.1/\
+Documentation/kube-flannel.yml
+\end{lstlisting}
 
-%# from host:
-%scp root@10.10.10.12:/etc/kubernetes/admin.conf .
-%kubectl --kubeconfig ./admin.conf get nodes
+A continuacion se puede validar que Flannel o cualquier driver de red para Kubernetes esta funcionando con el commando:
+\begin{lstlisting}
+kubectl get pods --all-namespaces
+\end{lstlisting}
+Y que se revisa en la salida del mismo si se logra levantarse \texttt{kube-dns} con una linea similar a:
+\begin{lstlisting}
+kube-system   kube-dns-...-...  3/3   Running  ... ...
+\end{lstlisting}
 
-%mv admin.conf k8s.xen.master.admin.conf
-%cp k8s.xen.master.admin.conf ~/.kube/config.xen
-%cp ~/.kube/config ~/.kube/config.minikube
-%cp ~/.kube/config.xen ~/.kube/config
-%kubectl version
+Para utilizar volumenes de Git dentro del cluster, es necesario installar git en cada nodo:
+\begin{lstlisting}
+apt install git
+\end{lstlisting}
+
+Para consumir el cluster desde el servicio de EduNube, es necesario copiar el archivo /etc/kubernetes/admin.conf al otro equipo. Para realizar la copia, lo que mas conviene, especialmente en redes no tan confiables (ya que el admin.conf contiene los credenciales de superusuario de Kubernetes), es realizar la copia sobre SSH. Primero para validar la existencia de sshd:
+\begin{lstlisting}
+apt install net-tools
+netstat -tupln
+\end{lstlisting}
+Se puede buscar un servicio llamado sshd que normalmente escucha en el puerto 22 (pero puede ser configurado en otro puerto para ofrecer un poco mas de seguridad\footnote{Normalmente un cambio de puerto no ofrece mayor seguridad y es mal consejo, pero en la experiencia del autor, la mayoria de ataques de fuerza bruta de SSH no utilizan ningun escaneo de puertos ya que son script kiddies o bots bien basicos}). Si es que no existe, hay que instalar el servicio:
+\begin{lstlisting}
+apt install openssh-server
+\end{lstlisting}
+Pero en la instalacion que realiza xen-tools se instala sshd por defecto. Dentro del servidor de Kubernetes no se tiene acceso al admin.conf cualquier usuario, entonces se require connectar por SSH como root, algo que normalmente es muy peligroso y se desabilita por defecto. Para permitirlo, hay que editar \texttt{/etc/ssh/sshd\_config} y reiniciar el servicio:
+\begin{lstlisting}
+vim.tiny /etc/ssh/sshd_config
+
+# Editar la linea que diga PermitRootLogin para que diga:
+PermitRootLogin yes
+
+systemctl restart sshd
+\end{lstlisting}
+
+Desde el equipo que tiene EduNube como servicio se realiza la copia por SSH:
+\begin{lstlisting}
+scp root@10.10.10.12:/etc/kubernetes/admin.conf .
+\end{lstlisting}
+Se puede probar que funcionan los credenciales copiados con una peticion a Kubernetes de una lista de las maquinas que componen el cluster:
+\begin{lstlisting}
+kubectl --kubeconfig ./admin.conf get nodes
+\end{lstlisting}
+Si es que funcionan los crendenciales y el sistema que aloja el nodo maestro de Kubernetes esta expuesto a alguna red donde no hay sufficiente confianza para dejar que se connecta root por SSH, ya se puede deshabilitar la configuracion que se realizo anteriormente y reiniciar el servicio.
+
+Para instalar los credenciales de Kubernetes para que EduNube tiene acceso (pero sin perderse los credenciales al MiniKube instalado anteriormente) se realiza los siguientes commandos:
+\begin{lstlisting}
+mv admin.conf ~/.kube/config.xen
+cp ~/.kube/config ~/.kube/config.minikube
+cp ~/.kube/config.xen ~/.kube/config
+\end{lstlisting}
+
+Para validar que los credenciales se instalaron correctamente:
+\begin{lstlisting}
+kubectl version
+\end{lstlisting}
+
 \subparagraph{Validación de Cluster de Kubernetes}
-%cd kubernetes/
-%kubectl create -f debian-pod.yaml
-%kubectl get pods/utility
-%kubectl describe pods/utility
-%kubectl create -f debian-pod-2.yaml
-%for manifest in `ls *.json`; do
-%    kubectl create -f $manifest;
-%done
-%kubectl get jobs
-%# not all will succeed, some point to git repos (http://192.168.99.1) that only minikube has access to
-%watch -n 15 "kubectl get jobs"
-%# First to finish:
-%kubectl describe jobs/pi
-%# Pod Created: pi-kf8zv
-%kubectl describe pods/pi-kf8zv
-%# see output of job
-%kubectl logs jobs/pi
+Para validar el cluster de Kubernetes se puede entrar a la carpeta kubernetes dentro del repositorio de GitEDU/EduNube y realizar las siguientes validaciones del nuevo cluster:
+\begin{lstlisting}
+cd kubernetes/
+kubectl create -f debian-pod.yaml
+kubectl get pods/utility
+kubectl describe pods/utility
+kubectl create -f debian-pod-2.yaml
+for manifest in `ls *.json`; do
+    kubectl create -f $manifest;
+done
+kubectl get jobs
+# no todos tendran exito al ejecutarse, algunos
+# trabajos requieren configuraciones especiales
+# que solo se encontraron en el entorno de
+# expirimentos, y algunos de los expirimentos
+# no fueron exitosos
+watch -n 15 "kubectl get jobs"
+# en este caso el primero en terminar:
+kubectl describe jobs/pi
+# El pod que fue creado (sera diferente):
+# pi-kf8zv
+kubectl describe pods/pi-kf8zv
+# Ver la salida del trabajo
+kubectl logs jobs/pi
+\end{lstlisting}
 
 % TODO: under consideration if time
 %\paragraph{Interfaz de Administracion}

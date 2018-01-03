@@ -8,53 +8,105 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 \begin{itemize}
 	\item Kubernetes (backend de virtualizacion) se ubica en una maquina virtual de Xen (con paravirtualizacion activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea fisico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algun hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
     \item Los servicios auxiliares en lugar de ser maquinas virtuales de Xen ahora son contenedores de Docker.
-    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podria mejorar el rendimiento de esta forma, asignandoles a un usuario con mayor prioridad de ejecuccion como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, tampoco puede cambiar los recursos fisicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algun usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restingido que tiene mayor prioridad de ejecucion para sus procesos.}) si no por temas de facilitar la administracion del mismo.
+    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podria mejorar el rendimiento de esta forma, asignandoles a un usuario con mayor prioridad de ejecuccion como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, una solucion asi de software tampoco puede cambiar los recursos fisicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algun usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restingido que tiene mayor prioridad de ejecucion para sus procesos.}) si no por temas de facilitar la administracion del mismo.
     \item La integracion de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminacion SSL/TLS, servidor de archivos estaticos y validador de peticiones sin mayor perdida de rendimiento.
 \end{itemize}
 % TODO
 % diagrama de red/fisica
 
 \section{Preperaciones del Ambiente de Despliegue}
-% TODO
-% asignacion de dirreciones ip/puertos
-% Maquina Fisica para Servicios y Docker: 10.10.10.1
-%	NGinX - http://0.0.0.0:80
-%		http://10.10.10.1:80 & http://git.localhost:80 -> GitWeb
-%		http://gitedu.localhost:80 -> GitEDU
-%		http://edunube.localhost:80 -> EduNube
-%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
-%	GitEDU - http://10.10.10.1:8000
-%	EduNube - http://10.10.10.1:8001
-%	GitServerHTTPEndpoint - http://10.10.10.1:8002
-%	Docker - 10.10.10.1
-%		MySQL 0.0.0.0:3306 -> moodledb:3306
-%		Moodle 0.0.0.0:8201 -> moodle:80
-%		GitLab CE - 10.10.10.1
+Para preperar el ambiente de despliegue se lo ve pertinente planificar direcciones IP, dominios y puertos para los varios servicios que requieren ser levantados:
+\begin{description}
+	\item[Maquina Fisica] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
+    \begin{description}
+    	\item[NGinX] \textit{http://0.0.0.0:80}
+        \begin{itemize}
+            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb
+            \item \textit{http://gitedu.localhost:80} -> GitEDU
+            \item \textit{http://edunube.localhost:80} -> EduNube
+            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint
+            \item \textit{http://gitlab.localhost:80} -> GitLab
+            \item \textit{http://moodle.localhost:80} -> Moodle
+        \end{itemize}
+        \item[GitEDU] \textit{http://0.0.0.0:8000}
+        \item[EduNube] \textit{http://0.0.0.0:8001}\footnote{Este puerto esta en conflicto con el Dashboard de Kubernetes, o se podria cambiar este puerto o montar el Dashboard de Kubernetes solo en la maquina virtual si es que fuera el caso}
+        \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8002}
+        \item[Docker] \textit{10.10.10.1}
+        \begin{description}
+        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306}
+        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80}
+        	\item[GitLab CE] \textit{10.10.10.1}
+            \begin{itemize}
+            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443}
+            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80}
+            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22}
+            \end{itemize}
+        \end{description}
+    \end{description}
+    \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
+\end{description}
 
 \subsubsection{Moodle en Docker}
-% TODO
-%docker pull mysql
-%docker pull jauer/moodle
-%docker run -d --name moodledb -p 3306:3306 -v /srv/moodle/mysql:/var/lib/mysql -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle --restart always mysql
-%docker run -d -P --name moodle --link moodledb:DB -e MOODLE_URL=http://10.10.10.1:8201 -p 8201:80 -v /srv/moodle/data:/var/moodledata --restart always jhardison/moodle
-%visit http://10.10.10.1:8201/
+La instalacion de Moodle en Docker consiste de los siguientes pasos:
+\begin{enumerate}
+	\item Bajar el imagen de Docker oficial de MySQL:
+    \begin{lstlisting}    
+docker pull mysql
+    \end{lstlisting}
+    \item Bajar un imagen de Docker de Moodle:
+    \begin{lstlisting}    
+docker pull jauer/moodle
+    \end{lstlisting}
+    \item Ejecutar el imagen de MySQL en el fondo (-d) con un nombre idenficable (moodledb), paso de puertos (10.10.10.1:3306 -> moodledb:3306), un volumen de persistencia para el motor de base de datos, nombres de bases de datos, usuarios y contraseñas de MySQL y una peticion de que siempre se reinicia el contenedor a lo que muere con algun error:
+    \begin{lstlisting}    
+docker run -d --name moodledb -p 3306:3306 -v \
+/srv/moodle/mysql:/var/lib/mysql -e \
+MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle \
+-e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle \
+--restart always mysql
+    \end{lstlisting}
+    \item Ejecutar el imagen de Moodle con opciones similares al anterior, con un enlace a la base de datos con un dominio local de DB, metadatos del url en que debe responder y ocupar el puerto 8201 local como puerto 80 del contenedor (un passthrough):
+    \begin{lstlisting}    
+docker run -d -P --name moodle --link moodledb:DB\
+-e MOODLE_URL=http://10.10.10.1:8201 -p 8201:80 \
+-v /srv/moodle/data:/var/moodledata \
+--restart always jhardison/moodle
+    \end{lstlisting}
+    \item Y finalmente visitamos http://10.10.10.1:8201/ para terminar la instalacion inicial de Moodle y realizar su configuracion inicial.
+\end{enumerate}
 
 \subsubsection{GitLab en Docker}
-% TODO
+Para instalar GitLab en Docker, se sigue pasos similares a los vistos previamente con Moodle:
+% TODO: Cite
 %https://hub.docker.com/r/gitlab/gitlab-ce/
 %https://docs.gitlab.com/omnibus/docker/
-%docker pull gitlab/gitlab-ce
-%docker run --detach --hostname 10.10.10.1 --publish 8143:443 --publish 8101:80 --publish 8122:22 --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab --volume /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest
-% visit http://10.10.10.1:8101/
-% user: root
+\begin{enumerate}
+	\item Bajar el imagen de Docker:
+    \begin{lstlisting}    
+docker pull gitlab/gitlab-ce
+    \end{lstlisting}
+    \item Ejecutar el imagen de Docker:
+    \begin{lstlisting}    
+docker run --detach --hostname 10.10.10.1 \
+--publish 8143:443 --publish 8101:80 \
+--publish 8122:22 --name gitlab --restart always \
+--volume /srv/gitlab/config:/etc/gitlab \
+--volume /srv/gitlab/logs:/var/log/gitlab \
+--volume /srv/gitlab/data:/var/opt/gitlab \
+gitlab/gitlab-ce:latest
+    \end{lstlisting}
+    \item Visitar http://10.10.10.1:8101/ para cambiar la contraseña de root
+\end{enumerate}
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
-\paragraph{Máquina Virtual de Xen}
+\subsubsection{Máquina Virtual de Xen}
 % TODO
-\subsubsection{Construción de Servidor Virtualizado para Cluster de Kubernetes}
+
+\paragraph{Construción de Servidor Virtualizado para Cluster de Kubernetes}
 % TODO
 % xen-create-image --hostname=debian-k8s-master --ip=10.10.10.12 --netmask=255.255.255.0 --gateway=10.10.10.1 --memory=2048mb --vcpus=2 --lvm=Xephyr-VG --pygrub --dist=stretch --force --size=10240mb --swap=1024mb
 % see Screenshot_2017-12-29_15-21-49.png
+
 \paragraph{Instalación de Docker}
 % TODO
 % apt update
@@ -63,6 +115,7 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 % curl -fsSL get.docker.com -o get-docker.sh
 % sh get-docker.sh
 % see Screenshot_2017-12-29_15-31-49.png
+
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO
 %https://kubernetes.io/docs/setup/independent/install-kubeadm/
@@ -159,6 +212,11 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 %kubectl describe pods/pi-kf8zv
 %# see output of job
 %kubectl logs jobs/pi
+
+% TODO: under consideration if time
+%\paragraph{Interfaz de Administracion}
+%kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+%kubectl proxy
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \section{Despliegue}
@@ -166,9 +224,14 @@ En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evid
 % servicios y su asignacion de puertos
 % GitEDU - 8000/HTTP = gitedu.localhost
 % EduNube - 8001/HTTP = edunube.localhost
-% GitServerHTTPEndpoint - 8002/HTTP = githttp.localhost
+% GitServerHTTPEndpoint - 8002/HTTP = gitsrvendpoint.localhost
 % aux services (redir NGinX):
-% 
+%		http://git.localhost:80 -> GitWeb
+%		http://gitedu.localhost:80 -> GitEDU
+%		http://edunube.localhost:80 -> EduNube
+%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
+%		http://gitlab.localhost:80 -> GitLab
+%		http://moodle.localhost:80 -> Moodle
 
 \subsection{GitEDU}
 

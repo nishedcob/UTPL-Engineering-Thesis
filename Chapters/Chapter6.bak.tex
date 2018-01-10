@@ -4,20 +4,20 @@
 \label{capitulo6}
 
 \section{Plan de Despliegue}
-En el curso del desarrollo, depuración y ejecución de pruebas llegó a ser evidente en enorme consumo de recursos necesarios para levantar todos los servicios desarrollados y auxiliares a la vez, razón por el cual, se ha visto la necesidad de un rediseño de forma mas liviana de la manera en que se despliegue todos los componentes integrados a la aplicación para con ello terminar las fases mencionadas anteriormente y dar paso a ejecución en ambientes de pocos recursos, tanto en el ámbito de desarrollo como de producción. En la implementación original de la arquitectura física para el desarrollo, se había planteado una colección de maquinas virtuales quienes representarían servidores distintas dentro de una red, pero para temas de optimizar recursos, se ha realizado los siguientes cambios los cuales se documentan a lo largo de este capitulo:
+En el curso del desarrollo, depuracion y ejecuccion de pruebas llegó a ser evidente en enorme consumo de recursos necesarios para levantar todos los servicios desarrollados y auxiliares a la vez, razon por el cual, se ha visto la necesidad de un rediseño de forma mas liviana de la manera en que se despliegue todos los componentes integrados a la aplicacion para con ello terminar las fases mencionadas anteriormente y dar paso a ejecuccion en ambientes de pocos recursos, tanto en el ambito de desarrollo como de produccion. En la implementacion original de la arquitectura fisica para el desarrollo, se habia planteado una colleccion de maquinas virtuales quienes representarian servidores distintas dentro de una red, pero para temas de optimizar recursos, se ha realizado los siguientes cambios los cuales se documentan a lo largo de este capitulo:
 \begin{itemize}
-	\item Kubernetes (backend de virtualización) se ubica en una maquina virtual de Xen (con paravirtualización activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea físico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algún hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
+	\item Kubernetes (backend de virtualizacion) se ubica en una maquina virtual de Xen (con paravirtualizacion activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea fisico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algun hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
     \item Los servicios auxiliares en lugar de ser maquinas virtuales de Xen ahora son contenedores de Docker.
-    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podría mejorar el rendimiento de esta forma, asignándoles a un usuario con mayor prioridad de ejecución como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, una solución así de software tampoco puede cambiar los recursos físicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algún usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restringido que tiene mayor prioridad de ejecución para sus procesos.}) si no por temas de facilitar la administración del mismo.
-    \item La integración de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminación SSL/TLS, servidor de archivos estáticos y validador de peticiones sin mayor perdida de rendimiento.
+    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podria mejorar el rendimiento de esta forma, asignandoles a un usuario con mayor prioridad de ejecuccion como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, una solucion asi de software tampoco puede cambiar los recursos fisicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algun usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restingido que tiene mayor prioridad de ejecucion para sus procesos.}) si no por temas de facilitar la administracion del mismo.
+    \item La integracion de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminacion SSL/TLS, servidor de archivos estaticos y validador de peticiones sin mayor perdida de rendimiento.
 \end{itemize}
 % TODO
 % diagrama de red/fisica
 
-\section{Preparaciones del Ambiente de Despliegue}
-Para preparar el ambiente de despliegue se lo ve pertinente planificar direcciones IP, dominios y puertos para los varios servicios que requieren ser levantados:
+\section{Preperaciones del Ambiente de Despliegue}
+Para preperar el ambiente de despliegue se lo ve pertinente planificar direcciones IP, dominios y puertos para los varios servicios que requieren ser levantados:
 \begin{description}
-	\item[Maquina Física] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
+	\item[Maquina Fisica] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
     \begin{description}
     	\item[NGinX] \textit{http://0.0.0.0:80}
         \begin{itemize}
@@ -29,7 +29,7 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
             \item \textit{http://moodle.localhost:80} -> Moodle
         \end{itemize}
         \item[GitEDU] \textit{http://0.0.0.0:8000}
-        \item[EduNube] \textit{http://0.0.0.0:8001}\footnote{Este puerto esta en conflicto con el Dashboard de Kubernetes, o se podría cambiar este puerto o montar el Dashboard de Kubernetes solo en la maquina virtual si es que fuera el caso}
+        \item[EduNube] \textit{http://0.0.0.0:8001}\footnote{Este puerto esta en conflicto con el Dashboard de Kubernetes, o se podria cambiar este puerto o montar el Dashboard de Kubernetes solo en la maquina virtual si es que fuera el caso}
         \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8002}
         \item[Docker] \textit{10.10.10.1}
         \begin{description}
@@ -47,7 +47,7 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
 \end{description}
 
 \subsubsection{Moodle en Docker}
-La instalación de Moodle en Docker consiste de los siguientes pasos:
+La instalacion de Moodle en Docker consiste de los siguientes pasos:
 \begin{enumerate}
 	\item Bajar el imagen de Docker oficial de MySQL:
     \begin{lstlisting}    
@@ -57,7 +57,7 @@ docker pull mysql
     \begin{lstlisting}    
 docker pull jauer/moodle
     \end{lstlisting}
-    \item Ejecutar el imagen de MySQL en el fondo (-d) con un nombre posible de identificar (moodledb), paso de puertos (10.10.10.1:3306 -> moodledb:3306), un volumen de persistencia para el motor de base de datos, nombres de bases de datos, usuarios y contraseñas de MySQL y una petición de que siempre se reinicia el contenedor a lo que muere con algún error:
+    \item Ejecutar el imagen de MySQL en el fondo (-d) con un nombre idenficable (moodledb), paso de puertos (10.10.10.1:3306 -> moodledb:3306), un volumen de persistencia para el motor de base de datos, nombres de bases de datos, usuarios y contraseñas de MySQL y una peticion de que siempre se reinicia el contenedor a lo que muere con algun error:
     \begin{lstlisting}    
 docker run -d --name moodledb -p 3306:3306 -v \
 /srv/moodle/mysql:/var/lib/mysql -e \
@@ -72,7 +72,7 @@ docker run -d -P --name moodle --link moodledb:DB\
 -v /srv/moodle/data:/var/moodledata \
 --restart always jhardison/moodle
     \end{lstlisting}
-    \item Y finalmente visitamos http://10.10.10.1:8201/ para terminar la instalación inicial de Moodle y realizar su configuración inicial.
+    \item Y finalmente visitamos http://10.10.10.1:8201/ para terminar la instalacion inicial de Moodle y realizar su configuracion inicial.
 \end{enumerate}
 
 \subsubsection{GitLab en Docker}
@@ -100,10 +100,10 @@ gitlab/gitlab-ce:latest
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Máquina Virtual de Xen}
-Con el fin de proteger la maquina física contra usuarios finales, sean maliciosos o solo sin conocimientos adecuados, hay la necesidad de que el ambiente que ejecuta código sea aislado con virtualización. Pero el rendimiento de esta maquina virtual necesita ser maximizada para poder permitir su uso con un mínimo de recursos. Es, por lo tanto, que se ha propuesta utilizar una maquina virtual de Xen de baja nivel con mejores de rendimiento con la tecnología de paravirtualización con la finalidad de que esta misma logra ofrecer alta aislamiento, y por lo tanto seguridad, frente una alta rendimiento.
+Con el fin de proteger la maquina fisica contra usuarios finales, sean maliciosos o solo sin conocimientos adecuados, hay la necesidad de que el ambiente que ejecuta codigo sea aislado con virtualizacion. Pero el rendimiento de esta maquina virtual necesita ser maximizada para poder permitir su uso con un minimo de recursos. Es, por lo tanto, que se ha propuesta utilizar una maquina virtual de Xen de baja nivel con mejores de rendimiento con la tecnologia de paravirtualizacion con la finalidad de que esta misma logra ofrecer alta aislamiento, y por lo tanto seguridad, frente una alta rendimiento.
 
-\paragraph{Construcción de Servidor Virtualizado para Cluster de Kubernetes}
-Las características mínimas que pide Kubernetes para su nodo maestro son 2 núcleos y 2 GiB de RAM, es por aquello razón que se crea una maquina virtual paravirtualización con estas mismas características. En el curso del año que se ha trabajado este trabajo de titulación la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales:
+\paragraph{Construción de Servidor Virtualizado para Cluster de Kubernetes}
+Las caracteristicas minimas que pide Kubernetes para su nodo maestro son 2 nucleos y 2 GiB de RAM, es por aquello razon que se crea una maquina virtual paravirtualizada con estas mismas caracteristicas. En el curso del año que se ha trabajado este trabajo de titulacion la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales:
 \begin{lstlisting}
 xen-create-image --hostname=debian-k8s-master \
 --ip=10.10.10.12 --netmask=255.255.255.0 \
@@ -115,7 +115,7 @@ xen-create-image --hostname=debian-k8s-master \
 % see Screenshot_2017-12-29_15-21-49.png
 
 \paragraph{Instalación de Docker}
-Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalación de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendría que cambiar el gestor de paquetes apt por el respectivo de su sistema):
+Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalacion de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendria que cambiar el gestor de paquetes apt por el respectivo de su sistema):
 \begin{enumerate}
 	\item Actualizar el sistema operativo
     \begin{lstlisting}
@@ -140,7 +140,7 @@ sh get-docker.sh
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO: Cite
 %https://kubernetes.io/docs/setup/independent/install-kubeadm/
-Para instalar el cluster de Kubernetes, el proceso es relativamente sencillo con una herramienta que se llama \texttt{kubeadm} que se encarga de levantar, gestionar y bajar nodos del cluster. Primero para instalar el mismo:
+Para instalar el cluster de Kubernetes, el proceso es relativamente sencillo con una harramienta que se llama \texttt{kubeadm} que se encarga de levantar, gestionar y bajar nodos del cluster. Primero para instalar el mismo:
 \begin{enumerate}
 	\item Debemos tener suporte en el gestor de paquetes APT para el protocolo HTTPS:
     \begin{lstlisting}
@@ -155,7 +155,7 @@ cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
     \end{lstlisting}
-    \item Actualizamos los índices de APT y procedemos a instalar:
+    \item Actualizamos los indices de APT y procedemos a instalar:
     \begin{lstlisting}
 apt-get update
 apt-get install -y kubelet kubeadm kubectl
@@ -164,19 +164,19 @@ apt-get install -y kubelet kubeadm kubectl
 
 % TODO: Cite 
 %https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
-El levantamiento de un nodo maestro básica se puede hacer con el comando:
+El levantamiento de un nodo maestro basica se puede hacer con el commando:
     \begin{lstlisting}
 kubeadm init
     \end{lstlisting}
-Que utiliza todos los valores por defecto, pero Kubernetes requiere para su funcionamiento algún driver de red de los cuales se ha elegido Flannel ya que es el más sencillo y no necesitamos mayor funcionalidad como Switches programables, ni enrutamiento o ACLs en las redes de nuestro cluster debido a que no se busca levantar sistemas de producción aquí, solo contenedores independientes y obviamente otros drivers de red con mayor funcionalidad tienen un costo de rendimiento mayor. Si es que se levanto el cluster con el comando anterior, se lo puede destruir con el siguiente comando: 
+Que utiliza todos los valores por defecto, pero Kubernetes requiere para su funcionamiento algun driver de red de los cuales se ha elegido Flannel ya que es el más sencillo y no necesitamos mayor funcionalidad como Switches programables, ni enrutamiento o ACLs en las redes de nuestro cluster debido a que no se busca levantar sistemas de produccion aqui, solo contendores independientes y obviamente otros drivers de red con mayor funcionalidad tienen un costo de rendimiento mayor. Si es que se levanto el cluster con el comando anterior, se lo puede destruir con el siguiente commando: 
     \begin{lstlisting}
 kubeadm reset
     \end{lstlisting}
-Ya que Flannel requiere que se define el rango de IPs con que se trabajara el cluster como 10.244.0.0/16\footnote{Si, parece que tiene que ser exactamente este rango y no suporta mas que $65,536$ contenedores al mismo tiempo, pero eso debe ser suficiente para el propósito actual.}, por lo tanto en realidad, para trabajar con Flannel es necesario agregar un argumento al comando de levantamiento del cluster como se lo indica a continuación:
+Ya que Flannel requiere que se define el rango de IPs con que se trabajara el cluster como 10.244.0.0/16\footnote{Si, parece que tiene que ser exactamente este rango y no suporta mas que $65,536$ contenedores al mismo tiempo, pero eso debe ser suficiente para el proposito actual.}, por lo tanto en realidad, para trabajar con Flannel es necesario agregar un argumento al commando de levantamiento del cluster como se lo indica a continuacion:
     \begin{lstlisting}
 kubeadm init --pod-network-cidr=10.244.0.0/16
     \end{lstlisting}
-Esto se genera una salida como la que se demuestra a continuación:
+Esto se genera una salida como la que se demuestra a continuacion:
     \begin{lstlisting}
 To start using your cluster, you need to run the following(...)
 as a regular user:
@@ -201,19 +201,19 @@ as root:
   67be914e86b16660d267c8
     \end{lstlisting}
 
-Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una política de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta política con el siguiente comando:
+Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una politica de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta politica con el siguiente commando:
     \begin{lstlisting}
 KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes \
 --all node-role.kubernetes.io/master-
     \end{lstlisting}
-El Variable de Entorno de KUBECONFIG da el archivo que se ve a continuación que autentica el cliente con el cluster. Una vez que se configura bien el cliente, este mismo deja de ser necesario. Entonces a continuación para configurar el cliente:
+El Variable de Entorno de KUBECONFIG da el archivo que se ve a continuacion que autentica el cliente con el cluster. Una vez que se configura bien el cliente, este mismo deja de ser necesario. Entonces a continuacion para configurar el cliente:
     \begin{lstlisting}
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
     \end{lstlisting}
 
-Se puede probar la conexión pidiendo la versión del cliente y del servidor:
+Se puede probar la conexion pidiendo la version del cliente y del servidor:
 \begin{lstlisting}
 kubectl version
 \end{lstlisting}
@@ -221,7 +221,7 @@ kubectl version
 % TODO: Cite
 %#https://kubernetes.io/docs/concepts/cluster-administration/networking/
 %https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
-Para instalar el driver de red Flannel (que es necesaria cualquier driver de red para Kubernetes previo a funcionamiento -- no se instala con ningún por defecto para que sea al elección del administrador quien instala ya que un cluster de Kubernetes solo puede ocupar un driver de red a la vez):
+Para instalar el driver de red Flannel (que es necesaria cualquier driver de red para Kubernetes previo a funcionamiento -- no se instala con ningun por defecto para que sea al eleccion del administrador quien instala ya que un cluster de Kubernetes solo puede ocupar un driver de red a la vez):
 \begin{lstlisting}
 sysctl net.bridge.bridge-nf-call-iptables=1
 cat sysctl.conf
@@ -236,7 +236,7 @@ https://raw.githubusercontent.com/coreos/flannel/v0.9.1/\
 Documentation/kube-flannel.yml
 \end{lstlisting}
 
-A continuación se puede validar que Flannel o cualquier driver de red para Kubernetes esta funcionando con el comando:
+A continuacion se puede validar que Flannel o cualquier driver de red para Kubernetes esta funcionando con el commando:
 \begin{lstlisting}
 kubectl get pods --all-namespaces
 \end{lstlisting}
@@ -245,7 +245,7 @@ Y que se revisa en la salida del mismo si se logra levantarse \texttt{kube-dns} 
 kube-system   kube-dns-...-...  3/3   Running  ... ...
 \end{lstlisting}
 
-Para utilizar volúmenes de Git dentro del cluster, es necesario instalar Git en cada nodo:
+Para utilizar volumenes de Git dentro del cluster, es necesario installar git en cada nodo:
 \begin{lstlisting}
 apt install git
 \end{lstlisting}
@@ -255,11 +255,11 @@ Para consumir el cluster desde el servicio de EduNube, es necesario copiar el ar
 apt install net-tools
 netstat -tupln
 \end{lstlisting}
-Se puede buscar un servicio llamado sshd que normalmente escucha en el puerto 22 (pero puede ser configurado en otro puerto para ofrecer un poco mas de seguridad\footnote{Normalmente un cambio de puerto no ofrece mayor seguridad y es mal consejo, pero en la experiencia del autor, la mayoría de ataques de fuerza bruta de SSH no utilizan ningún escaneo de puertos ya que son script kiddies o bots bien básicos}). Si es que no existe, hay que instalar el servicio:
+Se puede buscar un servicio llamado sshd que normalmente escucha en el puerto 22 (pero puede ser configurado en otro puerto para ofrecer un poco mas de seguridad\footnote{Normalmente un cambio de puerto no ofrece mayor seguridad y es mal consejo, pero en la experiencia del autor, la mayoria de ataques de fuerza bruta de SSH no utilizan ningun escaneo de puertos ya que son script kiddies o bots bien basicos}). Si es que no existe, hay que instalar el servicio:
 \begin{lstlisting}
 apt install openssh-server
 \end{lstlisting}
-Pero en la instalación que realiza xen-tools se instala sshd por defecto. Dentro del servidor de Kubernetes no se tiene acceso al admin.conf cualquier usuario, entonces se requiere conectar por SSH como root, algo que normalmente es muy peligroso y se deshabilita por defecto. Para permitirlo, hay que editar \texttt{/etc/ssh/sshd\_config} y reiniciar el servicio:
+Pero en la instalacion que realiza xen-tools se instala sshd por defecto. Dentro del servidor de Kubernetes no se tiene acceso al admin.conf cualquier usuario, entonces se require connectar por SSH como root, algo que normalmente es muy peligroso y se desabilita por defecto. Para permitirlo, hay que editar \texttt{/etc/ssh/sshd\_config} y reiniciar el servicio:
 \begin{lstlisting}
 vim.tiny /etc/ssh/sshd_config
 
@@ -273,13 +273,13 @@ Desde el equipo que tiene EduNube como servicio se realiza la copia por SSH:
 \begin{lstlisting}
 scp root@10.10.10.12:/etc/kubernetes/admin.conf .
 \end{lstlisting}
-Se puede probar que funcionan los credenciales copiados con una petición a Kubernetes de una lista de las maquinas que componen el cluster:
+Se puede probar que funcionan los credenciales copiados con una peticion a Kubernetes de una lista de las maquinas que componen el cluster:
 \begin{lstlisting}
 kubectl --kubeconfig ./admin.conf get nodes
 \end{lstlisting}
-Si es que funcionan los credenciales y el sistema que aloja el nodo maestro de Kubernetes esta expuesto a alguna red donde no hay suficiente confianza para dejar que se conecta root por SSH, ya se puede deshabilitar la configuración que se realizo anteriormente y reiniciar el servicio.
+Si es que funcionan los crendenciales y el sistema que aloja el nodo maestro de Kubernetes esta expuesto a alguna red donde no hay sufficiente confianza para dejar que se connecta root por SSH, ya se puede deshabilitar la configuracion que se realizo anteriormente y reiniciar el servicio.
 
-Para instalar los credenciales de Kubernetes para que EduNube tiene acceso (pero sin perderse los credenciales al MiniKube instalado anteriormente) se realiza los siguientes comandos:
+Para instalar los credenciales de Kubernetes para que EduNube tiene acceso (pero sin perderse los credenciales al MiniKube instalado anteriormente) se realiza los siguientes commandos:
 \begin{lstlisting}
 mv admin.conf ~/.kube/config.xen
 cp ~/.kube/config ~/.kube/config.minikube
@@ -306,7 +306,7 @@ kubectl get jobs
 # no todos tendran exito al ejecutarse, algunos
 # trabajos requieren configuraciones especiales
 # que solo se encontraron en el entorno de
-# experimentos, y algunos de los experimentos
+# expirimentos, y algunos de los expirimentos
 # no fueron exitosos
 watch -n 15 "kubectl get jobs"
 # en este caso el primero en terminar:

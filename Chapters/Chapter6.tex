@@ -352,10 +352,38 @@ kubectl describe pods/pi-kf8zv
 kubectl logs jobs/pi
 \end{lstlisting}
 
-% TODO: under consideration if time
-%\paragraph{Interfaz de Administracion}
-%kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-%kubectl proxy -> will fail if executed at the same time as EduNube (port 8001)
+\paragraph{Interfaz de Administracion}
+Para instalar la interfaz web de administracion para Kuberntes, se sigue los siguientes pasos:
+\begin{enumerate}
+	\item Para evitar problemas, se connecta mediante SSH al nodo maestro del cluster y se instala Dashboard:
+		\begin{lstlisting}
+ssh root@10.10.10.12
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+		\end{lstlisting}
+	\item Desde el mismo servidor o otro que tiene conexion al API del nodo maestro (desde donde se quiere tener acceso en su navegador), se ejecuta:
+% TODO: EduNube requires a Port Change in Production, Kubernetes uses :8001 for proxy, for consistency GitServerHTTPEndpoint should be changed at the same time
+    	\begin{lstlisting}
+kubectl proxy
+cat > dashboard-admin.yml << EOF       
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard
+  labels:
+    k8s-app: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+EOF
+kubectl create -f dashboard-admin.yml
+    	\end{lstlisting}
+\end{enumerate}
+Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/} y en lugar de autenticarse, se pone "skip".
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \section{Despliegue}

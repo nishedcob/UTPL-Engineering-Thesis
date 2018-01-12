@@ -100,7 +100,27 @@ gitlab/gitlab-ce:latest
 \end{enumerate}
 
 \subsubsection{Registry en Docker}
-A diferencia de el ambiente de desarrollo, que ocupa el Docker Registry de GitLab\footnote{Se puede encontrar en \href{https://gitlab.com/nishedcob/GitEDU/container\_registry}}, para el ambiente de despliegue se plantea  
+A diferencia de el ambiente de desarrollo, que ocupa el Docker Registry de GitLab\footnote{Se puede encontrar en \href{https://gitlab.com/nishedcob/GitEDU/container\_registry}}, para el ambiente de despliegue se plantea replicar el servicio de forma local para reducir el consumo de red. Para ello, se utiliza un contenedor de Docker:
+\begin{enumerate}
+	\item Bajar el imagen de Docker:
+    \begin{lstlisting}
+docker pull registry
+    \end{lstlisting}
+    \item Ejecutar el imagen de Docker:
+    \begin{lstlisting}
+docker run -d -p 5000:5000 --restart always \
+--name registry registry
+    \end{lstlisting}
+\end{enumerate}
+El proyecto de Docker, en parte por su mala fama de ser insegura, toma muy enserio la seguridad. Por lo tanto, aunque se puede consumir normalmente un Docker Registry por HTTP con el dominio localhost, al ocupar cualquier otro dominio o direccion IP, el cliente de Docker por defecto exige que las llamadas al API en el servidor sean sobre HTTPS. Con la finalidad de no complicar la configuracion más y tambien por el hecho de que la arquitectura fisica del despliegue realmente no sale del localhost, aunque para Docker le parece que si (obviamente no tiene conocimiento de son maquinas virtuales a los cuales el acceso es por adaptadores de red virtuales, etc), se ha optado para realizar la adecuada configuracion al archivo \texttt{/etc/docker/daemon.json} en cada host que consume el Registry sobre HTTP para que los mismos no exigen HTTPS donde solo existe HTTP. La configuracion es lo siguiente (en este caso no existia el archivo JSON, entonces se lo creaba con los contenidos a continuacion, en otros casos se agregaria solo los valores abajo a los valores existentes):
+\begin{lstlisting}
+{
+          "insecure-registries" : [
+                  "10.10.10.1:5000"
+          ]
+}
+\end{lstlisting}
+Despues de realizar aquello configuracion es necesario reiniciar Docker para que tome en cuenta los cambios con el commando \texttt{systemctl restart docker}. Para popular el registry con los contenedores necesarias para ejecuccion de codigo con el sistema EduNube, puede referirse a los commandos encontrados en \texttt{docker/commands-local-doc.sh} del repositorio principal. Este script toma los contenedores compilados previamente durante el desarrollo, los prepara para subirse y se los sube al Registry para que otros consumidores del mismo Registry tengan acceso a ellos.
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Máquina Virtual de Xen}
@@ -140,6 +160,15 @@ sh get-docker.sh
     \end{lstlisting}
 \end{enumerate}
 % TODO: see Screenshot_2017-12-29_15-31-49.png
+
+Para utilizar el Registry creado anteriormente, se agrega el siguiente configuracion a las maquinas del cluster (seguido por el reinicio del servicio de Docker con \texttt{systemctl restart docker}):
+\begin{lstlisting}
+{
+          "insecure-registries" : [
+                  "10.10.10.1:5000"
+          ]
+}
+\end{lstlisting}
 
 \paragraph{Instalación de Cluster de Kubernetes}
 % TODO: Cite

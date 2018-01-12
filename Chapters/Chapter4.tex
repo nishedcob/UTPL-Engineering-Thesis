@@ -227,7 +227,7 @@ git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
 Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:
 \begin{lstlisting}
 pipenv --three
-pipenv install django six psycopg2 PyJWT bcrypt ipython
+pipenv install django six psycopg2 PyJWT bcrypt ipython requests
 pipenv run django-admin startproject GitServerHTTPEndpoint .
 # Configurar Base de Datos, Reutilizar authApp de EduNube, migrar la base de datos, Crear un superusuario
 rsync -av --progress ~/EduNube/authApp ~/GitServerHTTPEndpoint/
@@ -240,6 +240,8 @@ pipenv run python manage.py runserver 8002
 # crear un api token para GitEDU
 
 pipenv run python manage.py startapp apiApp
+
+pipenv lock --requirements | awk '{print $1}' > requirements.txt
 \end{lstlisting}
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.

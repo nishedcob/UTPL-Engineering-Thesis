@@ -100,7 +100,7 @@ gitlab/gitlab-ce:latest
 \end{enumerate}
 
 \subsubsection{Registry en Docker}
-A diferencia de el ambiente de desarrollo, que ocupa el Docker Registry de GitLab\footnote{Se puede encontrar en \href{https://gitlab.com/nishedcob/GitEDU/container\_registry}}, para el ambiente de despliegue se plantea replicar el servicio de forma local para reducir el consumo de red. Para ello, se utiliza un contenedor de Docker:
+A diferencia de el ambiente de desarrollo, que ocupa el Docker Registry de GitLab\footnote{Se puede encontrar en \url{https://gitlab.com/nishedcob/GitEDU/container\_registry}}, para el ambiente de despliegue se plantea replicar el servicio de forma local para reducir el consumo de red. Para ello, se utiliza un contenedor de Docker:
 \begin{enumerate}
 	\item Bajar el imagen de Docker:
     \begin{lstlisting}
@@ -120,7 +120,8 @@ El proyecto de Docker, en parte por su mala fama de ser insegura, toma muy enser
           ]
 }
 \end{lstlisting}
-Despues de realizar aquello configuracion es necesario reiniciar Docker para que tome en cuenta los cambios con el commando \texttt{systemctl restart docker}. Para popular el registry con los contenedores necesarias para ejecuccion de codigo con el sistema EduNube, puede referirse a los commandos encontrados en \texttt{docker/commands-local-doc.sh} del repositorio principal. Este script toma los contenedores compilados previamente durante el desarrollo, los prepara para subirse y se los sube al Registry para que otros consumidores del mismo Registry tengan acceso a ellos.
+Despues de realizar aquello configuracion es necesario reiniciar Docker para que tome en cuenta los cambios con el commando \texttt{systemctl restart docker}. Para popular el registry con los contenedores necesarias para ejecuccion de codigo con el sistema EduNube, puede referirse a los commandos encontrados en \\
+\texttt{docker/commands-local-doc.sh} del repositorio principal. Este script toma los contenedores compilados previamente durante el desarrollo, los prepara para subirse y se los sube al Registry para que otros consumidores del mismo Registry tengan acceso a ellos.
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Máquina Virtual de Xen}

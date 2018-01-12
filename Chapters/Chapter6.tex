@@ -41,6 +41,7 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
             	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80}
             	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22}
             \end{itemize}
+            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000}
         \end{description}
     \end{description}
     \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
@@ -97,6 +98,9 @@ gitlab/gitlab-ce:latest
     \end{lstlisting}
     \item Visitar http://10.10.10.1:8101/ para cambiar la contraseña de root
 \end{enumerate}
+
+\subsubsection{Registry en Docker}
+A diferencia de el ambiente de desarrollo, que ocupa el Docker Registry de GitLab\footnote{Se puede ver en \href{https://gitlab.com/nishedcob/GitEDU/container\_registry}}, para el ambiente de despliegue se plantea 
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Máquina Virtual de Xen}

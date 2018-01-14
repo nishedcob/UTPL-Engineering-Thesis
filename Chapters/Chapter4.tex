@@ -222,6 +222,30 @@ Prueba de que funciona:
 git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
 \end{lstlisting}
 
+Dado que el mismo GitWeb no tenga problemas con bajada de datos (\texttt{git fetch} / \texttt{git pull} / \texttt{git clone}) pero si tiene problemas con subida de datos como se lo require en EduNube para armar repositorios de ejecuccion validadas, se ve una necesidad de habilitar subida al mismo por SSH:
+% como root en el servidor de git, cambiamos la clave del usuario de git:
+%passwd git
+% desde el servidor/usuario de EduNube:
+%cd .ssh/
+%ssh-keygen -f id_git
+% Deja la llave sin clave
+% Copia la llave publica al servidor
+%ssh-copy-id -i ~/.ssh/id_git.pub git@10.10.10.1
+% Prueba que funciona
+%ssh -i ~/.ssh/id_git -vvv git@10.10.10.1
+% Guardar la configuracion:
+%cat >> ~/.ssh/config < EOF
+%
+%Host git
+%     HostName 10.10.10.1
+%     User git
+%     Port 22
+%     IdentityFile $HOME/.ssh/id_git
+%
+%EOF
+% Probar con:
+%ssh -vvv git
+
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsubsection{Git Server HTTP Endpoint}
 Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:

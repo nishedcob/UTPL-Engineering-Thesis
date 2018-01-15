@@ -103,12 +103,15 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
     	\begin{lstlisting}
 	apt install python3 python3-virtualenv python3-pip
     	\end{lstlisting}
-        % gitweb fcgiwrap
-        % libffi-dev % TODO: Look for other possible dependencies?
     \item Instalación de Servidores
     	\begin{lstlisting}
 	apt install nginx-full postgresql mongodb\
-    		redis-server
+    		redis-server gitweb fcgiwrap
+    	\end{lstlisting}
+    \item Instalación de Otros dependencias
+        %  % TODO: Look for other possible dependencies?
+    	\begin{lstlisting}
+	apt install libffi-dev
     	\end{lstlisting}
     \item Instalación de IDEs en /opt. Se descargaron los respectivos .tar\textit{.xx} y se los descomprimieron en /opt con un comando similar al siguiente:
     	\begin{lstlisting}
@@ -151,8 +154,13 @@ su - git
 
 Para tener repositorios ejemplares, se clona algunos repositorios:
 \begin{lstlisting}
-git clone --bare https://gitlab.com/nishedcob/GitEDU.git repositories/GitEDU.git
-git clone --bare https://gitlab.com/ArqAppGrpBravoEarleyVargas/GitEduERP.git repositories/GitEduERP.git
+git clone --bare\
+	https://gitlab.com/nishedcob/GitEDU.git\
+	repositories/GitEDU.git
+git clone --bare\
+	https://gitlab.com/ArqAppGrpBravoEarleyVargas/\
+    	GitEduERP.git\
+	repositories/GitEduERP.git
 \end{lstlisting}
 
 Entrar al directorio de repositorios y arreglar permisos para permitir git push desde repositorios remotos:
@@ -176,22 +184,26 @@ Después se configura NGinX para trabajar con gitweb:
 server {
         listen 80;
         listen [::]:80;
-        server_name git.localhost;
+        server_name git.localhost 192.168.99.1 10.10.10.1;
         root /usr/share/gitweb;
         access_log /var/log/nginx/gitweb.access.log;
         # static repo files for cloning over https
-        location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+|pack/pack-[0-9a-f]+.(pack|idx))$ {
+        location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+\
+        	|pack/pack-[0-9a-f]+.(pack|idx))$ {
                 root /home/git/repositories/;
         }
 
         # requests that need to go to git-http-backend
-        location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
+        location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*\
+        	|git-(upload|receive)-pack)$ {
                 root /home/git/repositories;
 
                 fastcgi_pass unix:/var/run/fcgiwrap.socket;
-                fastcgi_param SCRIPT_FILENAME   /usr/lib/git-core/git-http-backend;
+                fastcgi_param SCRIPT_FILENAME   /usr/lib/\
+                	git-core/git-http-backend;
                 fastcgi_param PATH_INFO          $uri;
-                fastcgi_param GIT_PROJECT_ROOT  /home/git/repositories;
+                fastcgi_param GIT_PROJECT_ROOT  /home/git/\
+                	repositories;
                 fastcgi_param GIT_HTTP_EXPORT_ALL "";
                 fastcgi_param REMOTE_USER $remote_user;
                 include fastcgi_params;
@@ -201,9 +213,11 @@ server {
         try_files $uri @gitweb;
         location @gitweb {
                 fastcgi_pass unix:/var/run/fcgiwrap.socket;
-                fastcgi_param SCRIPT_FILENAME   /usr/share/gitweb/gitweb.cgi;
+                fastcgi_param SCRIPT_FILENAME   /usr/share/\
+                	gitweb/gitweb.cgi;
                 fastcgi_param PATH_INFO          $uri;
-                fastcgi_param GITWEB_CONFIG      /etc/gitweb.conf;
+                fastcgi_param GITWEB_CONFIG      /etc/gitweb\
+                	.conf;
                 include fastcgi_params;
         }
 }
@@ -219,42 +233,52 @@ $projectroot = "/home/git/repositories";
 
 Prueba de que funciona:
 \begin{lstlisting}
-git clone http://git.localhost/nishedcob/GitEDU.git GitEDU-test
+git clone http://git.localhost/nishedcob/GitEDU.git \
+	GitEDU-test
 \end{lstlisting}
 
 Dado que el mismo GitWeb no tenga problemas con bajada de datos (\texttt{git fetch} / \texttt{git pull} / \texttt{git clone}) pero si tiene problemas con subida de datos como se lo require en EduNube para armar repositorios de ejecuccion validadas, se ve una necesidad de habilitar subida al mismo por SSH:
-% como root en el servidor de git, cambiamos la clave del usuario de git:
-%passwd git
-% desde el servidor/usuario de EduNube:
-%cd .ssh/
-%ssh-keygen -f id_git
-% Deja la llave sin clave
-% Copia la llave publica al servidor
-%ssh-copy-id -i ~/.ssh/id_git.pub git@10.10.10.1
-% Prueba que funciona
-%ssh -i ~/.ssh/id_git -vvv git@10.10.10.1
-% Guardar la configuracion:
-%cat >> ~/.ssh/config < EOF
-%
-%Host git
-%     HostName 10.10.10.1
-%     User git
-%     Port 22
-%     IdentityFile $HOME/.ssh/id_git
-%
-%EOF
-% Probar con:
-%ssh -vvv git
+
+Como root en el servidor de Git, se cambia la clave del usuario de Git:
+\begin{lstlisting}
+passwd git
+\end{lstlisting}
+
+Como el usuario de EduNube en el servidor para el mismo:
+\begin{lstlisting}
+cd .ssh/
+# Deja la llave generada sin clave:
+ssh-keygen -f id_git
+# Copia la llave publica al servidor
+ssh-copy-id -i ~/.ssh/id_git.pub git@10.10.10.1
+# Prueba que funciona
+ssh -i ~/.ssh/id_git -vvv git@10.10.10.1
+# Guardar la configuracion:
+cat >> ~/.ssh/config < EOF
+
+Host git
+     HostName 10.10.10.1
+     User git
+     Port 22
+     IdentityFile $HOME/.ssh/id_git
+
+EOF
+# Probar con:
+ssh -vvv git
+\end{lstlisting}
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsubsection{Git Server HTTP Endpoint}
 Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:
 \begin{lstlisting}
 pipenv --three
-pipenv install django six psycopg2 PyJWT bcrypt ipython requests
+pipenv install django six psycopg2 PyJWT bcrypt ipython \
+	requests
 pipenv run django-admin startproject GitServerHTTPEndpoint .
-# Configurar Base de Datos, Reutilizar authApp de EduNube, migrar la base de datos, Crear un superusuario
-rsync -av --progress ~/EduNube/authApp ~/GitServerHTTPEndpoint/
+# Configurar Base de Datos, Reutilizar authApp de EduNube, \
+#	migrar la base de datos, Crear un superusuario
+rsync -av --progress ~/EduNube/authApp \
+	~/GitServerHTTPEndpoint/
 vim GitServerHTTPEndpoint/settings.py
 pipenv run python manage.py makemigrations authApp
 pipenv run python manage.py migrate
@@ -265,7 +289,8 @@ pipenv run python manage.py runserver 8002
 
 pipenv run python manage.py startapp apiApp
 
-pipenv lock --requirements | awk '{print $1}' > requirements.txt
+pipenv lock --requirements | awk '{print $1}' > \
+	requirements.txt
 \end{lstlisting}
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
@@ -419,7 +444,8 @@ Se realiza la instalación de la ultima versión de Moodle (3.3 con sus respecti
 \begin{lstlisting}
 
 # descargar
-wget https://download.moodle.org/download.php/direct/stable33/moodle-latest-33.tgz
+wget https://download.moodle.org/download.php/direct/stable33/\
+	moodle-latest-33.tgz
 
 # descomprimir
 tar -zxvf moodle-latest-33.tgz
@@ -690,37 +716,57 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Servidor de Virtualización Virtualizado}
-% TODO
+Frente los problemas que tiene Docker como desventajas, se ha elegido a Kubernetes como una tecnologia complementaria para orquestación de nube y dar, a futuro, mayor independencia de la plataforma EduNube frente cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube entre EduNube y los respectivos hipervisores que se puede utilizar fue OpenStack debido a que es una solucion muy completa para el problema actual con mas caracteristicas incluso que Kubernetes, pero el mismo, por su lista grande de caracteristicas es muy pesada y no entraria adecuadamente en la infrastructura actual de la Universidad Tecnica Particular de Loja, entonces para ofrecer una solucion que cumple con el contexto actual de la universidad, Kubernetes ofrece una buena alternativa que, aunque sea relativamente liviana, ofrece las caracteristicas necesarias para implementar una solucion de ejecucion que sea eficaz y eficiente en la infrastructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y despues, de forma virtualizada para ayudar mitigar algunos de los riesgos asociados con Docker, el servidor. 
+
 \paragraph{Instalación de Kubernetes}
-% TODO
-% # Kubernetes (Kubectl Client)
-% curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-% chmod +x kubectl
-% echo $PATH
-% # move into $PATH
-% mv kubectl ~/bin/
-% # verify installation
-% kubectl --help
-% # or:
-% kubectl version
-% # will give server error, we only are a client thus far
+Para instalar la ultima version del cliente de Kubernetes, tanto en desarrollo como en produccion, solo se necesita bajar la ultima version de kubectl desde los repositorios de Google y poner el mismo dentro del \$PATH:
+\begin{lstlisting}
+# Bajar la ultima version de Kubectl para Linux:
+curl -LO https://storage.googleapis.com/kubernetes-release/\
+	release/$(curl -s https://storage.googleapis.com/\
+    	kubernetes-release/release/stable.txt)\
+	/bin/linux/amd64/kubectl
+# Hacerlo ejecutable
+chmod +x kubectl
+# Revisar el $PATH actual
+echo $PATH
+# Ubicar dentro del $PATH
+mv kubectl ~/bin/
+# verificar instalacion con:
+kubectl --help
+# o con:
+kubectl version
+# Este segundo commando debe dar un error de servidor hasta\
+#	que se instala y configura el servidor al cual se\
+#	debe connectar
+\end{lstlisting}
+
 \paragraph{MiniKube}
-% TODO
-% # Minikube
-% curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.23.0/minikube-linux-amd64
-% chmod +x minikube
-% # move into $PATH
-% mv minikube ~/bin/
-% # verify installation:
-% minikube --help
-% # or
-% minikube version
-%
-% # Start Minikube Cluster
-% minikube start
-%
-% # Shutdown Minikube Cluster
-% minikube stop
+Dentro del ambiente de desarrollo, fue ocupado un cluster de Kubernetes, de solo un nodo, virtualizado en VirtualBox. La instalacion del mismo se detalle a continuacion:
+\begin{lstlisting}
+# Se descarga desde los repositorios de Google el commando\
+#	de MiniKube
+curl -Lo minikube https://storage.googleapis.com/minikube/\
+	releases/v0.23.0/minikube-linux-amd64
+# Se lo hace ejecutable
+chmod +x minikube
+# se lo ubica en el $PATH
+mv minikube ~/bin/
+# para validar la instalacion:
+minikube --help
+# o
+minikube version
+\end{lstlisting}
+
+Para levantar el cluster de MiniKube y realizar la configuracion automatica del entorno para el uso del mismo, se utiliza el commando:
+\begin{lstlisting}
+minikube start
+\end{lstlisting}
+
+Para bajar el cluster de MiniKube:
+\begin{lstlisting}
+minikube stop
+\end{lstlisting}
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \subsection{Plantillas de Máquinas Virtuales (Docker)}

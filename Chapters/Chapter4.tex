@@ -1896,13 +1896,28 @@ def update_api_token(api_token=None, regen_secret_key=False):
 
 Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokens de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se crea este permiso, como es el caso del ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario para acceder a estas vistas.
 
-% <TODO>
+
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
+% TODO: Overview Code Execution
 
-% If Time
-%\index{Calificar Código}
-%\subsection{Calificación Automatizada con Pruebas Unitarias}
+\subsection{Metadatos de Plantillas}
+% TODO: Discuss types of Template Metadata
+% TODO: Security/Functionality Model
+\subsubsection{.edunubeignore}
+% TODO: Ignore this list of files
+\paragraph{.edunubeignore.children}
+% TODO: Ignore this list of files for all my children
+\subsubsection{.repospec}
+% TODO: Secure identification of parent
+\subsubsection{.templateinclude}
+% TODO: What files should be copied to children
 
 \subsection{API Externa}
-% </TODO>
+% TODO: Requirements for API Calls
+\subsubsection{RepoSpec API}
+% TODO: How to create and modify RepoSpecs via API calls
+\subsubsection{Execution API}
+% TODO: How to execute code via API calls
+\subsubsection{Jobs API}
+% TODO: How to query job state via API calls

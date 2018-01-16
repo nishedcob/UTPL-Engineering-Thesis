@@ -11,8 +11,7 @@ En el curso del desarrollo, depuración y ejecución de pruebas llegó a ser evi
     \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podría mejorar el rendimiento de esta forma, asignándoles a un usuario con mayor prioridad de ejecución como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, una solución así de software tampoco puede cambiar los recursos físicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algún usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restringido que tiene mayor prioridad de ejecución para sus procesos.}) si no por temas de facilitar la administración del mismo.
     \item La integración de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminación SSL/TLS, servidor de archivos estáticos y validador de peticiones sin mayor perdida de rendimiento.
 \end{itemize}
-% TODO
-% diagrama de red/fisica
+% TODO: diagrama de red/fisica
 
 \section{Preparaciones del Ambiente de Despliegue}
 Para preparar el ambiente de despliegue se lo ve pertinente planificar direcciones IP, dominios y puertos para los varios servicios que requieren ser levantados:
@@ -80,9 +79,8 @@ docker run -d -P --name moodle --link moodledb:DB\
 
 \subsubsection{GitLab en Docker}
 Para instalar GitLab en Docker, se sigue pasos similares a los vistos previamente con Moodle:
-% TODO: Cite
-%https://hub.docker.com/r/gitlab/gitlab-ce/
-%https://docs.gitlab.com/omnibus/docker/
+% TODO: Cite https://hub.docker.com/r/gitlab/gitlab-ce/
+% TODO: Cite https://docs.gitlab.com/omnibus/docker/
 \begin{enumerate}
 	\item Bajar el imagen de Docker:
     \begin{lstlisting}    
@@ -138,8 +136,7 @@ xen-create-image --hostname=debian-k8s-master \
 --lvm=Xephyr-VG --pygrub --dist=stretch --force \
 --size=10240mb --swap=1024mb
 \end{lstlisting}
-% TODO:
-% see Screenshot_2017-12-29_15-21-49.png
+% TODO: include Screenshot_2017-12-29_15-21-49.png
 
 \paragraph{Instalación de Docker}
 Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalación de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendría que cambiar el gestor de paquetes apt por el respectivo de su sistema):
@@ -162,7 +159,7 @@ curl -fsSL get.docker.com -o get-docker.sh
 sh get-docker.sh
     \end{lstlisting}
 \end{enumerate}
-% TODO: see Screenshot_2017-12-29_15-31-49.png
+% TODO: include Screenshot_2017-12-29_15-31-49.png
 
 Para utilizar el Registry creado anteriormente, se agrega el siguiente configuracion a las maquinas del cluster (seguido por el reinicio del servicio de Docker con \texttt{systemctl restart docker}):
 \begin{lstlisting}
@@ -174,8 +171,7 @@ Para utilizar el Registry creado anteriormente, se agrega el siguiente configura
 \end{lstlisting}
 
 \paragraph{Instalación de Cluster de Kubernetes}
-% TODO: Cite
-%https://kubernetes.io/docs/setup/independent/install-kubeadm/
+% TODO: Cite https://kubernetes.io/docs/setup/independent/install-kubeadm/
 Para instalar el cluster de Kubernetes, el proceso es relativamente sencillo con una herramienta que se llama \texttt{kubeadm} que se encarga de levantar, gestionar y bajar nodos del cluster. Primero para instalar el mismo:
 \begin{enumerate}
 	\item Debemos tener suporte en el gestor de paquetes APT para el protocolo HTTPS:
@@ -198,8 +194,7 @@ apt-get install -y kubelet kubeadm kubectl
     \end{lstlisting}
 \end{enumerate}
 
-% TODO: Cite 
-%https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+% TODO: Cite https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 El levantamiento de un nodo maestro básica se puede hacer con el comando:
     \begin{lstlisting}
 kubeadm init
@@ -254,9 +249,8 @@ Se puede probar la conexión pidiendo la versión del cliente y del servidor:
 kubectl version
 \end{lstlisting}
 
-% TODO: Cite
-%#https://kubernetes.io/docs/concepts/cluster-administration/networking/
-%https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+% TODO: Cite https://kubernetes.io/docs/concepts/cluster-administration/networking/
+% TODO: Cite https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 Para instalar el driver de red Flannel (que es necesaria cualquier driver de red para Kubernetes previo a funcionamiento -- no se instala con ningún por defecto para que sea al elección del administrador quien instala ya que un cluster de Kubernetes solo puede ocupar un driver de red a la vez):
 \begin{lstlisting}
 sysctl net.bridge.bridge-nf-call-iptables=1
@@ -389,7 +383,7 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \section{Despliegue}
-% TODO:
+% TODO: discuss NGinX config for deployment, introduce idea of SystemD Services
 % servicios y su asignacion de puertos
 % GitEDU - 8000/HTTP = gitedu.localhost
 % EduNube - 8010/HTTP = edunube.localhost
@@ -405,10 +399,13 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 %		http://registry.localhost:80 -> Registry
 
 \subsection{GitEDU}
+% TODO: GitEDU systemd service
 
 \subsection{EduNube}
+% TODO: EduNube systemd service
 
 \subsection{GitServerHTTPEndpoint}
+% TODO: GitServerHTTPEndpoint systemd service
 
 \section{Pruebas del Despliegue y Resultados}
-
+% TODO: Testing and test results of deployment

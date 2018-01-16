@@ -1728,7 +1728,8 @@ source activate-en.sh
 Con el entorno creado y activado se puede proceder a instalar cualquier dependencia necesaria que no ha sido instalado previamente:
 
 \begin{lstlisting}
-pip3 install django==1.10.6 psycopg2==2.7.1 pymodm==0.4.0 ipython
+pip3 install django==1.10.6 psycopg2==2.7.1 pymodm==0.4.0\
+	ipython
 \end{lstlisting}
 
 Para el presente proyecto se instalaron las siguientes dependencias:
@@ -1757,12 +1758,16 @@ su - postgres
 psql
 \end{lstlisting}
 \begin{lstlisting}
-	postgres=# CREATE USER edunubeser WITH PASSWORD '3d?N_6E';
-	postgres=# CREATE DATABASE edunubedb WITH OWNER edunubeser;
+	postgres=# CREATE USER edunubeser WITH PASSWORD\
+    	'3d?N_6E';
+	postgres=# CREATE DATABASE edunubedb WITH OWNER\
+    	edunubeser;
 	postgres=# \q
 psql edunubedb -U postgres
-	edunubedb=# CREATE SCHEMA edunubeapp AUTHORIZATION edunubeser;
-	edunubedb=# ALTER USER edunubeser SET search_path TO edunubeapp;
+	edunubedb=# CREATE SCHEMA edunubeapp AUTHORIZATION\
+    	edunubeser;
+	edunubedb=# ALTER USER edunubeser SET search_path\
+    	TO edunubeapp;
 	edunubedb=# \q
 psql edunubedb -U edunubeser
 	edunubedb=> SELECT current_schema();

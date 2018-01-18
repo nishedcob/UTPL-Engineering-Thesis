@@ -614,6 +614,7 @@ Ahora que todo esta funcionando se recomienda editar /boot/grub/menu.lst para co
 \subsection{Servidor de Virtualización}
 Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico además de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
 
+\index{Ejecutar Código}
 \subsubsection{Comparación de Hipervisores}
 Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoración de características de cada ecosistema de hipervisor para generar una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor a ser implementado en el presente proyecto.
 
@@ -637,6 +638,7 @@ Para la selección de una tecnología de virtualización, se ha considerado conv
 	\end{tabular}
     \caption{Pesos de las Características de Comparación para Hipervisores Considerados}
     \label{tab:hipervisor-compar-pesos}
+\index{Ejecutar Código}
 \end{table}
 
 El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada categoría de la comparación para poder realizar un promedio ponderado de las valoraciones con mayor peso en las categorías que se consideraban más importantes. Las características consideradas son:
@@ -666,6 +668,7 @@ Se ha considerado con mayor importancia el Rendimiento y la Seguridad como neces
         \hline
 	\end{tabular}
     \caption{Características de Comparación I: Hipervisores Considerados}
+\index{Ejecutar Código}
     \label{tab:hipervisor-compar-i}
 \end{table}
 
@@ -683,6 +686,7 @@ Se ha considerado con mayor importancia el Rendimiento y la Seguridad como neces
         \hline
 	\end{tabular}
     \caption{Características de Comparación II: Hipervisores Considerados}
+\index{Ejecutar Código}
     \label{tab:hipervisor-compar-ii}
 \end{table}
 
@@ -702,6 +706,7 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 	\]
 	\caption{Ecuación para Calcular los Promedios Ponderados en base a Pesos para los Hipervisores Comparados}
     \label{fig:hipervisor-calif-equ}
+\index{Ejecutar Código}
 \end{figure}
 
 \begin{table}
@@ -719,12 +724,14 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 	\end{tabular}
     \caption{Calificaciones Promediados Ponderadas para la Comparación de los Hipervisores}
     \label{tab:hipervisor-compar-promed}
+\index{Ejecutar Código}
 \end{table}
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Servidor de Virtualización Virtualizado}
 Frente los problemas que tiene Docker como desventajas, se ha elegido a Kubernetes como una tecnologia complementaria para orquestación de nube y dar, a futuro, mayor independencia de la plataforma EduNube frente cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube entre EduNube y los respectivos hipervisores que se puede utilizar fue OpenStack debido a que es una solucion muy completa para el problema actual con mas caracteristicas incluso que Kubernetes, pero el mismo, por su lista grande de caracteristicas es muy pesada y no entraria adecuadamente en la infrastructura actual de la Universidad Tecnica Particular de Loja, entonces para ofrecer una solucion que cumple con el contexto actual de la universidad, Kubernetes ofrece una buena alternativa que, aunque sea relativamente liviana, ofrece las caracteristicas necesarias para implementar una solucion de ejecucion que sea eficaz y eficiente en la infrastructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y despues, de forma virtualizada para ayudar mitigar algunos de los riesgos asociados con Docker, el servidor. 
 
+\index{Kubernetes}
 \paragraph{Instalación de Kubernetes}
 Para instalar la ultima version del cliente de Kubernetes, tanto en desarrollo como en produccion, solo se necesita bajar la ultima version de kubectl desde los repositorios de Google y poner el mismo dentro del \$PATH:
 \begin{lstlisting}
@@ -748,6 +755,7 @@ kubectl version
 #	debe connectar
 \end{lstlisting}
 
+\index{Kubernetes}
 \paragraph{MiniKube}
 Dentro del ambiente de desarrollo, fue ocupado un cluster de Kubernetes, de solo un nodo, virtualizado en VirtualBox. La instalacion del mismo se detalle a continuacion:
 \begin{lstlisting}
@@ -776,6 +784,7 @@ minikube stop
 \end{lstlisting}
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
+\index{Docker}
 \subsection{Plantillas de Máquinas Virtuales (Docker)}
 Para la ejecución de código en Docker, es necesario tener un contenedor de Docker que cumpla con las dependencias requeridas al momento de la ejecución. Los contenedores están basados en Debian y en Alpine Linux.
 
@@ -785,6 +794,7 @@ Se considera Debian como una buena base para los contenedores debido a que es ba
 \subsubsection{Sistema Operativo: Alpine GNU/Linux}
 Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con Docker) y en la nube en general porque es un sistema operativo minimalista que lleva menor peso. Aquí tiene el mismo fin, aunque aveces es mas complicado de manejar y configurar, puede que valga la pena para entornos de producción que necesitan optimizar el uso de sus recursos.
 
+\index{Docker|(}
 \subsubsection{Tipo de Contenedor: Shell-Executor}
 El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. 
 

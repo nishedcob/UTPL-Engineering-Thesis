@@ -931,6 +931,7 @@ VOLUME ["/code"]
 WORKDIR "/code"
 \end{lstlisting}
 La primera y segunda linea define herencia del contenedor Alpine Shell-Executor que definimos previamente. La tercera y cuarta linea instala PostgreSQL dentro del contenedor en adición a inicializar la base de datos. La sexta hasta decimoséptima linea levanta el motor de base de datos PostgreSQL con la finalidad de crear un usuario y base de datos por defecto sobre el cual se puede trabajar. Finalizando este proceso se desactiva el contenedor para reducir el tamaño del mismo y no introducir comportamiento desconocido. La decimonovena linea vuelve a declarar el volumen de Docker porque al aparecer la versión actual de Docker a propósito no suporta herencia de esta linea en los Dockerfile. La vigésima linea define la ubicación inicial utilizada cuando se inicia el contenedor.
+\index{Docker|)}
 
 \section{GitEDU}
 
@@ -1036,6 +1037,7 @@ También creamos un superusuario de Django para temas administrativos:
 python manage.py createsuperuser
 \end{lstlisting}
 
+\index{Editar Código}
 También se puede crear el app inicial (para lógica del editor de código):
 \begin{lstlisting}
 python manage.py startapp ideApp
@@ -1121,7 +1123,10 @@ source activate-en.sh
 git checkout edunube
 cd EduNube
 python manage.py runserver 8001
-\end{lstlisting}
+\end{lstlisting}\footnote{Para produccion, se cambio el puerto 8001 de EduNube para 8010}
+
+% TODO: document pipenv
+% TODO: document runserver / runshell scripts
 
 \subsection{Autenticación Clásica}
 
@@ -1696,7 +1701,7 @@ except Exception as e:
 \end{lstlisting}
 \lstset{language=Bash}
 
-% TODO: delete or explain why gitlab wasn't developed further, maybe as an anexo
+% TODO: delete or explain why gitlab wasn't developed further, maybe this section as an anexo
 
 \subsection{Aspectos Sociales}
 Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir independientemente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto 'socialApp'' como fue creada previamente.

@@ -1908,18 +1908,16 @@ Como parte de la administración de este aspecto del sistema de autenticación, 
 
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
-% TODO: Overview Code Execution
+El de ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad integra frente las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
 
 \subsection{Metadatos de Plantillas}
-% TODO: Discuss types of Template Metadata
-% TODO: Security/Functionality Model
+Para ofrecer mayor seguridad y funcionalidad a la ejecucion de codigo en el sistema, se basa en lo que son plantillas de ejecucion diseñados especifcamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyiendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recien se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecuccion y tambien la ubicacion del repositorio padre. La herrencia se basa en la creacion de un nuevo repositorio donde se copia uno por uno los contenidos de cada repositorio, desde el inicio de la cadena de herrencia (una plantilla hecha por la administracion para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se copia en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de control que tiene el usuario final sobre lo que esta ejecutando. 
 \subsubsection{.edunubeignore}
 El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede herredar de ningun otro repositorio que le sigue en la herencia de repositorios.
 \paragraph{.edunubeignore.children}
-El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos 
-% TODO: Ignore this list of files for all my children
+El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios herredetarios.
 \subsubsection{.repospec}
-% TODO: Secure identification of parent
+El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual tema se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
 % TODO: What files should be copied to children
 

@@ -463,7 +463,20 @@ Se copia los archivos al directorio que utiliza NGinX para servir los archivos e
 python manage.py collectstatic
 \end{lstlisting}
 
-Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\ \texttt{}
+Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\ \texttt{/etc/nginx/sites-available/gitserverhttpendpoint}:
+\begin{lstlisting}
+server {
+        listen 8020;
+        listen [::]:8020;
+        server_name _;
+        location /static/ {
+                root /static/service/uwsgi/githttpserverendpoint;
+        }
+        location / {
+                proxy_pass http://127.0.0.1:8021;
+        }
+}
+\end{lstlisting}
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

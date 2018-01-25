@@ -440,7 +440,7 @@ Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de con
 \begin{lstlisting}
 systemctl restart uwsgi
 \end{lstlisting}
-Cualquier error que se da, se lo puede investigar mediante el archivo de log \texttt{/usr/share/uwsgi.gitserverhttpendpoint.log}.
+Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.gitserverhttpendpoint.log}.
 
 Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
 \begin{lstlisting}
@@ -477,6 +477,16 @@ server {
         }
 }
 \end{lstlisting}
+
+Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
+\begin{lstlisting}
+ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint \ 
+    /etc/nginx/sites-enabled/33-gitserverhttpendpoint
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
+
+Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8020/auth/login}
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

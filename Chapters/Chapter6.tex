@@ -405,15 +405,57 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 %		http://gitlab.localhost:80 -> GitLab
 %		http://moodle.localhost:80 -> Moodle
 %		http://registry.localhost:80 -> Registry
+% TODO: uWSGI Systemd Service
 
 \subsection{GitEDU}
-% TODO: GitEDU systemd service
+% TODO: GitEDU uWSGI ini
 
 \subsection{EduNube}
-% TODO: EduNube systemd service
+% TODO: EduNube uWSGI ini
 
 \subsection{GitServerHTTPEndpoint}
-% TODO: GitServerHTTPEndpoint systemd service
+% TODO: GitServerHTTPEndpoint uWSGI ini
+Para levantar el servicio de GitServerHTTPEndpoint se guarda el archivo \texttt{/etc/uwsgi/sites/gitserverhttpendpoint.ini} con los siguientes contenidos:
+\begin{lstlisting}
+[uwsgi]
+project = GitServerHTTPEndpoint
+project_location = %(project)
+username = git
+base = /home/%(username)
+environment = %(project)/env
+
+chdir = %(base)/%(project_location)
+home = %(base)/%(environment)
+module = %(project).wsgi:application
+logto = /usr/share/uwsgi.%(project).log
+
+master = true
+processes = 2
+
+uid = %(username)
+gid = root
+http-socket = 127.0.0.1:8021
+\end{lstlisting}
+
+Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
+\begin{lstlisting}
+mkdir -p /static/service/uwsgi/githttpserverendpoint
+find /static -type d -exec chmod +x -c {} \;
+chown -c root:git /static/service/uwsgi/githttpserverendpoint
+find /static/service/uwsgi/githttpserverendpoint -type f -exec chmod -c 660 {} \;
+\end{lstlisting}
+
+Se cambia el settings.py del servicio:
+\begin{lstlisting}
+# Development:
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "static"),
+#]
+# Production:
+STATICFILES_DIRS = [
+    "/static/service/uwsgi/githttpserverendpoint",
+]
+\end{lstlisting}
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

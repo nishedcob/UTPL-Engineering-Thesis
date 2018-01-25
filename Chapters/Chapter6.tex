@@ -414,8 +414,7 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 % TODO: EduNube uWSGI ini
 
 \subsection{GitServerHTTPEndpoint}
-% TODO: GitServerHTTPEndpoint uWSGI ini
-Para levantar el servicio de GitServerHTTPEndpoint se guarda el archivo \texttt{/etc/uwsgi/sites/gitserverhttpendpoint.ini} con los siguientes contenidos:
+Para levantar el servicio de GitServerHTTPEndpoint se guarda el archivo \\ \texttt{/etc/uwsgi/sites/gitserverhttpendpoint.ini} con los siguientes contenidos:
 \begin{lstlisting}
 [uwsgi]
 project = GitServerHTTPEndpoint
@@ -437,25 +436,34 @@ gid = root
 http-socket = 127.0.0.1:8021
 \end{lstlisting}
 
+Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de configuracion que representa el respectivo servicio:
+\begin{lstlisting}
+systemctl restart uwsgi
+\end{lstlisting}
+Cualquier error que se da, se lo puede investigar mediante el archivo de log \texttt{/usr/share/uwsgi.gitserverhttpendpoint.log}.
+
 Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
 \begin{lstlisting}
-mkdir -p /static/service/uwsgi/githttpserverendpoint
+mkdir -p /static/service/uwsgi/githttpserverendpoint/static
 find /static -type d -exec chmod +x -c {} \;
-chown -c root:git /static/service/uwsgi/githttpserverendpoint
-find /static/service/uwsgi/githttpserverendpoint -type f -exec chmod -c 660 {} \;
+chown -cR git:root /static/service/uwsgi/githttpserverendpoint
+find /static/service/uwsgi/githttpserverendpoint -type f \
+    -exec chmod -c 660 {} \;
 \end{lstlisting}
 
 Se cambia el settings.py del servicio:
+\lstset{language=Python}
 \begin{lstlisting}
-# Development:
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, "static"),
-#]
-# Production:
-STATICFILES_DIRS = [
-    "/static/service/uwsgi/githttpserverendpoint",
-]
+STATIC_ROOT = "/static/service/uwsgi/githttpserverendpoint/static"
 \end{lstlisting}
+\lstset{language=Bash}
+
+Se copia los archivos al directorio que utiliza NGinX para servir los archivos estaticos, este paso se tiene que repetir siempre y cuando los archivos estaticos cambien:
+\begin{lstlisting}
+python manage.py collectstatic
+\end{lstlisting}
+
+Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\ \texttt{}
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

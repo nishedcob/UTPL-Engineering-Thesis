@@ -365,7 +365,6 @@ ssh root@10.10.10.12
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 		\end{lstlisting}
 	\item Desde el mismo servidor o otro que tiene conexion al API del nodo maestro (desde donde se quiere tener acceso en su navegador), se ejecuta:
-% TODO: EduNube requires a Port Change in Production, Kubernetes uses :8001 for proxy, for consistency GitServerHTTPEndpoint should be changed at the same time
     	\begin{lstlisting}
 kubectl proxy
 cat > dashboard-admin.yml << EOF       
@@ -405,8 +404,14 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 %		http://gitlab.localhost:80 -> GitLab
 %		http://moodle.localhost:80 -> Moodle
 %		http://registry.localhost:80 -> Registry
-% TODO: uWSGI Systemd Service
 
+Para instalar uWSGI, se lo instala como root a nivel de sistema operativo para Python 3:
+\begin{lstlisting}
+pip3 install uwsgi
+\end{lstlisting}
+
+% TODO: Instead of nyx, maybe uWSGI would be better as group, ie chown root:uwsgi
+El servicio de SystemD para gestionar cada servidor de aplicacion (uWSGI) mediante un archivo de configuracion \texttt{.ini} se define de la siguiente manera: 
 \begin{lstlisting}
 [Unit]
 Description=uWSGI Emperor service
@@ -423,6 +428,21 @@ NotifyAccess=all
 WantedBy=multi-user.target
 \end{lstlisting}
 
+El servicio de uWSGI se empieza con el siguiente manera:
+\begin{lstlisting}
+systemctl start uwsgi
+\end{lstlisting}
+
+Se puede revisar el estado del mismo con:
+\begin{lstlisting}
+systemctl status uwsgi
+\end{lstlisting}
+
+Cuando se ha confirmado su correcto funcionamiento, se puede activar el servicio para iniciar con el sistema operativo:
+\begin{lstlisting}
+systemctl enable uwsgi
+\end{lstlisting}
+
 \subsection{GitEDU}
 % TODO: GitEDU uWSGI ini
 
@@ -430,6 +450,7 @@ WantedBy=multi-user.target
 % TODO: EduNube uWSGI ini
 
 \subsection{GitServerHTTPEndpoint}
+% TODO: add git user to uwsgi group, gid = uwsgi
 Para levantar el servicio de GitServerHTTPEndpoint se guarda el archivo \\ \texttt{/etc/uwsgi/sites/gitserverhttpendpoint.ini} con los siguientes contenidos:
 \begin{lstlisting}
 [uwsgi]
@@ -458,6 +479,7 @@ systemctl restart uwsgi
 \end{lstlisting}
 Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.gitserverhttpendpoint.log}.
 
+% TODO: root:uwsgi as group?
 Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
 \begin{lstlisting}
 mkdir -p /static/service/uwsgi/githttpserverendpoint/static

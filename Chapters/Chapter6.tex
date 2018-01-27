@@ -407,6 +407,22 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 %		http://registry.localhost:80 -> Registry
 % TODO: uWSGI Systemd Service
 
+\begin{lstlisting}
+[Unit]
+Description=uWSGI Emperor service
+
+[Service]
+ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown nyx:root /run/uwsgi'
+ExecStart=/usr/local/bin/uwsgi --emperor /etc/uwsgi/sites
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+\end{lstlisting}
+
 \subsection{GitEDU}
 % TODO: GitEDU uWSGI ini
 

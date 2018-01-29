@@ -295,9 +295,9 @@ pipenv lock --requirements | awk '{print $1}' > \
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
-% TODO: summarize API and auth token management
 \paragraph{Tokens de Autenticacion}
-% TODO: describe CRUD for tokens
+Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante un interfaz CRUD construido con formularios de Django. Esos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreto (mediante la funcion generar sal de bcrypt) y con ello se cifra datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente puede modificar los datos de su API token. El mismo esquema de autenticacion para el API se utiliza con el servicio de EduNube.
+
 \paragraph{API externa}
 % TODO: define parameters
 % TODO: indicate location of example client

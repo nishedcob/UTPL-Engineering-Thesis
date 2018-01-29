@@ -1155,9 +1155,10 @@ cd EduNube
 python manage.py runserver 8001
 \end{lstlisting}\footnote{Para produccion, se cambio el puerto 8001 de EduNube para 8010}
 
-\subsubsection{}
-% TODO: document pipenv
-% TODO: document runserver / runshell scripts
+\subsubsection{Automatizacion del Levantamiento del Servicios / DevStack}
+Para el manejo de dependencias, originalmente se llevó el tema unicamente con Pip y Virtualenv hasta que se descubrio otra herramienta que combina la funcionalidad de ambos en un solo commando: \texttt{pipenv}. El mismo agrega funcionalidades adicionales como validacion del ambiente (sistema operativo / arquitectura / version exacta de Python) y validacion de paquetes (mediante sus hash SHA256). Es por ello que se vio utilidad en cambiar la modalidad con que se lleva las dependencias del proyecto, aunque tambien se sigue apoyando el sistema anterior para quienes no realizan la instalacion de pipenv con pip como root.
+
+Para el levantamiento facil del DevStack, se realizó dos scripts, de los cuales cada uno detecta la presencia de pipenv para utilizarlo si existe o si no existe ocupar la modalidad clasica de virtualenv con pip para gestionar las dependencias. Lo que diferencia los dos scripts es que uno, despues de validar/instalar y activar el entorno, ejecuta el servidor en el puerto designado para produccion (\texttt{runserver}) mientras que el otro (\texttt{runshell}) abre el shell de Django despues de adecuar el entorno.
 
 \subsection{Autenticación Clásica}
 

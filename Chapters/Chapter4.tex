@@ -1957,8 +1957,8 @@ El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.
 \subsubsection{.repospec}
 El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual tema se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
-El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. 
-% CODE TODO: Unimplemented
+El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el professor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}).
+% CODE TODO: GitEDU Templates Unimplemented
 
 \subsection{API Externa}
 % TODO: Requirements for API Calls
@@ -1970,3 +1970,42 @@ El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantill
 % TODO: How to execute code via API calls
 \subsubsection{Jobs API}
 % TODO: How to query job state via API calls
+
+
+%\paragraph{Tokens de Autenticacion}
+%Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante un interfaz CRUD construido con formularios de Django. Esos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreto (mediante la funcion generar sal de bcrypt) y con ello se cifra datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente puede modificar los datos de su API token. El mismo esquema de autenticacion para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en el url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creacion, lectura, actualizacion y eliminacion de los API Tokens.
+%
+%\paragraph{API externa}
+%Los URLs del API de GitServerHTTPEndpoint toman la forma general de: 
+%\texttt{/api/<tipo\_de\_objeto>/<accion>/<ruta/de/objeto>}\\
+%donde los tipos de objetos posibles son
+%\begin{itemize}
+%	\item \texttt{ns} para los Namespace
+%    \item \texttt{repo} para Repositorios y
+%    \item \texttt{file} para Archivos
+%\end{itemize}
+%acciones posibles son:
+%\begin{itemize}
+%	\item \texttt{create} para crear,
+%	\item \texttt{edit} para editar y
+%    \item en el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificacion de:
+%    \begin{itemize}
+%    	\item \texttt{edit/mv}
+%        para alterar la ruta de un archivo y 
+%        \item \texttt{edit/contents}
+%        para alterar los contenidos de un archivo.
+%    \end{itemize}
+%\end{itemize}
+%
+%Los URIs del API que operan sobre Namespace, solo acceptan un namespace de parametro con un slash de delimitador final por ejemplo: \\
+%\texttt{/api/ns/create/nearley/}
+%
+%Los URIs del API que opera sobre los repositorios requieren de parametros un namespace y repositorio igual con un slash de delimitador final por ejemplo: \\
+%\texttt{/api/repo/create/nearley/GitEDU/}
+%
+%Los URIs del API que opera sobre archivos toman de parametros un namespace, un repositorio y una ruta de archivos que puede conllevar cualquier numero de slash para indicar directorios dentro del repositorio selecionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
+%\texttt{/api/file/create/nearley/GitEDU/despliegue/Readme.md}
+%
+%Un cliente ejemplar de todo el API, se puede encontrar con el nombre \\
+%\texttt{example\_client.py} dentro del raiz del proyecto.
+

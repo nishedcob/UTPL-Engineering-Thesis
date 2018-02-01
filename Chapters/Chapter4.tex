@@ -1733,12 +1733,18 @@ except Exception as e:
 \end{lstlisting}
 \lstset{language=Bash}
 
-% TODO: delete or explain why gitlab wasn't developed further, maybe this section as an anexo
+Aunque originalmente se planifico el uso de GitLab como backend de persistencia de codigo (en repositorios, a diferencia de GitEduERP que ocupó snippets), al final no se ocupó el mismo por cinco razones:
+\begin{enumerate}
+\item La complejidad del API frente documentacion no tan clara del mismo para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso ni en el ambiente de desarollo ni de produccion) y el tiempo disponible.
+\item Un gran inestabilidad del servicio.
+\item La falta de recursos en los ambientes de produccion y de desarollo que empeora problemas de estabilidad.
+\item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para hacer el mismo disponible por HTTP.
+\item Realmente frente las necesidades actual del proyecto, con tal que no se necesita exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el GitLab.
+\end{enumerate}
+% TODO: maybe this section as an anexo
 
 \subsection{Aspectos Sociales}
-Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir independientemente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto 'socialApp'' como fue creada previamente.
-
-% TODO: Social aspects for future development
+Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir independientemente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto 'socialApp'' como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
 
 \index{Ejecutar Código}
 \section{EduNube}
@@ -1951,7 +1957,8 @@ El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.
 \subsubsection{.repospec}
 El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual tema se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
-% TODO: What files should be copied to children
+El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. 
+% CODE TODO: Unimplemented
 
 \subsection{API Externa}
 % TODO: Requirements for API Calls

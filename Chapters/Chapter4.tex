@@ -1969,7 +1969,8 @@ Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API ext
 \end{enumerate}
 \subsubsection{Autenticacion para el API}
 % TODO: JWT, /auth/tokens interface, example settings config
-Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defect (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear/visualizar tokens (\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1/auth/token/edit/<app\_name>/}), cambiar el screto de un token (\texttt{http://10.10.10.1/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1/auth/token/delete/<app\_name>/}).
+Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defect (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear/visualizar tokens \\
+(\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el screto de un token (\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
 \subsubsection{RepoSpec API}
 % TODO: How to create and modify RepoSpecs via API calls
 \subsubsection{Ejecuccion API}

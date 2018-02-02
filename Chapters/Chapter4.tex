@@ -1961,12 +1961,18 @@ El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantill
 % CODE TODO: GitEDU Templates Unimplemented
 
 \subsection{API Externa}
-% TODO: Requirements for API Calls
+Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API externa que requiere un token de autenticacion para su funcionamiento como se lo detalle a continuacion. Ademas se considera critico tres componentes criticos del API:
+\begin{enumerate}
+  \item API de RepoSpec donde se implementa la creacion y actualizacion de los RepoSpecs de tal forma que al momento de enviar un repositorio a ser ejecutado, se puede validar que el repositorio esta autorizado para ejecucion y de donde previene la herencia del mismo de tal forma que el usuario final no tenga mucho libertad a modificar el mismo y realizar cambios indebidos al entorno de ejecucion.
+  \item API de Ejecuccion donde se solita ejecucion de codigo. Esto agrega la solicitud a la cola de trabajo para que el mismo puede ser ejecutado cuando hay disponibilidad.
+  \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo trabajo.
+\end{enumerate}
 \subsubsection{Autenticacion para el API}
 % TODO: JWT, /auth/tokens interface, example settings config
+Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defect (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear/visualizar tokens (\texttt{http://10.10.10.1:8010/auth/token/<app_name>.json}), actualizar un token (\texttt{http://10.10.10.1/auth/token/edit/<app_name>/}), cambiar el screto de un token (\texttt{http://10.10.10.1/auth/token/secret/<app_name>/}), y eliminar un token (\texttt{http://10.10.10.1/auth/token/delete/<app_name>/}).
 \subsubsection{RepoSpec API}
 % TODO: How to create and modify RepoSpecs via API calls
-\subsubsection{Execution API}
+\subsubsection{Ejecuccion API}
 % TODO: How to execute code via API calls
 \subsubsection{Jobs API}
 % TODO: How to query job state via API calls

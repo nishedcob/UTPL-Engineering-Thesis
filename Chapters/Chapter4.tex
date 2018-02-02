@@ -1968,10 +1968,61 @@ Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API ext
   \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo trabajo.
 \end{enumerate}
 \subsubsection{Autenticacion para el API}
-% TODO: JWT, /auth/tokens interface, example settings config
 Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defect (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear/visualizar tokens \\
-(\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el screto de un token (\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
+(\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el secreto (llave privado) de un token\\
+(\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
+
+Para dar conectividad a este servicio desde otro servicio, se copia las respectivas clientes del mismo, llamadas \texttt{execute\_status\_example\_client.py} y \\
+\texttt{repospec\_example\_client.py} respectivamente y se agrega las siguientes lineas al settings:
+\lstset{language=Python}
+\begin{lstlisting}
+EDUNUBE_CONFIG = {
+    "protocol": "http",
+    "host": "10.10.10.1",
+    "port": 8010,
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBf"
+             "bmFtZSI6IkdpdEVEVSIsImV4cGlyZXMiOmZhbHNlLCJjc"
+             "mVhdGVkX2RhdGUiOiIyMDE3LTExLTEyIDE3OjMzOjE3Lj"
+             "Y0MTY4MSIsImVkaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA"
+             "6MzY6NDAuMjc5NDAyIn0.825oh2rZUlIPZFaP_UbYPDpd"
+             "sXTE0XCaNsia-3NnGuc"
+}
+\end{lstlisting}
+
 \subsubsection{RepoSpec API}
+Los URIs del API de RepoSpecs de EduNube toma la forma general de: \\
+\texttt{POST /api/repospec/<operacion>} \\
+donde las operaciones posibles son los siguientes:
+\begin{itemize}
+	\item \texttt{create} para crear un nuevo RepoSpec. Parametros del \texttt{POST} son:
+    \begin{description}
+    	\item[token] con el API token que generamos previamente.
+        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, pero a futuro seria de agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, de aqui parte la herencia de los repositorios y solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui.
+    \end{description}
+    \item \texttt{get} para leer un RepoSpec existente. Parametros del \texttt{POST} son:
+    \begin{description}
+    	\item[token] con el API token que generamos previamente.
+        \item[\textit{repo}] \ldots
+        \item[\textit{repospec\_token}] \ldots
+    \end{description}
+    \item \texttt{get\_or\_create} para leer un RepoSpec existente o si no existe, crearla. Parametros del \texttt{POST} son:
+    \begin{description}
+    	\item[token] con el API token que generamos previamente.
+        \item[repo] \ldots
+        \item[\textit{parent}] \ldots
+        \item[\textit{repospec\_token}] \ldots
+    \end{description}
+    \item \texttt{edit} para modificar un RepoSpec existente. Parametros del \texttt{POST} son:
+    \begin{description}
+    	\item[token] con el API token que generamos previamente.
+        \item[\textit{repo}] \ldots
+        \item[\textit{repospec\_token}] \ldots
+        \item[\textit{parent}] \ldots
+        \item[\textit{new\_repo}] \ldots
+        \item[\textit{regen\_secret\_key}] \ldots
+    \end{description}
+\end{itemize}
 % TODO: How to create and modify RepoSpecs via API calls
 \subsubsection{Ejecuccion API}
 % TODO: How to execute code via API calls

@@ -454,6 +454,11 @@ Para instalar uWSGI, se lo instala como root a nivel de sistema operativo para P
 pip3 install uwsgi
 \end{lstlisting}
 
+El usuario y grupo que se utiliza para los servidores de aplicaciones (menos la de GitServerHTTPEndpoint que utiliza el usuario Git) es uWSGI, por lo tanto hay la necesidad de crear dicho usuario:
+\begin{lstlisting}
+adduser uwsgi
+\end{lstlisting}
+
 % TODO: Instead of nyx, maybe uWSGI would be better as user/group, ie chown root:uwsgi
 El servicio de SystemD para gestionar cada servidor de aplicacion (uWSGI) mediante un archivo de configuracion \texttt{.ini} se define de la siguiente manera: 
 \begin{lstlisting}
@@ -461,12 +466,14 @@ El servicio de SystemD para gestionar cada servidor de aplicacion (uWSGI) median
 Description=uWSGI Emperor service
 
 [Service]
-ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown nyx:root /run/uwsgi'
+#ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown uwsgi:uwsgi /run/uwsgi'
 ExecStart=/usr/local/bin/uwsgi --emperor /etc/uwsgi/sites
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
 NotifyAccess=all
+User=uwsgi
+Group=uwsgi
 
 [Install]
 WantedBy=multi-user.target
@@ -494,6 +501,11 @@ systemctl enable uwsgi
 % TODO: EduNube uWSGI ini
 
 \subsection{GitServerHTTPEndpoint}
+Para que el usuario git puede levantar un servidor uwsgi para su servicio GitServerHTTPEndpoint, se le agrege al grupo uwsgi:
+\begin{lstlisting}
+adduser git uwsgi
+\end{lstlisting}
+
 % TODO: add git user to uwsgi group, gid = uwsgi
 Para levantar el servicio de GitServerHTTPEndpoint se guarda el archivo \\ \texttt{/etc/uwsgi/sites/gitserverhttpendpoint.ini} con los siguientes contenidos:
 \begin{lstlisting}
@@ -513,8 +525,14 @@ master = true
 processes = 2
 
 uid = %(username)
-gid = root
+gid = uwsgi
 http-socket = 127.0.0.1:8021
+\end{lstlisting}
+
+Se crea el archivo log con los permisos adecuados:
+\begin{lstlisting}
+touch /usr/share/uwsgi.gitserverhttpendpoint.log
+chown git:uwsgi /usr/share/uwsgi.gitserverhttpendpoint.log
 \end{lstlisting}
 
 Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de configuracion que representa el respectivo servicio:

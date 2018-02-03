@@ -2043,42 +2043,13 @@ Donde operaciones de la consulta son los siguientes:
 \end{description}
 y lenguaje ejecutores son los mismos que se definen para el API anterior. Actualmente el valor de lenguaje no tiene ningun efecto sobre la consulta en el backend, pero seria mala practica de programacion que se solicita el trabajo con un lenguaje y despues consulta su estado o resultado con otro ya que, a futuro, si se implementa otros backends de virtualizacion para distintas lenguaje ejecutores, puede que este parametro se convierte en lo unico que les distingue para realizar la consulta en el backend adecuado. Todo operacion contra este API debe llevar su respectivo \texttt{token} definido anteriormente para validar que realmente puede realizar estas consultas.
 \subsubsection{Passthrough de API de EduNube en GitEDU para su consumo via AJAX}
-% TODO: mapeo uris en GitEDU -> uris en EduNube
-
-%\paragraph{Tokens de Autenticacion}
-%Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante un interfaz CRUD construido con formularios de Django. Esos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreto (mediante la funcion generar sal de bcrypt) y con ello se cifra datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente puede modificar los datos de su API token. El mismo esquema de autenticacion para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en el url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creacion, lectura, actualizacion y eliminacion de los API Tokens.
-%
-%\paragraph{API externa}
-%Los URLs del API de GitServerHTTPEndpoint toman la forma general de: 
-%\texttt{/api/<tipo\_de\_objeto>/<accion>/<ruta/de/objeto>}\\
-%donde los tipos de objetos posibles son
-%\begin{itemize}
-%	\item \texttt{ns} para los Namespace
-%    \item \texttt{repo} para Repositorios y
-%    \item \texttt{file} para Archivos
-%\end{itemize}
-%acciones posibles son:
-%\begin{itemize}
-%	\item \texttt{create} para crear,
-%	\item \texttt{edit} para editar y
-%    \item en el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificacion de:
-%    \begin{itemize}
-%    	\item \texttt{edit/mv}
-%        para alterar la ruta de un archivo y 
-%        \item \texttt{edit/contents}
-%        para alterar los contenidos de un archivo.
-%    \end{itemize}
-%\end{itemize}
-%
-%Los URIs del API que operan sobre Namespace, solo acceptan un namespace de parametro con un slash de delimitador final por ejemplo: \\
-%\texttt{/api/ns/create/nearley/}
-%
-%Los URIs del API que opera sobre los repositorios requieren de parametros un namespace y repositorio igual con un slash de delimitador final por ejemplo: \\
-%\texttt{/api/repo/create/nearley/GitEDU/}
-%
-%Los URIs del API que opera sobre archivos toman de parametros un namespace, un repositorio y una ruta de archivos que puede conllevar cualquier numero de slash para indicar directorios dentro del repositorio selecionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
-%\texttt{/api/file/create/nearley/GitEDU/despliegue/Readme.md}
-%
-%Un cliente ejemplar de todo el API, se puede encontrar con el nombre \\
-%\texttt{example\_client.py} dentro del raiz del proyecto.
-
+Con la finalidad de que el usuario final de GitEDU tenga acceso a los APIs de Ejecuccion y de Trabajos de EduNube, se realiza un mapeo de URIs entre los dos sistemas:
+\begin{description}
+	\item[Ejeccucion] \textit{GitEDU}: \texttt{POST} \texttt{/ide/execute/<namespace>/<repositorio>} \\
+    $\rightarrow$ \textit{EduNube}: \texttt{POST} \texttt{/api/execute/create/<lenguaje\_ejecutor>/} \\
+    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadata (definido con el ayuda del usuario, especificamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio.
+    \item[Trabajos] \textit{GitEDU}: \texttt{POST} \texttt{/ide/execute/<op>/<namespace>/<repositorio>} \\
+    $\rightarrow$ \textit{EduNube}: \texttt{POST} \texttt{/api/execute/<op>/<lenguaje\_ejecutor>/} \\
+    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadata (definido con el ayuda del usuario, especificamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio y \texttt{<op>} es la operacion \texttt{status} o \texttt{result} como se lo ha definido anteriormente.
+\end{description}
+Actualmente estas vistas quieren como minimo que el usuario se encuentra logueado, pero a futuro se podria integrar con un sistema de permisos con la finalidad de restringir cuales usuarios y/o grupos pueden ejecutar un proyecto.

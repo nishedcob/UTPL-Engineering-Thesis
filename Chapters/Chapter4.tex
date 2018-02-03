@@ -2019,13 +2019,21 @@ donde las operaciones posibles son los siguientes:
         \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repospec\_token}.
         \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repo}.
         \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, de aqui parte la herencia de los repositorios y solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Si se deja este sin valor (considerado como Null o en Python None), el comportamiento por defecto es de sobreescribir el valor anterior.
-        \item[\textit{new\_repo}] \ldots
-        \item[\textit{regen\_secret\_key}] \ldots
+        \item[\textit{new\_repo}] \textit{de forma opcional} con el nuevo nombre del repositorio actual para cambiar la misma, no incluir este parametro deja el RepoSpec con el mismo nombre de repositorio que ya tiene.
+        \item[\textit{regen\_secret\_key}] \textit{de forma opcional} con una bandera booleano que indica si se debe generar un nuevo secreto (llave privada) para el RepoSpec. Si no se incluye el parametro o lo deja el valor en false, se lo interpeta como mantener el mismo secreto actual para cifrar el token actualizado, caso contrario se interpreta cualquier otro valor como true, y procede a cambiar el secreto. 
     \end{description}
 \end{itemize}
-% TODO: How to create and modify RepoSpecs via API calls
 \subsubsection{Ejecuccion API}
 % TODO: How to execute code via API calls
+Los URIs del API de Ejecuccion de EduNube toma la forma general de: \\
+\texttt{POST /api/execute/create/<lenguage_ejecutor>/<namespace>/<repositorio>/} \\
+donde los ejecutores de lenguajes posibles son los siguientes:
+\begin{description}
+	\item[\texttt{shell}] \ldots
+	\item[\texttt{python3}] \ldots
+	\item[\texttt{postgresql}] \ldots
+\end{description}
+El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene 
 \subsubsection{Jobs API}
 % TODO: How to query job state via API calls
 

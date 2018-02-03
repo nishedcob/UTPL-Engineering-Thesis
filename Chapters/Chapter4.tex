@@ -2033,10 +2033,11 @@ donde los ejecutores de lenguajes posibles son los siguientes:
 	\item[\texttt{python3}] \ldots
 	\item[\texttt{postgresql}] \ldots
 \end{description}
-El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene 
+El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene el \texttt{id} con el cual se puede realizar consultas del estado de trabajo y ver sus resultados cuando el mismo termina.
 \subsubsection{Jobs API}
 % TODO: How to query job state via API calls
-
+\subsubsection{Passthrough de API de EduNube en GitEDU para su consumo via AJAX}
+% TODO: mapeo uris en GitEDU -> uris en EduNube
 
 %\paragraph{Tokens de Autenticacion}
 %Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante un interfaz CRUD construido con formularios de Django. Esos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreto (mediante la funcion generar sal de bcrypt) y con ello se cifra datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente puede modificar los datos de su API token. El mismo esquema de autenticacion para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en el url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creacion, lectura, actualizacion y eliminacion de los API Tokens.

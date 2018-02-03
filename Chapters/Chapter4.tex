@@ -2024,18 +2024,24 @@ donde las operaciones posibles son los siguientes:
     \end{description}
 \end{itemize}
 \subsubsection{Ejecuccion API}
-% TODO: How to execute code via API calls
 Los URIs del API de Ejecuccion de EduNube toma la forma general de: \\
-\texttt{POST /api/execute/create/<lenguage_ejecutor>/<namespace>/<repositorio>/} \\
+\texttt{POST /api/execute/create/<lenguage\_ejecutor>/<namespace>/} \\
+\texttt{<repositorio>/} \\
 donde los ejecutores de lenguajes posibles son los siguientes:
 \begin{description}
-	\item[\texttt{shell}] \ldots
-	\item[\texttt{python3}] \ldots
-	\item[\texttt{postgresql}] \ldots
+	\item[shell] que ejecuta commandos de terminal ocupando el interprete \texttt{/bin/sh} (puede ver el imagen de Docker \texttt{shell-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
+	\item[python3] que ejecuta codigo de Python 3 utilizando \texttt{virtualenv} y \texttt{pip} para manejo de dependencias (puede ver el imagen de Docker \texttt{python3-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
+	\item[postgresql] que ejecuta sentencias de SQL de PostgreSQL (puede ver el imagen de Docker \texttt{postgresql-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 \end{description}
 El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene el \texttt{id} con el cual se puede realizar consultas del estado de trabajo y ver sus resultados cuando el mismo termina.
 \subsubsection{Jobs API}
-% TODO: How to query job state via API calls
+Una vez que se realiza una peticion de un trabajo, se puede consultar el estatus y, a lo que termina, resultados del mismo con su identificador unico devuelto por el API de Ejeccucion. Estas llamadas toman una forma general de: \texttt{POST /api/execute/<operacion\_de\_consulta>/<lenguaje\_ejecutor>/<id>/}
+Donde operaciones de la consulta son los siguientes:
+\begin{description}
+	\item[status] devuelve en formato JSON si un trabajo existe o no y en caso de que existe, si el mismo ha terminado.
+    \item[result] devuelve en formato JSON la salida del trabajo con la finalidad de que se puede presentar el mismo al usuario final.
+\end{description}
+y lenguaje ejecutores son los mismos que se definen para el API anterior. Actualmente el valor de lenguaje no tiene ningun efecto sobre la consulta en el backend, pero seria mala practica de programacion que se solicita el trabajo con un lenguaje y despues consulta su estado o resultado con otro ya que, a futuro, si se implementa otros backends de virtualizacion para distintas lenguaje ejecutores, puede que este parametro se convierte en lo unico que les distingue para realizar la consulta en el backend adecuado. Todo operacion contra este API debe llevar su respectivo \texttt{token} definido anteriormente para validar que realmente puede realizar estas consultas.
 \subsubsection{Passthrough de API de EduNube en GitEDU para su consumo via AJAX}
 % TODO: mapeo uris en GitEDU -> uris en EduNube
 

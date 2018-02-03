@@ -24,13 +24,13 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
     \begin{description}
     	\item[NGinX] \textit{http://0.0.0.0:80} \index{NGinX}
         \begin{itemize}
-            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb
-            \item \textit{http://gitedu.localhost:80} -> GitEDU
-            \item \textit{http://edunube.localhost:80} -> EduNube
-            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint
-            \item \textit{http://gitlab.localhost:80} -> GitLab
-            \item \textit{http://moodle.localhost:80} -> Moodle
-            \item \textit{http://registry.localhost:80} -> Registry
+            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb (HTTP)
+            \item \textit{http://gitedu.localhost:80} -> GitEDU (HTTP)
+            \item \textit{http://edunube.localhost:80} -> EduNube (HTTP)
+            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint (HTTP)
+            \item \textit{http://gitlab.localhost:80} -> GitLab (HTTP)
+            \item \textit{http://moodle.localhost:80} -> Moodle (HTTP)
+            \item \textit{http://registry.localhost:80} -> Registry (HTTP)
         \end{itemize}
         \item[GitEDU] \textit{http://0.0.0.0:8000}
         \item[EduNube] \textit{http://0.0.0.0:8010}\footnote{Previamente el puerto asignado fue :8001, pero esto estaba en conflicto con el Dashboard/Proxy de Kubernetes, por lo tanto se ha cambiado este servicio al puerto :8010}
@@ -38,15 +38,15 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
         \item[Kubernetes Proxy] \textit{http://0.0.0.0:8001}
         \item[Docker] \textit{10.10.10.1}
         \begin{description}
-        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306}
-        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80}
+        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306} (TCP/MySQL)
+        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80} (HTTP)
         	\item[GitLab CE] \textit{10.10.10.1}
             \begin{itemize}
-            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443}
-            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80}
-            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22}
+            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443} (HTTPS)
+            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80} (HTTP)
+            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22} (SSH)
             \end{itemize}
-            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000}
+            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000} (HTTP)
         \end{description}
     \end{description}
     \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
@@ -390,6 +390,18 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 \index{Contenedor} \index{Virtualización} \index{Hipervisor}
 
 \section{Despliegue}
+Para el despliegue de los servicios y su infrastructura de apoyo se propone utilizar NGinX como proxy inversa, con uWSGI como servidor de aplicacion para los servicios de Django/Python y todo gestionado por el sistema operativo de despliegue con Systemd que ahora es un estandar por defecto en casi todos los distribuciones de Linux. La segmentacion de servicios en el mismo puerto (80/HTTP) de NGinX se realiza con subdominios como se indica al inicio de este capitulo.
+
+La configuracion de \texttt{http://10.10.10.1} y \texttt{http://git.localhost} se encuentra en el capitulo \ref{capitulo4} de Desarrollo.
+
+La configuracion de los tres servicios de Django, GitEDU, EduNube y GitServerHTTPEndpoint se detallan a continuacion por seperado por el hecho de que la configuracion de cada uno es mas extenso.
+
+% TODO: Configuracion de Gitlab (Docker) con NGinX
+
+% TODO: Configuracion de Moodle (Docker) con NGinX
+
+% TODO: Configuracion de Docker Registry (Docker) con NGinX
+
 % TODO: discuss NGinX config for deployment, introduce idea of SystemD Services
 % servicios y su asignacion de puertos
 % GitEDU - 8000/HTTP = gitedu.localhost
@@ -404,13 +416,45 @@ Para ver el Dashboard se visita en su navegador: \href{http://localhost:8001/api
 %		http://gitlab.localhost:80 -> GitLab
 %		http://moodle.localhost:80 -> Moodle
 %		http://registry.localhost:80 -> Registry
+%\begin{description}
+%	\item[Maquina Física] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
+%    \begin{description}
+%    	\item[NGinX] \textit{http://0.0.0.0:80} \index{NGinX}
+%        \begin{itemize}
+%            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb (HTTP)
+%            \item \textit{http://gitedu.localhost:80} -> GitEDU (HTTP)
+%            \item \textit{http://edunube.localhost:80} -> EduNube (HTTP)
+%            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint (HTTP)
+%            \item \textit{http://gitlab.localhost:80} -> GitLab (HTTP)
+%            \item \textit{http://moodle.localhost:80} -> Moodle (HTTP)
+%            \item \textit{http://registry.localhost:80} -> Registry (HTTP)
+%        \end{itemize}
+%        \item[GitEDU] \textit{http://0.0.0.0:8000}
+%        \item[EduNube] \textit{http://0.0.0.0:8010}\footnote{Previamente el puerto asignado fue :8001, pero esto estaba en conflicto con el Dashboard/Proxy de Kubernetes, por lo tanto se ha cambiado este servicio al puerto :8010}
+%        \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8020}\footnote{Para temas de consistencia con el cambio de puerto de EduNube, se ha cambiado el numero de puerto de :8002 a :8020}
+%        \item[Kubernetes Proxy] \textit{http://0.0.0.0:8001}
+%        \item[Docker] \textit{10.10.10.1}
+%        \begin{description}
+%        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306} (TCP/MySQL)
+%        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80} (HTTP)
+%        	\item[GitLab CE] \textit{10.10.10.1}
+%            \begin{itemize}
+%            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443} (HTTPS)
+%            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80} (HTTP)
+%            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22} (SSH)
+%            \end{itemize}
+%            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000} (HTTP)
+%        \end{description}
+%    \end{description}
+%    \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
+%\end{description}
 
 Para instalar uWSGI, se lo instala como root a nivel de sistema operativo para Python 3:
 \begin{lstlisting}
 pip3 install uwsgi
 \end{lstlisting}
 
-% TODO: Instead of nyx, maybe uWSGI would be better as group, ie chown root:uwsgi
+% TODO: Instead of nyx, maybe uWSGI would be better as user/group, ie chown root:uwsgi
 El servicio de SystemD para gestionar cada servidor de aplicacion (uWSGI) mediante un archivo de configuracion \texttt{.ini} se define de la siguiente manera: 
 \begin{lstlisting}
 [Unit]

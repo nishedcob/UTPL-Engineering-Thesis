@@ -499,6 +499,16 @@ Cuando se ha confirmado su correcto funcionamiento, se puede activar el servicio
 systemctl enable uwsgi
 \end{lstlisting}
 
+Finalmente se edita el archivo sudoers para que cualquier usuario que es miembro del grupo uwsgi puede reiniciar el servicio como root:
+\begin{lstlisting}
+visudo
+\end{lstlisting}
+y se agrega la siguiente linea:
+\begin{lstlisting}
+%uwsgi  ALL= NOPASSWD: /bin/systemctl restart uwsgi
+\end{lstlisting}
+Donde \texttt{\%uwsgi} indica el grupo \texttt{uwsgi}, \texttt{ALL} indica desde cualquier host, local o remoto, \texttt{NOPASSWD} indica que no hay necesidad de pedir la clave del usuario, eso permite utilizar el comando de forma autonoma (no interactiva) dentro de scripts y finalmente se define el commando exacto para el cual se aplica la regla (cualquier modificacion commando y ya no se aplica la regla).
+
 \subsection{GitEDU}
 % TODO: GitEDU uWSGI ini
 

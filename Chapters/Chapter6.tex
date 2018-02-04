@@ -456,53 +456,6 @@ systemctl restart nginx
 \end{lstlisting}
 Para probar, puede vistar: \texttt{http://registry.localhost/v2/\_catalog}
 
-% TODO: discuss NGinX config for deployment, introduce idea of SystemD Services
-% servicios y su asignacion de puertos
-% GitEDU - 8000/HTTP = gitedu.localhost
-% EduNube - 8010/HTTP = edunube.localhost
-% GitServerHTTPEndpoint - 8020/HTTP = gitsrvendpoint.localhost
-% Kubernetes Proxy - 8001/HTTP = kubernetes.proxy.localhost
-% aux services (redir NGinX):
-%		http://git.localhost:80 -> GitWeb
-%		http://gitedu.localhost:80 -> GitEDU
-%		http://edunube.localhost:80 -> EduNube
-%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
-%		http://gitlab.localhost:80 -> GitLab
-%		http://moodle.localhost:80 -> Moodle
-%		http://registry.localhost:80 -> Registry
-%\begin{description}
-%	\item[Maquina Física] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
-%    \begin{description}
-%    	\item[NGinX] \textit{http://0.0.0.0:80} \index{NGinX}
-%        \begin{itemize}
-%            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb (HTTP)
-%            \item \textit{http://gitedu.localhost:80} -> GitEDU (HTTP)
-%            \item \textit{http://edunube.localhost:80} -> EduNube (HTTP)
-%            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint (HTTP)
-%            \item \textit{http://gitlab.localhost:80} -> GitLab (HTTP)
-%            \item \textit{http://moodle.localhost:80} -> Moodle (HTTP)
-%            \item \textit{http://registry.localhost:80} -> Registry (HTTP)
-%        \end{itemize}
-%        \item[GitEDU] \textit{http://0.0.0.0:8000}
-%        \item[EduNube] \textit{http://0.0.0.0:8010}\footnote{Previamente el puerto asignado fue :8001, pero esto estaba en conflicto con el Dashboard/Proxy de Kubernetes, por lo tanto se ha cambiado este servicio al puerto :8010}
-%        \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8020}\footnote{Para temas de consistencia con el cambio de puerto de EduNube, se ha cambiado el numero de puerto de :8002 a :8020}
-%        \item[Kubernetes Proxy] \textit{http://0.0.0.0:8001}
-%        \item[Docker] \textit{10.10.10.1}
-%        \begin{description}
-%        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306} (TCP/MySQL)
-%        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80} (HTTP)
-%        	\item[GitLab CE] \textit{10.10.10.1}
-%            \begin{itemize}
-%            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443} (HTTPS)
-%            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80} (HTTP)
-%            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22} (SSH)
-%            \end{itemize}
-%            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000} (HTTP)
-%        \end{description}
-%    \end{description}
-%    \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
-%\end{description}
-
 Para instalar uWSGI, se lo instala como root a nivel de sistema operativo para Python 3:
 \begin{lstlisting}
 pip3 install uwsgi
@@ -548,6 +501,52 @@ systemctl enable uwsgi
 
 \subsection{GitEDU}
 % TODO: GitEDU uWSGI ini
+
+% servicios y su asignacion de puertos
+% GitEDU - 8000/HTTP = gitedu.localhost
+% EduNube - 8010/HTTP = edunube.localhost
+% GitServerHTTPEndpoint - 8020/HTTP = gitsrvendpoint.localhost
+% Kubernetes Proxy - 8001/HTTP = kubernetes.proxy.localhost
+% aux services (redir NGinX):
+%		http://git.localhost:80 -> GitWeb
+%		http://gitedu.localhost:80 -> GitEDU
+%		http://edunube.localhost:80 -> EduNube
+%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
+%		http://gitlab.localhost:80 -> GitLab
+%		http://moodle.localhost:80 -> Moodle
+%		http://registry.localhost:80 -> Registry
+%\begin{description}
+%	\item[Maquina Física] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
+%    \begin{description}
+%    	\item[NGinX] \textit{http://0.0.0.0:80} \index{NGinX}
+%        \begin{itemize}
+%            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb (HTTP)
+%            \item \textit{http://gitedu.localhost:80} -> GitEDU (HTTP)
+%            \item \textit{http://edunube.localhost:80} -> EduNube (HTTP)
+%            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint (HTTP)
+%            \item \textit{http://gitlab.localhost:80} -> GitLab (HTTP)
+%            \item \textit{http://moodle.localhost:80} -> Moodle (HTTP)
+%            \item \textit{http://registry.localhost:80} -> Registry (HTTP)
+%        \end{itemize}
+%        \item[GitEDU] \textit{http://0.0.0.0:8000}
+%        \item[EduNube] \textit{http://0.0.0.0:8010}\footnote{Previamente el puerto asignado fue :8001, pero esto estaba en conflicto con el Dashboard/Proxy de Kubernetes, por lo tanto se ha cambiado este servicio al puerto :8010}
+%        \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8020}\footnote{Para temas de consistencia con el cambio de puerto de EduNube, se ha cambiado el numero de puerto de :8002 a :8020}
+%        \item[Kubernetes Proxy] \textit{http://0.0.0.0:8001}
+%        \item[Docker] \textit{10.10.10.1}
+%        \begin{description}
+%        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306} (TCP/MySQL)
+%        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80} (HTTP)
+%        	\item[GitLab CE] \textit{10.10.10.1}
+%            \begin{itemize}
+%            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443} (HTTPS)
+%            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80} (HTTP)
+%            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22} (SSH)
+%            \end{itemize}
+%            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000} (HTTP)
+%        \end{description}
+%    \end{description}
+%    \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
+%\end{description}
 
 \subsection{EduNube}
 % TODO: EduNube uWSGI ini

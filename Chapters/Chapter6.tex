@@ -396,9 +396,45 @@ La configuracion de \texttt{http://10.10.10.1} y \texttt{http://git.localhost} s
 
 La configuracion de los tres servicios de Django, GitEDU, EduNube y GitServerHTTPEndpoint se detallan a continuacion por seperado por el hecho de que la configuracion de cada uno es mas extenso.
 
-% TODO: Configuracion de Gitlab (Docker) con NGinX
+Para la configuracion de NGinX para Gitlab se escribe las siguientes lineas en el archivo \texttt{/etc/nginx/sites-available/gitlab}:
+\begin{lstlisting}
+server {
+        listen 80;
+        listen [::]:80;
+        server_name gitlab.localhost;
+        location / {
+                proxy_pass http://127.0.0.1:8101;
+        }
+}
+\end{lstlisting}
+Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
+\begin{lstlisting}
+ln -s -r /etc/nginx/sites-available/gitlab \ 
+    /etc/nginx/sites-enabled/21-gitlab
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
+Para probar, puede vistar: \texttt{http://gitlab.localhost/users/sign\_in}
 
-% TODO: Configuracion de Moodle (Docker) con NGinX
+Para la configuracion de NGinX para Moodle se escribe las siguientes lineas en el archivo \texttt{/etc/nginx/sites-available/moodle}:
+\begin{lstlisting}
+server {
+        listen 80;
+        listen [::]:80;
+        server_name moodle.localhost;
+        location / {
+                proxy_pass http://127.0.0.1:8201;
+        }
+}
+\end{lstlisting}
+Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
+\begin{lstlisting}
+ln -s -r /etc/nginx/sites-available/moodle \ 
+    /etc/nginx/sites-enabled/22-moodle
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
+Para probar, puede vistar: \texttt{http://moodle.localhost/}
 
 Para la configuracion de NGinX para Docker Registry se escribe las siguientes lineas en el archivo \texttt{/etc/nginx/sites-available/docker-registry}:
 \begin{lstlisting}

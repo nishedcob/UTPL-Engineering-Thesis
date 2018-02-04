@@ -649,6 +649,37 @@ systemctl restart nginx
 
 Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8020/auth/login}
 
+Con Git y SSH se automatiza el despliegue con cada push del servicio de la siguiente manera:
+\begin{enumerate}
+	\item Crear un directorio de scripts de apoyo en el raiz del proyecto:
+    \begin{lstlisting}
+mkdir bin
+    \end{lstlisting}
+    \item Crear un script para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
+    \begin{lstlisting}
+#! /bin/bash
+
+SYSTEMCTL=/bin/systemctl
+SUDO=/usr/bin/sudo
+SERVICE=uwsgi
+BASE_PATH=/home/git/GitServerHTTPEndpoint
+PYTHON=env/bin/python
+MANAGE=manage.py
+STATIC_COMMAND="collectstatic --no-input"
+MIGRATE_COMMAND="migrate"
+STAT=status
+RESET=restart
+
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $STATIC_COMMAND
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $MIGRATE_COMMAND
+$SYSTEMCTL $STAT $SERVICE
+$SUDO $SYSTEMCTL $RESET $SERVICE
+$SYSTEMCTL $STAT $SERVICE
+    \end{lstlisting}
+    Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio.
+    \item Crear un hook post-receive de Git (version minimo  (.git/hooks/post-receive)
+\end{enumerate}
+
 % TODO: Automatizar el despliegue con Git y SSH
 
 \section{Pruebas del Despliegue y Resultados}

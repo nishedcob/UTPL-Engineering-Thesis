@@ -1,18 +1,18 @@
 
 % Appendix B - Software Requirements Specification
 
-\chapter{Especificacion de Requisitos de Software}
+\chapter{Especificación de Requisitos de Software}
 \label{ersDoc}
 
-\section{Introduccion}
+\section{Introducción}
 
-\subsection{Proposito}
-El siguiente documento espera dar una descripción detallado de los requisitos del Sistema Git Education (GitEDU) con las finalidades de definir la intención de la misma, declarar de forma completa todos los componentes a ser desarrollados del sistema, y también explicar limitaciones del sistema además de sus interacciones y interfaces con otros sistemas. Se destina el siguiente documento para revisión por el equipo de asesores y como una referencia de alcance para el equipo de desarrollo.
+\subsection{Propósito}
+El siguiente documento espera dar una descripción detallada de los requisitos del Sistema Git Education (GitEDU) con la finalidad de definir la intención de la misma, declarar de forma completa todos los componentes a ser desarrollados del sistema, y también explicarlas limitaciones del sistema además de sus interacciones e interfaces con otros sistemas. Se destina el siguiente documento para revisión por el equipo de asesores y como una referencia de alcance para el equipo de desarrollo.
 
 \subsection{Alcance}
 GitEDU es un sistema de integración para promover la programación estudiantil y el sistema educativo que soporta el mismo. El sistema final debe disponer de buena documentación y alta calidad de código para sostener su futuro desarrollo y mantenimiento por parte de una comunidad de profesionales y profesionales en formación.
 
-Docentes de las carreras que involucran la enseñanza de programación, actualmente tanto la carrera de Sistemas Informáticos y Computación como la carrera de Electrónica y Telecomunicaciones, pueden crear dentro de la plataforma, deberes, talleres, pruebas y exámenes, y a través de los LMS institucionales, compartir las mismas con sus alumnos. Los alumnos pueden entrar a través de un enlace que les comparte su docente dentro del LMS institucional y con un canal de comunicación LTI, la plataforma GitEDU les identifica y autentica sin interacción del usuario para que el estudiante puede empezar directamente con el trabajo que tiene que realizar sin digitar sus credenciales. En el curso de su actividad, se va guardando su progreso periódicamente contra un servidor de control de versiones institucional (GitLab CE) y en cualquier momento el estudiante puede probar e interactuar con su código a través de un terminal virtual de Linux que se encuentra dentro de la misma interfaz. Una vez que se termine su trabajo y desee enviarlo, se lo envía y el código escrito se auto califica contra un conjunto de pruebas unitarias ocultas que el docente agregó a la actividad al crearlo. La nota que se genera se lo envía al LMS institucional a través del mismo canal LTI. En caso de que el docente decide no utilizar pruebas unitarias o calificar cada trabajo a mano o realizar una calificación híbrida entre las pruebas unitarias y la parte a mano, no se reflejarán las notas en el LMS hasta que el docente se ha terminado de calificar el código en la plataforma de GitEDU.
+Docentes de las carreras que involucran la enseñanza de programación, actualmente tanto la carrera de Sistemas Informáticos y Computación como la carrera de Electrónica y Telecomunicaciones, puedan crear dentro de la plataforma, deberes, talleres, pruebas y exámenes, y a través de los LMS institucionales, compartir los mismas con sus alumnos. Los alumnos pueden entrar a través de un enlace que les comparte su docente dentro del LMS institucional y con un canal de comunicación LTI, la plataforma GitEDU les identifica y autentica sin interacción del usuario para que el estudiante puede empezar directamente con el trabajo que tiene que realizar sin digitar sus credenciales. En el curso de su actividad, se va guardando su progreso periódicamente contra un servidor de control de versiones institucional (GitLab CE) y en cualquier momento el estudiante puede probar e interactuar con su código a través de un terminal virtual de Linux que se encuentra dentro de la misma interfaz. Una vez que se termine su trabajo y desee enviarlo, se lo envía y el código escrito se auto califica contra un conjunto de pruebas unitarias ocultas que el docente agregó a la actividad al crearlo. La nota que se genera se lo envía al LMS institucional a través del mismo canal LTI. En caso de que el docente decide no utilizar pruebas unitarias o calificar cada trabajo a mano o realizar una calificación híbrida entre las pruebas unitarias y la parte a mano, no se reflejarán las notas en el LMS hasta que el docente haya terminado de calificar el código en la plataforma de GitEDU.
 
 Además el sistema requiere una conexión de internet y la disponibilidad de sistemas de apoyo como el servidor de control de versiones, el LMS y el servicio de ejecución de código.
 
@@ -21,13 +21,13 @@ Además el sistema requiere una conexión de internet y la disponibilidad de sis
 \begin{table}[h!]
 	\begin{tabular}{|p{0.45\textwidth}|p{0.45\textwidth}|}
     	\hline
-    	\textbf{Termino} & \textbf{Definicion} \\
+    	\textbf{Termino} & \textbf{Definición} \\
         \hline
-		Docente / Professor & Alguien quien pertenece a la facultad de la institución y cuyo responsabilidad es enseñar a sus alumnos / estudiantes programación. \\
+		Docente / Profesor & Alguien que pertenece a la facultad de la institución y cuya responsabilidad es enseñar a sus alumnos / estudiantes programación. \\
 		\hline
 		Alumno / Estudiante & Un miembro del cuerpo estudiantil de la institución y está en el proceso de aprender la programación. \\
 		\hline
-		Administrador & Quien se administra y mantiene el sistema. \\
+		Administrador & Quien administra y mantiene el sistema. \\
 		\hline
 		Materia / Clase & Un conjunto de Docente(s) y Alumno(s) que están el proceso educativo de programación juntos en una aula física o virtual. \\
 		\hline
@@ -35,7 +35,7 @@ Además el sistema requiere una conexión de internet y la disponibilidad de sis
 		\hline
 		LMS & Learning Management System, un sistema que apoya en la interacción educativa diaria entre Docentes y sus Alumnos \\
 		\hline
-		LTI & Learning Tools Interoperability, una estandar y protocolo que permite la comunicación e interacción entre varias herramientas educativas. \\
+		LTI & Learning Tools Interoperability, una estándar y protocolo que permite la comunicación e interacción entre varias herramientas educativas. \\
 		\hline
 		VCS & Sistema de Control de Versiones, permite almacenar y visualizar una historia de versiones de archivos o código para dar trazabilidad para lo mismo.  \\
 		\hline
@@ -53,17 +53,16 @@ Como fuente de la plantilla para el ERS, se ocupó:
 \subsection{Perspectiva de Producto}
 La plataforma GitEDU se descompone en dos subsistemas: el subsistema de editar código y el subsistema de ejecutar código. El subsistema de editar código consiste en la integración de autenticación y notas por el lado del LMS, el uso de persistencia del código por el servidor de control de versiones por otro lado, el consumo de un servicio de ejecución de código por un tercer lado y un editor de código en línea. El subsistema de ejecutar código consiste en esperar llamadas del subsistema anterior, validar la autenticidad, establecer permisos, limitaciones y parámetros de ejecución, gestionar recursos para ejecución, la ejecución interactiva y devolución de resultados al otro subsistema.
 
-Debido a la necesidad de mantener seguridad y prevenir la ejecución indebido de código, el subsistema para lo mismo debe ser aislado de todos los usuarios y solo accedido desde el otro subsistema a través de un API que permite su interoperabilidad. La solución para la ejecución de código debe ser liviana debido a número grande de usuarios concurrentes que puede tener a la vez.
+Debido a la necesidad de mantener la seguridad y prevenir la ejecución indebida de código, el subsistema debe ser aislado de todos los usuarios y solo accedido desde el otro subsistema a través de un API que permite su interoperabilidad. La solución para la ejecución de código debe ser liviana debido al gran número de usuarios concurrentes que puede tener a la vez.
 
-Funcionalidades de Producto
-Para entrar al subsistema de editar código en línea, se debe autenticarse contra el LMS institucional. El editor de código en línea debe soportar una variedad grande de lenguajes y estar abierto a la agregación de más lenguajes en un futuro. La persistencia de código en un servidor de control de versiones debe ser transparente y no requerir ningún interacción del usuario. El interfaz para interactuar con el ambiente virtual debe ser simple y fácil de manejar sin mayor conocimiento de las tecnologías que le respaldan. Se debe poder acompañar el editor de código con documentación que guía el estudiante en explicar o resolver el problema actual. La manera en que docentes pueden generar nuevos ejercicios, su documentación y pruebas unitarias para la calificación debe ser intuitivo.
+Funcionalidades de Producto: para entrar al subsistema de editar código en línea, se debe autenticar contra el LMS institucional. El editor de código en línea debe soportar una variedad grande de lenguajes y estar abierto a la agregación de más lenguajes en un futuro. La persistencia de código en un servidor de control de versiones debe ser transparente y no requerir ningún interacción del usuario. El interfaz para interactuar con el ambiente virtual debe ser simple y fácil de manejar sin mayor conocimiento de las tecnologías que le respaldan. Se debe poder acompañar el editor de código con documentación que guía el estudiante en explicar o resolver el problema actual. La manera en que los docentes pueden generar nuevos ejercicios, su documentación y pruebas unitarias para la calificación debe ser intuitivo.
 
-\subsection{Caracteristicas de Usuario}
+\subsection{Características de usuario}
 Los tres tipos de usuarios que interactúan con el sistema son Docentes, Alumnos y Administradores. Cada tipo de usuario tiene sus propias necesidades y requerimientos.
 
-Docentes necesitan un sistema que sea fácil de manejar y que les simplifica y automatiza el proceso de enseñar y evaluar a sus estudiantes. Eso significa tener una interfaz intuitiva para docentes que les permite escribir, documentar y generar pruebas unitarias para probar funcionalidad de código que escribe estudiantes para los ejercicios.
+Docentes, necesitan un sistema que sea fácil de manejar y que simplifique y automatice el proceso de enseñar y evaluar a los estudiantes. Eso significa tener una interfaz intuitiva para los  docentes que les permita escribir, documentar y generar pruebas unitarias para probar funcionalidad de código que escriben los  estudiantes para los ejercicios.
 
-Alumnos necesitan un sistema que les brinde una buena experiencia de aprendizaje y les proporciona todas las herramientas que requieren para desarrollar en linea. Igual que sus profesores, deben disponer de una interfaz intuitiva que les ayuda cumplir con sus responsabilidades de estudiar, aprender y demostrar conocimientos en una cantidad de tiempo óptimo.
+Alumnos, necesitan un sistema que les brinde una buena experiencia de aprendizaje y les proporcione todas las herramientas que requieran para el desarrollar en línea. Igual que sus profesores, deben disponer de una interfaz intuitiva que les ayude a cumplir con las responsabilidades de estudiar, aprender y demostrar conocimientos en una cantidad de tiempo óptimo.
 
 Administradores necesitan un sistema que sea seguro y cuyos componentes sean fáciles de mantener y extender a lo largo del tiempo. Para ello se necesita tener una buena documentación del funcionamiento del sistema y todos sus componentes para tener la misma como referencia.
 
@@ -87,7 +86,7 @@ El sistema que interactúa directamente con los usuarios no tiene ningún requis
 El sistema que interactúa directamente con los usuarios debe ser capaz de autenticar los mismos contra LMS existentes y sincronizar notas que tiene con el mismo sistema LMS. Además el código que se desarrolla dentro de esta plataforma debe ir contra el servidor del sistema de control de versiones institucional. Y finalmente debe haber comunicación mediante APIs que permite el intercambio de código, entradas y salidas de ejecución en adición a notas resultantes de pruebas unitarias entre el sistema de desarrollo en línea y el sistema de ejecución de código en línea.
 
 \subsubsection{Interfaces de Comunicación}
-La comunicación entre los dos subsistemas es vital para lograr el nivel de funcionalidad que los usuarios finales requieren. Además, como aplicación en línea, se supone que todos los usuarios finales deben tener conectividad previo y durante el uso del sistema.
+La comunicación entre los dos subsistemas es vital para lograr el nivel de funcionalidad que los usuarios finales requieren. Además, como aplicación en línea, se supone que todos los usuarios finales deben tener conectividad previa y durante el uso del sistema.
 
 \subsection{Requerimientos Funcionales}
 

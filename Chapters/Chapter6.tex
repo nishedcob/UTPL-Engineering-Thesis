@@ -509,8 +509,34 @@ y se agrega la siguiente linea:
 \end{lstlisting}
 Donde \texttt{\%uwsgi} indica el grupo \texttt{uwsgi}, \texttt{ALL} indica desde cualquier host, local o remoto, \texttt{NOPASSWD} indica que no hay necesidad de pedir la clave del usuario, eso permite utilizar el comando de forma autonoma (no interactiva) dentro de scripts y finalmente se define el commando exacto para el cual se aplica la regla (cualquier modificacion commando y ya no se aplica la regla).
 
+Para facilitar el acceso al usuario \texttt{uwsgi} por SSH, se genera un par de llaves:
+\begin{lstlisting}
+ssh-keygen -f ~/.ssh/id_uwsgi
+\end{lstlisting}
+
+Esta llave se lo copia al usuario \texttt{uwsgi}:
+\begin{lstlisting}
+ssh-copy-id -i ~/.ssh/id_uwsgi.pub uwsgi@10.10.10.1
+\end{lstlisting}
+
+Se configura SSH para siempre ocupar esta llave en sus conexiones y conocer ese conexion por un alias:
+\begin{lstlisting}
+vim ~/.ssh/config
+
+# y se agrega las siguientes lineas:
+Host uwsgi
+     HostName 10.10.10.1
+     User uwsgi
+     Port 22
+     IdentityFile /home/nyx/.ssh/id_uwsgi
+\end{lstlisting}
+
+Se puede probar la configuracion con:
+\begin{lstlisting}
+ssh uwsgi
+\end{lstlisting}
+
 \subsection{GitEDU}
-% TODO: GitEDU uWSGI ini
 Para levantar el servicio de GitEDU se guarda el archivo \\
 \texttt{/etc/uwsgi/sites/gitedu.ini} con los siguientes contenidos:
 \begin{lstlisting}
@@ -531,13 +557,13 @@ processes = 2
 
 uid = %(username)
 gid = uwsgi
-http-socket = 127.0.0.1:8001
+http-socket = 127.0.0.1:8002
 \end{lstlisting}
 
 Se crea el archivo log con los permisos adecuados:
 \begin{lstlisting}
-touch /usr/share/uwsgi.gitedu.log
-chown uwsgi:uwsgi /usr/share/uwsgi.gitedu.log
+touch /usr/share/uwsgi.GitEDU.log
+chown uwsgi:uwsgi /usr/share/uwsgi.GitEDU.log
 \end{lstlisting}
 
 Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de configuracion que representa el respectivo servicio:
@@ -547,13 +573,12 @@ systemctl restart uwsgi
 Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.gitedu.log}.
 
 Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 mkdir -p /static/service/uwsgi/gitedu/static
 find /static -type d -exec chmod +x -c {} \;
 chown -c uwsgi:root /static/service/uwsgi
 chown -cR uwsgi:root /static/service/uwsgi/gitedu
-find /static/service/uwsgi/gitedu -type f \
-    -exec chmod -c 660 {} \;
+find /static/service/uwsgi/gitedu -type f -exec chmod -c 644 {} \;
 \end{lstlisting}
 
 Se cambia de usuario para clonar el repositorio:
@@ -592,7 +617,7 @@ server {
                 root /static/service/uwsgi/gitedu;
         }
         location / {
-                proxy_pass http://127.0.0.1:8001;
+                proxy_pass http://127.0.0.1:8002;
         }
 }
 \end{lstlisting}
@@ -674,13 +699,41 @@ do
 done
 echo "Servicio $SERVICE_NAME actualizado..."
 
-    \end{lstlisting} % TODO
+    \end{lstlisting}
     Este script se ejecuta cada vez que se recibe nuevos commits el repositorio y comprueba si los mismos representan la rama \texttt{\$DEPLOYMENT\_BRANCH} para proceder a hacer el despliegue con el mismo, caso contrario no realiza ningun operacion al respeto. Este script debe ser ejecutable (es una forma rapida de desactivar esta funcionalidad del despliegue automatico).
     \item Finalmente hay la necesidad de configurar Git para que esta dispuesto a recibir commits en la rama actual ya que en los repositorios que no son \textit{bare} por defecto se rechazo dichos cambios:
     \begin{lstlisting}
 git config receive.denyCurrentBranch updateInstead
-    \end{lstlisting} % TODO
+    \end{lstlisting}
 \end{enumerate}
+
+Finalmente en el repositorio de desarrollo, se puede agrega un nuevo remote que representa el entorno de produccion para su subida por SSH:
+\begin{lstlisting}
+git remote add localssh_gitedu_deploy uwsgi:/home/uwsgi/GitEDU
+\end{lstlisting}
+
+Y ahora se puede actualizar produccion con:
+\begin{lstlisting}
+git push localssh_gitedu_deploy --all
+\end{lstlisting}
+
+Para disponer de acceso facil al servicio de forma local, se agrega la siguiente configuracion a NGinX en el archivo \texttt{/etc/nginx/sites-available/gitedu-proxy}:
+\begin{lstlisting}
+server {
+        listen 80;
+        listen [::]:80;
+        server_name gitedu.localhost;
+        location / {
+                proxy_pass http://127.0.0.1:8000;
+        }
+}
+\end{lstlisting}
+y el mismo se enlaza previo a la activacion de la configuracion:
+\begin{lstlisting}[linebreaks=true]
+ln -s -r /etc/nginx/sites-available/gitedu-proxy /etc/nginx/sites-enabled/41-gitedu-proxy
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
 
 % servicios y su asignacion de puertos
 % GitEDU - 8000/HTTP = gitedu.localhost
@@ -772,13 +825,12 @@ systemctl restart uwsgi
 Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.gitserverhttpendpoint.log}.
 
 Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 mkdir -p /static/service/uwsgi/githttpserverendpoint/static
 find /static -type d -exec chmod +x -c {} \;
 chown -c uwsgi:root /static/service/uwsgi
 chown -cR git:root /static/service/uwsgi/githttpserverendpoint
-find /static/service/uwsgi/githttpserverendpoint -type f \
-    -exec chmod -c 660 {} \;
+find /static/service/uwsgi/githttpserverendpoint -type f -exec chmod -c 644 {} \;
 \end{lstlisting}
 
 Se cambia el settings.py del servicio:
@@ -893,6 +945,24 @@ echo "Servicio $SERVICE_NAME actualizado..."
 git config receive.denyCurrentBranch updateInstead
     \end{lstlisting}
 \end{enumerate}
+
+Para disponer de acceso facil al servicio de forma local, se agrega la siguiente configuracion a NGinX en el archivo \texttt{/etc/nginx/sites-available/gitedu-proxy}:
+\begin{lstlisting}
+server {
+        listen 80;
+        listen [::]:80;
+        server_name gitedu.localhost;
+        location / {
+                proxy_pass http://127.0.0.1:8000;
+        }
+}
+\end{lstlisting}
+y el mismo se enlaza previo a la activacion de la configuracion:
+\begin{lstlisting}[linebreaks=true]
+ln -s -r /etc/nginx/sites-available/gitedu-proxy /etc/nginx/sites-enabled/41-gitedu-proxy
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

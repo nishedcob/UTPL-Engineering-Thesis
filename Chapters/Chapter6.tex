@@ -511,6 +511,170 @@ Donde \texttt{\%uwsgi} indica el grupo \texttt{uwsgi}, \texttt{ALL} indica desde
 
 \subsection{GitEDU}
 % TODO: GitEDU uWSGI ini
+Para levantar el servicio de GitEDU se guarda el archivo \\
+\texttt{/etc/uwsgi/sites/gitedu.ini} con los siguientes contenidos:
+\begin{lstlisting}
+[uwsgi]
+project = GitEDU
+project_location = %(project)
+username = uwsgi
+base = /home/%(username)
+environment = %(project)/env
+
+chdir = %(base)/%(project_location)
+home = %(base)/%(environment)
+module = %(project).wsgi:application
+logto = /usr/share/uwsgi.%(project).log
+
+master = true
+processes = 2
+
+uid = %(username)
+gid = uwsgi
+http-socket = 127.0.0.1:8001
+\end{lstlisting}
+
+Se crea el archivo log con los permisos adecuados:
+\begin{lstlisting}
+touch /usr/share/uwsgi.gitedu.log
+chown uwsgi:uwsgi /usr/share/uwsgi.gitedu.log
+\end{lstlisting}
+
+Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de configuracion que representa el respectivo servicio:
+\begin{lstlisting}
+systemctl restart uwsgi
+\end{lstlisting}
+Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.gitedu.log}.
+
+Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
+\begin{lstlisting}
+mkdir -p /static/service/uwsgi/gitedu/static
+find /static -type d -exec chmod +x -c {} \;
+chown -c uwsgi:root /static/service/uwsgi
+chown -cR uwsgi:root /static/service/uwsgi/gitedu
+find /static/service/uwsgi/gitedu -type f \
+    -exec chmod -c 660 {} \;
+\end{lstlisting}
+
+Se cambia de usuario para clonar el repositorio:
+\begin{lstlisting}
+su - uwsgi
+git clone https://gitlab.com/nishedcob/GitEDU.git GitEDU
+
+\end{lstlisting}
+
+Se cambia el settings.py del servicio:
+\lstset{language=Python}
+\begin{lstlisting}
+STATIC_ROOT = "/static/service/uwsgi/gitedu/static"
+\end{lstlisting}
+\lstset{language=Bash}
+
+Se copia los archivos al directorio que utiliza NGinX para servir los archivos estaticos, este paso se tiene que repetir siempre y cuando los archivos estaticos cambien:
+\begin{lstlisting}
+python manage.py collectstatic
+\end{lstlisting}
+
+Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\
+\texttt{/etc/nginx/sites-available/gitserverhttpendpoint}:
+\begin{lstlisting}
+server {
+        listen 8020;
+        listen [::]:8020;
+        server_name _;
+        location /static/ {
+                root /static/service/uwsgi/githttpserverendpoint;
+        }
+        location / {
+                proxy_pass http://127.0.0.1:8021;
+        }
+}
+\end{lstlisting}
+
+Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
+\begin{lstlisting}
+ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint \ 
+    /etc/nginx/sites-enabled/33-gitserverhttpendpoint
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
+
+Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8020/auth/login}
+
+Con Git y SSH se automatiza el despliegue con cada push del servicio de la siguiente manera:
+\begin{enumerate}
+	\item Crear un directorio de scripts de apoyo en el raiz del proyecto:
+    \begin{lstlisting}
+mkdir bin
+    \end{lstlisting}
+    \item Crear un script para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
+    \begin{lstlisting}
+#! /bin/bash
+
+SYSTEMCTL=/bin/systemctl
+SUDO=/usr/bin/sudo
+SERVICE=uwsgi
+BASE_PATH=/home/git/GitServerHTTPEndpoint
+PYTHON=env/bin/python
+MANAGE=manage.py
+STATIC_COMMAND="collectstatic --no-input"
+MIGRATE_COMMAND="migrate"
+STAT=status
+RESET=restart
+
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $STATIC_COMMAND
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $MIGRATE_COMMAND
+$SYSTEMCTL $STAT $SERVICE
+$SUDO $SYSTEMCTL $RESET $SERVICE
+$SYSTEMCTL $STAT $SERVICE
+    \end{lstlisting}
+    Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio. El mismo script debe ser ejecutable.
+    \item Crear un hook post-receive de Git (version minimo 2.4.12) \\
+    \texttt{.git/hooks/post-receive}:
+    \begin{lstlisting}[breaklines=true]
+#!/bin/bash
+#
+## Originally:
+## #!/bin/sh
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-receive".
+
+BASE_PATH="/home/git/GitServerHTTPEndpoint"
+GIT_DIR_PATH="$BASE_PATH/.git"
+DEPLOY_SCRIPT_PATH="$BASE_PATH/bin/deploy.sh"
+CHECKOUT="checkout"
+SERVICE_NAME="GitServerHTTPEndpoint"
+DEPLOYMENT_BRANCH="deployment"
+GIT="/usr/bin/git"
+WORK_TREE="--work-tree=$BASE_PATH"
+GIT_DIR="--git-dir=$GIT_DIR_PATH"
+UPDATE_INFO="$WORK_TREE $GIT_DIR update-server-info"
+
+$GIT $UPDATE_INFO
+echo "Directorio actual: " `pwd`
+echo "Actualizando el servicio $SERVICE_NAME..."
+while read oldrev newrev ref
+do
+    if [[ $ref =~ .*/"$DEPLOYMENT_BRANCH"$ ]];
+    then
+        echo "Referencia $DEPLOYMENT_BRANCH recibido.  Desplegando rama $DEPLOYMENT_BRANCH..."
+        echo "Ref: $ref"
+        $GIT $WORK_TREE $GIT_DIR $CHECKOUT && $DEPLOY_SCRIPT_PATH
+    else
+        echo "Ref $ref recibido exitosamente.  No voy a hacer nada: solo se deplega la rama $DEPLOYMENT_BRANCH en este servidor."
+    fi
+done
+echo "Servicio $SERVICE_NAME actualizado..."
+
+    \end{lstlisting}
+    Este script se ejecuta cada vez que se recibe nuevos commits el repositorio y comprueba si los mismos representan la rama \texttt{\$DEPLOYMENT\_BRANCH} para proceder a hacer el despliegue con el mismo, caso contrario no realiza ningun operacion al respeto. Este script debe ser ejecutable (es una forma rapida de desactivar esta funcionalidad del despliegue automatico).
+    \item Finalmente hay la necesidad de configurar Git para que esta dispuesto a recibir commits en la rama actual ya que en los repositorios que no son \textit{bare} por defecto se rechazo dichos cambios:
+    \begin{lstlisting}
+git config receive.denyCurrentBranch updateInstead
+    \end{lstlisting}
+\end{enumerate}
 
 % servicios y su asignacion de puertos
 % GitEDU - 8000/HTTP = gitedu.localhost
@@ -677,8 +841,9 @@ $SUDO $SYSTEMCTL $RESET $SERVICE
 $SYSTEMCTL $STAT $SERVICE
     \end{lstlisting}
     Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio. El mismo script debe ser ejecutable.
-    \item Crear un hook post-receive de Git (version minimo 2.4.12) \texttt{.git/hooks/post-receive}:
-    \begin{lstlisting}
+    \item Crear un hook post-receive de Git (version minimo 2.4.12) \\
+    \texttt{.git/hooks/post-receive}:
+    \begin{lstlisting}[breaklines=true]
 #!/bin/bash
 #
 ## Originally:
@@ -695,17 +860,16 @@ CHECKOUT="checkout"
 SERVICE_NAME="GitServerHTTPEndpoint"
 DEPLOYMENT_BRANCH="deployment"
 GIT="/usr/bin/git"
-UPDATE_INFO="update-server-info"
 WORK_TREE="--work-tree=$BASE_PATH"
-#GIT_DIR="--git-dir=$GIT_DIR_PATH"
-GIT_DIR="" # No es necesario utilizar eso con repositorios completos, solo en el caso de repositorios bare
+GIT_DIR="--git-dir=$GIT_DIR_PATH"
+UPDATE_INFO="$WORK_TREE $GIT_DIR update-server-info"
 
 $GIT $UPDATE_INFO
 echo "Directorio actual: " `pwd`
 echo "Actualizando el servicio $SERVICE_NAME..."
 while read oldrev newrev ref
 do
-    if [[ $ref =~ ".*/$DEPLOYMENT_BRANCH$" ]];
+    if [[ $ref =~ .*/"$DEPLOYMENT_BRANCH"$ ]];
     then
         echo "Referencia $DEPLOYMENT_BRANCH recibido.  Desplegando rama $DEPLOYMENT_BRANCH..."
         echo "Ref: $ref"
@@ -723,8 +887,6 @@ echo "Servicio $SERVICE_NAME actualizado..."
 git config receive.denyCurrentBranch updateInstead
     \end{lstlisting}
 \end{enumerate}
-
-% TODO: Automatizar el despliegue con Git y SSH
 
 \section{Pruebas del Despliegue y Resultados}
 % TODO: Testing and test results of deployment

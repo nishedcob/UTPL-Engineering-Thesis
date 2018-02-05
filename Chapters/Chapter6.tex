@@ -729,7 +729,7 @@ server {
 }
 \end{lstlisting}
 y el mismo se enlaza previo a la activacion de la configuracion:
-\begin{lstlisting}[linebreaks=true]
+\begin{lstlisting}[breaklines=true]
 ln -s -r /etc/nginx/sites-available/gitedu-proxy /etc/nginx/sites-enabled/41-gitedu-proxy
 nginx -t
 systemctl restart nginx
@@ -928,7 +928,7 @@ server {
 }
 \end{lstlisting}
 y el mismo se enlaza previo a la activacion de la configuracion:
-\begin{lstlisting}[linebreaks=true]
+\begin{lstlisting}[breaklines=true]
 ln -s -r /etc/nginx/sites-available/edunube-proxy /etc/nginx/sites-enabled/42-edunube-proxy
 nginx -t
 systemctl restart nginx
@@ -1108,7 +1108,7 @@ server {
 }
 \end{lstlisting}
 y el mismo se enlaza previo a la activacion de la configuracion:
-\begin{lstlisting}[linebreaks=true]
+\begin{lstlisting}[breaklines=true]
 ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint-proxy /etc/nginx/sites-enabled/43-gitserverhttpendpoint-proxy
 nginx -t
 systemctl restart nginx

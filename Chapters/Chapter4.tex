@@ -796,41 +796,8 @@ Se inicia el proyecto de Django con el comando:
 django-admin startproject EduNube
 \end{lstlisting}
 
-También antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo. Primero es necesario crear y configurar un usuario y base de datos para ser ocupado:
-
-\begin{lstlisting}
-su - postgres
-psql
-\end{lstlisting}
-\begin{lstlisting}[breaklines]
-	postgres=# CREATE USER edunubeser WITH PASSWORD '3d?N_6E';
-	postgres=# CREATE DATABASE edunubedb WITH OWNER edunubeser;
-	postgres=# \q
-psql edunubedb -U postgres
-	edunubedb=# CREATE SCHEMA edunubeapp AUTHORIZATION edunubeser;
-	edunubedb=# ALTER USER edunubeser SET search_path TO edunubeapp;
-	edunubedb=# \q
-psql edunubedb -U edunubeser
-	edunubedb=> SELECT current_schema();
-		Debe decir: edunubeapp
-	edunubedb=> \q
-\end{lstlisting}
-
-Segundo, se abre el settings.py (dentro de la carpeta EduNube/EduNube) y se remplaza (para desarrollo, en producción debe llevar valores distintos) el atributo DATABASES con lo siguiente:
-\lstset{language=Python}
-\begin{lstlisting}[breaklines]
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'edunubedb',
-        'USER': 'edunubeser',
-        'PASSWORD': '3d?N_6E',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
-\end{lstlisting}
-\lstset{language=Bash}
+% TODO: -> Anexo E
+También antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo. Esta configuracion lo puede encontrar en el Anexo \ref{AnexoE}.
 
 Ahora se puede migrar las tablas iniciales de Django:
 \begin{lstlisting}
@@ -858,37 +825,7 @@ USE_TZ = False
 \end{lstlisting}
 \lstset{language=Bash}
 
-Para crear la base de datos de MongoDB:
-\begin{lstlisting}
-mongo
-\end{lstlisting}
-\lstset{language=sql}
-\begin{lstlisting}
-use eduNubeDB
-db.createUser(
-    {
-        user: "eduNubeUser",
-        pwd: "3d?N_6E",
-        roles: [ "readWrite", "dbAdmin" ]
-    }
-)
-\end{lstlisting}
-\lstset{language=Bash}
-
-El mismo se define en el settings de la siguiente manera:
-\lstset{language=Python}
-\begin{lstlisting}
-NOSQL_DATABASES = {
-    'nosql': {
-        'NAME': 'eduNubeDB',
-        'USER': "eduNubeUser",
-        'PASSWORD': '3d?N_6E',
-        'HOST': '127.0.0.1',
-        'PORT': '27017',
-    }
-}
-\end{lstlisting}
-\lstset{language=Bash}
+La configuracion de base de datos no relacional se encuentra en el Anexo E.
 
 \subsection{Autenticación}
 El diseño planteado para el sistema EduNube propone dos tipos de autenticación:
@@ -903,41 +840,7 @@ Para la administración del sistema por operador humano se considera necesario l
 \subsubsection{Autenticación basado en Criptografía Asimétrica}
 Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solución utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
 
-% TODO: -> Anexo E
-A continuación se presenta la lógica para descifrar y cifrar los tokenes con el fin de generar/actualizarlo y también poderlo validar contra una tabla interna de la base de datos a lo que un cliente se lo envía:
-\begin{lstlisting}
-def decode_api_token(api_token=None):
-    if api_token is None:
-        raise ValueError("API_Token can't be None")
-    return jwt.decode(api_token.token, api_token.secret_key,\
-        algorithms=[api_token.token_algo])
-
-def update_api_token(api_token=None, regen_secret_key=False):
-    if api_token is None:
-        raise ValueError("API_Token can't be None")
-    if regen_secret_key or api_token.secret_key is None or\
-            len(api_token.secret_key) == 0:
-        api_token.secret_key = bcrypt.gensalt()
-            # Generate Random Unique Secret_Key
-    api_token.edit_date_in_token =\
-        api_token.edit_date.__str__()
-    payload = {
-        'app_name': api_token.app_name,
-        'created_date': api_token.created_date.__str__(),
-        'edit_date': api_token.edit_date_in_token,
-        'expires': api_token.expires
-    }
-    if api_token.expires:
-        if api_token.expire_date is not None:
-            payload['expire_date'] = api_token.expire_date
-    api_token.token = jwt.encode(payload,\
-        api_token.secret_key, algorithm='HS256')\
-        # Generate Token
-    api_token.save()
-\end{lstlisting}
-
-Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokens de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se crea este permiso, como es el caso del ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario para acceder a estas vistas.
-
+La logica para gestionar los API tokens se encuentra en el Anexo \ref{AnexoE}.
 
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}

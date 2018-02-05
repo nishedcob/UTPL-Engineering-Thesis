@@ -585,17 +585,17 @@ Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\
 \texttt{/etc/nginx/sites-available/gitserverhttpendpoint}:
 \begin{lstlisting}
 server {
-        listen 8020;
-        listen [::]:8020;
+        listen 8000;
+        listen [::]:8000;
         server_name _;
         location /static/ {
                 root /static/service/uwsgi/gitedu;
         }
         location / {
-                proxy_pass http://127.0.0.1:8021;
+                proxy_pass http://127.0.0.1:8001;
         }
 }
-\end{lstlisting} % TODO: Copy to NginX
+\end{lstlisting}
 
 Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
 \begin{lstlisting}

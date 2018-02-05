@@ -243,11 +243,11 @@ El módulo de roles de usuarios y grupos define las responsabilidades de varios 
 
 \paragraph{Subsistema de Ejecución}
 \index{Ejecutar Código} \index{Calificar Código}
-El subsistema de ejecución de código se encarga de recibir y procesar  comandos del sistema externa GitEdu con un fin de aprovechar los hipervisores que tiene a su cargo y proveer funcionalidades de ejecución en línea, aplicación de pruebas unitarias y calificación automática de código sin exponer dichos hipervisores a usuarios finales. Para aumentar la seguridad que logra llevar EduNube, GitEdu communica con lo mismo a través de canales seguros como HTTPS y SSH utilizando métodos de autenticación orientados a una schema de llaves públicas y privadas (criptografía asimétrica) para asegurarse de la identidad de ambos previo al envío de comandos y comunicación de datos y notas.
+El subsistema de ejecución de código se encarga de recibir y procesar  comandos del sistema externo GitEdu con el fin de aprovechar los hipervisores que tiene a su cargo y proveer funcionalidades de ejecución en línea, aplicación de pruebas unitarias y calificación automática de código sin exponer dichos hipervisores a usuarios finales. Para aumentar la seguridad que logra llevar EduNube, GitEdu comunica con lo mismo a través de canales seguros como HTTPS y SSH utilizando métodos de autenticación orientados a una schema de llaves públicas y privadas (criptografía asimétrica) para asegurar de la identidad de ambos previo al envío de comandos y comunicación de datos y notas.
 
 \subparagraph{Módulo de Recepción de Comandos}
 \index{Ejecutar Código} \index{Calificar Código}
-El módulo de recepción de comandos se encarga de recibir comandos externos enviados a través del API externa que provee para que otras aplicaciones pueden indicar al mismo cuando debe bajar, ejecutar o calificar algún código.
+El módulo de recepción de comandos se encarga de recibir comandos externos enviados a través del API externa que provee para que otras aplicaciones puedan indicar cuando debe bajar, ejecutar o calificar algún código.
 
 \subparagraph{Módulo de Permisos y Restricciones de Comandos}
 \index{Ejecutar Código} \index{Calificar Código}
@@ -255,19 +255,19 @@ El módulo de permisos y restricciones de comandos se encarga de limitar o permi
 
 \subparagraph{Módulo de Control de Hipervisores}
 \index{Ejecutar Código} \index{Calificar Código}
-El módulo de control de hipervisores se encarga de cumplir con la funcionalidades críticos del sistema EduNube de compilar, ejecutar y calificar código. Esto lo hace a través de tres respectivos submódulos para cada fase. De manera más general, este módulo también controla hipervisores conectados al sistema EduNube con un fin de poder realizar las operaciones listados previamente.
+El módulo de control de hipervisores se encarga de cumplir con la funcionalidades críticos del sistema EduNube de compilar, ejecutar y calificar código. Esto lo hace a través de tres respectivos submódulos para cada fase. De manera más general, este módulo también controla hipervisores conectados al sistema EduNube con el fin de poder realizar las operaciones listadas previamente.
 \begin{description}
 	\item[Submódulo de Compilación de Código] \index{Ejecutar Código}
-	El submódulo de compilación de código se encarga de compilar codigo que se le entrega en base a procedimientos que define el profesor anteriormente y reporta resultados del mismo, sea exitosa o sea errores de compilación. Para la implementación del mismo submódulo, se aprovecha de las máquinas virtuales que provee el hipervisor con un fin de realizar la compilación en un ambiente controlado y aislado.
+	El submódulo de compilación de código se encarga de compilar código que se entrega en base a procedimientos que define el profesor anteriormente, y reporta resultados del mismo: exitosos o genere errores de compilación. Para la implementación del mismo submódulo, se aprovecha de las máquinas virtuales que provee el hipervisor con el fin de realizar la compilación en un ambiente controlado y aislado.
     \item[Submódulo de Ejecución de Código] \index{Ejecutar Código}
-	El submódulo de ejecucion de codigo recibe de entradas codigo compilado y comandos que se desee ejecutar en el ambiente de ejecución y pruebas con un fin de proveer, a través de las máquinas virtuales controladas y aisladas, un ambiente interactivo donde estudiantes, tanto estudiantes como docentes pueden trabajar de una forma interactiva con código desarrollado dentro de la plataforma.
+	El submódulo de ejecución de código recibe de entradas código compilado y comandos que se desea ejecutar en el ambiente de ejecución y pruebas con el fin de proveer, a través de las máquinas virtuales controladas y aisladas, un ambiente interactivo donde estudiantes y docentes pueden trabajar de una forma interactiva con código desarrollado dentro de la plataforma.
     \item[Submódulo de Calificación Automatizado de Código] \index{Calificar Código}
-	El submódulo de calificación automatizado de código se basa en pruebas unitarias escritas previamente por un docente y que van contra la funcionalidad que se pide en el código de los estudiantes con un fin de calificar el código de una forma autónoma. Una vez que termina de calificar un código, reporta los resultados a gestores de los mismos.
+	El submódulo de calificación automatizado de código se basa en pruebas unitarias escritas previamente por un docente y que van contra la funcionalidad que se pide en el código de los estudiantes, con el fin de calificar el código de una forma autónoma. Una vez que termina de calificar un código, reporta los resultados a gestores de los mismos.
 \end{description}
 
 \subparagraph{Módulo de Persistencia de Código}
 \index{Persistir Código}
-El módulo de persistencia de código recupere codigo versionado en servidores de control de versiones externas que usuarios han escrito y editado con un fin de permitir la compilación, ejecución y calificación del mismo dentro del sistema EduNube.
+El módulo de persistencia de código recupera código versionado en servidores de control de versiones externos que usuarios han escrito y editado con el fin de permitir la compilación, ejecución y calificación del mismo dentro del sistema EduNube.
 
 \subparagraph{Módulo de Control de Acceso a Código}
 \index{Persistir Código}

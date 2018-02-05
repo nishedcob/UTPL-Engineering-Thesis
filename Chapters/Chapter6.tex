@@ -607,7 +607,7 @@ python manage.py collectstatic
 \end{lstlisting}
 
 Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\
-\texttt{/etc/nginx/sites-available/gitserverhttpendpoint}:
+\texttt{/etc/nginx/sites-available/gitedu}:
 \begin{lstlisting}
 server {
         listen 8000;
@@ -630,7 +630,7 @@ nginx -t
 systemctl restart nginx
 \end{lstlisting}
 
-Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8020/auth/login}
+Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8000/auth/login}
 
 Con Git y SSH se automatiza el despliegue con cada push del servicio de la siguiente manera:
 \begin{enumerate}
@@ -638,7 +638,7 @@ Con Git y SSH se automatiza el despliegue con cada push del servicio de la sigui
     \begin{lstlisting}
 mkdir bin
     \end{lstlisting}
-    \item Crear un script para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
+    \item Crear un script (\texttt{bin/deploy.sh}) para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
     \begin{lstlisting}
 #! /bin/bash
 
@@ -735,54 +735,204 @@ nginx -t
 systemctl restart nginx
 \end{lstlisting}
 
-% servicios y su asignacion de puertos
-% GitEDU - 8000/HTTP = gitedu.localhost
-% EduNube - 8010/HTTP = edunube.localhost
-% GitServerHTTPEndpoint - 8020/HTTP = gitsrvendpoint.localhost
-% Kubernetes Proxy - 8001/HTTP = kubernetes.proxy.localhost
-% aux services (redir NGinX):
-%		http://git.localhost:80 -> GitWeb
-%		http://gitedu.localhost:80 -> GitEDU
-%		http://edunube.localhost:80 -> EduNube
-%		http://gitsrvendpoint.localhost:80 -> GitServerHTTPEndpoint
-%		http://gitlab.localhost:80 -> GitLab
-%		http://moodle.localhost:80 -> Moodle
-%		http://registry.localhost:80 -> Registry
-%\begin{description}
-%	\item[Maquina Física] con Debian 9.x para Servicios y Docker: \textit{10.10.10.1}
-%    \begin{description}
-%    	\item[NGinX] \textit{http://0.0.0.0:80} \index{NGinX}
-%        \begin{itemize}
-%            \item \textit{http://10.10.10.1:80} \& \textit{http://git.localhost:80} -> GitWeb (HTTP)
-%            \item \textit{http://gitedu.localhost:80} -> GitEDU (HTTP)
-%            \item \textit{http://edunube.localhost:80} -> EduNube (HTTP)
-%            \item \textit{http://gitsrvendpoint.localhost:80} -> GitServerHTTPEndpoint (HTTP)
-%            \item \textit{http://gitlab.localhost:80} -> GitLab (HTTP)
-%            \item \textit{http://moodle.localhost:80} -> Moodle (HTTP)
-%            \item \textit{http://registry.localhost:80} -> Registry (HTTP)
-%        \end{itemize}
-%        \item[GitEDU] \textit{http://0.0.0.0:8000}
-%        \item[EduNube] \textit{http://0.0.0.0:8010}\footnote{Previamente el puerto asignado fue :8001, pero esto estaba en conflicto con el Dashboard/Proxy de Kubernetes, por lo tanto se ha cambiado este servicio al puerto :8010}
-%        \item[GitServerHTTPEndpoint] \textit{http://0.0.0.0:8020}\footnote{Para temas de consistencia con el cambio de puerto de EduNube, se ha cambiado el numero de puerto de :8002 a :8020}
-%        \item[Kubernetes Proxy] \textit{http://0.0.0.0:8001}
-%        \item[Docker] \textit{10.10.10.1}
-%        \begin{description}
-%        	\item[MySQL] \textit{0.0.0.0:3306} -> \textit{moodledb:3306} (TCP/MySQL)
-%        	\item[Moodle] \textit{0.0.0.0:8201} -> \textit{moodle:80} (HTTP)
-%        	\item[GitLab CE] \textit{10.10.10.1}
-%            \begin{itemize}
-%            	\item \textit{0.0.0.0:8143} -> \textit{gitlab:443} (HTTPS)
-%            	\item \textit{0.0.0.0:8101} -> \textit{gitlab:80} (HTTP)
-%            	\item \textit{0.0.0.0:8122} -> \textit{gitlab:22} (SSH)
-%            \end{itemize}
-%            \item[Registry] \textit{0.0.0.0:5000} -> \textit{registry:5000} (HTTP)
-%        \end{description}
-%    \end{description}
-%    \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
-%\end{description}
-
 \subsection{EduNube}
-% TODO: EduNube uWSGI ini
+Para levantar el servicio de EduNube se guarda el archivo \\
+\texttt{/etc/uwsgi/sites/edunube.ini} con los siguientes contenidos:
+\begin{lstlisting}
+[uwsgi]
+project = EduNube
+project_location = %(project)/%(project)
+username = uwsgi
+base = /home/%(username)
+environment = %(project_location)/env
+
+chdir = %(base)/%(project_location)
+home = %(base)/%(environment)
+module = %(project).wsgi:application
+logto = /usr/share/uwsgi.%(project).log
+
+master = true
+processes = 2
+
+uid = %(username)
+gid = uwsgi
+http-socket = 127.0.0.1:8011
+\end{lstlisting}
+
+Se crea el archivo log con los permisos adecuados:
+\begin{lstlisting}
+touch /usr/share/uwsgi.EduNube.log
+chown uwsgi:uwsgi /usr/share/uwsgi.EduNube.log
+\end{lstlisting}
+
+Se reinicia el servicio de uWSGI para que se levanta con el nuevo archivo de configuracion que representa el respectivo servicio:
+\begin{lstlisting}
+systemctl restart uwsgi
+\end{lstlisting}
+Cualquier error que se da, se lo puede investigar mediante el archivo de log \\ \texttt{/usr/share/uwsgi.EduNube.log}.
+
+Se crea una ubicacion para archivos estaticos y se le da los permisos adecuados:
+\begin{lstlisting}[breaklines=true]
+mkdir -p /static/service/uwsgi/edunube/static
+find /static -type d -exec chmod +x -c {} \;
+chown -c uwsgi:root /static/service/uwsgi
+chown -cR uwsgi:root /static/service/uwsgi/edunube
+find /static/service/uwsgi/edunube -type f -exec chmod -c 644 {} \;
+\end{lstlisting}
+
+Se cambia de usuario para clonar el repositorio:
+\begin{lstlisting}
+su - uwsgi
+git clone https://gitlab.com/nishedcob/GitEDU.git EduNube
+cd EduNube
+git checkout edunube-deploy
+\end{lstlisting}
+
+Se cambia el settings.py del servicio:
+\lstset{language=Python}
+\begin{lstlisting}
+STATIC_ROOT = "/static/service/uwsgi/edunube/static"
+\end{lstlisting}
+\lstset{language=Bash}
+
+Se puede crear y instalar el entorno virtual con:
+\begin{lstlisting}
+source activate.sh
+\end{lstlisting}
+
+Se copia los archivos al directorio que utiliza NGinX para servir los archivos estaticos, este paso se tiene que repetir siempre y cuando los archivos estaticos tambien:
+\begin{lstlisting}
+python manage.py collectstatic
+\end{lstlisting}
+
+Para la configuracion de NGinX se escribe las siguientes lineas en el archivo \\
+\texttt{/etc/nginx/sites-available/edunube}:
+\begin{lstlisting}
+server {
+        listen 8010;
+        listen [::]:8010;
+        server_name _;
+        location /static/ {
+                root /static/service/uwsgi/edunube;
+        }
+        location / {
+                proxy_pass http://127.0.0.1:8011;
+        }
+}
+\end{lstlisting}
+
+Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
+\begin{lstlisting}
+ln -s -r /etc/nginx/sites-available/edunube \ 
+    /etc/nginx/sites-enabled/32-edunube
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
+
+Se puede validar que el servicio esta funcionando en visitar: \url{http://10.10.10.1:8010/auth/login}
+
+Con Git y SSH se automatiza el despliegue con cada push del servicio de la siguiente manera:
+\begin{enumerate}
+	\item Crear un directorio de scripts de apoyo en el raiz del proyecto:
+    \begin{lstlisting}
+mkdir bin
+    \end{lstlisting}
+    \item Crear un script (\texttt{bin/deploy.sh}) para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
+    \begin{lstlisting}
+#! /bin/bash
+
+SYSTEMCTL=/bin/systemctl
+SUDO=/usr/bin/sudo
+SERVICE=uwsgi
+BASE_PATH=/home/uwsgi/EduNube/EduNube
+PYTHON=env/bin/python
+MANAGE=manage.py
+STATIC_COMMAND="collectstatic --no-input"
+MIGRATE_COMMAND="migrate"
+STAT=status
+RESET=restart
+
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $STATIC_COMMAND
+$BASE_PATH/$PYTHON $BASE_PATH/$MANAGE $MIGRATE_COMMAND
+$SYSTEMCTL $STAT $SERVICE
+$SUDO $SYSTEMCTL $RESET $SERVICE
+$SYSTEMCTL $STAT $SERVICE
+    \end{lstlisting}
+    Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio. El mismo script debe ser ejecutable.
+    \item Crear un hook post-receive de Git (version minimo 2.4.12) \\
+    \texttt{.git/hooks/post-receive}:
+    \begin{lstlisting}[breaklines=true]
+#!/bin/bash
+#
+## Originally:
+## #!/bin/sh
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-receive".
+
+BASE_PATH="/home/uwsgi/EduNube"
+GIT_DIR_PATH="$BASE_PATH/.git"
+DEPLOY_SCRIPT_PATH="$BASE_PATH/EduNube/bin/deploy.sh"
+CHECKOUT="checkout"
+SERVICE_NAME="EduNube"
+DEPLOYMENT_BRANCH="edunube-deploy"
+GIT="/usr/bin/git"
+WORK_TREE="--work-tree=$BASE_PATH"
+GIT_DIR="--git-dir=$GIT_DIR_PATH"
+UPDATE_INFO="$WORK_TREE $GIT_DIR update-server-info"
+
+$GIT $UPDATE_INFO
+echo "Directorio actual: " `pwd`
+echo "Actualizando el servicio $SERVICE_NAME..."
+while read oldrev newrev ref
+do
+    if [[ $ref =~ .*/"$DEPLOYMENT_BRANCH"$ ]];
+    then
+        echo "Referencia $DEPLOYMENT_BRANCH recibido.  Desplegando rama $DEPLOYMENT_BRANCH..."
+        echo "Ref: $ref"
+        $GIT $WORK_TREE $GIT_DIR $CHECKOUT && $DEPLOY_SCRIPT_PATH
+    else
+        echo "Ref $ref recibido exitosamente.  No voy a hacer nada: solo se deplega la rama $DEPLOYMENT_BRANCH en este servidor."
+    fi
+done
+echo "Servicio $SERVICE_NAME actualizado..."
+
+    \end{lstlisting}
+    Este script se ejecuta cada vez que se recibe nuevos commits el repositorio y comprueba si los mismos representan la rama \texttt{\$DEPLOYMENT\_BRANCH} para proceder a hacer el despliegue con el mismo, caso contrario no realiza ningun operacion al respeto. Este script debe ser ejecutable (es una forma rapida de desactivar esta funcionalidad del despliegue automatico).
+    \item Finalmente hay la necesidad de configurar Git para que esta dispuesto a recibir commits en la rama actual ya que en los repositorios que no son \textit{bare} por defecto se rechazo dichos cambios:
+    \begin{lstlisting}
+git config receive.denyCurrentBranch updateInstead
+    \end{lstlisting}
+\end{enumerate}
+
+Finalmente en el repositorio de desarrollo, se puede agrega un nuevo remote que representa el entorno de produccion para su subida por SSH:
+\begin{lstlisting}
+git remote add localssh_edunube_deploy uwsgi:/home/uwsgi/EduNube
+\end{lstlisting}
+
+Y ahora se puede actualizar produccion con:
+\begin{lstlisting}
+git push localssh_edunube_deploy --all
+\end{lstlisting}
+
+Para disponer de acceso facil al servicio de forma local, se agrega la siguiente configuracion a NGinX en el archivo \texttt{/etc/nginx/sites-available/edunube-proxy}:
+\begin{lstlisting}
+server {
+        listen 80;
+        listen [::]:80;
+        server_name edunube.localhost;
+        location / {
+                proxy_pass http://127.0.0.1:8010;
+        }
+}
+\end{lstlisting}
+y el mismo se enlaza previo a la activacion de la configuracion:
+\begin{lstlisting}[linebreaks=true]
+ln -s -r /etc/nginx/sites-available/edunube-proxy /etc/nginx/sites-enabled/42-edunube-proxy
+nginx -t
+systemctl restart nginx
+\end{lstlisting}
 
 \subsection{GitServerHTTPEndpoint}
 Para que el usuario git puede levantar un servidor uwsgi para su servicio GitServerHTTPEndpoint, se le agrege al grupo uwsgi:
@@ -877,7 +1027,7 @@ Con Git y SSH se automatiza el despliegue con cada push del servicio de la sigui
     \begin{lstlisting}
 mkdir bin
     \end{lstlisting}
-    \item Crear un script para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
+    \item Crear un script (\texttt{bin/deploy.sh}) para volver a despliegar la aplicacion que utiliza variables para ofrecer un alto nivel de reutilizacion y capacidad para modificacion rapido:
     \begin{lstlisting}
 #! /bin/bash
 
@@ -946,20 +1096,20 @@ git config receive.denyCurrentBranch updateInstead
     \end{lstlisting}
 \end{enumerate}
 
-Para disponer de acceso facil al servicio de forma local, se agrega la siguiente configuracion a NGinX en el archivo \texttt{/etc/nginx/sites-available/gitedu-proxy}:
+Para disponer de acceso facil al servicio de forma local, se agrega la siguiente configuracion a NGinX en el archivo \texttt{/etc/nginx/sites-available/gitserverhttpendpoint-proxy}:
 \begin{lstlisting}
 server {
         listen 80;
         listen [::]:80;
-        server_name gitedu.localhost;
+        server_name gitserverhttpendpoint.localhost;
         location / {
-                proxy_pass http://127.0.0.1:8000;
+                proxy_pass http://127.0.0.1:8020;
         }
 }
 \end{lstlisting}
 y el mismo se enlaza previo a la activacion de la configuracion:
 \begin{lstlisting}[linebreaks=true]
-ln -s -r /etc/nginx/sites-available/gitedu-proxy /etc/nginx/sites-enabled/41-gitedu-proxy
+ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint-proxy /etc/nginx/sites-enabled/43-gitserverhttpendpoint-proxy
 nginx -t
 systemctl restart nginx
 \end{lstlisting}

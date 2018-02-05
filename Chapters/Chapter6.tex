@@ -676,8 +676,52 @@ $SYSTEMCTL $STAT $SERVICE
 $SUDO $SYSTEMCTL $RESET $SERVICE
 $SYSTEMCTL $STAT $SERVICE
     \end{lstlisting}
-    Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio.
-    \item Crear un hook post-receive de Git (version minimo  (.git/hooks/post-receive)
+    Este script copia los archivos estaticos a NGinX, migra la base de datos y reinica el servidor de aplicacion con un reporte del estatus del mismo antes y despues de su reinicio. El mismo script debe ser ejecutable.
+    \item Crear un hook post-receive de Git (version minimo 2.4.12) \texttt{.git/hooks/post-receive}:
+    \begin{lstlisting}
+#!/bin/bash
+#
+## Originally:
+## #!/bin/sh
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-receive".
+
+BASE_PATH="/home/git/GitServerHTTPEndpoint"
+GIT_DIR_PATH="$BASE_PATH/.git"
+DEPLOY_SCRIPT_PATH="$BASE_PATH/bin/deploy.sh"
+CHECKOUT="checkout"
+SERVICE_NAME="GitServerHTTPEndpoint"
+DEPLOYMENT_BRANCH="deployment"
+GIT="/usr/bin/git"
+UPDATE_INFO="update-server-info"
+WORK_TREE="--work-tree=$BASE_PATH"
+#GIT_DIR="--git-dir=$GIT_DIR_PATH"
+GIT_DIR="" # No es necesario utilizar eso con repositorios completos, solo en el caso de repositorios bare
+
+$GIT $UPDATE_INFO
+echo "Directorio actual: " `pwd`
+echo "Actualizando el servicio $SERVICE_NAME..."
+while read oldrev newrev ref
+do
+    if [[ $ref =~ ".*/$DEPLOYMENT_BRANCH$" ]];
+    then
+        echo "Referencia $DEPLOYMENT_BRANCH recibido.  Desplegando rama $DEPLOYMENT_BRANCH..."
+        echo "Ref: $ref"
+        $GIT $WORK_TREE $GIT_DIR $CHECKOUT && $DEPLOY_SCRIPT_PATH
+    else
+        echo "Ref $ref recibido exitosamente.  No voy a hacer nada: solo se deplega la rama $DEPLOYMENT_BRANCH en este servidor."
+    fi
+done
+echo "Servicio $SERVICE_NAME actualizado..."
+
+    \end{lstlisting}
+    Este script se ejecuta cada vez que se recibe nuevos commits el repositorio y comprueba si los mismos representan la rama \texttt{\$DEPLOYMENT\_BRANCH} para proceder a hacer el despliegue con el mismo, caso contrario no realiza ningun operacion al respeto. Este script debe ser ejecutable (es una forma rapida de desactivar esta funcionalidad del despliegue automatico).
+    \item Finalmente hay la necesidad de configurar Git para que esta dispuesto a recibir commits en la rama actual ya que en los repositorios que no son \textit{bare} por defecto se rechazo dichos cambios:
+    \begin{lstlisting}
+git config receive.denyCurrentBranch updateInstead
+    \end{lstlisting}
 \end{enumerate}
 
 % TODO: Automatizar el despliegue con Git y SSH

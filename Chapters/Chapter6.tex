@@ -560,7 +560,8 @@ Se cambia de usuario para clonar el repositorio:
 \begin{lstlisting}
 su - uwsgi
 git clone https://gitlab.com/nishedcob/GitEDU.git GitEDU
-
+cd GitEDU
+git checkout gitedu-deploy
 \end{lstlisting}
 
 Se cambia el settings.py del servicio:
@@ -569,6 +570,11 @@ Se cambia el settings.py del servicio:
 STATIC_ROOT = "/static/service/uwsgi/gitedu/static"
 \end{lstlisting}
 \lstset{language=Bash}
+
+Se puede crear y instalar el entorno virtual con:
+\begin{lstlisting}
+source activate.sh
+\end{lstlisting}
 
 Se copia los archivos al directorio que utiliza NGinX para servir los archivos estaticos, este paso se tiene que repetir siempre y cuando los archivos estaticos cambien:
 \begin{lstlisting}
@@ -583,18 +589,18 @@ server {
         listen [::]:8020;
         server_name _;
         location /static/ {
-                root /static/service/uwsgi/githttpserverendpoint;
+                root /static/service/uwsgi/gitedu;
         }
         location / {
                 proxy_pass http://127.0.0.1:8021;
         }
 }
-\end{lstlisting}
+\end{lstlisting} % TODO: Copy to NginX
 
 Se agrega la nueva configuracion de NGinX, valida y renicia el servicio de NGinX:
 \begin{lstlisting}
-ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint \ 
-    /etc/nginx/sites-enabled/33-gitserverhttpendpoint
+ln -s -r /etc/nginx/sites-available/gitedu \ 
+    /etc/nginx/sites-enabled/31-gitedu
 nginx -t
 systemctl restart nginx
 \end{lstlisting}
@@ -614,7 +620,7 @@ mkdir bin
 SYSTEMCTL=/bin/systemctl
 SUDO=/usr/bin/sudo
 SERVICE=uwsgi
-BASE_PATH=/home/git/GitServerHTTPEndpoint
+BASE_PATH=/home/uwsgi/GitEDU/GitEDU
 PYTHON=env/bin/python
 MANAGE=manage.py
 STATIC_COMMAND="collectstatic --no-input"
@@ -641,12 +647,12 @@ $SYSTEMCTL $STAT $SERVICE
 #
 # To enable this hook, rename this file to "post-receive".
 
-BASE_PATH="/home/git/GitServerHTTPEndpoint"
+BASE_PATH="/home/uwsgi/GitEDU/GitEDU"
 GIT_DIR_PATH="$BASE_PATH/.git"
 DEPLOY_SCRIPT_PATH="$BASE_PATH/bin/deploy.sh"
 CHECKOUT="checkout"
-SERVICE_NAME="GitServerHTTPEndpoint"
-DEPLOYMENT_BRANCH="deployment"
+SERVICE_NAME="GitEDU"
+DEPLOYMENT_BRANCH="gitedu-deploy"
 GIT="/usr/bin/git"
 WORK_TREE="--work-tree=$BASE_PATH"
 GIT_DIR="--git-dir=$GIT_DIR_PATH"
@@ -668,12 +674,12 @@ do
 done
 echo "Servicio $SERVICE_NAME actualizado..."
 
-    \end{lstlisting}
+    \end{lstlisting} % TODO
     Este script se ejecuta cada vez que se recibe nuevos commits el repositorio y comprueba si los mismos representan la rama \texttt{\$DEPLOYMENT\_BRANCH} para proceder a hacer el despliegue con el mismo, caso contrario no realiza ningun operacion al respeto. Este script debe ser ejecutable (es una forma rapida de desactivar esta funcionalidad del despliegue automatico).
     \item Finalmente hay la necesidad de configurar Git para que esta dispuesto a recibir commits en la rama actual ya que en los repositorios que no son \textit{bare} por defecto se rechazo dichos cambios:
     \begin{lstlisting}
 git config receive.denyCurrentBranch updateInstead
-    \end{lstlisting}
+    \end{lstlisting} % TODO
 \end{enumerate}
 
 % servicios y su asignacion de puertos

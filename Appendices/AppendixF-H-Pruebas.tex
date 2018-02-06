@@ -1,13 +1,222 @@
 % Appendix F - H - Pruebas
 
 \chapter{Pruebas de GitEDU}
+\label{AnexoF}
 
-\label{AnexoF} 
+\section{Prueba de CodePersistenceBackend}
+Con respeto al sistema GitEDU, el componente mas importante de probar fue el backend de persistencia de codigo, automatizado de la siguiente manera:
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+from pymongo import ASCENDING, DESCENDING
+from ideApp.CodePersistenceBackends.MongoDB.mongodb_models import ChangeModel, ChangeFileModel, NamespaceModel,\
+    RepositoryModel, RepositoryFileModel
+from GitEDU.settings import CODE_PERSISTENCE_BACKEND_MANAGER_CLASS, load_code_persistence_backend_manager
+
+manager = load_code_persistence_backend_manager(CODE_PERSISTENCE_BACKEND_MANAGER_CLASS)
+
+print("code persistence backend manager: <%s>" % manager)
+
+print("Changes in Ascending Order:")
+for change in list(ChangeModel.objects.raw({}).order_by([("timestamp", ASCENDING)])):
+    print(change)
+
+print("Changes in Descending Order:")
+for change in list(ChangeModel.objects.raw({}).order_by([("timestamp", DESCENDING)])):
+    print(change)
+
+namespace = "nishedcob"
+repository = "test"
+file_path = "folder/hello.py"
+
+manager.sync("NRF")
+namespace_objs = manager.get_namespace(namespace=namespace)
+print(namespace_objs)
+namespace_obj = manager.select_preferred_backend_object(result_set=namespace_objs)
+print(namespace_obj)
+repository_objs = manager.get_repository(namespace=namespace_obj, repository=repository)
+print(repository_objs)
+repository_obj = manager.select_preferred_backend_object(result_set=repository_objs)
+print(repository_obj)
+repository_file_objs = manager.get_file(namespace=namespace_obj, repository=repository_obj, file_path=file_path)
+print(repository_file_objs)
+repository_file_obj = manager.select_preferred_backend_object(result_set=repository_file_objs)
+print(repository_file_obj)
+print(repository_file_obj.persistence_object)
+print(repository_file_obj.persistence_object.pk)
+file_edits = ChangeFileModel.objects.raw({
+    'file': repository_file_obj.persistence_object.pk,
+    'file_path': file_path
+})
+print(list(file_edits))
+edits = []
+for file_edit in file_edits:
+    print(file_edit.change.pk)
+    change = ChangeModel.objects.raw({'_id': file_edit.change.pk}).first()
+    print(change)
+    edit = {
+        'id': change.change_id,
+        'author': change.author,
+        'timestamp': change.timestamp.as_datetime().__str__(),
+        'namespace': namespace,
+        'repository': repository,
+        'file_path': file_edit.file_path
+    }
+    print(edit)
+    edits.append(edit)
+    print(edits)
+print(edits)
+edits = edits.sort(key=lambda k: k['timestamp'])
+print(edits)
+\end{lstlisting}
+\lstset{language=Bash}
 
 \chapter{Pruebas de EduNube}
-
 \label{AnexoG}
 
-\chapter{Pruebas de GitServerHTTPEndpoint}
+\section{Expirimento de Extraccion de ID de Ultimo Commit de un Repositorio de Git}
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+# coding: utf-8
+from apiApp.VirtualizationBackends.Kubernetes import KubernetesVirtualizationBackend
+kvb = KubernetesVirtualizationBackend()
+kvb.get_id_last_git_commit(repository_path='/home/nyx/GitEDU')
+kvb.get_id_last_git_commit(repository_path='/home/nyx/GitEDU-copy')
+\end{lstlisting}
 
+\section{Prueba Inicial de Backend de RepoSpecs}
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+# coding: utf-8
+from apiApp.Validation import RepoSpec
+py3_code_exec_template_repospec = RepoSpec.create(repo="python3-code-executor-template", parent=None)
+token = py3_code_exec_template_repospec.token
+print(token)
+secret_key = py3_code_exec_template_repospec.secret_key
+print(secret_key)
+py3_code_exec_template_repospec = RepoSpec.RepoSpec.objects.get(repo="python3-code-executor-template")
+# token == py3_code_exec_template_repospec.token
+# secret_key == py3_code_exec_template_repospec.secret_key
+# RepoSpec.validate_repospec(py3_code_exec_template_repospec.token) == True
+# RepoSpec.decode_repospec(repospec=py3_code_exec_template_repospec.token,
+#                          stored_repospec=py3_code_exec_template_repospec)
+#                          == {'repo': "python3-code-executor-template"}
+# RepoSpec.decode_repospec(repospec=py3_code_exec_template_repospec.token) == {'repo': "python3-code-executor-template"}
+# RepoSpec.decode(stored_repospec=py3_code_exec_template_repospec, repospec=None, decode_stored=True)
+#                   == {'repo': "python3-code-executor-template"}
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec,
+                                                           parent="http://192.168.1.100/shell.git",
+                                                           repo=py3_code_exec_template_repospec.repo,
+                                                           regen_secret_key=False)
+# token != py3_code_exec_template_repospec.token
+# secret_key == py3_code_exec_template_repospec.secret_key
+token = py3_code_exec_template_repospec.token
+print(token)
+secret_key = py3_code_exec_template_repospec.secret_key
+print(secret_key)
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec,
+                                                           parent="http://192.168.1.100/shell.git",
+                                                           repo=py3_code_exec_template_repospec.repo,
+                                                           regen_secret_key=True)
+# token != py3_code_exec_template_repospec.token
+# secret_key != py3_code_exec_template_repospec.secret_key
+token = py3_code_exec_template_repospec.token
+print(token)
+secret_key = py3_code_exec_template_repospec.secret_key
+print(secret_key)
+# RepoSpec.validate_repospec(repospec=py3_code_exec_template_repospec.token) == True
+py3_code_exec_template_repospec = RepoSpec.RepoSpec.objects.get(repo="python3-code-executor-template")
+# token == py3_code_exec_template_repospec.token
+# secret_key == py3_code_exec_template_repospec.secret_key
+token = py3_code_exec_template_repospec.token
+print(token)
+secret_key = py3_code_exec_template_repospec.secret_key
+print(secret_key)
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec, parent=None,
+                                                           repo=py3_code_exec_template_repospec.repo,
+                                                           regen_secret_key=True)
+# token != py3_code_exec_template_repospec.token
+# secret_key != py3_code_exec_template_repospec.secret_key
+token = py3_code_exec_template_repospec.token
+print(token)
+secret_key = py3_code_exec_template_repospec.secret_key
+print(secret_key)
+py3_code_exec_template_repospec = RepoSpec.update_repo(old_repo=py3_code_exec_template_repospec.token)
+# token == py3_code_exec_template_repospec.token
+# secret key == py3_code_exec_template_repospec.secret_key
+py3_code_exec_template_repospec = RepoSpec.update_repo(old_repo=py3_code_exec_template_repospec.token,
+                                                       regen_secret_key=True)
+# token != py3_code_exec_template_repospec.token
+# secret_key != py3_code_exec_template_repospec.secret_key
+
+from apiApp.Validation import RepoSpec
+postgresql_code_exec_template_repospec = RepoSpec.create(repo="postgresql-code-executor-template", parent=None)
+token = postgresql_code_exec_template_repospec.token
+print(token)
+secret_key = postgresql_code_exec_template_repospec.secret_key
+print(secret_key)
+postgresql_code_exec_template_repospec = RepoSpec.RepoSpec.objects.get(repo="postgresql-code-executor-template")
+# str(token, 'utf-8') == postgresql_code_exec_template_repospec.token
+# str(secret_key, 'utf-8') == postgresql_code_exec_template_repospec.secret_key
+# RepoSpec.validate_repospec(postgresql_code_exec_template_repospec.token) == True
+# RepoSpec.decode_repospec(repospec=postgresql_code_exec_template_repospec.token,
+#                          stored_repospec=postgresql_code_exec_template_repospec)
+#                          == {'repo': "postgresql-code-executor-template"}
+# RepoSpec.decode_repospec(repospec=postgresql_code_exec_template_repospec.token) == {'repo': "postgresql-executor-template"}
+# RepoSpec.decode(stored_repospec=postgresql_code_exec_template_repospec, repospec=None, decode_stored=True)
+#                   == {'repo': "postgresql-code-executor-template"}
+\end{lstlisting}
+\lstset{language=Bash}
+
+\section{Prueba Inicial de Ejecuccion con Kubernetes}
+\lstset{language=Python}
+\begin{lstlisting}
+# coding: utf-8
+
+import time
+
+from apiApp.VirtualizationBackends.Kubernetes import Py3KubernetesVirtualizationBackend
+
+# values for test:
+kvb = Py3KubernetesVirtualizationBackend()
+job_name = 'py3-pytest-3'
+# with minikube
+#git_repo = 'http://192.168.99.1/python3-code-executor-template.git'
+# with Kubernetes on Xen
+git_repo = 'http://10.10.10.1/python3-code-executor-template.git'
+kubernetes_working_tmp_dir = '/tmp'
+
+# prepare test manifest
+manifest = kvb.build_job_template(job_name=job_name, git_repo=git_repo)
+manifest_path = '%s/%s.json' % (kubernetes_working_tmp_dir, job_name)
+kvb.write_json_manifest(path=manifest_path, json_data=manifest, overwrite=True)
+
+# create job with manifest
+print(kvb.job_status(job_id=job_name))
+print(kvb.kubectl_create_from_manifest_file(manifest_path=manifest_path))
+
+# job info
+print(kvb.job_describe(job_id=job_name))
+
+# get job status & wait until job completion
+print(kvb.job_get(job_id=job_name))
+while not kvb.job_finished(job_id=job_name):
+    print(kvb.job_status(job_id=job_name))
+    time.sleep(1)
+print(kvb.job_status(job_id=job_name))
+print(kvb.job_get(job_id=job_name))
+
+# job info
+print(kvb.job_describe(job_id=job_name))
+
+# job output
+print(kvb.job_logs(job_id=job_name))
+
+# delete job
+print(kvb.kubectl_delete_from_manifest_file(manifest_path=manifest_path))
+\end{lstlisting}
+\lstset{language=Bash}
+
+
+
+\chapter{Pruebas de GitServerHTTPEndpoint}
 \label{AnexoH}

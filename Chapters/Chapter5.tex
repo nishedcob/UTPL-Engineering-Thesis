@@ -17,7 +17,6 @@ Donde se considera que estas mismas pruebas deben ser automatizados en el mayor 
 
 \subsection{Flujos completos de funcionalidad}
 Estas pruebas son de alto nivel para revisar funcionalidad desde el punto del usuario en distintos roles de la aplicación y llevar cada uno de esos roles por las distintas fases de su ciclo de vida dentro de la aplicación. Se considera Selenium como buena opción para la automatización de esta fase de pruebas. Aunque por falta de tiempo, no se ha podido implementar las pruebas de forma automatizada, ni en su totalidad, a continuacion se explica la manera en que quisiera que se implementan.
-% TODO: anexo de pruebas aplicadas
 
 \subsubsection{Administrador}
 Dentro del ciclo de vida del administrador se debe probar:
@@ -67,5 +66,8 @@ Las pruebas de GitServerHTTPEndpoint deben validar la API externa, manejo de API
 Como parte de las pruebas unitarias del fase anterior, se debe validar que los mismos clientes que se han probado son los que realmente esta utilizando cada sistema para con ello asegurar el cumplimiento de la integración esperada. En realizar esta fase de esta forma para permitir que se desarrolla al mismo rato de las pruebas unitarias de Django del fase anterior.
 
 \section{Resultados}
-% TODO: results of testing
-% TODO: anexo de pruebas aplicadas
+De las pruebas aplicadas, detalladas en los Anexos \ref{AnexoF}, \ref{AnexoG} y \ref{AnexoH} respectivamente, la plataforma desarrollada cumple con su especificacion, pero solo por dos motivos:
+\begin{enumerate}
+	\item Las pruebas aplicadas son incompletas para probar todo las especficaciones originales del sistema.
+    \item La correcciones de errores en los servicios fue dirigido en base a las pruebas aplicadas.
+\end{enumerate}

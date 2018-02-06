@@ -149,7 +149,7 @@ xen-create-image --hostname=debian-k8s-master \
 
 \index{Docker}
 \paragraph{Instalación de Docker}
-Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalación de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendría que cambiar el gestor de paquetes apt por el respectivo de su sistema):
+Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero contarnos con una instalación de Docker. Kubernetes no garantiza que va a funcionar con las ultimas versiones de Docker ya que el API de Docker cambia constantemente, especialmente con actualizaciones de seguridad, pero de esta misma forma para la seguridad de la misma, queremos contar con la misma forma estable. Se instala de la siguiente manera en Debian (para otros sistemas operativos, a lo mucho solo se tendría que cambiar el gestor de paquetes apt por el respectivo de su sistema), los resultados del mismo se encuentran en la figura \ref{fig:resultados-instalacion-docker-k8s}:
 \begin{enumerate}
 	\item Actualizar el sistema operativo
     \begin{lstlisting}
@@ -169,7 +169,13 @@ curl -fsSL get.docker.com -o get-docker.sh
 sh get-docker.sh
     \end{lstlisting}
 \end{enumerate}
-% TODO: include Screenshot_2017-12-29_15-31-49.png
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{Figures/k8s-docker-install.png}
+	\end{center}
+    \caption{Resultados de la Instalacion de Docker en el Cluster de Kubernetes de un Solo Nodo}
+    \label{fig:resultados-instalacion-docker-k8s}
+\end{figure}
 
 Para utilizar el Registry creado anteriormente, se agrega el siguiente configuracion a las maquinas del cluster (seguido por el reinicio del servicio de Docker con \texttt{systemctl restart docker}):
 \begin{lstlisting}

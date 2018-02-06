@@ -1,6 +1,6 @@
 % Appendix I - Source Code Locations
 
-\chapter{Ubicacion de Codigo Fuente y Licencia}
+\chapter{Ubicacion de Repositorios de Codigo y Sus Licencias}
 \label{AnexoI} 
 
 \section{Ubicacion de Codigo Fuente}
@@ -62,6 +62,13 @@ Se puede encontrar el codigo fuente, divido en repositorios de este trabajo de t
         	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}
             \item[GitHub] \sloppy \url{https://github.com/nishedcob/GitServerHTTPEndpoint}
         \end{description}
+        \item[UTPL-Engineering-Thesis] el codigo/proyecto de LaTeX para generar este documento. \\
+        Licencia: \textbf{Creative Commons Attribution Non Commercial Share Alike 4.0}. \\
+        Repositorios y Espejos:
+        \begin{description}
+        	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/UTPL-Engineering-Thesis}
+            \item[GitHub] \sloppy \url{https://github.com/nishedcob/UTPL-Engineering-Thesis}
+        \end{description}
         \item[db/] Directorio desactualizado con algunos archivos relacionados a la base de datos tanto relacional como no relacional.
         \item[docker/] Directorio con todos los archivos relacionados a la creacion de los seis imagenes de Docker utilizados en el proyecto.
         \item[kubernetes/] Directorio con los expirimentos realizados con Kubernetes. Tambien contiene los submodulos detallados a continuacion:
@@ -89,6 +96,12 @@ Se puede encontrar el codigo fuente, divido en repositorios de este trabajo de t
             \end{description}
         \end{description}
     \end{description}
+    Se puede clonar todo el repositorio y submodules con el commando:
+    \begin{lstlisting}[breaklines]
+git clone --recursive https://gitlab.com/nishedcob/GitEDU.git
+    \end{lstlisting}
+    O en repositorios ya existentes, siempre se puede actualizar submodulos con el comando:
+    \begin{lstlisting}
+git submodule update --init --recursive --remote
+    \end{lstlisting}
 \end{description}
-
-\section{Licencia de Codigo}

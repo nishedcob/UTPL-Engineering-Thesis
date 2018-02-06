@@ -8,8 +8,7 @@ Con respeto al sistema GitEDU, el componente mas importante de probar fue el bac
 \lstset{language=Python}
 \begin{lstlisting}[breaklines]
 from pymongo import ASCENDING, DESCENDING
-from ideApp.CodePersistenceBackends.MongoDB.mongodb_models import ChangeModel, ChangeFileModel, NamespaceModel,\
-    RepositoryModel, RepositoryFileModel
+from ideApp.CodePersistenceBackends.MongoDB.mongodb_models import ChangeModel, ChangeFileModel, NamespaceModel, RepositoryModel, RepositoryFileModel
 from GitEDU.settings import CODE_PERSISTENCE_BACKEND_MANAGER_CLASS, load_code_persistence_backend_manager
 
 manager = load_code_persistence_backend_manager(CODE_PERSISTENCE_BACKEND_MANAGER_CLASS)
@@ -152,20 +151,14 @@ py3_code_exec_template_repospec = RepoSpec.RepoSpec.objects.get(repo="python3-co
 # RepoSpec.decode_repospec(repospec=py3_code_exec_template_repospec.token) == {'repo': "python3-code-executor-template"}
 # RepoSpec.decode(stored_repospec=py3_code_exec_template_repospec, repospec=None, decode_stored=True)
 #                   == {'repo': "python3-code-executor-template"}
-py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec,
-                                                           parent="http://192.168.1.100/shell.git",
-                                                           repo=py3_code_exec_template_repospec.repo,
-                                                           regen_secret_key=False)
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec, parent="http://192.168.1.100/shell.git", repo=py3_code_exec_template_repospec.repo, regen_secret_key=False)
 # token != py3_code_exec_template_repospec.token
 # secret_key == py3_code_exec_template_repospec.secret_key
 token = py3_code_exec_template_repospec.token
 print(token)
 secret_key = py3_code_exec_template_repospec.secret_key
 print(secret_key)
-py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec,
-                                                           parent="http://192.168.1.100/shell.git",
-                                                           repo=py3_code_exec_template_repospec.repo,
-                                                           regen_secret_key=True)
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec, parent="http://192.168.1.100/shell.git", repo=py3_code_exec_template_repospec.repo, regen_secret_key=True)
 # token != py3_code_exec_template_repospec.token
 # secret_key != py3_code_exec_template_repospec.secret_key
 token = py3_code_exec_template_repospec.token
@@ -180,9 +173,7 @@ token = py3_code_exec_template_repospec.token
 print(token)
 secret_key = py3_code_exec_template_repospec.secret_key
 print(secret_key)
-py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec, parent=None,
-                                                           repo=py3_code_exec_template_repospec.repo,
-                                                           regen_secret_key=True)
+py3_code_exec_template_repospec = RepoSpec.update_repospec(repospec=py3_code_exec_template_repospec, parent=None, repo=py3_code_exec_template_repospec.repo, regen_secret_key=True)
 # token != py3_code_exec_template_repospec.token
 # secret_key != py3_code_exec_template_repospec.secret_key
 token = py3_code_exec_template_repospec.token
@@ -192,8 +183,7 @@ print(secret_key)
 py3_code_exec_template_repospec = RepoSpec.update_repo(old_repo=py3_code_exec_template_repospec.token)
 # token == py3_code_exec_template_repospec.token
 # secret key == py3_code_exec_template_repospec.secret_key
-py3_code_exec_template_repospec = RepoSpec.update_repo(old_repo=py3_code_exec_template_repospec.token,
-                                                       regen_secret_key=True)
+py3_code_exec_template_repospec = RepoSpec.update_repo(old_repo=py3_code_exec_template_repospec.token, regen_secret_key=True)
 # token != py3_code_exec_template_repospec.token
 # secret_key != py3_code_exec_template_repospec.secret_key
 
@@ -228,9 +218,13 @@ EDUNUBE_CONFIG = {
     "protocol": "http",
     "host": "10.10.10.1",
     "port": 8010,
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZXMiOmZhbHNlLCJjcmVhdGVkX2RhdGUi"
-             "OiIyMDE3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImVkaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6NDAuMjc5NDAyIn0.825oh2rZU"
-             "lIPZFaP_UbYPDpdsXTE0XCaNsia-3NnGuc"
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
+             "eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZ"
+             "XMiOmZhbHNlLCJjcmVhdGVkX2RhdGUiOiIyMD"
+             "E3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImV"
+             "kaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6"
+             "NDAuMjc5NDAyIn0.825oh2rZUlIPZFaP_UbYP"
+             "DpdsXTE0XCaNsia-3NnGuc"
 }
 
 
@@ -392,9 +386,13 @@ EDUNUBE_CONFIG = {
     "protocol": "http",
     "host": "10.10.10.1",
     "port": 8010,
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZXMiOmZhbHNlLCJjcmVhdGVkX2RhdGUi"
-             "OiIyMDE3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImVkaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6NDAuMjc5NDAyIn0.825oh2rZU"
-             "lIPZFaP_UbYPDpdsXTE0XCaNsia-3NnGuc"
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
+             "eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZ"
+             "XMiOmZhbHNlLCJjcmVhdGVkX2RhdGUiOiIyMD"
+             "E3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImV"
+             "kaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6"
+             "NDAuMjc5NDAyIn0.825oh2rZUlIPZFaP_UbYP"
+             "DpdsXTE0XCaNsia-3NnGuc"
 }
 
 
@@ -531,9 +529,14 @@ GIT_SERVER_HTTP_ENDPOINT_CONFIG = {
     "protocol": "http",
     "host": "127.0.0.1",
     "port": 8020,
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjpmYWxzZSwiYXBwX25hbWUiOiJHaXRFRFUiLCJlZGl0X2RhdGUiOiIy"
-             "MDE3LTExLTI1IDIwOjI2OjIzLjQ3MDgxNyswMDowMCIsImNyZWF0ZWRfZGF0ZSI6IjIwMTctMTEtMjUgMjA6MjY6MjMuNDcwNzUwKzAwO"
-             "jAwIn0.jVHEmUAgJcQy7sU-qyULAnAiIrBAPNbeDjOiwjk5EEk"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+             "eyJleHBpcmVzIjpmYWxzZSwiYXBwX25hbWUiO"
+             "iJHaXRFRFUiLCJlZGl0X2RhdGUiOiIyMDE3LT"
+             "ExLTI1IDIwOjI2OjIzLjQ3MDgxNyswMDowMCI"
+             "sImNyZWF0ZWRfZGF0ZSI6IjIwMTctMTEtMjUg"
+             "MjA6MjY6MjMuNDcwNzUwKzAwOjAwIn0.jVHEm"
+             "UAgJcQy7sU-qyULAnAiIrBAPNbeDjOiwjk5EE"
+             "k"
 }
 
 import requests
@@ -584,8 +587,7 @@ class ConfigGitSrvHTTPEpConsumer(GitServerHTTPEndpointConsumer):
         }
 
     def build_config_url(self, operation, object_path):
-        return self.build_url(protocol=self.protocol, host=self.host, port=self.port, object_type=self.object_type,
-                              operation=operation, object_path=object_path)
+        return self.build_url(protocol=self.protocol, host=self.host, port=self.port, object_type=self.object_type, operation=operation, object_path=object_path)
 
 
 class DefaultConfigGitSrvHTTPEpConsumer(ConfigGitSrvHTTPEpConsumer):
@@ -656,8 +658,7 @@ class FileGitSrvHTTPEpConsumer(DefaultConfigGitSrvHTTPEpConsumer):
     def create_call(self, namespace, repository, file_path, commit=True):
         payload = self.build_inicial_payload()
         payload['commit'] = commit
-        url = self.build_call_url(operation=self.create_operation, namespace=namespace, repository=repository,
-                                  file_path=file_path)
+        url = self.build_call_url(operation=self.create_operation, namespace=namespace, repository=repository, file_path=file_path)
         return self.post_url(url=url, payload=payload)
 
     def edit_mv_call(self, namespace, repository, file_path, new_file_path, new_repository=None, new_namespace=None):
@@ -667,15 +668,13 @@ class FileGitSrvHTTPEpConsumer(DefaultConfigGitSrvHTTPEpConsumer):
         if new_repository is not None:
             payload['new_repository'] = new_repository
         payload['new_file_path'] = new_file_path
-        url = self.build_call_url(operation=self.edit_mv_operation, namespace=namespace, repository=repository,
-                                  file_path=file_path)
+        url = self.build_call_url(operation=self.edit_mv_operation, namespace=namespace, repository=repository, file_path=file_path)
         return self.post_url(url=url, payload=payload)
 
     def edit_contents_call(self, namespace, repository, file_path, contents):
         payload = self.build_inicial_payload()
         payload['contents'] = contents
-        url = self.build_call_url(operation=self.edit_contents_operation, namespace=namespace, repository=repository,
-                                  file_path=file_path)
+        url = self.build_call_url(operation=self.edit_contents_operation, namespace=namespace, repository=repository, file_path=file_path)
         return self.post_url(url=url, payload=payload)
 
     def create_and_edit_contents_call(self, namespace, repository, file_path, contents):
@@ -694,8 +693,7 @@ if test:
 
     # Example File Creation Call:
     file_consumer = FileGitSrvHTTPEpConsumer()
-    file_create = file_consumer.create_call(namespace=namespace, repository=repository, file_path=file_path,
-                                            commit=False)
+    file_create = file_consumer.create_call(namespace=namespace, repository=repository, file_path=file_path, commit=False)
 
     print('url: %s' % file_create.request.url)
     print('data: %s' % file_create.request.body)
@@ -703,16 +701,14 @@ if test:
     contents = "print('hello world')\n"
 
     # Example File Edit Call:
-    file_edit = file_consumer.edit_contents_call(namespace=namespace, repository=repository, file_path=file_path,
-                                                 contents=contents)
+    file_edit = file_consumer.edit_contents_call(namespace=namespace, repository=repository, file_path=file_path, contents=contents)
 
     print('url: %s' % file_edit.request.url)
     print('data: %s' % file_edit.request.body)
 
     file_path = 'folder/test3.py'
 
-    file_create_and_edit = file_consumer.create_and_edit_contents_call(namespace=namespace, repository=repository,
-                                                                       file_path=file_path, contents=contents)
+    file_create_and_edit = file_consumer.create_and_edit_contents_call(namespace=namespace, repository=repository, file_path=file_path, contents=contents)
     print("FILE CREATE")
     file_create = file_create_and_edit[0]
     print('url: %s' % file_create.request.url)

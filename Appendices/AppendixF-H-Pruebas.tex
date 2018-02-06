@@ -83,6 +83,55 @@ kvb.get_id_last_git_commit(repository_path='/home/nyx/GitEDU')
 kvb.get_id_last_git_commit(repository_path='/home/nyx/GitEDU-copy')
 \end{lstlisting}
 
+\section{Prueba Inicial de Ejecuccion con Kubernetes}
+\lstset{language=Python}
+\begin{lstlisting}
+# coding: utf-8
+
+import time
+
+from apiApp.VirtualizationBackends.Kubernetes import Py3KubernetesVirtualizationBackend
+
+# values for test:
+kvb = Py3KubernetesVirtualizationBackend()
+job_name = 'py3-pytest-3'
+# with minikube
+#git_repo = 'http://192.168.99.1/python3-code-executor-template.git'
+# with Kubernetes on Xen
+git_repo = 'http://10.10.10.1/python3-code-executor-template.git'
+kubernetes_working_tmp_dir = '/tmp'
+
+# prepare test manifest
+manifest = kvb.build_job_template(job_name=job_name, git_repo=git_repo)
+manifest_path = '%s/%s.json' % (kubernetes_working_tmp_dir, job_name)
+kvb.write_json_manifest(path=manifest_path, json_data=manifest, overwrite=True)
+
+# create job with manifest
+print(kvb.job_status(job_id=job_name))
+print(kvb.kubectl_create_from_manifest_file(manifest_path=manifest_path))
+
+# job info
+print(kvb.job_describe(job_id=job_name))
+
+# get job status & wait until job completion
+print(kvb.job_get(job_id=job_name))
+while not kvb.job_finished(job_id=job_name):
+    print(kvb.job_status(job_id=job_name))
+    time.sleep(1)
+print(kvb.job_status(job_id=job_name))
+print(kvb.job_get(job_id=job_name))
+
+# job info
+print(kvb.job_describe(job_id=job_name))
+
+# job output
+print(kvb.job_logs(job_id=job_name))
+
+# delete job
+print(kvb.kubectl_delete_from_manifest_file(manifest_path=manifest_path))
+\end{lstlisting}
+\lstset{language=Bash}
+
 \section{Prueba Inicial de Backend de RepoSpecs}
 \lstset{language=Python}
 \begin{lstlisting}[breaklines]
@@ -167,56 +216,511 @@ postgresql_code_exec_template_repospec = RepoSpec.RepoSpec.objects.get(repo="pos
 \end{lstlisting}
 \lstset{language=Bash}
 
-\section{Prueba Inicial de Ejecuccion con Kubernetes}
+\section{Cliente Ejemplar de API de RepoSpecs}
 \lstset{language=Python}
-\begin{lstlisting}
-# coding: utf-8
+\begin{lstlisting}[breaklines]
 
-import time
+import requests
 
-from apiApp.VirtualizationBackends.Kubernetes import Py3KubernetesVirtualizationBackend
+# Would normally be imported from settings, but for demonstration purposes:
+#from EduNube.settings import EDUNUBE_CONFIG
+EDUNUBE_CONFIG = {
+    "protocol": "http",
+    "host": "10.10.10.1",
+    "port": 8010,
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZXMiOmZhbHNlLCJjcmVhdGVkX2RhdGUi"
+             "OiIyMDE3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImVkaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6NDAuMjc5NDAyIn0.825oh2rZU"
+             "lIPZFaP_UbYPDpdsXTE0XCaNsia-3NnGuc"
+}
 
-# values for test:
-kvb = Py3KubernetesVirtualizationBackend()
-job_name = 'py3-pytest-3'
-# with minikube
-#git_repo = 'http://192.168.99.1/python3-code-executor-template.git'
-# with Kubernetes on Xen
-git_repo = 'http://10.10.10.1/python3-code-executor-template.git'
-kubernetes_working_tmp_dir = '/tmp'
 
-# prepare test manifest
-manifest = kvb.build_job_template(job_name=job_name, git_repo=git_repo)
-manifest_path = '%s/%s.json' % (kubernetes_working_tmp_dir, job_name)
-kvb.write_json_manifest(path=manifest_path, json_data=manifest, overwrite=True)
+class EduNubeRepoSpecHTTPconsumer:
 
-# create job with manifest
-print(kvb.job_status(job_id=job_name))
-print(kvb.kubectl_create_from_manifest_file(manifest_path=manifest_path))
+    create_operation = "create"
+    get_operation = "get"
+    get_or_create_operation = "get_or_create"
+    edit_operation = "edit"
 
-# job info
-print(kvb.job_describe(job_id=job_name))
+    url_template = "%s://%s:%d/api/repospec/%s"
 
-# get job status & wait until job completion
-print(kvb.job_get(job_id=job_name))
-while not kvb.job_finished(job_id=job_name):
-    print(kvb.job_status(job_id=job_name))
-    time.sleep(1)
-print(kvb.job_status(job_id=job_name))
-print(kvb.job_get(job_id=job_name))
+    def build_url(self, protocol, host, port, operation):
+        return self.url_template % (protocol, host, port, operation)
 
-# job info
-print(kvb.job_describe(job_id=job_name))
+    def build_inicial_payload(self):
+        return dict()
 
-# job output
-print(kvb.job_logs(job_id=job_name))
+    def post_url(self, url, payload):
+        return requests.post(url, data=payload)
 
-# delete job
-print(kvb.kubectl_delete_from_manifest_file(manifest_path=manifest_path))
+    def validate_url(self, url):
+        return url
+
+
+class ConfigEduNubeRepoSpecHTTPconsumer(EduNubeRepoSpecHTTPconsumer):
+
+    protocol = None
+    host = None
+    port = None
+    object_type = None
+    token = None
+
+    def __init__(self, protocol=None, host=None, port=None, object_type=None, token=None):
+        self.protocol = self.protocol if protocol is None else protocol
+        self.host = self.host if host is None else host
+        self.port = self.port if port is None else port
+        self.object_type = self.object_type if object_type is None else object_type
+        self.token = self.token if token is None else token
+
+    def build_inicial_payload(self):
+        return {
+            'token': self.token
+        }
+
+    def build_config_url(self, operation):
+        return self.build_url(protocol=self.protocol, host=self.host, port=self.port, operation=operation)
+
+
+class DefaultConfigEduNubeRepoSpecHTTPconsumer(ConfigEduNubeRepoSpecHTTPconsumer):
+    protocol = EDUNUBE_CONFIG.get('protocol')
+    host = EDUNUBE_CONFIG.get('host')
+    port = EDUNUBE_CONFIG.get('port')
+    token = EDUNUBE_CONFIG.get('token')
+
+
+class EduNubeRepoSpecConsumer(DefaultConfigEduNubeRepoSpecHTTPconsumer):
+
+    def _validate_findable(self, repo=None, repospec_token=None):
+        if repo is None and repospec_token is None:
+            raise ValueError("repo and repospec_token can't both be None")
+
+    def _make_call(self, operation, payload):
+        url = self.build_config_url(operation=operation)
+        return self.post_url(url=url, payload=payload)
+
+    def _if_not_none_add_to_payload(self, payload, payload_index, value):
+        if value is not None:
+            payload[payload_index] = value
+        return payload
+
+    def create(self, repo, parent_repo=None):
+        payload = self.build_inicial_payload()
+        payload['repo'] = repo
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='parent', value=parent_repo)
+        return self._make_call(operation=self.create_operation, payload=payload)
+
+    def get(self, repo=None, repospec_token=None):
+        self._validate_findable(repo=repo, repospec_token=repospec_token)
+        payload = self.build_inicial_payload()
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='repo', value=repo)
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='repospec_token', value=repospec_token)
+        return self._make_call(operation=self.get_operation, payload=payload)
+
+    def get_or_create(self, repo, parent_repo=None, repospec_token=None):
+        payload = self.build_inicial_payload()
+        payload['repo'] = repo
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='parent', value=parent_repo)
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='repospec_token', value=repospec_token)
+        return self._make_call(operation=self.get_or_create_operation, payload=payload)
+
+    def edit(self, repo=None, repospec_token=None, parent_repo=None, new_repo=None, regen_secret_key=False):
+        self._validate_findable(repo=repo, repospec_token=repospec_token)
+        payload = self.build_inicial_payload()
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='repo', value=repo)
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='repospec_token', value=repospec_token)
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='parent', value=parent_repo)
+        payload = self._if_not_none_add_to_payload(payload=payload, payload_index='new_repo', value=new_repo)
+        if type(regen_secret_key) == bool:
+            payload['regen_secret_key'] = regen_secret_key
+        return self._make_call(operation=self.edit_operation, payload=payload)
 \end{lstlisting}
 \lstset{language=Bash}
 
+\section{Prueba inicial de API de Ejecuccion y Jobs}
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+import json
 
+from execute_status_example_client import EduNubePy3ExecuteStatusConsumer
+
+en_py3_es_consumer = EduNubePy3ExecuteStatusConsumer()
+
+namespace = 'nishedcob'
+repository = 'test'
+
+inicial_execution_create = en_py3_es_consumer.create(namespace=namespace, repository=repository)
+
+print("Inicial Exec Create Code: %d" % inicial_execution_create.status_code)
+print("Inicial Exec Create Reply Data: %s" % inicial_execution_create.text)
+inicial_execution_create_reply_data = json.loads(inicial_execution_create.text)
+print("Inicial Exec Create Reply Data (JSON Loads): %s" % inicial_execution_create_reply_data)
+
+print()
+print("-------------------------------------------------------------------------")
+print()
+
+inicial_execution_id = inicial_execution_create_reply_data.get('id')
+
+inicial_execution_status = en_py3_es_consumer.status(id=inicial_execution_id)
+
+print("Inicial Exec Status Code: %d" % inicial_execution_status.status_code)
+print("Inicial Exec Status Reply Data: %s" % inicial_execution_status.text)
+inicial_execution_status_reply_data = json.loads(inicial_execution_status.text)
+print("Inicial Exec Status Reply Data (JSON Loads): %s" % inicial_execution_status_reply_data)
+
+print()
+print("-------------------------------------------------------------------------")
+print()
+
+inicial_execution_result = en_py3_es_consumer.result(id=inicial_execution_id)
+print("Initial Exec Result Code: %d" % inicial_execution_result.status_code)
+print("Inicial Exec Result Reply Data: %s" % inicial_execution_result.text)
+inicial_execution_result_reply_data = json.loads(inicial_execution_result.text)
+print("Inicial Exec Result Reply Data (JSON Loads): %s" % inicial_execution_result_reply_data)
+\end{lstlisting}
+\lstset{language=Bash}
+
+\section{Cliente de API de Ejecuccion y Jobs}
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+
+import requests
+import json
+
+# Would normally be imported from settings, but for demonstration purposes:
+#from EduNube.settings import EDUNUBE_CONFIG
+EDUNUBE_CONFIG = {
+    "protocol": "http",
+    "host": "10.10.10.1",
+    "port": 8010,
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbmFtZSI6IkdpdEVEVSIsImV4cGlyZXMiOmZhbHNlLCJjcmVhdGVkX2RhdGUi"
+             "OiIyMDE3LTExLTEyIDE3OjMzOjE3LjY0MTY4MSIsImVkaXRfZGF0ZSI6IjIwMTctMTEtMTIgMjA6MzY6NDAuMjc5NDAyIn0.825oh2rZU"
+             "lIPZFaP_UbYPDpdsXTE0XCaNsia-3NnGuc"
+}
+
+
+class EduNubeExecuteStatusHTTPConsumer:
+
+    create_operation = 'create'
+    status_operation = 'status'
+    result_operation = 'result'
+
+    url_template = "%s://%s:%d/api/execute/%s"
+
+    def build_base_url(self, protocol, host, port, operation):
+        return self.url_template % (protocol, host, port, operation)
+
+    def build_inicial_payload(self):
+        return dict()
+
+    def post_url(self, url, payload):
+        return requests.post(url, data=payload)
+
+    def validate_url(self, url):
+        return url
+
+
+class ConfigEduNubeExecuteStatusHTTPConsumer(EduNubeExecuteStatusHTTPConsumer):
+
+    protocol = None
+    host = None
+    port = None
+    object_type = None
+    token = None
+
+    def __init__(self, protocol=None, host=None, port=None, object_type=None, token=None):
+        self.protocol = self.protocol if protocol is None else protocol
+        self.host = self.host if host is None else host
+        self.port = self.port if port is None else port
+        self.object_type = self.object_type if object_type is None else object_type
+        self.token = self.token if token is None else token
+
+    def build_inicial_payload(self):
+        return {
+            'token': self.token
+        }
+
+    def build_base_config_url(self, operation):
+        return self.build_base_url(protocol=self.protocol, host=self.host, port=self.port, operation=operation)
+
+
+class DefaultConfigEduNubeExecuteStatusHTTPConsumer(ConfigEduNubeExecuteStatusHTTPConsumer):
+    protocol = EDUNUBE_CONFIG.get('protocol')
+    host = EDUNUBE_CONFIG.get('host')
+    port = EDUNUBE_CONFIG.get('port')
+    token = EDUNUBE_CONFIG.get('token')
+
+
+class EduNubeExecuteStatusConsumer(DefaultConfigEduNubeExecuteStatusHTTPConsumer):
+
+    def _prepare_repo_suffix(self, language, namespace, repository):
+        return "%s/%s/%s/" % (language, namespace, repository)
+
+    def _prepare_id_suffix(self, language, id):
+        return "%s/%s/" % (language, id)
+
+    def _make_call(self, operation, suffix, payload=None):
+        if payload is None:
+            payload = self.build_inicial_payload()
+        url = "%s/%s" % (self.build_base_config_url(operation=operation), suffix)
+        return self.post_url(url=url, payload=payload)
+
+    def create(self, language, namespace, repository):
+        return self._make_call(
+            operation=self.create_operation,
+            suffix=self._prepare_repo_suffix(language=language, namespace=namespace, repository=repository)
+        )
+
+    def status(self, language, id):
+        return self._make_call(
+            operation=self.status_operation,
+            suffix=self._prepare_id_suffix(language=language, id=id)
+        )
+
+    def result(self, language, id):
+        return self._make_call(
+            operation=self.result_operation,
+            suffix=self._prepare_id_suffix(language=language, id=id)
+        )
+
+
+class EduNubeLanguageExecuteStatusConsumer(EduNubeExecuteStatusConsumer):
+
+    language = None
+
+    def create(self, namespace, repository, language=None):
+        if language is None:
+            language = self.language
+        return super().create(language=language, namespace=namespace, repository=repository)
+
+    def status(self, id, language=None):
+        if language is None:
+            language = self.language
+        return super().status(language=language, id=id)
+
+    def result(self, id, language=None):
+        if language is None:
+            language = self.language
+        return super().result(language=language, id=id)
+
+
+class EduNubeShellExecuteStatusConsumer(EduNubeLanguageExecuteStatusConsumer):
+    language = 'shell'
+
+
+class EduNubePy3ExecuteStatusConsumer(EduNubeLanguageExecuteStatusConsumer):
+    language = 'python3'
+
+
+class EduNubePGSQLExecuteStatusConsumer(EduNubeLanguageExecuteStatusConsumer):
+    language = 'postgresql'
+\end{lstlisting}
+\lstset{language=Bash}
 
 \chapter{Pruebas de GitServerHTTPEndpoint}
 \label{AnexoH}
+
+\section{Cliente Ejemplar de API con pruebas integradas}
+\lstset{language=Python}
+\begin{lstlisting}[breaklines]
+
+# import config from somewhere, for example with Django I would use a settings file
+#from GitEDU.settings import GIT_SERVER_HTTP_ENDPOINT_CONFIG
+
+# In this case, I will just place an example config here, extracted from GitEDU:
+GIT_SERVER_HTTP_ENDPOINT_CONFIG = {
+    "protocol": "http",
+    "host": "127.0.0.1",
+    "port": 8020,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjpmYWxzZSwiYXBwX25hbWUiOiJHaXRFRFUiLCJlZGl0X2RhdGUiOiIy"
+             "MDE3LTExLTI1IDIwOjI2OjIzLjQ3MDgxNyswMDowMCIsImNyZWF0ZWRfZGF0ZSI6IjIwMTctMTEtMjUgMjA6MjY6MjMuNDcwNzUwKzAwO"
+             "jAwIn0.jVHEmUAgJcQy7sU-qyULAnAiIrBAPNbeDjOiwjk5EEk"
+}
+
+import requests
+
+
+class GitServerHTTPEndpointConsumer:
+
+    create_operation = 'create'
+    edit_operation = 'edit'
+    edit_mv_operation = "%s/mv" % edit_operation
+    edit_contents_operation = "%s/contents" % edit_operation
+
+    url_template = "%s://%s:%d/api/%s/%s/%s"
+
+    def build_url(self, protocol, host, port, object_type, operation, object_path):
+        return self.url_template % (protocol, host, port, object_type, operation, object_path)
+
+    def build_inicial_payload(self):
+        return dict()
+
+    def post_url(self, url, payload):
+        return requests.post(url, data=payload)
+
+    def validate_url(self, url):
+        if not url.endswith("/"):
+            url += "/"
+        return url
+
+
+class ConfigGitSrvHTTPEpConsumer(GitServerHTTPEndpointConsumer):
+
+    protocol = None
+    host = None
+    port = None
+    object_type = None
+    token = None
+
+    def __init__(self, protocol=None, host=None, port=None, object_type=None, token=None):
+        self.protocol = self.protocol if protocol is None else protocol
+        self.host = self.host if host is None else host
+        self.port = self.port if port is None else port
+        self.object_type = self.object_type if object_type is None else object_type
+        self.token = self.token if token is None else token
+
+    def build_inicial_payload(self):
+        return {
+            'token': self.token
+        }
+
+    def build_config_url(self, operation, object_path):
+        return self.build_url(protocol=self.protocol, host=self.host, port=self.port, object_type=self.object_type,
+                              operation=operation, object_path=object_path)
+
+
+class DefaultConfigGitSrvHTTPEpConsumer(ConfigGitSrvHTTPEpConsumer):
+    protocol = GIT_SERVER_HTTP_ENDPOINT_CONFIG.get('protocol')
+    host = GIT_SERVER_HTTP_ENDPOINT_CONFIG.get('host')
+    port = GIT_SERVER_HTTP_ENDPOINT_CONFIG.get('port')
+    token = GIT_SERVER_HTTP_ENDPOINT_CONFIG.get('token')
+
+
+class NamespaceGitSrvHTTPEpConsumer(DefaultConfigGitSrvHTTPEpConsumer):
+    object_type = 'ns'
+
+    def build_call_url(self, operation, namespace):
+        url = self.build_config_url(operation=operation, object_path=namespace)
+        if not url.endswith("/"):
+            url += "/"
+        return url
+
+    def create_call(self, namespace):
+        payload = self.build_inicial_payload()
+        url = self.build_call_url(operation=self.create_operation, namespace=namespace)
+        return self.post_url(url=url, payload=payload)
+
+    def edit_call(self, namespace, new_namespace):
+        payload = self.build_inicial_payload()
+        payload['new_namespace'] = new_namespace
+        url = self.build_call_url(operation=self.edit_operation, namespace=namespace)
+        return self.post_url(url=url, payload=payload)
+
+
+class RepositoryGitSrvHTTPEpConsumer(DefaultConfigGitSrvHTTPEpConsumer):
+    object_type = 'repo'
+
+    def build_object_path(self, namespace, repository):
+        return "%s/%s" % (namespace, repository)
+
+    def build_call_url(self, operation, namespace, repository):
+        object_path = self.build_object_path(namespace=namespace, repository=repository)
+        url = self.build_config_url(operation=operation, object_path=object_path)
+        if not url.endswith("/"):
+            url += "/"
+        return url
+
+    def create_call(self, namespace, repository):
+        payload = self.build_inicial_payload()
+        url = self.build_call_url(operation=self.create_operation, namespace=namespace, repository=repository)
+        return self.post_url(url=url, payload=payload)
+
+    def edit_call(self, namespace, repository, new_repository, new_namespace=None):
+        payload = self.build_inicial_payload()
+        if new_namespace is not None:
+            payload['new_namespace'] = new_namespace
+        payload['new_repository'] = new_repository
+        url = self.build_call_url(operation=self.edit_operation, namespace=namespace, repository=repository)
+        return self.post_url(url=url, payload=payload)
+
+
+class FileGitSrvHTTPEpConsumer(DefaultConfigGitSrvHTTPEpConsumer):
+    object_type = 'file'
+
+    def build_object_path(self, namespace, repository, file_path):
+        return "%s/%s/%s" % (namespace, repository, file_path)
+
+    def build_call_url(self, operation, namespace, repository, file_path):
+        object_path = self.build_object_path(namespace=namespace, repository=repository, file_path=file_path)
+        return self.build_config_url(operation=operation, object_path=object_path)
+
+    def create_call(self, namespace, repository, file_path, commit=True):
+        payload = self.build_inicial_payload()
+        payload['commit'] = commit
+        url = self.build_call_url(operation=self.create_operation, namespace=namespace, repository=repository,
+                                  file_path=file_path)
+        return self.post_url(url=url, payload=payload)
+
+    def edit_mv_call(self, namespace, repository, file_path, new_file_path, new_repository=None, new_namespace=None):
+        payload = self.build_inicial_payload()
+        if new_namespace is not None:
+            payload['new_namespace'] = new_namespace
+        if new_repository is not None:
+            payload['new_repository'] = new_repository
+        payload['new_file_path'] = new_file_path
+        url = self.build_call_url(operation=self.edit_mv_operation, namespace=namespace, repository=repository,
+                                  file_path=file_path)
+        return self.post_url(url=url, payload=payload)
+
+    def edit_contents_call(self, namespace, repository, file_path, contents):
+        payload = self.build_inicial_payload()
+        payload['contents'] = contents
+        url = self.build_call_url(operation=self.edit_contents_operation, namespace=namespace, repository=repository,
+                                  file_path=file_path)
+        return self.post_url(url=url, payload=payload)
+
+    def create_and_edit_contents_call(self, namespace, repository, file_path, contents):
+        return [
+            self.create_call(namespace=namespace, repository=repository, file_path=file_path, commit=False),
+            self.edit_contents_call(namespace=namespace, repository=repository, file_path=file_path, contents=contents)
+        ]
+
+
+# to test: set test to True and run "python manage.py -c "import ideApp.git_server_http_endpoint"
+test = False
+if test:
+    namespace = 'nishedcob3'
+    repository = 'test2'
+    file_path = 'folder/test2.py'
+
+    # Example File Creation Call:
+    file_consumer = FileGitSrvHTTPEpConsumer()
+    file_create = file_consumer.create_call(namespace=namespace, repository=repository, file_path=file_path,
+                                            commit=False)
+
+    print('url: %s' % file_create.request.url)
+    print('data: %s' % file_create.request.body)
+
+    contents = "print('hello world')\n"
+
+    # Example File Edit Call:
+    file_edit = file_consumer.edit_contents_call(namespace=namespace, repository=repository, file_path=file_path,
+                                                 contents=contents)
+
+    print('url: %s' % file_edit.request.url)
+    print('data: %s' % file_edit.request.body)
+
+    file_path = 'folder/test3.py'
+
+    file_create_and_edit = file_consumer.create_and_edit_contents_call(namespace=namespace, repository=repository,
+                                                                       file_path=file_path, contents=contents)
+    print("FILE CREATE")
+    file_create = file_create_and_edit[0]
+    print('url: %s' % file_create.request.url)
+    print('data: %s' % file_create.request.body)
+
+    print("FILE EDIT")
+    file_edit = file_create_and_edit[1]
+    print('url: %s' % file_edit.request.url)
+    print('data: %s' % file_edit.request.body)
+\end{lstlisting}
+\lstset{language=Bash}

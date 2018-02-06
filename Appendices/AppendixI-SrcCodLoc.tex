@@ -1,10 +1,56 @@
 % Appendix I - Source Code Locations
 
 \chapter{Ubicacion de Codigo Fuente y Licencia}
-
 \label{AnexoI} 
 
 \section{Ubicacion de Codigo Fuente}
-Se puede encontrar el codigo fuente de este trabajo de titulacion en la siguiente direccion: \url{https://gitlab.com/nishedcob/GitEDU}
+Se puede encontrar el codigo fuente, divido en repositorios de este trabajo de titulacion en la siguiente direcciones con las licencias respectivas:
+\begin{description}
+	\item[GitEDU y EduNube] Servicios Principales para Editar y Ejecutar codigo en Linea.\\
+    Repositorios y Espejos:
+    \begin{description}
+    	\item[GitLab] \url{https://gitlab.com/nishedcob/GitEDU}
+        \item[GitHub] \url{https://gitlab.com/nishedcob/GitEDU}
+    \end{description}
+    Submodules y Directorios:
+    \begin{description}
+    	\item[3rd\_party/] Directorio con Librerias de Terceros ubicado de tal forma que GitHub no lo cuenta en los estadisticas del repositorio.
+        \item[EduNube/] Directorio que forma la raiz del proyecto de Django que es el servicio EduNube.
+        \item[GitEDU/] Directorio que forma la raiz del proyecto de Django que es el servicio GitEDU.
+        \item[GitServerHTTPEndpoint] Submodule para el Servicio GitServerHTTPEndpoint. \\
+        Licencia: \textbf{GNU General Public License v3.0}. \\
+        Repositorios y Espejos:
+        \begin{description}
+        	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}
+            \item[GitHub] \sloppy \url{https://github.com/nishedcob/GitServerHTTPEndpoint}
+        \end{description}
+        \item[db/] Directorio desactualizado con algunos archivos relacionados a la base de datos tanto relacional como no relacional.
+        \item[docker/] Directorio con todos los archivos relacionados a la creacion de los seis imagenes de Docker utilizados en el proyecto.
+        \item[kubernetes/] Directorio con los expirimentos realizados con Kubernetes. Tambien contiene los submodulos detallados a continuacion:
+        \begin{description}
+        	\item[postgresql-code-executor-template] Plantilla de Ejecuccion para uso con imagenes de Docker \texttt{postgresql-executor} dentro de su volumen \texttt{/code}.\\
+            Licencia: \textbf{GNU General Public License v3.0}. \\
+            Repositorios y Espejos:
+            \begin{description}
+            	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/postgresql-code-executor-template}
+                \item[GitHub] \sloppy \url{https://github.com/nishedcob/postgresql-code-executor-template}
+            \end{description}
+        	\item[python3-code-executor-template] Plantilla de Ejecuccion para uso con imagenes de Docker \texttt{python3-executor} dentro de su volumen \texttt{/code}.\\
+            Licencia: \textbf{GNU General Public License v3.0}. \\
+            Repositorios y Espejos:
+            \begin{description}
+            	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/python3-code-executor-template}
+                \item[GitHub] \sloppy \url{https://github.com/nishedcob/python3-code-executor-template}
+            \end{description}
+        	\item[shell-code-executor-template] Plantilla de Ejecuccion para uso con imagenes de Docker \texttt{shell-executor} dentro de su volumen \texttt{/code}.\\
+            Licencia: \textbf{GNU General Public License v3.0}. \\
+            Repositorios y Espejos:
+            \begin{description}
+            	\item[GitLab] \sloppy \url{https://gitlab.com/nishedcob/shell-code-executor-template}
+                \item[GitHub] \sloppy \url{https://github.com/nishedcob/shell-code-executor-template}
+            \end{description}
+        \end{description}
+    \end{description}
+\end{description}
 
 \section{Licencia de Codigo}

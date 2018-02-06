@@ -82,9 +82,7 @@ docker run -d -P --name moodle --link moodledb:DB\
 \end{enumerate}
 
 \subsubsection{GitLab en Docker}
-Para instalar GitLab en Docker, se sigue pasos similares a los vistos previamente con Moodle:
-% TODO: Cite https://hub.docker.com/r/gitlab/gitlab-ce/
-% TODO: Cite https://docs.gitlab.com/omnibus/docker/
+Para instalar GitLab en Docker\citep{GitLab-Docker-Images}, se sigue pasos similares a los vistos previamente con Moodle:
 \begin{enumerate}
 	\item Bajar el imagen de Docker:
     \begin{lstlisting}    
@@ -178,7 +176,6 @@ Para utilizar el Registry creado anteriormente, se agrega el siguiente configura
 
 \index{Kubernetes}
 \paragraph{Instalación de Cluster de Kubernetes}
-% TODO: Cite https://kubernetes.io/docs/setup/independent/install-kubeadm/
 Para instalar el cluster de Kubernetes, el proceso es relativamente sencillo con una herramienta que se llama \texttt{kubeadm} que se encarga de levantar, gestionar y bajar nodos del cluster. Primero para instalar el mismo:
 \begin{enumerate}
 	\item Debemos tener suporte en el gestor de paquetes APT para el protocolo HTTPS:
@@ -200,8 +197,8 @@ apt-get update
 apt-get install -y kubelet kubeadm kubectl
     \end{lstlisting}
 \end{enumerate}
+\citep{kubernetes-install-kubeadm}
 
-% TODO: Cite https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 El levantamiento de un nodo maestro básica se puede hacer con el comando:
     \begin{lstlisting}
 kubeadm init
@@ -238,6 +235,7 @@ as root:
   sha256:4919df120063c4535fd03e909ce11dfe9e6448f8a7\
   67be914e86b16660d267c8
     \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
 Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una política de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta política con el siguiente comando:
     \begin{lstlisting}
@@ -250,14 +248,14 @@ mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
     \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
 Se puede probar la conexión pidiendo la versión del cliente y del servidor:
 \begin{lstlisting}
 kubectl version
 \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
-% TODO: Cite https://kubernetes.io/docs/concepts/cluster-administration/networking/
-% TODO: Cite https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 Para instalar el driver de red Flannel (que es necesaria cualquier driver de red para Kubernetes previo a funcionamiento -- no se instala con ningún por defecto para que sea al elección del administrador quien instala ya que un cluster de Kubernetes solo puede ocupar un driver de red a la vez):
 \begin{lstlisting}
 sysctl net.bridge.bridge-nf-call-iptables=1
@@ -272,6 +270,7 @@ kubectl apply -f \
 https://raw.githubusercontent.com/coreos/flannel/v0.9.1/\
 Documentation/kube-flannel.yml
 \end{lstlisting}
+\citep{kubernetes-cluster-networking}
 
 A continuación se puede validar que Flannel o cualquier driver de red para Kubernetes esta funcionando con el comando:
 \begin{lstlisting}
@@ -281,6 +280,7 @@ Y que se revisa en la salida del mismo si se logra levantarse \texttt{kube-dns} 
 \begin{lstlisting}
 kube-system   kube-dns-...-...  3/3   Running  ... ...
 \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
 Para utilizar volúmenes de Git dentro del cluster, es necesario instalar Git en cada nodo:
 \begin{lstlisting}
@@ -315,6 +315,7 @@ Se puede probar que funcionan los credenciales copiados con una petición a Kube
 kubectl --kubeconfig ./admin.conf get nodes
 \end{lstlisting}
 Si es que funcionan los credenciales y el sistema que aloja el nodo maestro de Kubernetes esta expuesto a alguna red donde no hay suficiente confianza para dejar que se conecta root por SSH, ya se puede deshabilitar la configuración que se realizo anteriormente y reiniciar el servicio.
+\citep{kubernetes-create-cluster-kubeadm}
 
 Para instalar los credenciales de Kubernetes para que EduNube tiene acceso (pero sin perderse los credenciales al MiniKube instalado anteriormente) se realiza los siguientes comandos:
 \begin{lstlisting}
@@ -322,11 +323,13 @@ mv admin.conf ~/.kube/config.xen
 cp ~/.kube/config ~/.kube/config.minikube
 cp ~/.kube/config.xen ~/.kube/config
 \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
 Para validar que los credenciales se instalaron correctamente:
 \begin{lstlisting}
 kubectl version
 \end{lstlisting}
+\citep{kubernetes-create-cluster-kubeadm}
 
 \index{Kubernetes}
 \subparagraph{Validación de Cluster de Kubernetes}
@@ -1113,7 +1116,3 @@ ln -s -r /etc/nginx/sites-available/gitserverhttpendpoint-proxy /etc/nginx/sites
 nginx -t
 systemctl restart nginx
 \end{lstlisting}
-
-% TODO: if time
-%\section{Pruebas del Despliegue y Resultados}
-% TODO: Testing and test results of deployment

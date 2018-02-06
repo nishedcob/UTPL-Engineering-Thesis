@@ -1374,25 +1374,3 @@ def update_api_token(api_token=None, regen_secret_key=False):
 
 Como parte de la administración de este aspecto del sistema de autenticación, se encuentra implementado las funcionalidades de crear, actualizar, leer y borrar estos tokens de autenticación, siempre y cuando el usuario logueado tenga el permiso ''auth\_admin.manage\_tokens''. Si no se crea este permiso, como es el caso del ambiente de desarrollo, la política de Django es solo permitir cuentas de superusuario para acceder a estas vistas.
 
-% TODO: Transfer from Chapter 4 to here
-
-%\section{How do I change the colors of links?}
-%
-%The color of links can be changed to your liking using:
-%
-%{\small\verb!\hypersetup{urlcolor=red}!}, or
-%
-%{\small\verb!\hypersetup{citecolor=green}!}, or
-%
-%{\small\verb!\hypersetup{allcolor=blue}!}.
-%
-%\noindent If you want to completely hide the links, you can use:
-%
-%{\small\verb!\hypersetup{allcolors=.}!}, or even better: 
-%
-%{\small\verb!\hypersetup{hidelinks}!}.
-%
-%\noindent If you want to have obvious links in the PDF but not the printed text, use:
-%
-%{\small\verb!\hypersetup{colorlinks=false}!}.
-%

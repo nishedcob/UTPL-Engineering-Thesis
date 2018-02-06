@@ -131,7 +131,7 @@ Con el fin de proteger la maquina física contra usuarios finales, sean malicios
 
 \index{Kubernetes}
 \paragraph{Construcción de Servidor Virtualizado para Cluster de Kubernetes}
-Las características mínimas que pide Kubernetes para su nodo maestro son 2 núcleos y 2 GiB de RAM, es por aquello razón que se crea una maquina virtual paravirtualización con estas mismas características. En el curso del año que se ha trabajado este trabajo de titulación la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales:
+Las características mínimas que pide Kubernetes para su nodo maestro son 2 núcleos y 2 GiB de RAM, es por aquello razón que se crea una maquina virtual paravirtualización con estas mismas características. En el curso del año que se ha trabajado este trabajo de titulación la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales, los resultados de la creacion del mismo, se indica en la figura \ref{fig:create-k8s-xen-vm}:
 \begin{lstlisting}
 xen-create-image --hostname=debian-k8s-master \
 --ip=10.10.10.12 --netmask=255.255.255.0 \

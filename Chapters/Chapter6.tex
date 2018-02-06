@@ -139,7 +139,13 @@ xen-create-image --hostname=debian-k8s-master \
 --lvm=Xephyr-VG --pygrub --dist=stretch --force \
 --size=10240mb --swap=1024mb
 \end{lstlisting}
-% TODO: include Screenshot_2017-12-29_15-21-49.png
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{Figures/create-k8s-vm.png}
+	\end{center}
+    \caption{Resultados de Crear la Maquina Virtual de Xen para el Cluster de Kubernetes de un solo Nodo}
+    \label{fig:create-k8s-xen-vm}
+\end{figure}
 
 \index{Docker}
 \paragraph{Instalación de Docker}

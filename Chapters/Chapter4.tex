@@ -1,11 +1,11 @@
-% Chapter 4
+﻿% Chapter 4
 
 \chapter{Desarrollo}
 \label{capitulo4}
 
 \index{Autenticación LTI|textit} \index{Ejecutar Código} \index{Editar Código} \index{Calificar Código} \index{Persistir Código} \index{Sincronizar Notas por LTI|textit} \index{Controlar Versiones de Código} \index{Recolección de Datos} \index{Toma de Decisiones}
 \section{Preparaciones del Ambiente de Desarrollo}
-Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la misma con:
+Previo a realizar el desarrollo, es necesario que se prepare el ambiente con:
 \begin{itemize}
   \item un sistema base (Debian Stretch con el Xen Hipervisor)
   \item un servidor local de Git (Git + Gitweb + NGinX),
@@ -13,7 +13,7 @@ Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la
   \item un LMS \index{LMS} (Moodle),
   \item un servidor de Git (GitLab CE)
   \item un servidor de Virtualización (Docker)
-  \item plantillas de maquinas virtuales (en Docker)
+  \item plantillas de máquinas virtuales (en Docker)
 \end{itemize}
 
 \subsection{Sistema Base de Desarrollo}
@@ -27,14 +27,14 @@ Previo a realizar el desarrollo, es necesario que se prepara el ambiente para la
 \end{figure}
 
 \index{Ejecutar Código}
-Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarrollo de este trabajo de titulación utiliza Xen instalado con Debian Stretch (9.1)\footnote{Como el sistema de Dom0} instalado en un LVM con el nombre del grupo de volúmenes ''Xephyr-VG''. Originalmente se tenia planificado trabajar con Debian Jessie (8.x) debido que eso fue la versión estable al momento de instalación pero después se opto por una actualización a la versión beta de Debian en aquello momento (Debian Stretch). En resumen los pasos realizados fueron:
+Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarrollo de este trabajo de titulación utiliza Xen instalado con Debian Stretch (9.1)\footnote{Como el sistema de Dom0} instalado en un LVM con el nombre del grupo de volúmenes ''Xephyr-VG''. Originalmente se tenía planificado trabajar con Debian Jessie (8.x) debido que esa era la versión estable al momento de la instalación, sin embargo luego se optó por la actualización a la versión beta de Debian del momento (Debian Stretch). En resumen los pasos realizados fueron:
 \lstset{language=Bash}
 \begin{enumerate}
 	\item Instalación Limpia de Debian 8 con un LVM.
     	\begin{description}
     		\item[Volumen Físico:] /dev/sda8 310g 
             \item[Grupo de Volúmenes:] Xephyr-VG 310g
-            \item[Volúmenes Lógicos:] Originalmente 4 (se agrega 2 por cada nueva maquina virtual -- uno para su disco y otro para su área de intercambio).
+            \item[Volúmenes Lógicos:] Originalmente 4 (se agrega 2 por cada nueva máquina virtual -- uno para su disco y otro para su área de intercambio).
             \begin{description}
             	\item[Xephyr-Dom0] Xephyr-VG 30g
                 \item[Xephyr-IMG-Repo] Xephyr-VG 20g
@@ -42,7 +42,7 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
                 \item[Xephyr-Swap] Xephyr-VG 4g
             \end{description}
     	\end{description}
-    \item Actualizar Instalación de Debian 8.
+    \item Actualizar la instalación de Debian 8.
     	\begin{lstlisting}
 	apt update
 	apt upgrade
@@ -56,7 +56,7 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
 	apt upgrade
 	reboot
         \end{lstlisting}
-    \item Instalación de Herramientas de Trabajo
+    \item Instalación de las Herramientas de Trabajo
         \begin{lstlisting}
 	apt install tmux vim zsh
         \end{lstlisting}
@@ -106,24 +106,24 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
     	\begin{lstlisting}[breaklines=true]
 	apt install nginx-full postgresql mongodb redis-server gitweb fcgiwrap
     	\end{lstlisting}
-    \item Instalación de Otros dependencias
+    \item Instalación de otras dependencias
         %  % TODO: Look for other possible dependencies?
     	\begin{lstlisting}
 	apt install libffi-dev
     	\end{lstlisting}
-    \item Instalación de IDEs en /opt. Se descargaron los respectivos .tar\textit{.xx} y se los descomprimieron en /opt con un comando similar al siguiente:
+    \item Instalación de IDEs en /opt. Se descargaron los respectivos .tar\textit{.xx} y se los descomprimió en /opt con un comando similar al siguiente:
     	\begin{lstlisting}[breaklines=true]
 	tar -axvf nombre.tar.xx -C /opt/ruta/raiz/donde/descomprimir
     	\end{lstlisting}
     \begin{enumerate}
-    	\item PyCharm (Community o Professional Edition\footnote{Se ocupo una versión Professional, en parte por su buen suporte para desarrollo en Django) con una licencia estudiantil que actualmente es gratis de solicitar y renovar año tras año con un correo institucional})
-        \item DBeaver (Community o Enterprise Edition\footnote{Históricamente siempre han sido gratis ambas versiones con la diferencia siendo que Enterprise Edition no es completamente software libre a diferencia de su versión libre, pero el mismo agrega suporte para bases de datos no relacionales. Se ocupo la versión Enterprise, entre los últimos ofertas gratis antes de que se convierte en un producto de pago, por este mismo motivo de requerir suporte para bases de datos NoSQL como MongoDB y Redis.})
+    	\item PyCharm (Community o Professional Edition\footnote{Se ocupó la versión profesional, en parte por elbuen soporte para el desarrollo con Django) con una licencia estudiantil que actualmente que permite solicitar y renovar año tras año con un correo institucional})
+        \item DBeaver (Community o Enterprise Edition\footnote{Históricamente siempre han sido gratis ambas versiones con la diferencia que Enterprise Edition no es completamente software libre y agrega soporte para bases de datos no relacionales. Se ocupó la versión Enterprise, de las últimas ofertas gratis antes de que se convierta en un producto de pago, por el mismo motivo de requerir soporte para bases de datos NoSQL como MongoDB y Redis.})
     \end{enumerate}
 \end{enumerate}
 
 Estos pasos de instalación se basaron en la guía de instalación de Xen publicado en el wiki del proyecto de Debian \citep{Debian-Wiki-Xen}.
 
-Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activar una regla NAT en el cortafuego IPTables:
+Para dar conexiones hacia el exterior de las maquinas virtuales, se necesita activar una regla NAT en el cortafuego IPTables:
 
 \begin{lstlisting}[breaklines=true]
 	iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
@@ -131,11 +131,11 @@ Para dar conexiones hace el exterior a las maquinas virtuales, se necesita activ
 
 \index{Controlar Versiones de Código} \index{Persistir Código}
 \subsubsection{Servidor Local de Git}
-Para gestionar versiones de código escrito y facilitar la integración con sistemas externas y el sistema de virtualización, se levanta un servidor sencillo de Git. La instalacion del mismo se documenta en el Anexo \ref{AnexoC}.
+Para gestionar versiones de código escrito y facilitar la integración con sistemas externos y el sistema de virtualización, se levantó un servidor sencillo de Git. La instalacion del mismo se documenta en el Anexo \ref{AnexoC}.
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsubsection{Git Server HTTP Endpoint}
-Para recibir llamadas HTTP y convertirlos en sus respectivos objetos en un repositorio de Git, se creó un miniservicio que realiza esta tarea, basado en la misma app de autenticación que utiliza EduNube:
+Para recibir llamadas HTTP y convertirlas en sus respectivos objetos, en un repositorio de Git se creó un miniservicio que realiza esta tarea, basado en la misma aplicación de autenticación que utiliza EduNube:
 \begin{lstlisting}
 pipenv --three
 pipenv install django six psycopg2 PyJWT bcrypt ipython \
@@ -161,13 +161,13 @@ pipenv lock --requirements | awk '{print $1}' > \
 
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
-\paragraph{Tokens de Autenticacion}
-Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante un interfaz CRUD construido con formularios de Django. Esos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreto (mediante la funcion generar sal de bcrypt) y con ello se cifra datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente puede modificar los datos de su API token. El mismo esquema de autenticacion para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en el url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creacion, lectura, actualizacion y eliminacion de los API Tokens.
+\paragraph{Tokens de Autenticación}
+Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante una interfaz CRUD, construida con formularios de Django. Estos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreta (mediante la función generar sal de bcrypt) y con ello se cifra los  datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente pueda modificar los datos de su API token. El mismo esquema de autenticación para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en la url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creación, lectura, actualización y eliminación de los API Tokens.
 
 \paragraph{API externa}
 Los URLs del API de GitServerHTTPEndpoint toman la forma general de: 
 \texttt{/api/<tipo\_de\_objeto>/<accion>/<ruta/de/objeto>}\\
-donde los tipos de objetos posibles son
+donde los tipos de objetos posibles son:
 \begin{itemize}
 	\item \texttt{ns} para los Namespace
     \item \texttt{repo} para Repositorios y
@@ -177,7 +177,7 @@ acciones posibles son:
 \begin{itemize}
 	\item \texttt{create} para crear,
 	\item \texttt{edit} para editar y
-    \item en el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificacion de:
+    \item Para el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificacion de:
     \begin{itemize}
     	\item \texttt{edit/mv}
         para alterar la ruta de un archivo y 
@@ -186,34 +186,34 @@ acciones posibles son:
     \end{itemize}
 \end{itemize}
 
-Los URIs del API que operan sobre Namespace, solo acceptan un namespace de parametro con un slash de delimitador final por ejemplo: \\
+Los URIs del API que operan sobre Namespace, solo aceptan un namespace de parámetro con un slash de delimitador final por ejemplo: \\
 \texttt{/api/ns/create/nearley/}
 
-Los URIs del API que opera sobre los repositorios requieren de parametros un namespace y repositorio igual con un slash de delimitador final por ejemplo: \\
+Los URIs del API que operan sobre los repositorios requieren de los parámetros: un namespace y un repositorio igual con un slash de delimitador final por ejemplo: \\
 \texttt{/api/repo/create/nearley/GitEDU/}
 
-Los URIs del API que opera sobre archivos toman de parametros un namespace, un repositorio y una ruta de archivos que puede conllevar cualquier numero de slash para indicar directorios dentro del repositorio selecionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
+Los URIs del API que operan sobre archivos toman de parámetros un namespace, un repositorio y una ruta de archivos que puede llevar cualquier número de slash para indicar los directorios dentro del repositorio selecionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
 \texttt{/api/file/create/nearley/GitEDU/despliegue/Readme.md}
 
 Un cliente ejemplar de todo el API, se puede encontrar con el nombre \\
-\texttt{example\_client.py} dentro del raiz del proyecto.
+\texttt{example\_client.py} dentro de la raíz del proyecto.
 
 \index{Sincronizar Notas por LTI} \index{Autenticación LTI}
 \subsection{Ambiente Virtual de LMS \index{LMS} (Moodle)}
 \label{instalacion-moodle}
-Originalmente fue planteada trabajar con el LMS como una máquina virtual de Xen, pero con el tiempo, se ha visto una necesidad de consumir todos los servicios possibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación de Moodle en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, al final se optó por un levantamiento del mismo en Docker. El levantamento de Moodle en Docker se documenta en el capitulo \ref{capitulo6} de Despliegue.
+Originalmente se planteó trabajar con un LMS como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación de Moodle en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, al final se optó por un levantamiento del mismo en Docker. El levantamento de Moodle en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
-Originalmente fue planteada trabajar con GitLab Community Edition como una máquina virtual de Xen, pero con el tiempo, se ha visto una necesidad de consumir todos los servicios possibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación del mismo en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, al final se optó por un levantamiento del mismo en Docker. El levantamento de GitLab en Docker se documenta en el capitulo \ref{capitulo6} de Despliegue.
+Originalmente se planteó trabajar con GitLab Community Edition como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma más liviana al final se optó por un levantamiento del mismo en Docker. Sin embargo en este documento se incluye la instalación de la primera opción en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, . El levantamento de GitLab en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
-Para la ejecución de código se considera necesario la virtualización. La ejecución puramente nativa de código daría mayor superficie de ataque al servidor físico además de no permitir mayor flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
+Para la ejecución de código se consideró necesario la virtualización. La ejecución puramente nativa de código daría mayor grado de ataques al servidor físico además de no brindar de una flexibilidad necesaria para sostener una gran variedad de usuarios y necesidades.
 
 \index{Ejecutar Código}
 \subsubsection{Comparación de Hipervisores}
-Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo en base a una valoración de características de cada ecosistema de hipervisor para generar una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor a ser implementado en el presente proyecto.
+Para la selección de una tecnología de virtualización, se ha considerado conveniente realizar el siguiente cuadro comparativo, en base a una valoración de características de cada ecosistema de hipervisor generando una calificación ponderada de las mismas y poder llegar objetivamente al mejor hipervisor a ser implementado en el presente proyecto.
 
 \begin{table}
 	\centering
@@ -238,18 +238,18 @@ Para la selección de una tecnología de virtualización, se ha considerado conv
 \index{Ejecutar Código}
 \end{table}
 
-El cuadro \ref{tab:hipervisor-compar-pesos} presenta las pesos que se asignaron a cada categoría de la comparación para poder realizar un promedio ponderado de las valoraciones con mayor peso en las categorías que se consideraban más importantes. Las características consideradas son:
+El cuadro \ref{tab:hipervisor-compar-pesos} presenta los pesos que se asignaron a cada categoría de la comparación, para poder realizar un promedio ponderado de las valoraciones con mayor peso en las categorías que se consideraban más importantes. Las características consideradas son:
 \begin{description}
-	\item[Rendimiento] Indica la máxima eficiencia que puede llegar a tener la virtualización con esta tecnología.
-    \item[Seguridad] Indica el nivel de aislamiento y mitigación de riesgo que se considera los usuarios virtualizados frente la maquina host.
-    \item[Facilidad de Uso (CLI)] La facilidad en utilizar el hipervisor desde linea de comandos (terminal).
-    \item[Facilidad de Uso (GUI)] La facilidad en utilizar el hipervisor desde aplicación de escritorio gráfica.
-    \item[Facilidad de Uso (WUI)] La facilidad en utilizar el hipervisor desde plataforma web.
-    \item[Facilidad de Instalación] La facilidad para instalar el hipervisor y realizar la configuración inicial para que empieza a funcionar.
-    \item[Facilidad de Mantenimiento] La facilidad para actualizar, utilizar y mantener el hipervisor.
-    \item[Experiencia Personal del Autor] La opinión tiene el autor del hipervisor después de años de uso y experimentación en estas tecnologías.
+	\item[Rendimiento], indica la máxima eficiencia que puede llegar a tener la virtualización con esta tecnología.
+    \item[Seguridad], indica el nivel de aislamiento y mitigación de riesgo que se considera los usuarios virtualizados frente la máquina host.
+    \item[Facilidad de Uso (CLI)], la facilidad en utilizar el hipervisor desde línea de comandos (terminal).
+    \item[Facilidad de Uso (GUI)], la facilidad en utilizar el hipervisor desde una aplicación de escritorio gráfico.
+    \item[Facilidad de Uso (WUI)], la facilidad en utilizar el hipervisor desde la plataforma web.
+    \item[Facilidad de Instalación], la facilidad para instalar el hipervisor y realizar la configuración inicial para que empiece a funcionar.
+    \item[Facilidad de Mantenimiento], la facilidad para actualizar, utilizar y mantener el hipervisor.
+    \item[Experiencia Personal del Autor], la opinión que tiene el autor del hipervisor después de años de uso y experimentación en estas tecnologías.
 \end{description}
-Se ha considerado con mayor importancia el Rendimiento y la Seguridad como necesidades del presente proyecto. La Facilidad de Uso desde Línea de Comandos y la Experiencia Personal del Autor también se ha considerado importante para que se pueda implementar de forma mas concisa, rápida y precisa la tecnología de virtualización elegida. La Facilidad de Uso tanto Gráfica como Web en adición a la complejidad de Instalación y Mantenimiento se considera importantes pero menos relevantes debido a que son características de menor impacto para el desarrollo actual y al largo plazo donde tienen mayor impacto se puede implementar otra solución mas adecuada frente esos temas si es necesario. 
+Se ha considerado con mayor importancia el Rendimiento y la Seguridad como necesidades del presente proyecto. La Facilidad de Uso desde la Línea de Comandos y la Experiencia Personal del Autor también se ha considerado importante para que se pueda implementar de forma mas concisa, rápida y precisa la tecnología de virtualización elegida. La Facilidad de Uso tanto Gráfica como Web en adición a la complejidad de la instalación y mantenimiento se considera importantes pero menos relevantes, debido a que son características de menor impacto para el desarrollo actual y a largo plazo es donde tienen mayor impacto se puede implementar otra solución más adecuada frente a estos temas si es necesario. 
 
 \begin{table}
 	\centering
@@ -288,20 +288,20 @@ Se ha considerado con mayor importancia el Rendimiento y la Seguridad como neces
 \end{table}
 
 % TODO: Correccion de la Maria del Carmen "caracteristicas consideradas"?
-En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las características consideras y un puntaje relativo (sobre 5) dada a cada una de las mismas según las investigaciones, experiencias y opiniones del autor. A continuación se explica el porque de las valoraciones:
+En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las características consideras y un puntaje relativo (sobre 5) dado a cada una de estos de acuerdo a investigaciones, experiencias y opiniones del autor. A continuación se explica el porqué de las valoraciones:
 \begin{description}
-	\item[Xen] como un hipervisor de tipo uno se cuenta con un rendimiento muy alto, especialmente cuando se toma en cuenta la paravirtualización que también se suporta con sistemas operativos modificados, casi a un nivel nativo. Este hipervisor logra virtualizar todas las capas de un sistema operativo, desde su núcleo hasta el espacio de los usuarios, pero al mismo tiempo dispone de un modelo de seguridad muy buena. Falla en las herramientas de administración de los cuales hay muy pocas que están actualizadas. La mejor herramienta de administración es en la Línea de Comandos. Sus cambios frecuentes y documentación desactualizada son un problema para la instalación y mantenimiento. La experiencia del autor con esta tecnología ha sido muy positiva.
-    \item[KVM] como un hipervisor de tipo uno y medio es más alto nivel que Xen y no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualización. Aunque es más alto nivel, se ha tomado pasos adicionales para que alcanza un nivel de seguridad equivalente a la de Xen. Para su administración cuenta con herramientas muy similares a los de Xen, pero su alto nivel de integración con el API de Libvirt hace que puente con mejores interfaces para su manejo web. Posiblemente por desconocimiento de las posibilidades para mejorar el rendimiento que se puede aplicar, el autor no ha tenido una experiencia muy positiva con la aplicación de esta tecnología de virtualización.
-    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su técnica de containerización como un tipo de virtualización que puede dar mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel web. Puede que sea el caso por el hecho de que Docker es una tecnología que aún es bastante nueva y que esta en auge. Esto promueve una gran cantidad de personas a estar contribuyendo sus mejoras. La instalación y mantenimiento de Docker es muy sencillo en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
+	\item[Xen] como un hipervisor de tipo 1 cuenta con un rendimiento muy alto, especialmente cuando se lo considera la paravirtualización que también soporta sistemas operativos modificados, casi a un nivel nativo. Este hipervisor logra virtualizar todas las capas de un sistema operativo, desde su núcleo hasta el espacio de los usuarios, pero al mismo tiempo dispone de un modelo de seguridad muy bueno. Tiene falla en las herramientas de administración, de los cuales hay muy pocas que están actualizadas. La mejor herramienta de administración es en la Línea de Comandos. Sus cambios frecuentes y documentación desactualizada son un problema para la instalación y mantenimiento. Sin embargo, la experiencia del autor con esta tecnología ha sido muy positiva.
+    \item[KVM] como un hipervisor de tipo uno y medio tiene un nivel más alto que Xen pero no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualización. Aunque es de más alto nivel, se ha xonsiderado otros pasos adicionales para alcanzar un nivel de seguridad equivalente al de Xen. Para su administración cuenta con herramientas muy similares a los de Xen, pero su alto nivel de integración con el API de Libvirt hace que cuente con mejores interfaces para su manejo web. Posiblemente por desconocimiento de las posibilidades para mejorar el rendimiento que se puede aplicar, el autor no ha tenido una experiencia muy positiva con la aplicación de esta tecnología de virtualización.
+    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su técnica de contenerización como un tipo de virtualización, puede dar un mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel Web, por el hecho de que Docker es una tecnología que aún es nueva y que esta en auge. Esto promueve a una gran cantidad de personas en contribuir continuamente con mejoras. La instalación y mantenimiento de Docker es muy sencilla en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
 \end{description}
 
-Para calcular los pesos promediados de forma ponderada se aplica la siguiente formula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. Como se puede observar del mismo cuadro, frente los criterios previamente establecidos, Docker se puede considerar la mejor tecnología de virtualización en el proyecto actual con un puntaje de $4.167$, con medio punto mas que su competencia mas cercana Xen, $3.667$ y $\frac{5}{6}$ de un punto mas que KVM, $3.333$, que esta en último lugar.
+Para calcular los pesos promedio de forma ponderada se aplica la fórmula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. Como se puede observar en el mismo cuadro, frente a los criterios previamente establecidos, Docker se puede considerar la mejor tecnología de virtualización en el proyecto actual con un puntaje de $4.167$, con medio punto más que su competencia mas cercana Xen, $3.667$ y $\frac{5}{6}$ de un punto más que KVM, $3.333$, que está en último lugar.
 
 \begin{figure}
 	\[
 		Promedio = \sum_{c = [Categorías]} CalificaciónCatagoria_c * \left ( \frac{PesoCatagoria_c}{TotalPesos} \right )
 	\]
-	\caption{Ecuación para Calcular los Promedios Ponderados en base a Pesos para los Hipervisores Comparados}
+	\caption{Ecuación para calcular los promedios ponderados en base a pesos para los hipervisores comparados}
     \label{fig:hipervisor-calif-equ}
 \index{Ejecutar Código}
 \end{figure}
@@ -326,36 +326,36 @@ Para calcular los pesos promediados de forma ponderada se aplica la siguiente fo
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Servidor de Virtualización Virtualizado}
-Frente los problemas que tiene Docker como desventajas, se ha elegido a Kubernetes como una tecnologia complementaria para orquestación de nube y dar, a futuro, mayor independencia de la plataforma EduNube frente cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube entre EduNube y los respectivos hipervisores que se puede utilizar fue OpenStack debido a que es una solucion muy completa para el problema actual con mas caracteristicas incluso que Kubernetes, pero el mismo, por su lista grande de caracteristicas es muy pesada y no entraria adecuadamente en la infrastructura actual de la Universidad Tecnica Particular de Loja, entonces para ofrecer una solucion que cumple con el contexto actual de la universidad, Kubernetes ofrece una buena alternativa que, aunque sea relativamente liviana, ofrece las caracteristicas necesarias para implementar una solucion de ejecucion que sea eficaz y eficiente en la infrastructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y despues, de forma virtualizada para ayudar mitigar algunos de los riesgos asociados con Docker, el servidor. 
+Frente las desventajas/problemas que tiene Docker, se ha elegido a Kubernetes como una tecnología complementaria para la orquestación con la nube, y brindar a futuro una mayor independencia a la plataforma EduNube frente a cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube, entre EduNube y los respectivos hipervisores que se puede utilizar, fue OpenStack debido a que es una solución muy completa para el problema actual con más características que de los Kubernetes, pero el mismo, por su gran lista de características es muy pesado y no entraría adecuadamente en la infrastructura actual de la Universidad Técnica Particular de Loja, entonces para ofrecer una solución que cumpla con el contexto actual de la universidad, los Kubernetes ofrecen una buena alternativa que, aunque sea relativamente liviana, ofrece las características necesarias para implementar una solución de ejecucion que sea eficaz y eficiente en la infrastructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y después de forma virtualizada, para ayudar a mitigar algunos de los riesgos asociados con Docker, el servidor. 
 
 \index{Kubernetes}
 \paragraph{Kubernetes}
-La instalacion y uso de Kubernetes se encuentra en el Anexo \ref{AnexoC}.
+La instalación y uso de Kubernetes se encuentra en el Anexo \ref{AnexoC}.
 
 \index{Docker}
 \subsection{Plantillas de Máquinas Virtuales (Docker)}
 Para la ejecución de código en Docker, es necesario tener un contenedor de Docker que cumpla con las dependencias requeridas al momento de la ejecución. Los contenedores están basados en Debian y en Alpine Linux.
 
 \subsubsection{Sistema Operativo: Debian GNU/Linux}
-Se considera Debian como una buena base para los contenedores debido a que es bastante conocido, estable, seguro y tiene una plenitud de paquetes que se pueden instalar directamente desde sus repositorios oficiales.
+Se considera Debian como una buena base para los contenedores debido a que es bastante conocido, estable, seguro y tiene una amplitd de paquetes que se pueden instalar directamente desde sus repositorios oficiales.
 
 \subsubsection{Sistema Operativo: Alpine GNU/Linux}
 Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con Docker) y en la nube en general porque es un sistema operativo minimalista que lleva menor peso. Aquí tiene el mismo fin, aunque aveces es mas complicado de manejar y configurar, puede que valga la pena para entornos de producción que necesitan optimizar el uso de sus recursos.
 
 \index{Docker|(}
 \subsubsection{Tipo de Contenedor: Shell-Executor}
-El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes ya que el imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes, ya que la imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsubsection{Tipo de Contenedor: Python3-Executor}
-El tipo de contenedor ''Python3-Executor'' es para ejecutar comandos de shell en adición a código de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer funcionalidad de ejecutar comandos en un shell. El punto de entrada de ejecución es el archivo ''main.py'' a nivel raiz del repositorio. Tanto Debian como Alpine requieren la instalación de Python 3, porque lastimosamente su versión de Python por defecto sigue siendo 2.7 que se debería considerar prácticamente obsoleta. Docker requiere que se vuelve a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''Python3-Executor'' es para ejecutar comandos de shell en adición a código de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer de la funcionalidad de ejecutar comandos en un shell. El punto de entrada de ejecución es el archivo ''main.py'' a nivel raíz del repositorio. Tanto Debian como Alpine requieren de la instalación de Python 3, ya que la versión de Python por defecto es 2.7 que actualmente debería considerarsela prácticamente obsoleta. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsubsection{Tipo de Contenedor: PostgreSQL-Executor}
-El tipo de contenedor ''PostgreSQL-Executor'' es para ejecutar comandos de shell en adición a SQL de PostgreSQL. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer funcionalidad de ejecutar comandos en un shell. El archivo ''init.sql'' se ejecuta primero y por lo tanto puede ser utilizado para generar y llenar la base de datos. El archivo ''main.sql'' se ejecuta después y por lo tanto podría ser útil para ejecutar comandos SQL definidos por el usuario. Tanto Debian como Alpine requieren la instalación de PostgreSQL, tanto cliente como servidor. Docker requiere que se vuelve a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''PostgreSQL-Executor'' es para ejecutar comandos de shell en referencia a SQL de PostgreSQL. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer la funcionalidad de ejecutar comandos en un shell. El archivo ''init.sql'' se ejecuta primero y por lo tanto puede ser utilizado para generar y llenar la base de datos. El archivo ''main.sql'' se ejecuta después y por lo tanto podría ser útil para ejecutar comandos SQL definidos por el usuario. Tanto Debian como Alpine requieren de la instalación de PostgreSQL, tanto cliente como servidor. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 \index{Docker|)}
 
 \section{GitEDU}
 
-La gestión de dependencias del sistema GitEdu se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado a detectar si es que existe el entorno virtual (lo crea en caso de que no existe) y después instala los requerimientos faltantes como son especificados en un archivo aparte ''requirements.txt'' que da librerías y sus versiones.
+La gestión de dependencias del sistema GitEdu se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado para detectar si es que existe el entorno virtual (lo crea en caso que no exista) y después instala los requerimientos faltantes como son especificados en un archivo aparte ''requirements.txt'' en el que se encuentran las librerías necesarias y sus versiones.
 
 \begin{lstlisting}
 
@@ -368,7 +368,7 @@ pip3 install -r requirements.txt
 
 \end{lstlisting}
 
-El script anterior se ejecuta desde el raiz del repositorio con el comando:
+El script anterior se ejecuta desde el raíz del repositorio con el comando:
 
 \begin{lstlisting}
 source activate.sh
@@ -388,7 +388,7 @@ Para el presente proyecto se instalaron las siguientes dependencias:
     \item ipython (6.1.0) como interprete interactivo de Python para hacer pruebas en el curso del desarrollo.
 \end{itemize}
 
-Con las dependencias instaladas o con cada cambio que se realiza de dependencias se ejecuta el siguiente comando para actualizar la lista de los mismos:
+Con las dependencias instaladas o con cada cambio que se realice de las dependencias, se ejecuta el siguiente comando para actualizar la lista de las mismas:
 
 \begin{lstlisting}
 pip freeze > requirements.txt
@@ -400,7 +400,7 @@ Se inicia el proyecto de Django con el comando:
 django-admin startproject GitEdu
 \end{lstlisting}
 
-También antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo.  El mismo se documenta en el Anexo \ref{AnexoD}.
+También antes de iniciar el desarrollo debe estar configurada la base de datos para proceder a ocuparla.  Esto se documenta en el Anexo \ref{AnexoD}.
 
 Ahora se puede migrar las tablas iniciales de Django:
 \begin{lstlisting}
@@ -420,21 +420,21 @@ También se puede crear el app inicial (para lógica del editor de código):
 python manage.py startapp ideApp
 \end{lstlisting}
 
-Y de paso se lo agrega a INSTALLED\_APPS una linea 'ideApp' en el settings.py para que sus tablas definidos a futuro en models.py también se migran con los demás migraciones.
+Y de paso se lo agrega a INSTALLED\_APPS una linea 'ideApp' en el settings.py para que las tablas definidos a futuro en models.py también se migren con los demás migraciones.
 
-Para resolver un problema de zonas de tiempo, se ha desactivado esta característica de Django con el siguiente linea en el settings.py:
+Para resolver un problema de zonas de tiempo, se ha desactivado esta característica de Django con la siguiente línea en el settings.py:
 \lstset{language=Python}
 \begin{lstlisting}
 USE_TZ = False
 \end{lstlisting}
 \lstset{language=Bash}
 
-La creacion de la base de datos NoSQL y su configuracion con Django se encuentra en el Anexo \ref{AnexoD}.
+La creacioón de la base de datos NoSQL y su configuración con Django se encuentra en el Anexo \ref{AnexoD}.
 
-\subsubsection{Automatizacion del Levantamiento del Servicios / DevStack}
-Para el manejo de dependencias, originalmente se llevó el tema unicamente con Pip y Virtualenv hasta que se descubrio otra herramienta que combina la funcionalidad de ambos en un solo commando: \texttt{pipenv}. El mismo agrega funcionalidades adicionales como validacion del ambiente (sistema operativo / arquitectura / version exacta de Python) y validacion de paquetes (mediante sus hash SHA256). Es por ello que se vio utilidad en cambiar la modalidad con que se lleva las dependencias del proyecto, aunque tambien se sigue apoyando el sistema anterior para quienes no realizan la instalacion de pipenv con pip como root.
+\subsubsection{Automatización del Levantamiento del Servicios / DevStack}
+Para el manejo de dependencias, inicialmente se lo manejó unicamente con Pip y Virtualenv hasta que se descubrió otra herramienta que combina la funcionalidad de ambos en un solo commando: \texttt{pipenv}. El mismo agrega funcionalidades adicionales como validacion del ambiente (sistema operativo / arquitectura / versión exacta de Python) y validación de paquetes (mediante sus hash SHA256). Es por ello que se vio la importancia en cambiar la modalidad con que se llevaba las dependencias del proyecto, aunque también se sigue apoyando el método anterior para quienes no realizan la instalacion de pipenv con pip como root.
 
-Para el levantamiento facil del DevStack, se realizó dos scripts, de los cuales cada uno detecta la presencia de pipenv para utilizarlo si existe o si no existe ocupar la modalidad clasica de virtualenv con pip para gestionar las dependencias. Lo que diferencia los dos scripts es que uno, despues de validar/instalar y activar el entorno, ejecuta el servidor en el puerto designado para produccion (\texttt{runserver}) mientras que el otro (\texttt{runshell}) abre el shell de Django despues de adecuar el entorno.
+Para el fácil levantamiento del DevStack, se realizó dos scripts, de los cuales cada uno detecta la presencia de pipenv para utilizarlo si existe o no existe ocupar la modalidad clásica de virtualenv con pip para gestionar las dependencias. Lo que diferencia los dos scripts es que uno, después de validar/instalar y activar el entorno, ejecuta el servidor en el puerto designado para producción (\texttt{runserver}) mientras que el otro (\texttt{runshell}) abre el shell de Django después de adecuar el entorno.
 
 \subsection{Autenticación Clásica}
 
@@ -443,15 +443,15 @@ Primero se crea una nueva aplicación para autenticación clásica:
 python manage.py startapp authApp
 \end{lstlisting}
 
-Y de paso se lo agrega a INSTALLED\_APPS una linea 'authApp' en el settings.py para que sus tablas definidos a futuro en models.py también se migran con los demás migraciones.
+Y de paso se lo agrega a INSTALLED\_APPS en una línea 'authApp' en el settings.py para que las tablas definidos a futuro en models.py también se migren con las demás migraciones.
 
-Para la implementación de autenticación clásica, se reutilizo el modulo con el mismo propósito del proyecto anterior GitEduERP. A esta se aumento la funcionalidad adicional de que desde el settings se puede activar o desactivar la funcionalidad de permitir a usuarios registrarse a través del atributo ENABLE\_REGISTRATION. 
+Para la implementación de autenticación clásica, se reutilizó el módulo con el mismo propósito del proyecto anterior GitEduERP. A esta se aumentó la funcionalidad adicional, que es que desde el settings se pueda activar o desactivar la funcionalidad de permitir a los usuarios registrarse a través del atributo ENABLE\_REGISTRATION. 
 
 Para el registro de usuarios, se considera que solo debe permitirse (en caso de que sea habilitado por la administración) el registro de estudiantes y docentes pero no de administradores, motivo por el cual se ha considerado duplicar los formularios de registro y ofrecer uno para estudiantes y otro para docentes. Los mismos se pueden habilitar y deshabilitar con los atributos ENABLE\_STUDENT\_REGISTRATION y ENABLE\_TEACHER\_REGISTRATION respectivamente.
 
 \index{Autenticación LTI}
 \subsection{Autenticación por LTI}
-Se documenta el proceso de levantamiento de autenticacion por LTI en el Anexo \ref{AnexoD}.
+Se documenta el proceso de levantamiento de autenticación por LTI en el Anexo \ref{AnexoD}.
 
 \subsubsection{Validación}
 
@@ -459,7 +459,7 @@ Se levanta la aplicación (en \url{http://localhost:8000/} con:
 \begin{lstlisting}
 python manage.py runserver
 \end{lstlisting}
-La maquina virtual de Moodle también debe estar levantado para navegar a \url{http://10.10.10.10/}, iniciarse sesión como administrador, ir a la parte administrativa, a la pestaña de ''development'', seleccionar ''debugging'', y poner ''debug messages'' a nivel ''developer''. Ahora podemos volver a la parte de administración, volver a seleccionar la pestaña de ''development'' y crear un curso de prueba. Vamos a crear un curso pequeña (10 MB) con el nombre corto ''Prog\_I'' y nombre larga / descripción ''Introducción a la Programación''. Una vez que nos carga el curso, activamos modo de editar y agregamos una actividad externa.
+La máquina virtual de Moodle también debe estar levantada para navegar a \url{http://10.10.10.10/}, iniciar sesión como administrador, e ir a la parte administrativa, a la pestaña de ''development'', seleccionar ''debugging'', y poner ''debug messages'' a nivel ''developer''. Ahora podemos volver a la parte de administración, volver a seleccionar la pestaña de ''development'' y crear un curso de prueba. Vamos a crear un curso pequeño (10 MB) con el nombre corto ''Prog\_I'' y nombre largo / descripción ''Introducción a la Programación''. Una vez que se carga el curso, activamos el modo de editar y agregamos una actividad externa.
 
 Se da un nombre a la actividad, en este caso ''Prueba 1 Programación''. La mejor forma de poder reutilizar la herramienta externa en varias actividades es de crear una herramienta ''Preconfigurada''. Las opciones elegidas para la misma fueron los siguientes:
 \begin{description}
@@ -474,36 +474,36 @@ Se da un nombre a la actividad, en este caso ''Prueba 1 Programación''. La mejo
     \item[Compartir Correo Electrónico] Siempre
     \item[Aceptar Notas] Siempre
 \end{description}
-Con la herramienta preconfigurada realizada, se puede seleccionarlo así no mas para completar la integración. Donde se creó la actividad debe haber un enlace con el nombre del mismo, en este caso ''Prueba 1 Programación''. Al abrir el enlace se debe llevar a la aplicación con lo siguiente puntos interesantes:
+Con la herramienta preconfigurada realizada, se puede seleccionarlo así no mas para completar la integración. Donde se creó la actividad debe haber un enlace con el nombre del mismo, en este caso ''Prueba 1 Programación''. Al abrir el enlace se debe llevar a la aplicación con los siguiente puntos interesantes:
 \begin{enumerate}
 	\item se encuentra autenticado con el mismo usuario de Moodle (incluyendo sus roles como ''administrador'', ''instructor'', ''estudiante'', etc\ldots{})
     \item hay contexto de:
     \begin{enumerate}
     	\item el curso de origen de Moodle
         \item la actividad de origen de Moodle (no es contexto completo, un problema que se tendrá que resolver en el curso del desarrollo)
-        \item el llave de consumidor ocupado
+        \item la llave de consumidor ocupada
     \end{enumerate}
 \end{enumerate}
 
-Si, dentro del mismo curso creamos una segunda actividad con todo lo mismo, pero solo cambiando el nombre a ''Prueba 2 Programación'', se encuentra que si logra distinguir entre actividades.
+Si, dentro del mismo curso creamos una segunda actividad con todo lo mismo, pero solo cambiando el nombre a ''Prueba 2 Programación'', se identifica que sí se logra distinguir entre actividades.
 
-\subsection{Integración de Dos Schemas de Autenticación}
-Los dos schemas de autenticación implementadas, sea la forma clásica con nombre de usuario y contraseña correspondiente o por LTI \index{LTI} donde una aplicación externa autentica un usuario autenticado previamente por el mismo, tienen un mismo fin de permitir que el sistema conozca quien esta accediendo el sistema con un fin de dar el comportamiento adecuado y en base a ello proveer seguridad y funcionalidad adecuado a todos los usuarios según su rol.
+\subsection{Integración de dos esquemas de autenticación}
+Los dos schemas de autenticación implementados, sea la forma clásica con nombre de usuario y contraseña correspondiente o por LTI \index{LTI} donde una aplicación externa autentica un usuario autenticado previamente por el mismo, tienen el mismo fin de permitir que el sistema conozca quién esta accediendo al sistema para actuar con el comportamiento adecuado y en base a ello proveer seguridad y funcionalidad a todos los usuarios según su rol.
 
-Para el mismo se propone tres tablas (EquivalentUser, AuthenticationType, UserAuthentication) en la base de datos expresados como modelos de Django, los cual se encargara de generar las tablas adecuadas en la base de datos a traves de su ORM interna.
+Se propone tres tablas (EquivalentUser, AuthenticationType, UserAuthentication) en la base de datos expresados como modelos de Django, los mismos que se encargaran de generar las tablas adecuadas en la base de datos a través de su ORM interno.
 
-La tabla EquivalentUser relaciona usuarios autenticados de forma clásica con usuarios autenticados por LTI \index{LTI} (porque por cada método de autenticación se cree un nuevo usuario para su propio uso interno) con un fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. El idea es por ejemplo, si un docente se autentica por LTI \index{LTI} y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catalogo de formas de autenticación que suporta el sistema y por su naturaleza de catalogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociado con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios. La migracion escrita a mano para llenar la tabla AuthenticationType se puede encontrar en el Anexo \ref{AnexoD}.
+La tabla EquivalentUser relaciona a los usuarios autenticados de forma clásica con usuarios autenticados por LTI \index {LTI} (porque por cada método de autenticación se crea un nuevo usuario para su uso interno) con el fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. La idea es por ejemplo, si un docente se autentica por LTI \index{LTI} y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catálogo de las formas de autenticación que suporta el sistema y por su naturaleza de catálogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociada con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios. La migracion escrita a mano para llenar la tabla AuthenticationType se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsection{Accesibilidad a Datos de Autenticación de LTI}
 Las vistas y settings definidas para exponer datos de la autenticacion por LTI se presenta en el Anexo\ref{AnexoD}.
 
 \index{Calificar Código}
 \subsection{Establecer un Modelo de Base de Datos}
-Para empezar con el desarrollo de la parte fuerte del sistema GitEDU, es importante considerar su modelo de base de datos preliminar. La parte mas importante de ello es las tablas o entidades y las relaciones entre las mismas. Para el mismo se ha considerado 3 grupos de funcionalidad importantes:
+Para empezar con el desarrollo de la parte fuerte del sistema GitEDU, es importante considerar su modelo de base de datos preliminar. La parte mas importante de ello son las tablas o entidades y las relaciones entre las mismas. Para esto se ha considerado 3 grupos de funcionalidades importantes:
 \begin{enumerate}
-	\item El aspecto social y con ello los varios roles que pueden jugar usuarios dentro del sistema. Esto se representa con el app 'socialApp'.
+	\item El aspecto social y con ello varios roles con los que se puede manejar a los usuarios dentro del sistema. Esto se representa con el app 'socialApp'.
     \item El aspecto academico y con ello como se llevan las materias académicas dentro del sistema. Esto se representa con el app 'academicApp'.
-    \item El aspecto de notas y con ello la forma en que se llevan las notas que estudiantes sacan en las materias. Este aspecto lleva mucha en común con el aspecto anterior de la parte academico y la linea que les divide es un poco subjetiva por el mismo hecho de que no se ha optado por la creación de tablas adicionales para separar los dos, pero donde ha sido posible, se ha realizado la división. Este aspecto se representa con el app 'gradesApp'. 
+    \item El aspecto de notas y con ello la forma en que se llevan las calificaciones que los estudiantes obtienen en las materias. Este aspecto es muy relacionado con el tema anterior de la parte academica y la línea que las divide es un poco subjetiva ya que por el mismo hecho no se ha optado por la creación de tablas adicionales para separar estos dos aspectos, de todas maneras donde ha sido posible, se ha realizado la división. Este aspecto se representa con el app 'gradesApp'. 
 \end{enumerate}
 
 \begin{lstlisting}
@@ -512,18 +512,18 @@ python manage.py startapp academicApp
 python manage.py startapp gradesApp
 \end{lstlisting}
 
-Cada uno de los anteriores ha sido agregado al INSTALLED\_APPS del settings para que Django reconozca la necesidad de tomar en cuenta los modelos de cada uno.
+Cada uno de las anteriores aplicaciones han sido agregadas al INSTALLED\_APPS del settings para que Django reconozca la necesidad de tomar en cuenta los modelos de cada uno.
 
-Los modelos iniciales del socialApp solo definen distintos roles sociales dentro del sistema y ocupan de cuatro tablas:
+Los modelos iniciales del socialApp solo definen distintos roles sociales dentro del sistema y ocupan cuatro tablas:
 \begin{enumerate}
 	\item Person
 	\item Student
 	\item Teacher
 	\item Administrator
 \end{enumerate}
-Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta hierarquia de clases mas bien viene a dar la infraestructura necesaria para especializar cada uno de estos en caso de que sea necesario.
+Se esta tomando en cuenta que la tabla de usuarios de Django ya lleva por defecto muchos detalles de los usuarios como sus nombres y apellidos y por lo tanto no hay necesidad de replicar estos datos. Esta jerarquía de clases viene a ser la infraestructura necesaria para especializar a cada uno de estos en caso de que sea necesario.
 
-El modelo inicial de academicApp permite a docentes y administradores definir materias ofrecidos (con paralelos y metadatos como categoría del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adición a proveer la infraestructura de datos necesario para que un docente puede definir su libreta de calificaciones para una materia en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo). Esto involucra nueve tablas en la base de datos:
+El modelo inicial de academicApp permite a los docentes y administradores definir las materias ofrecidas (con paralelos y metadatos como categoría del componente), involucrados en los mismos, sean los mismos docentes o sus estudiantes, en adición a proveer de la infraestructura de datos necesaria para que un docente pueda definir su libreta de calificaciones a una materia, en base a un sistema relativo o un sistema de promedios ponderados (que el sistema puede calcular en base al sistema relativo). Esto involucra nueve tablas en la base de datos:
 \begin{enumerate}
   \item ClassSubject
   \item Course

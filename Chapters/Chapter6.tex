@@ -15,7 +15,6 @@ En el curso del desarrollo, depuración y ejecución de pruebas llegó a ser evi
     \index{NGinX}
     \item La integración de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminación SSL/TLS, servidor de archivos estáticos y validador de peticiones sin mayor perdida de rendimiento.
 \end{itemize}
-% TODO: diagrama de red/fisica
 
 \section{Preparaciones del Ambiente de Despliegue}
 Para preparar el ambiente de despliegue se lo ve pertinente planificar direcciones IP, dominios y puertos para los varios servicios que requieren ser levantados:
@@ -51,6 +50,14 @@ Para preparar el ambiente de despliegue se lo ve pertinente planificar direccion
     \end{description}
     \item[Maquina Virtual (Xen)] con Debian 9.x para el Cluster (solo 1 nodo maestro) de Kubernetes: \textit{10.10.10.12}
 \end{description}
+Se resume la configuracion en la figura \ref{fig:resumen-arq-desp}.
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{Figures/arq_desp_final_tesis.png}
+	\end{center}
+    \caption{Resumen de Arquitectura Despliegada}
+    \label{fig:resumen-arq-desp}
+\end{figure}
 
 \subsubsection{Moodle en Docker}
 La instalación de Moodle en Docker consiste de los siguientes pasos:

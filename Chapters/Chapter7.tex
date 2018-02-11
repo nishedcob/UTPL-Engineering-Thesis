@@ -3,7 +3,14 @@
 \chapter{Conclusiones}
 \label{capitulo7}
 
-% TODO: Write Resultados previo a conclusiones
+\section{Resultados}
+% TODO: Resultados %% REVIEW
+Como resultados conseguidos se ha logrado realizar un prototipo de la plataforma propuesta que integra tres servicios que ofrecen funcionalidades esenciales para el uso immediato del mismo:
+\begin{description}
+	\item[GitEDU] ofrece, mediante autenticacion clasica y autenticacion LTI, manejo de namespace y repositorios en addicion a un editor de codigo en linea para archivos dentro de los mismos repositorios, llevado bajo un sistema de control de versiones interna.
+    \item[EduNube] ofrece, mediante su API, todo lo necesario para que usuarios de GitEDU puedan ejecutar el codigo que desarrollan dentro de la plataforma. El mismo brinde este servicio de forma extensible para que a futuro puede ofrecer parte de la solucion para la calficacion de codigo en base a los resultados de su ejecuccion y/o pruebas unitarias y tambien para que el mismo, por el momento con contenedores de Docker, extensibilidad de lenguajes de programacion que el mismo puede soportar.
+    \item[GitServerHTTPEndpoint] ofrece, mediante su API, los mecanismos con los cuales GitEDU puede persistir codigo guardado en repositorios de Git externos para su consumo de aplicaciones y usuarios externos.
+\end{description}
 
 % TODO: get input on conclusions (are they okay for the thesis) %% REVIEW
 % Minimo 1 Conclusion frente cada Objetivo Especifico
@@ -13,7 +20,7 @@
 % Cuantas Conclusiones poner? 3-5 es acceptable -> 7 conclusiones suele ser demaciado
 % Tipicamente un recomendacion por cada cada conclusion
 
-
+\section{Conclusiones}
 A lo largo del desarrollo de este trabajo de titulacion, se ha formado los siguientes conclusiones:
 
 \begin{itemize}
@@ -24,4 +31,57 @@ A lo largo del desarrollo de este trabajo de titulacion, se ha formado los sigui
   \item Cualquier servidor de Git es altamente pesada, especialmente GitLab que en su estado pasivo consume muchos recursos, y tambien GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
   % TODO: Revisar Conclusion General %% REVIEW
   \item La combinacion de Python 3 con librerias selecionadas para realizar los respectivos backends, es decir Django, PyModm, Bcrypt, PyJWT, Requests y ipython forman una combinacion potente para el desarollo rapido de servicios de produccion siempre y cuando se maneja de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
+\end{itemize}
+
+
+% Previously Chapter 8: Recomendaciones, united with Chapter 7: Conclusiones by recomendation of Ing. Maria del Carmen
+%\chapter{Recommendaciones}
+\section{Recommendaciones}
+%\label{capitulo8}
+% TODO: revisar si recomendations son adecuadas %% REVIEW
+%Tipicamente un recomendacion por cada cada conclusion
+
+En base a lo que se ha aprendido en el camino de realizar el trabajo de titulacion, se puede realizar las siguientes recomendaciones:
+
+\begin{itemize}
+  \item Cuando se desarrolla sistemas con un enfoque educativo, se recomienda reutilizar una implementacion de LTI para evitar problemas de integración con lo que se está realizando.
+  \item En el curso de realizacion de interfaces web, se recomiendo reutilizar el trabajo de terceros siempre y cuando hay la posibilidad, con el fin de poder dar mayor enfoque a la funcionalidad del backend.
+  \item Para trabajar con cualquier base de datos, sea relacional o no relacional, lo más recomendable es trabajar con un ORM que permite abstraer la base de datos y facilitar el desarrollo y persistencia de datos en la misma.
+  \item Siempre se recomienda utilizar nuevas tecnologias, los cuales pueden ser utiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones de los cuales no se los ha podido considerar antes.
+  \item Donde hay posibilidad, se recomienda no trabajar con GitLab, a menos de que dispone de los recursos necesarios para ello y tambien que requiere las características avanzadas del mismo. En entornos donde sea posible, lo más recomendable es trabajar con Git sobre SSH, que además de ser más seguro, tiene mayor soporte por parte de Git y mayor inteligencia para la sincronización cuando se trabaja con este protocolo que puede dar como resultado mayor eficiencia en uso de red.
+\end{itemize}
+
+% TODO: escribir recomendacion general?
+
+\section{Trabajos Futuros}
+Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futuro, los cuales no esta en ningun orden especifico:
+\begin{itemize}
+	\item Arreglar Errores en la funcionalidad existente, por ejemplo:
+    \begin{itemize}
+    	\item EduNube no actualiza de forma adecuada repositorios de ejecuccion, lo cual resulta muchas veces en la ejecuccion de una version antigua del mismo.
+        \item EduNube no genera IDs de ejecuccion de forma adecuada.
+    \end{itemize}
+    \item Autenticacion en GitEDU y/o otros servicios mediante LDAP.
+    \item Sincronizacion en tiempo real de codigo editado en GitEDU y sus respectivo backends de codigo, tal ves mediante websockets.
+    \item Socializacion de vistas para editar codigo (GitEDU) con la finalidad de promover interaccion y collaboracion entre usuarios sobre los mismos.
+    \item Un sistema de permisos para el editor de codigo (GitEDU).
+    \item Distintas formas de calificacion, incluyendo:
+    \begin{itemize}
+    	\item Calificacion Manual por parte de professores.
+        \item Calificacion Automatizado por parte del sistema (tal vez en forma de un servicio nuevo?) en base a pruebas unitarias definidos por professores.
+        \item Calificacion Hibrida que combina los anteriores.
+    \end{itemize}
+    \item Sincronizacion de Notas (generados por la(s) modalidad(es) de calificacion anteriores) por LTI con los sistemas adecuadas para el manejo de los mismos, por ejemplo los LMS.
+    \item Mas backends de Git para el servicio GitServerHTTPEndpoint, como por ejemplo GitLab o Djacket.
+    \item Mas backends de persistencia de codigo para el servicio GitEDU como Redis o GitLab.
+    \item Mas backends de virtualizacion para EduNube como OpenStack, Docker, etc.
+    \item Versionamiento de APIs en todos los servicios.
+    \item Auditoria de Seguridad del Sistema Desarrollado, especialmente en el caso de los APIs que no manejan estados y solo se protegen con API tokens JWT y a lo mucho TLS.
+    \item Mejor gestion de la configuracion, actualmente hay componentes de algunos servicios que dejen de funcionar o que funcionan de forma inadecuada cuando no disponen de sus servicios dependientes. Debe ser configurable cuales servicios existen o no, dinamico la manera en que se encuentran y cada servicio tolerante a fallos en los demas servicios.
+    \item Convertir los servicios en imagenes de Docker para montarlos mismos en un cluster de Kubernetes y realizar un estudio de alta disponabilidad/escalabilidad.
+    \item Implementar el sistema de plantillas de GitEDU.
+    \item Migrar servicios a Django 2.x (la proxima version de soporte a largo plazo de Django esta planificado como el 2.3) ya que en realizar esta migracion de version, actualmente se rompe la forma en que se llevan los URIs con un namespace para cada app.
+    \item Automatizar y aumentar las pruebas unitarias de la aplicacion de acuerdo con el plan de pruebas original.
+    \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificulta la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro del plataforma).
+    \item Mayor soporte para caracteristicas de Git como ramas, tags, etc.
 \end{itemize}

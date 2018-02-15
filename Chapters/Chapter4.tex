@@ -613,12 +613,12 @@ GITLAB_CONNECT_TO = 'gitlab'
 
 Por el momento se ha optado por dejar desactivado el backend de GitLab ya que el mismo no esta implementado para ser utilizado.
 
-El gestor de persistencia de código se carga todas las backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asimismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos tipos de persistencia:
+El gestor de persistencia de código  carga todos los backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asi mismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos tipos de persistencia:
 \begin{itemize}
 	\item Lectura (read)
 	\item Escritura (write) 
 \end{itemize}
-Y permite para toda operación que se especifique sobre cual grupo se debe realizar la operación. Estos grupos se define en el settings con los variables:
+Y permite para toda operación que se especifique sobre cual grupo se debe realizar la operación. Estos grupos se definen en el settings con los variables:
 \begin{itemize}
 	\item CODE\_PERSISTENCE\_BACKEND\_READ\_PREFERENCE (que también da preferencia del orden en que se debe leer de los backends de persistencia de código).
 	\item CODE\_PERSISTENCE\_BACKEND\_WRITE\_OUT que define cuales son y da el orden en que se debe escribir a los backends de persistencia de código.
@@ -695,9 +695,9 @@ El ChangeModel representa un cambio realizado en el repositorio, como los commit
 \item una referencia al cambio anterior para que se puede construir una historial de cambios.
 \end{itemize}
 
-El ChangeFileModel es como el RepositoryFileModel en que representa archivos, pero en este caso son archivos modificados dentro de un cambio. Por lo tanto lleva los mismos atributos que RepositoryFile solo que en lugar de tener referencias a un repositorio directamente se referencia a un cambio realizado (el cual tiene metadatos como un comentario, autor, cambio previo y momento de modificación) y al archivo del repositorio que modifica (de esta forma puede modificar también la dirección de los archivos quienes no habría otra forma de buscarlos).
+ChangeFileModel se asemeja a RepositoryFileModel ya que representa archivos, pero en este caso son archivos modificados dentro de un cambio. Por lo tanto lleva los mismos atributos que RepositoryFile solo que en lugar de tener referencias a un repositorio directamente se referencia a un cambio realizado (el cual tiene metadatos como un comentario, autor, cambio previo y momento de modificación) y al archivo del repositorio que modifica (de esta forma puede modificar también la dirección de los archivos quienes no habría otra forma de buscarlos).
 
-Finalmente el TemporaryChangeFileModel no se utiliza actualmente pero como los dos FileModels vistos anteriormente, esta lleva atributos básicos de un archivo. Originalmente se lo planteo para realizar una operación intermedio como la fase del Git Stage en donde se selecciona previo a un commit los cambios que van a estar incluidos dentro del mismo. Pero al final, aunque el modelo de datos esta para suportar varios archivos cambiados dentro de un solo cambio, no esta implementado así. Por temas de tiempo, retraso y alcance, se ha optado por llevar un mini control de versiones de cada archivo dentro de un repositorio, así que en realidad cada cambio en el repositorio solo refleja un archivo cambiado de forma independiente y no hay necesidad para la complejidad del paso intermedio que este modelo representa. 
+Finalmente el TemporaryChangeFileModel no se utiliza actualmente pero como los dos FileModels vistos anteriormente, esta lleva atributos básicos de un archivo. Originalmente se lo planteo para realizar una operación de intermedio como la fase del Git Stage en donde se selecciona previo a un commit los cambios que van a estar incluidos dentro del mismo. Pero al final, aunque el modelo de datos esta para suportar varios archivos cambiados dentro de un solo cambio, no esta implementado así. Por temas de tiempo, retraso y alcance, se ha optado por llevar un mini control de versiones de cada archivo dentro de un repositorio, así que en realidad cada cambio en el repositorio solo refleja un archivo cambiado de forma independiente y no hay la necesidad de aumentar la complejidad con dicho paso intermedio; lo que este modelo representaba. 
 
 \index{Controlar Versiones de Código}
 \subsubsection{GitLab}
@@ -733,17 +733,17 @@ GITLAB_SERVERS = {
 
 La implementacion de la conexion al API de GitLab se presenta en el Anexo \ref{AnexoD}.
 
-Aunque originalmente se planifico el uso de GitLab como backend de persistencia de codigo (en repositorios, a diferencia de GitEduERP que ocupó snippets), al final no se ocupó el mismo por cinco razones:
+Aunque originalmente se planifico el uso de GitLab como backend de persistencia de codigo (en repositorios, a diferencia de GitEduERP que ocupó snippets), finalmente no se ocupó el mismo por cinco razones:
 \begin{enumerate}
-  \item La complejidad del API frente la documentación no es tan clara para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso ni en el ambiente de desarollo ni de produccion), y eso genera un factor limitante frente el tiempo disponible para la implementacion de la misma.
+  \item La complejidad del API frente la documentación no es tan clara para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso, ni en el ambiente de desarollo, ni de produccion), y eso genera un factor limitante frente al tiempo disponible para la implementacion de la misma.
   \item Un gran inestabilidad del servicio, Gitlab CE.
   \item La falta de recursos en los ambientes de produccion y de desarollo que empeora problemas de estabilidad.
-  \item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para hacer el mismo disponible por HTTP.
-  \item Realmente frente las necesidades actual del proyecto, con tal que no se necesita exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el Gitlab.
+  \item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para estar disponible por HTTP.
+  \item Frente a las necesidades actual del proyecto, mientras no sea necesario exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el Gitlab.
 \end{enumerate}
 
 \subsection{Aspectos Sociales}
-Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir de forma independiente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto, ''socialApp'', como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
+Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir de forma independiente de las funcionalidades principales de la misma aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto, ''socialApp'', como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
 
 \index{Ejecutar Código}
 \section{EduNube}

@@ -792,7 +792,7 @@ Se inicia el proyecto de Django con el comando:
 django-admin startproject EduNube
 \end{lstlisting}
 
-También antes de iniciar el desarrollo debe estar configurado el base de datos para ocupar el mismo. Esta configuracion lo puede encontrar en el Anexo \ref{AnexoE}.
+También antes de iniciar el desarrollo debe estar configurado el base de datos para ser usada. Esta configuracion lo puede encontrar en el Anexo \ref{AnexoE}.
 
 Ahora se puede migrar las tablas iniciales de Django:
 \begin{lstlisting}
@@ -811,7 +811,7 @@ También se puede crear el app inicial (para lógica del editor de código):
 python manage.py startapp apiApp
 \end{lstlisting}
 
-Y de paso se lo agrega a INSTALLED\_APPS una linea 'apiApp' en el settings.py para que sus tablas definidos a futuro en models.py también se migran con los demás migraciones.
+Y de paso se lo agrega a INSTALLED\_APPS una linea 'apiApp' en el settings.py para que sus tablas definidos a futuro en models.py también se migran con las demás migraciones.
 
 Para resolver un problema de zonas de tiempo, se ha desactivado esta característica de Django con el siguiente linea en el settings.py:
 \lstset{language=Python}
@@ -830,7 +830,7 @@ El diseño planteado para el sistema EduNube propone dos tipos de autenticación
 \end{itemize}
 
 \subsubsection{Autenticación Clasica}
-Para la administración del sistema por operador humano se considera necesario la autenticación clásica mediante usuario y contraseña. Para la misma se ocuparon la misma implementación del framework Django y código reutilizado de GitEDU que tiene el mismo propósito.
+Para la administración del sistema por operador humano se considera necesario la autenticación clásica mediante usuario y contraseña. Para la misma se uso la implementación del framework Django y código reutilizado de GitEDU que tiene el mismo propósito.
 
 \subsubsection{Autenticación basado en Criptografía Asimétrica}
 Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solución utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
@@ -839,18 +839,18 @@ La logica para gestionar los API tokens se encuentra en el Anexo \ref{AnexoE}.
 
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
-La ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad completa frente las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
+La ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad completa frente a las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
 
 \subsection{Metadatos de Plantillas}
 Para ofrecer mayor seguridad y funcionalidad a la ejecucion de codigo en el sistema, se basa en lo que son plantillas de ejecucion diseñados especifcamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyiendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recien se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecuccion y tambien la ubicacion del repositorio padre. La herrencia se basa en la creacion de un nuevo repositorio donde se copia uno por uno los contenidos (archivos) de cada repositorio, desde el inicio de la cadena de herrencia (una plantilla hecha por la administracion para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se puede copiar en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de acceso que tiene el usuario final sobre lo que esta ejecutando. 
 \subsubsection{.edunubeignore}
-El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede herredar de ningun otro repositorio que le sigue en la herencia de repositorios. Un ejemplo de los mismos serian archivos propios de Git.
+El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede heredar de ningun otro repositorio que le sigue en la herencia de repositorios. Un ejemplo de los mismos serian archivos propios de Git.
 \paragraph{.edunubeignore.children}
-El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios herredetarios. Un ejemplo de los mismos que se involucran en este conjunto de metadatos serian los shell scripts base que ocupa el backend de virtualizacion para iniciar la ejecuccion.
+El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios hereditarios. Un ejemplo de los mismos que se involucran en este conjunto de metadatos serian los shell scripts base que ocupa el backend de virtualizacion para iniciar la ejecuccion.
 \subsubsection{.repospec}
 El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
-El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el professor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}). Un ejemplo del mismo, serian los archivos de un cierto lenguaje de programacion que deben ser expuestas al usuario final para que el mismo los puede editar.
+El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el profesor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}). Un ejemplo del mismo, serian los archivos de un cierto lenguaje de programacion que deben ser expuestas al usuario final para que el mismo los puede editar.
 % CODE TODO: GitEDU Templates Unimplemented
 
 \subsection{API Externa}
@@ -861,7 +861,7 @@ Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API ext
   \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo.
 \end{enumerate}
 \subsubsection{Autenticacion para el API}
-Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defecto (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear tokens, visualizar los mismos \\
+Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens  los pueden administrar usuarios con los permisos adecuados, o por defecto (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear tokens, visualizar los mismos \\
 (\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el secreto (llave privado) de un token\\
 (\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
 
@@ -890,8 +890,8 @@ donde las operaciones posibles son los siguientes:
 	\item \texttt{create} para crear un nuevo RepoSpec. Parametros del \texttt{POST} son:
     \begin{description}
     	\item[token] con el API token que se genera previamente.
-        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, solo se lo persiste internamente, pero a futuro seria de agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro.
+        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, solo se lo persiste internamente, pero a futuro se deberia  agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI a traves del cual se puede acceder al repositorio padre del actual, eso forma la base para la herencia de los repositorios. Solo en el caso de un repositorio plantilla de ejecuccion que no hereda de ninguna otra plantilla,es permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantiles, debe ser obligatorio un valor valido. Pero dicha validacion queda para ser implementada a futuro.
     \end{description}
     \item \texttt{get} para leer un RepoSpec existente. Parametros del \texttt{POST} son:
     \begin{description}
@@ -922,13 +922,13 @@ Los URIs del API de Ejecuccion de EduNube toma la forma general de: \\
 \texttt{<repositorio>/} \\
 donde los ejecutores de lenguajes posibles son los siguientes:
 \begin{description}
-	\item[shell] que ejecuta commandos de terminal ocupando el interprete \texttt{/bin/sh} (puede ver el imagen de Docker \texttt{shell-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
+	\item[shell] que ejecuta comandos de terminal ocupando el interprete \texttt{/bin/sh} (puede ver el imagen de Docker \texttt{shell-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 	\item[python3] que ejecuta codigo de Python 3 utilizando \texttt{virtualenv} y \texttt{pip} para manejo de dependencias (puede ver el imagen de Docker \texttt{python3-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 	\item[postgresql] que ejecuta sentencias de SQL de PostgreSQL (puede ver el imagen de Docker \texttt{postgresql-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 \end{description}
 El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene el \texttt{id} con el cual se puede realizar consultas del estado de trabajo y ver sus resultados cuando el mismo termina.
 \subsubsection{Jobs API}
-Una vez que se realiza una peticion de un trabajo, se puede consultar el estatus y, a lo que termina, resultados del mismo con su identificador unico devuelto por el API de Ejeccucion. Estas llamadas toman una forma general de: \texttt{POST /api/execute/<operacion\_de\_consulta>/<lenguaje\_ejecutor>/<id>/}
+Una vez que se realiza una peticion de un trabajo, se puede consultar el estatus y al finalizar se puede observar resultados del mismo con su identificador unico devuelto por el API de Ejeccucion. Estas llamadas toman una forma general de: \texttt{POST /api/execute/<operacion\_de\_consulta>/<lenguaje\_ejecutor>/<id>/}
 Donde operaciones de la consulta son los siguientes:
 \begin{description}
 	\item[status] devuelve en formato JSON si un trabajo existe o no y en caso de que existe, si el mismo ha terminado.

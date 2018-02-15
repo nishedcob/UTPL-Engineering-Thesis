@@ -7,9 +7,9 @@
 % TODO: Resultados %% REVIEW
 El principal resultado obtenido es el realizar un prototipo de la plataforma propuesta donde se integra tres servicios cuyas funcionalidades esenciales son:
 \begin{description}
-	\item[GitEDU] ofrece, mediante autenticacion clasica y autenticacion LTI, manejo de namespace y repositorios en addicion a un editor de codigo en linea para archivos dentro de los mismos repositorios, llevado bajo un sistema de control de versiones interna.
-    \item[EduNube] ofrece, mediante su API, todo lo necesario para que usuarios de GitEDU puedan ejecutar el codigo que desarrollan dentro de la plataforma. El mismo brinde este servicio de forma extensible para que a futuro puede ofrecer parte de la solucion para la calficacion de codigo en base a los resultados de su ejecuccion y/o pruebas unitarias y tambien para que el mismo, por el momento con contenedores de Docker, extensibilidad de lenguajes de programacion que el mismo puede soportar.
-    \item[GitServerHTTPEndpoint] ofrece, mediante su API, los mecanismos con los cuales GitEDU puede persistir codigo guardado en repositorios de Git externos para su consumo de aplicaciones y usuarios externos.
+	\item[GitEDU], ofrece una autenticación clásica y autenticación de LTI, manejo de namespace y repositorios. Adicionalmente cuenta con un editor de código en línea para gestionar archivos dentro de un repositorio, esto, llevado bajo un sistema de control de versiones interno.
+    \item[EduNube], mediante su API, ofrece toda la funcionalidad necesaria para que cada uno de los usuarios de GitEDU pueda ejecutar el código que desarrolló dentro de la plataforma. El servicio está planteado para extenderse con nuevas funcionalidades a futuro, por ejemplo el dar soporte a la ejecución de más lenguajes de programación (mediante contenedores de Docker), y la calificacion del código escrito por los usuarios.
+    \item[GitServerHTTPEndpoint], mediante su API, permite que los cambios realizados en el editor de GitEDU sean persistentes en repositorios de Git externos para su consumo por parte de aplicaciones y usuarios externos.
 \end{description}
 
 % TODO: get input on conclusions (are they okay for the thesis) %% REVIEW
@@ -21,30 +21,31 @@ El principal resultado obtenido es el realizar un prototipo de la plataforma pro
 % Tipicamente un recomendacion por cada cada conclusion
 
 \section{Conclusiones}
-A lo largo del desarrollo de este trabajo de titulacion, se ha formado los siguientes conclusiones:
+A lo largo del desarrollo de este trabajo de titulación, se ha llegado a las siguientes conclusiones:
 
 \begin{itemize}
-  \item Para el desarrollo de sistemas educativos, LTI puede ser una buena solución que se puede tomar en cuenta para facilitar el flujo de autenticación entre sistemas para el aprendizaje y enseñanza.
-  \item Muchos usuarios solo se fijan en que tan llamativo es un interfaz de usuario y no en la funcionalidad que esta por detras. Por lo tanto es importante encontrar las herramientas adecuadas para que el editor de código en la plataforma sea tanto llamativa como funcional, porque la primera impresión es lo que más cuenta.
-  \item Para datos que no tienen estructuras muy fijas o que tienen campos de longitudes altamente variables, como es el caso del codigo, MongoDB ofrece una buena alternativa a los bases de datos relacionales y simplifica el trabajo a ser realizado.
+  \item Para el desarrollo de sistemas educativos, LTI puede ser una buena solución a tomar en cuenta, para facilitar el flujo de autenticación entre diferentes sistemas de aprendizaje y enseñanza.
+  \item Para datos que no tienen estructuras muy fijas o que tienen campos de longitudes altamente variables, como es el caso del codigo, bases de datos no-relacionales como MongoDB, ofrecen una buena alternativa frente a las bases de datos relacionales y simplifica el trabajo a ser realizado.
   \item Kubernetes y Docker son herramientas muy potentes para generar entornos confiables, entregar sistemas de producción valiosas y garantizar escalabilidad y portabilidad de código realizado debido a que su curva de aprendizaje es minima para el nivel de potencia que los mismos ofrecen.
   \item Cualquier servidor de Git es altamente pesada, especialmente GitLab que en su estado pasivo consume muchos recursos, y tambien GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
   % TODO: Revisar Conclusion General %% REVIEW
-  \item La combinacion de Python 3 con librerias selecionadas para realizar los respectivos backends, es decir Django, PyModm, Bcrypt, PyJWT, Requests y ipython forman una combinacion potente para el desarollo rapido de servicios de produccion siempre y cuando se maneja de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
+  % Pame, la conclusion general no debe ser el ultimo?
+  \item La combinacion de Python 3 con librerias selecionadas para realizar los respectivos backends, es decir Django, PyModm, Bcrypt, PyJWT, Requests y ipython forman una combinación potente para el desarollo rápido de servicios de producción siempre y cuando se maneje de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
+  \item Muchos usuarios solo se fijan en que tan llamativo es un interfaz de usuario y no en la funcionalidad que esta por detras. Por lo tanto es importante encontrar las herramientas adecuadas para que el editor de código en la plataforma sea tanto llamativa como funcional, porque la primera impresión es lo que más cuenta.
 \end{itemize}
 
 
 % Previously Chapter 8: Recomendaciones, united with Chapter 7: Conclusiones by recomendation of Ing. Maria del Carmen
 %\chapter{Recommendaciones}
-\section{Recommendaciones}
+\section{Recomendaciones}
 %\label{capitulo8}
 % TODO: revisar si recomendations son adecuadas %% REVIEW
 %Tipicamente un recomendacion por cada cada conclusion
 
-En base a lo que se ha aprendido en el camino de realizar el trabajo de titulacion, se puede realizar las siguientes recomendaciones:
+En base a lo que se ha aprendido en el camino de este trabajo de titulación, se puede realizar las siguientes recomendaciones:
 
 \begin{itemize}
-  \item Cuando se desarrolla sistemas con un enfoque educativo, se recomienda reutilizar una implementacion de LTI para evitar problemas de integración con lo que se está realizando.
+  \item Cuando se desarrolla sistemas con un enfoque educativo, se recomienda reutilizar una implementacion de LTI para evitar problemas de integración con el software nuevo que se desarrolla.
   \item En el curso de realizacion de interfaces web, se recomiendo reutilizar el trabajo de terceros siempre y cuando hay la posibilidad, con el fin de poder dar mayor enfoque a la funcionalidad del backend.
   \item Para trabajar con cualquier base de datos, sea relacional o no relacional, lo más recomendable es trabajar con un ORM que permite abstraer la base de datos y facilitar el desarrollo y persistencia de datos en la misma.
   \item Siempre se recomienda utilizar nuevas tecnologias, los cuales pueden ser utiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones de los cuales no se los ha podido considerar antes.

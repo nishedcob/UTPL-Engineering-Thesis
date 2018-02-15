@@ -16,37 +16,37 @@ La validación del presente trabajo de titulación se lo ha planteado en tres fa
 Donde se considera que estas mismas pruebas deben ser automatizados en el mayor parte posible con la finalidad de reducir variaciones que puede introducir un operador humano en interacciones distintas de una prueba.
 
 \subsection{Flujos completos de funcionalidad}
-Estas pruebas son de alto nivel para revisar funcionalidad desde el punto del usuario en distintos roles de la aplicación y llevar cada uno de esos roles por las distintas fases de su ciclo de vida dentro de la aplicación. Se considera Selenium como buena opción para la automatización de esta fase de pruebas. Aunque por falta de tiempo, no se ha podido implementar las pruebas de forma automatizada, ni en su totalidad, a continuacion se explica la manera en que quisiera que se implementan.
+Estas pruebas son de alto nivel para revisar funcionalidad desde el punto del usuario en distintos roles de la aplicación y llevar cada uno de esos roles por las distintas fases de su ciclo de vida dentro de la aplicación. Se considera Selenium como buena opción para la automatización de esta fase de pruebas. Aunque por falta de tiempo, no se ha podido implementar las pruebas de forma automatizada, ni en su totalidad, a continuacion se explica la manera en que en teoria deben ser implementados.
 
 \subsubsection{Administrador}
 Dentro del ciclo de vida del administrador se debe probar:
 \begin{enumerate}
   \item Creación/Lectura/Actualización/Eliminación de API Tokens en los sistemas respectivos que son:
   \begin{itemize}
-    \item EduNube
-    \item GitServerHTTPEndpoint
+    \item EduNube.
+    \item GitServerHTTPEndpoint.
   \end{itemize}
-  \item Registros de plantillas nuevas y actualización de plantillas existentes de virtualización
+  \item Registros de plantillas nuevas y actualización de plantillas existentes de virtualización.
   \begin{itemize}
-    \item La capacidad de establecer herencia de plantillas con el .repospec
-    \item La capacidad de proteger archivos a través del  .edunubeignore y el .edunubeignore.children
-    \item La capacidad de incluir archivos de forma automática en extensiones de la plantilla con el .templateinclude
+    \item La capacidad de establecer herencia de plantillas con el .repospec.
+    \item La capacidad de proteger archivos a través del  .edunubeignore y el .edunubeignore.children.
+    \item La capacidad de incluir archivos de forma automática a lo que se extiende una plantilla mediante el mecanismo .templateinclude.
   \end{itemize}
 \end{enumerate}
 
 \subsubsection{Profesor}
 Dentro del ciclo de vida del profesor se debe probar:
 \begin{enumerate}
-  \item Extensión de plantillas de virtualización
-  \item Ejecución de plantillas de virtualización
-  \item Validación de las protecciones y herencia dado por los archivos de metadata en cada plantilla
+  \item Extensión de plantillas de virtualización.
+  \item Ejecución de plantillas de virtualización.
+  \item Validación de las protecciones y herencia dado por los archivos de metadata en cada plantilla.
 \end{enumerate}
 
 \subsubsection{Estudiante}
 \begin{enumerate}
-  \item Autenticación por LTI
-  \item Editar código en línea
-  \item Ejecutar código en línea
+  \item Autenticación por LTI.
+  \item Editar código en línea.
+  \item Ejecutar código en línea.
 \end{enumerate}
 
 \subsection{Pruebas funcionales}

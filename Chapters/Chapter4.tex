@@ -567,7 +567,7 @@ Para el editor de código en linea, es necesaria extender la funcionalidad del m
 \item GroupMembership
 \end{enumerate}
 
-Dentro de ideApp se crea 4 entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y opcionalmente grupo dueño quien esta encargado de la administración del mismo, archivo mismo que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre código por usuarios no autorizados. Estos entidades como tablas en la base de datos son:
+Dentro de ideApp se crea cuatro entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y, de forma opcional, un grupo dueño quien esta encargado de la administración del mismo, una representacion de archivos, mismo que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre código por usuarios no autorizados. Estos entidades como tablas en la base de datos son:
 \begin{enumerate}
 \item Repository
 \item File
@@ -577,13 +577,13 @@ Dentro de ideApp se crea 4 entidades para representar repositorios (una colecci�
 
 \index{Persistir Código}
 \subsection{Persistencia de Código}
-Para la Persistencia de Código se considera dos backends de persistencia para código con una posibilidad de introducir mas a futuro:
+Para la Persistencia de Código se considera dos backends de persistencia para código con una posibilidad de introducir más a futuro:
 \begin{itemize}
 	\item MongoDB como base de datos NoSQL para acceso rápido y recuperación de código persistido de una manera similar a GitEduERP.
     \item GitLab CE, como servidor de Git, manejado con una combinación de la API del mismo y comandos de Git para el manejo de cambios en repositorios.
 \end{itemize}
 
-Para el mismo es necesario manejar un API interna estandarizada. La solución propuesta utiliza programación orientado a objetos y un modelo estándar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos lógicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarización se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objetos de datos con las siguientes clases genéricas, las cuales pueden ser sobrescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos también se encuentran en el mismo archivo de generics.py. Estos archivos se puede encontrar en el Apéndice \ref{AnexoF}.
+Para el mismo es necesario manejar una API interna estandarizada. La solución propuesta utiliza programación orientado a objetos y un modelo estándar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos lógicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarización se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objetos de datos con una serie de clases genéricas, las cuales pueden ser sobrescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos también se encuentran en el mismo archivo de generics.py y tambien dentro del Apéndice \ref{AnexoF}.
 
 En el settings, hay una necesidad de definir los backends de código y su prioridad:
 \lstset{language=Python}
@@ -613,14 +613,14 @@ GITLAB_CONNECT_TO = 'gitlab'
 
 Por el momento se ha optado por dejar desactivado el backend de GitLab ya que el mismo no esta implementado para ser utilizado.
 
-El gestor de persistencia de código se carga todas las backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asimismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos clases de persistencia:
+El gestor de persistencia de código se carga todas las backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asimismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos tipos de persistencia:
 \begin{itemize}
 	\item Lectura (read)
 	\item Escritura (write) 
 \end{itemize}
 Y permite para toda operación que se especifique sobre cual grupo se debe realizar la operación. Estos grupos se define en el settings con los variables:
 \begin{itemize}
-	\item CODE\_PERSISTENCE\_BACKEND\_READ\_PREFERENCE (que también da preferencia del orden en que se debe leer de los backends de persistencia de código)
+	\item CODE\_PERSISTENCE\_BACKEND\_READ\_PREFERENCE (que también da preferencia del orden en que se debe leer de los backends de persistencia de código).
 	\item CODE\_PERSISTENCE\_BACKEND\_WRITE\_OUT que define cuales son y da el orden en que se debe escribir a los backends de persistencia de código.
 \end{itemize}
 El código completo de este backend se encuentra en el paquete ideApp.CodePersis-tenceBackends en el archivo backend\_mánager.py con el nombre de clase CodePersistenceBackendManager que se puede encontrar en el Apéndice \ref{AnexoF}.
@@ -735,15 +735,15 @@ La implementacion de la conexion al API de GitLab se presenta en el Anexo \ref{A
 
 Aunque originalmente se planifico el uso de GitLab como backend de persistencia de codigo (en repositorios, a diferencia de GitEduERP que ocupó snippets), al final no se ocupó el mismo por cinco razones:
 \begin{enumerate}
-\item La complejidad del API frente documentacion no tan clara del mismo para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso ni en el ambiente de desarollo ni de produccion) y el tiempo disponible.
-\item Un gran inestabilidad del servicio.
-\item La falta de recursos en los ambientes de produccion y de desarollo que empeora problemas de estabilidad.
-\item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para hacer el mismo disponible por HTTP.
-\item Realmente frente las necesidades actual del proyecto, con tal que no se necesita exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el GitLab.
+  \item La complejidad del API frente la documentación no es tan clara para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso ni en el ambiente de desarollo ni de produccion), y eso genera un factor limitante frente el tiempo disponible para la implementacion de la misma.
+  \item Un gran inestabilidad del servicio, Gitlab CE.
+  \item La falta de recursos en los ambientes de produccion y de desarollo que empeora problemas de estabilidad.
+  \item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para hacer el mismo disponible por HTTP.
+  \item Realmente frente las necesidades actual del proyecto, con tal que no se necesita exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el Gitlab.
 \end{enumerate}
 
 \subsection{Aspectos Sociales}
-Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir independientemente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto 'socialApp'' como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
+Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir de forma independiente de las funcionalidades principales del mismo aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto, ''socialApp'', como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
 
 \index{Ejecutar Código}
 \section{EduNube}
@@ -825,8 +825,8 @@ La configuracion de base de datos no relacional se encuentra en el Anexo E.
 \subsection{Autenticación}
 El diseño planteado para el sistema EduNube propone dos tipos de autenticación:
 \begin{itemize}
-\item Clasica para usuarios humanas
-\item Basada en Criptografía Asimétrica para ofrecer mayor seguridad y permitir integración con otros sistemas como GitEDU
+\item Clasica para usuarios humanas, orientada solo a la administracion del mismo sistema.
+\item Basada en Criptografía Asimétrica para ofrecer mayor seguridad y permitir integración con otros sistemas como GitEDU.
 \end{itemize}
 
 \subsubsection{Autenticación Clasica}
@@ -839,29 +839,29 @@ La logica para gestionar los API tokens se encuentra en el Anexo \ref{AnexoE}.
 
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
-El de ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad integra frente las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
+La ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad completa frente las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
 
 \subsection{Metadatos de Plantillas}
-Para ofrecer mayor seguridad y funcionalidad a la ejecucion de codigo en el sistema, se basa en lo que son plantillas de ejecucion diseñados especifcamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyiendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recien se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecuccion y tambien la ubicacion del repositorio padre. La herrencia se basa en la creacion de un nuevo repositorio donde se copia uno por uno los contenidos de cada repositorio, desde el inicio de la cadena de herrencia (una plantilla hecha por la administracion para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se copia en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de control que tiene el usuario final sobre lo que esta ejecutando. 
+Para ofrecer mayor seguridad y funcionalidad a la ejecucion de codigo en el sistema, se basa en lo que son plantillas de ejecucion diseñados especifcamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyiendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recien se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecuccion y tambien la ubicacion del repositorio padre. La herrencia se basa en la creacion de un nuevo repositorio donde se copia uno por uno los contenidos (archivos) de cada repositorio, desde el inicio de la cadena de herrencia (una plantilla hecha por la administracion para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se puede copiar en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de acceso que tiene el usuario final sobre lo que esta ejecutando. 
 \subsubsection{.edunubeignore}
-El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede herredar de ningun otro repositorio que le sigue en la herencia de repositorios.
+El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede herredar de ningun otro repositorio que le sigue en la herencia de repositorios. Un ejemplo de los mismos serian archivos propios de Git.
 \paragraph{.edunubeignore.children}
-El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios herredetarios.
+El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios herredetarios. Un ejemplo de los mismos que se involucran en este conjunto de metadatos serian los shell scripts base que ocupa el backend de virtualizacion para iniciar la ejecuccion.
 \subsubsection{.repospec}
-El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual tema se discuta en trabajos futuros.
+El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
-El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el professor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}).
+El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el professor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}). Un ejemplo del mismo, serian los archivos de un cierto lenguaje de programacion que deben ser expuestas al usuario final para que el mismo los puede editar.
 % CODE TODO: GitEDU Templates Unimplemented
 
 \subsection{API Externa}
-Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API externa que requiere un token de autenticacion para su funcionamiento como se lo detalle a continuacion. Ademas se considera critico tres componentes criticos del API:
+Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API externa que requiere un token de autenticacion para su funcionamiento como se lo detalle a continuacion. Ademas se considera critico tres componentes del API:
 \begin{enumerate}
   \item API de RepoSpec donde se implementa la creacion y actualizacion de los RepoSpecs de tal forma que al momento de enviar un repositorio a ser ejecutado, se puede validar que el repositorio esta autorizado para ejecucion y de donde previene la herencia del mismo de tal forma que el usuario final no tenga mucho libertad a modificar el mismo y realizar cambios indebidos al entorno de ejecucion.
-  \item API de Ejecuccion donde se solita ejecucion de codigo. Esto agrega la solicitud a la cola de trabajo para que el mismo puede ser ejecutado cuando hay disponibilidad.
-  \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo trabajo.
+  \item API de Ejecuccion donde se solita ejecucion de codigo. Esto agrega la solicitud a la cola de trabajo para que el mismo puede ser ejecutado cuando hay disponibilidad de los recursos limitados.
+  \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo.
 \end{enumerate}
 \subsubsection{Autenticacion para el API}
-Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defect (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear/visualizar tokens \\
+Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens se los puede administrar usuarios con los permisos adecuados, o por defecto (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear tokens, visualizar los mismos \\
 (\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el secreto (llave privado) de un token\\
 (\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
 
@@ -889,29 +889,29 @@ donde las operaciones posibles son los siguientes:
 \begin{itemize}
 	\item \texttt{create} para crear un nuevo RepoSpec. Parametros del \texttt{POST} son:
     \begin{description}
-    	\item[token] con el API token que generamos previamente.
-        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, pero a futuro seria de agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, de aqui parte la herencia de los repositorios y solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui.
+    	\item[token] con el API token que se genera previamente.
+        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, solo se lo persiste internamente, pero a futuro seria de agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro.
     \end{description}
     \item \texttt{get} para leer un RepoSpec existente. Parametros del \texttt{POST} son:
     \begin{description}
-    	\item[token] con el API token que generamos previamente.
-        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repospec\_token}.
-        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repo}.
+    	\item[token] con el API token que se genera previamente.
+        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repospec\_token}.
+        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repo}.
     \end{description}
     \item \texttt{get\_or\_create} para leer un RepoSpec existente o si no existe, crearla. Parametros del \texttt{POST} son:
     \begin{description}
-    	\item[token] con el API token que generamos previamente.
+    	\item[token] con el API token que se genera previamente.
         \item[repo] con el nombre del repositorio actual para la busqueda/creacion.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, de aqui parte la herencia de los repositorios y solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro.
         \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda.
     \end{description}
     \item \texttt{edit} para modificar un RepoSpec existente. Parametros del \texttt{POST} son:
     \begin{description}
-    	\item[token] con el API token que generamos previamente.
-        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repospec\_token}.
-        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} estar minimo este parametro o el \texttt{repo}.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, de aqui parte la herencia de los repositorios y solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Si se deja este sin valor (considerado como Null o en Python None), el comportamiento por defecto es de sobreescribir el valor anterior.
+    	\item[token] con el API token que se genera previamente.
+        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repospec\_token}.
+        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repo}.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro. Si se deja este sin valor (considerado como Null o en Python None), el comportamiento por defecto es de sobreescribir el valor anterior.
         \item[\textit{new\_repo}] \textit{de forma opcional} con el nuevo nombre del repositorio actual para cambiar la misma, no incluir este parametro deja el RepoSpec con el mismo nombre de repositorio que ya tiene.
         \item[\textit{regen\_secret\_key}] \textit{de forma opcional} con una bandera booleano que indica si se debe generar un nuevo secreto (llave privada) para el RepoSpec. Si no se incluye el parametro o lo deja el valor en false, se lo interpeta como mantener el mismo secreto actual para cifrar el token actualizado, caso contrario se interpreta cualquier otro valor como true, y procede a cambiar el secreto. 
     \end{description}

@@ -567,7 +567,7 @@ Para el editor de código en linea, es necesaria extender la funcionalidad del m
 \item GroupMembership
 \end{enumerate}
 
-Dentro de ideApp se crea cuatro entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y, de forma opcional, un grupo dueño quien esta encargado de la administración del mismo, una representacion de archivos, mismo que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/o otras acciones sobre código por usuarios no autorizados. Estos entidades como tablas en la base de datos son:
+Dentro de ideApp se crea cuatro entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y, de forma opcional, un grupo dueño quien esta encargado de la administración del mismo, una representacion de archivos, misma que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/u otras acciones sobre código para usuarios no autorizados. Estas entidades como tablas en la base de datos son:
 \begin{enumerate}
 \item Repository
 \item File
@@ -577,7 +577,7 @@ Dentro de ideApp se crea cuatro entidades para representar repositorios (una col
 
 \index{Persistir Código}
 \subsection{Persistencia de Código}
-Para la Persistencia de Código se considera dos backends de persistencia para código con una posibilidad de introducir más a futuro:
+Para la Persistencia de Código se considera dos backends con una posibilidad de introducir más a futuro:
 \begin{itemize}
 	\item MongoDB como base de datos NoSQL para acceso rápido y recuperación de código persistido de una manera similar a GitEduERP.
     \item GitLab CE, como servidor de Git, manejado con una combinación de la API del mismo y comandos de Git para el manejo de cambios en repositorios.

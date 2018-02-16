@@ -7,9 +7,9 @@
 % TODO: Resultados %% REVIEW
 El principal resultado obtenido es el realizar un prototipo de la plataforma propuesta donde se integra tres servicios cuyas funcionalidades esenciales son:
 \begin{description}
-	\item[GitEDU], ofrece una autenticación clásica y autenticación de LTI, manejo de namespace y repositorios. Adicionalmente cuenta con un editor de código en línea para gestionar archivos dentro de un repositorio, esto, llevado bajo un sistema de control de versiones interno.
-    \item[EduNube], mediante su API, ofrece toda la funcionalidad necesaria para que cada uno de los usuarios de GitEDU pueda ejecutar el código que desarrolló dentro de la plataforma. El servicio está planteado para extenderse con nuevas funcionalidades a futuro, por ejemplo el dar soporte a la ejecución de más lenguajes de programación (mediante contenedores de Docker), y la calificacion del código escrito por los usuarios.
-    \item[GitServerHTTPEndpoint], mediante su API, permite que los cambios realizados en el editor de GitEDU sean persistentes en repositorios de Git externos para su consumo por parte de aplicaciones y usuarios externos.
+	\item[GitEDU,] ofrece una autenticación clásica y autenticación de LTI, manejo de namespace y repositorios. Adicionalmente cuenta con un editor de código en línea para gestionar archivos dentro de un repositorio, esto, llevado bajo un sistema de control de versiones interno.
+    \item[EduNube,] mediante su API, ofrece toda la funcionalidad necesaria para que cada uno de los usuarios de GitEDU pueda ejecutar el código que desarrolló dentro de la plataforma. El servicio está planteado para extenderse con nuevas funcionalidades a futuro, por ejemplo el dar soporte a la ejecución de más lenguajes de programación (mediante contenedores de Docker), y la calificacion del código escrito por los usuarios.
+    \item[GitServerHTTPEndpoint,] mediante su API, permite que los cambios realizados en el editor de GitEDU sean persistentes en repositorios de Git externos para su consumo por parte de aplicaciones y usuarios externos.
 \end{description}
 
 % TODO: get input on conclusions (are they okay for the thesis) %% REVIEW
@@ -86,4 +86,5 @@ Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futu
     \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificulta la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro del plataforma).
     \item Mayor soporte para caracteristicas de Git como ramas, tags, etc.
     \item Llevar metadatos de lenguaje de programacion / ejecutor seleccionado para repositorios en GitEDU, para su uso al momento de llamar al API de EduNube, se puede realizar la llamada adecuada (actualmente esta quemada el uso del ejecutor de Python 3).
+    \item Recolleccion de datos para apoyar la toma de decisiones estrategicas.
 \end{itemize}

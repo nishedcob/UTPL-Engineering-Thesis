@@ -4,16 +4,16 @@
 \label{capitulo6}
 
 \section{Plan de Despliegue}
-En el curso del desarrollo, depuración y ejecución de pruebas llegó a ser evidente en enorme consumo de recursos necesarios para levantar todos los servicios desarrollados y auxiliares a la vez, razón por el cual, se ha visto la necesidad de un rediseño de forma mas liviana de la manera en que se despliegue todos los componentes integrados a la aplicación para con ello terminar las fases mencionadas anteriormente y dar paso a ejecución en ambientes de pocos recursos, tanto en el ámbito de desarrollo como de producción. En la implementación original de la arquitectura física para el desarrollo, se había planteado una colección de maquinas virtuales quienes representarían servidores distintas dentro de una red, pero para temas de optimizar recursos, se ha realizado los siguientes cambios los cuales se documentan a lo largo de este capitulo:
+En el curso del desarrollo, depuración y ejecución de pruebas llegó a ser evidente el enorme consumo de recursos  para levantar todos los servicios desarrollados y auxiliares a la vez, razón por el cual, se ha visto la necesidad de un rediseño de forma mas liviana de la manera en que se despliega todos los componentes integrados a la aplicación para con ello terminar las fases mencionadas anteriormente y dar paso a ejecución en ambientes de pocos recursos, tanto en el ámbito de desarrollo como de producción. En la implementación original de la arquitectura física para el desarrollo, se había planteado una colección de maquinas virtuales quienes representarían servidores distintas dentro de una red, pero para temas de optimizar recursos, se ha realizado los siguientes cambios los cuales se documentan a lo largo de este capitulo:
 \begin{itemize}
 	\index{Kubernetes}
-	\item Kubernetes (backend de virtualización) se ubica en una maquina virtual de Xen (con paravirtualización activa para aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea físico o virtual (se recomienda mejor virtualizar todo el cluster final de Kubernetes en algún hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
+	\item Kubernetes (backend de virtualización) se ubica en una maquina virtual de Xen ( para virtualización activa con el fin de aumentar el rendimiento del sistema virtualizado) dado que el mismo, por temas de seguridad, debe seguir de una forma aislada. De esta forma se simula que esta en un servidor aparte, sea físico o virtual (se recomienda  virtualizar todo el cluster final de Kubernetes en algún hipervisor de tipo 1 para garantizar mayor seguridad y aislamiento) pero sin la mayor parte de las perdidas de rendimiento que se dio con MiniKube (alojado en VirtualBox).
     \index{Docker}
     \item Los servicios auxiliares en lugar de ser maquinas virtuales de Xen ahora son contenedores de Docker.
     \index{SystemD}
-    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podría mejorar el rendimiento de esta forma, asignándoles a un usuario con mayor prioridad de ejecución como el usuario root\footnote{Pero realizarlo esta afuera del alcance de este tesis, una solución así de software tampoco puede cambiar los recursos físicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algún usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restringido que tiene mayor prioridad de ejecución para sus procesos.}) si no por temas de facilitar la administración del mismo.
+    \item Los servicios desarrollados se los han convertido en servicios (Systemd) del sistema operativo, no tanto por temas de rendimiento (aunque se podría mejorar el rendimiento de esta forma, asignándoles a un usuario con mayor prioridad de ejecución como el usuario root\footnote{Pero realizarlo se encuentra fuera del alcance de este tesis, una solución así de software tampoco puede cambiar los recursos físicos de la maquina.}\footnote{Nunca se debe asignar un servicio que se consume en la red externa a algún usuario con privilegios de superusuario, como root, ya que el mismo abre todo el sistema operativo a un nuevo vector de ataque por el mismo servicio. En este caso debe ser un nuevo usuario, preferiblemente uno por cada servicio, con acceso restringido que tiene mayor prioridad de ejecución para sus procesos.}) si no por temas de facilitar la administración del mismo.
     \index{NGinX}
-    \item La integración de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inversa, proxy de terminación SSL/TLS, servidor de archivos estáticos y validador de peticiones sin mayor perdida de rendimiento.
+    \item La integración de los servicios con NGinX para que el mismo puede protegerlos y operar en la capacidad de proxy inverso, proxy de terminación SSL/TLS, servidor de archivos estáticos y validador de peticiones sin mayor perdida de rendimiento.
 \end{itemize}
 
 \section{Preparaciones del Ambiente de Despliegue}
@@ -129,16 +129,16 @@ El proyecto de Docker, en parte por su mala fama de ser insegura, toma muy enser
           ]
 }
 \end{lstlisting}
-Despues de realizar aquello configuracion es necesario reiniciar Docker \index{Docker} para que tome en cuenta los cambios con el commando \texttt{systemctl restart docker}. Para popular el registry con los contenedores necesarias para ejecuccion de codigo con el sistema EduNube, puede referirse a los commandos encontrados en \\
+Despues de realizar aquello configuracion es necesario reiniciar Docker \index{Docker} para que tome en cuenta los cambios con el comando \texttt{systemctl restart docker}. Para popular el registry con los contenedores necesarias para ejecuccion de codigo con el sistema EduNube, puede referirse a los commandos encontrados en \\
 \texttt{docker/commands-local-doc.sh} del repositorio principal. Este script toma los contenedores compilados previamente durante el desarrollo, los prepara para subirse y se los sube al Registry para que otros consumidores del mismo Registry tengan acceso a ellos.
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor} \index{Xen}
 \subsubsection{Máquina Virtual de Xen}
-Con el fin de proteger la maquina física contra usuarios finales, sean maliciosos o solo sin conocimientos adecuados, hay la necesidad de que el ambiente que ejecuta código sea aislado con virtualización. Pero el rendimiento de esta maquina virtual necesita ser maximizada para poder permitir su uso con un mínimo de recursos. Es, por lo tanto, que se ha propuesta utilizar una maquina virtual de Xen de baja nivel con mejores de rendimiento con la tecnología de paravirtualización con la finalidad de que esta misma logra ofrecer alta aislamiento, y por lo tanto seguridad, frente una alta rendimiento.
+Con el fin de proteger la maquina física contra usuarios finales, sean maliciosos o solo sin conocimientos adecuados, hay la necesidad de que el ambiente que ejecuta código sea aislado con virtualización. Pero el rendimiento de esta maquina virtual necesite ser maximizado para poder permitir su uso con un mínimo de recursos. Es, por lo tanto, que se ha propuesta utilizar una maquina virtual de Xen de baja nivel con mejores de rendimiento con la tecnología de paravirtualización con la finalidad de que esta misma logra ofrecer alta aislamiento, y por lo tanto seguridad, frente una alta rendimiento.
 
 \index{Kubernetes}
 \paragraph{Construcción de Servidor Virtualizado para Cluster de Kubernetes}
-Las características mínimas que pide Kubernetes para su nodo maestro son 2 núcleos y 2 GiB de RAM, es por aquello razón que se crea una maquina virtual paravirtualización con estas mismas características. En el curso del año que se ha trabajado este trabajo de titulación la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales, los resultados de la creacion del mismo, se indica en la figura \ref{fig:create-k8s-xen-vm}:
+Las características mínimas que pide Kubernetes para su nodo maestro son 2 núcleos y 2 GiB de RAM, es por aquello razón que se crea una maquina virtual para virtualización con estas mismas características. En el curso del año que se ha trabajado este trabajo de titulación la comunidad de Debian se ha logrado arreglar  el bug que antes causó problemas la ultima vez que se realizó una maquina virtual nueva de Debian 9 y es con este motivo que se puede crear una maquina virtual nueva sin ninguna necesidad para pasos adicionales, los resultados de la creacion del mismo, se indica en la figura \ref{fig:create-k8s-xen-vm}:
 \begin{lstlisting}
 xen-create-image --hostname=debian-k8s-master \
 --ip=10.10.10.12 --netmask=255.255.255.0 \
@@ -163,7 +163,7 @@ Para utilizar Kubernetes dentro de esta maquina virtual es necesario primero con
 apt update
 apt upgrade
     \end{lstlisting}
-    \item Instalar curl si es que no esta instalado previamente
+    \item Instalar curl en caso de no estar instalado previamente
     \begin{lstlisting}
 apt install curl
     \end{lstlisting}
@@ -256,7 +256,7 @@ as root:
     \end{lstlisting}
 \citep{kubernetes-create-cluster-kubeadm}
 
-Por defecto Kubernetes no permite que el nodo maestro aloje contenedores como una política de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta política con el siguiente comando:
+Por defecto Kubernetes no permite que el nodo maestro aloja contenedores como una política de seguridad, pero en este caso se quiere levantar un cluster de un solo nodo y por lo tanto se requiere cambiar esta política con el siguiente comando:
     \begin{lstlisting}
 KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes \
 --all node-role.kubernetes.io/master-

@@ -59,7 +59,7 @@ En base a lo que se ha aprendido en el camino de este trabajo de titulación, se
 % TODO: escribir recomendacion general?
 
 \section{Trabajos Futuros}
-Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futuro, los cuales no esta en ningun orden especifico:
+Se considera los siguientes aspectos que se podrian y/o se deberian trabajar a futuro, los cuales no esta en ningun orden especifico:
 \begin{itemize}
 	\item Arreglar Errores en la funcionalidad existente, por ejemplo:
     \begin{itemize}
@@ -67,13 +67,13 @@ Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futu
         \item EduNube no genera IDs de ejecuccion de forma adecuada.
     \end{itemize}
     \item Autenticacion en GitEDU y/o otros servicios mediante LDAP.
-    \item Sincronizacion en tiempo real de codigo editado en GitEDU y sus respectivo backends de codigo, tal ves mediante websockets.
+    \item Sincronizacion en tiempo real de codigo editado en GitEDU y sus respectivo backends de codigo, posiblemente  mediante el uso de websockets.
     \item Socializacion de vistas para editar codigo (GitEDU) con la finalidad de promover interaccion y collaboracion entre usuarios sobre los mismos.
     \item Un sistema de permisos para el editor de codigo (GitEDU).
     \item Distintas formas de calificacion, incluyendo:
     \begin{itemize}
     	\item Calificacion Manual por parte de professores.
-        \item Calificacion Automatizado por parte del sistema (tal vez en forma de un servicio nuevo?) en base a pruebas unitarias definidos por professores.
+        \item Calificacion Automatizado por parte del sistema (posiblemente en forma de un servicio nuevo?) en base a pruebas unitarias definidas por profesores.
         \begin{itemize}
         	\item En base a expresiones regulares aplicadas a la salida.
             \item En base a análisis lexico/semantico de la salida.
@@ -82,19 +82,20 @@ Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futu
         \end{itemize}
         \item Calificacion Hibrida que combina los anteriores.
     \end{itemize}
-    \item Sincronizacion de Notas (generados por la(s) modalidad(es) de calificacóon anteriores) por LTI con los sistemas adecuadas para el manejo de los mismos, por ejemplo los LMS.
+    \item Sincronizacion de Notas (generados por la(s) modalidad(es) de calificación anteriores) por LTI con los sistemas adecuadas para el manejo de los mismos, por ejemplo los LMS.
     \item Mas backends de Git para el servicio GitServerHTTPEndpoint, como por ejemplo GitLab o Djacket.
     \item Mas backends de persistencia de codigo para el servicio GitEDU como Redis o GitLab.
     \item Mas backends de virtualizacion para EduNube como OpenStack, Docker, etc.
+    \item Aumentar la seguridad de Kubernetes, tal vez con el uso de Namespace (clusters virtuales) dentro de la misma, quotas de recursos (para no dejar a ningun usuario ocupar todo el procesamiento), y limites de tiempo de ejecucción.
     \item Versionamiento de APIs en todos los servicios.
     \item Auditoria de Seguridad del Sistema Desarrollado, especialmente en el caso de los APIs que no manejan estados y solo se protegen con API tokens JWT y a lo mucho TLS.
     \item Mejor gestion de la configuracion, actualmente hay componentes de algunos servicios que dejen de funcionar o que funcionan de forma inadecuada cuando no disponen de sus servicios dependientes. Debe ser configurable cuales servicios existen o no, dinamico la manera en que se encuentran y cada servicio tolerante a fallos en los demas servicios.
-    \item Convertir los servicios en imagenes de Docker para montarlos mismos en un cluster de Kubernetes y realizar un estudio de alta disponabilidad/escalabilidad.
+    \item Convertir los servicios en imagenes de Docker para montar los mismos en un cluster de Kubernetes y realizar un estudio de alta disponabilidad/escalabilidad.
     \item Implementar el sistema de plantillas de GitEDU.
     \item Utilizar realmente el Navbar de GitEDU, que actualmente solo tiene ''Cerrar session'' de forma estatica.
     \item Migrar servicios a Django 2.x (la proxima version de soporte a largo plazo de Django esta planificado como el 2.3) ya que en realizar esta migracion de version, actualmente se rompe la forma en que se llevan los URIs con un namespace para cada app.
     \item Automatizar y aumentar las pruebas unitarias de la aplicacion de acuerdo con el plan de pruebas original.
-    \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificulta la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro del plataforma).
+    \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificultar la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro de la plataforma).
     \item Mayor soporte para caracteristicas de Git como ramas, tags, etc.
     \item Llevar metadatos de lenguaje de programacion / ejecutor seleccionado para repositorios en GitEDU, para su uso al momento de llamar al API de EduNube, se puede realizar la llamada adecuada (actualmente esta quemada el uso del ejecutor de Python 3).
     \item Recolleccion de datos para apoyar la toma de decisiones estrategicas.

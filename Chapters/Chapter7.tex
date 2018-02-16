@@ -85,6 +85,7 @@ Se considera los siguientes aspectos que se podrian y/o se deben trabajar a futu
     \item Mejor gestion de la configuracion, actualmente hay componentes de algunos servicios que dejen de funcionar o que funcionan de forma inadecuada cuando no disponen de sus servicios dependientes. Debe ser configurable cuales servicios existen o no, dinamico la manera en que se encuentran y cada servicio tolerante a fallos en los demas servicios.
     \item Convertir los servicios en imagenes de Docker para montarlos mismos en un cluster de Kubernetes y realizar un estudio de alta disponabilidad/escalabilidad.
     \item Implementar el sistema de plantillas de GitEDU.
+    \item Utilizar realmente el Navbar de GitEDU, que actualmente solo tiene 
     \item Migrar servicios a Django 2.x (la proxima version de soporte a largo plazo de Django esta planificado como el 2.3) ya que en realizar esta migracion de version, actualmente se rompe la forma en que se llevan los URIs con un namespace para cada app.
     \item Automatizar y aumentar las pruebas unitarias de la aplicacion de acuerdo con el plan de pruebas original.
     \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificulta la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro del plataforma).

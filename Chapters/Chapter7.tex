@@ -24,14 +24,18 @@ El principal resultado obtenido es el realizar un prototipo de la plataforma pro
 A lo largo del desarrollo de este trabajo de titulación, se ha llegado a las siguientes conclusiones:
 
 \begin{itemize}
+  \item En base a la investigación de trabajos relacionados se puede proyectar que el sistema prototipo desarollado podría convertirse en una herramienta valiosa para la docencia de la Universidad Técnica Particular de Loja, con la finalidad de enseñar y evaluar a los estudiantes de programación. Y por lo tanto el prototipo realizado es el primer paso para cumplir con esta finalidad, pero para ello se requiere de un mayor trabajo a futuro.
   \item Para el desarrollo de sistemas educativos, LTI puede ser una buena solución a tomar en cuenta, para facilitar el flujo de autenticación entre diferentes sistemas de aprendizaje y enseñanza.
-  \item Para datos que no tienen estructuras muy fijas o que tienen campos de longitudes altamente variables, como es el caso del codigo, bases de datos no-relacionales como MongoDB, ofrecen una buena alternativa frente a las bases de datos relacionales y simplifica el trabajo a ser realizado.
-  \item Kubernetes y Docker son herramientas muy potentes para generar entornos confiables, entregar sistemas de producción valiosas y garantizar escalabilidad y portabilidad de código realizado debido a que su curva de aprendizaje es minima para el nivel de potencia que los mismos ofrecen.
-  \item Cualquier servidor de Git es altamente pesada, especialmente GitLab que en su estado pasivo consume muchos recursos, y tambien GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
-  % TODO: Revisar Conclusion General %% REVIEW
-  % Pame, la conclusion general no debe ser el ultimo?
+  %\item El servicio del editor de codigo en linea, ''GitEDU'', dispone de una interfaz web llamativa y funcional gracias a una potente combinacion de jQuery, AJAX, plantillas predefinidas de Bootstrap, XTerm.js y Ace Code Editor. % y la implementacion del mismo
+  %forman una combinación potente para definir,
+  %sin mayor esfuerzo, la interfaz adecuada para programar y ejecutar código en linea, y que el mismo tenga un alto nivel de funcionalidad.
+  %\item Un sistema que viene a ser frontend para usuarios finales, como un editor de codigo debe poner bastante desempeño en tratar de ser llamativo y funcional ya que muchos usuarios solo se fijan en la aparencia y no en la funcionalidad que esta por detras, aunque si se dan cuenta eventualmente si falta funcionalidad. Por lo tanto es importante encontrar las herramientas adecuadas para que el editor de código en la plataforma sea tanto llamativa como funcional, porque la primera impresión es lo que más cuenta.
+  \item Kubernetes y Docker son herramientas muy potentes y fáciles de implementar en soluciones de mayor complejidad para generar entornos confiables, construir sistemas de producción escalables y portables, así como para ejecutar trabajos por lotes con mayor grado de seguridad y con un alto rendimiento. Estas tecnologías permitieron cumplir con los requerimientos del servicio de EduNube que se encarga de ejecutar el código de usuarios finales.
+  \item Para la implementación de control de versiones externo en el presente proyecto se ha concluido que cualquier servidor de Git es altamente pesado, especialmente GitLab que en su estado pasivo consume muchos recursos, y también GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
+  \item Para los datos que no bien estructurados o con campos de longitud altamente variable, como en el caso del código escrito por los estudiantes, las bases de datos no-relacionales como MongoDB, son una buena alternativa frente a las bases de datos relacionales además de simplificar el proceso. 
+  \item Es importante que el interfaz de un sistema que se expone frente a los usuarios finales, en este caso, el editor de código en linea, ''GitEDU'', dispone de un fuerte combinación de tecnologías para obtener una interfaz llamativa y funcional en base a jQuery, AJAX, Bootstrap, XTerm.js y Ace Code Editor.
+  \item Django/Python orientado a objetos permite desarollar con mayor rapidez, mayor enfoques a DRY y la extensibilidad del codigo a futuro. 
   \item La combinacion de Python 3 con librerias selecionadas para realizar los respectivos backends, es decir Django, PyModm, Bcrypt, PyJWT, Requests y ipython forman una combinación potente para el desarollo rápido de servicios de producción siempre y cuando se maneje de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
-  \item Muchos usuarios solo se fijan en que tan llamativo es un interfaz de usuario y no en la funcionalidad que esta por detras. Por lo tanto es importante encontrar las herramientas adecuadas para que el editor de código en la plataforma sea tanto llamativa como funcional, porque la primera impresión es lo que más cuenta.
 \end{itemize}
 
 
@@ -47,8 +51,8 @@ En base a lo que se ha aprendido en el camino de este trabajo de titulación, se
 \begin{itemize}
   \item Cuando se desarrolla sistemas con un enfoque educativo, se recomienda reutilizar una implementacion de LTI para evitar problemas de integración con el software nuevo que se desarrolla.
   \item En el curso de realizacion de interfaces web, se recomiendo reutilizar el trabajo de terceros siempre y cuando hay la posibilidad, con el fin de poder dar mayor enfoque a la funcionalidad del backend.
-  \item Para trabajar con cualquier base de datos, sea relacional o no relacional, lo más recomendable es trabajar con un ORM que permite abstraer la base de datos y facilitar el desarrollo y persistencia de datos en la misma.
-  \item Siempre se recomienda utilizar nuevas tecnologias, los cuales pueden ser utiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones de los cuales no se los ha podido considerar antes.
+  \item Para trabajar con cualquier base de datos, sea relacional o no relacional, lo más recomendable es trabajar con un ORM que permite abstraer la base de datos y facilitar el desarrollo y persistencia de datos en la misma. PyMODM es un ORM potente para combinar el poder de Python con MongoDB y un API bastante similar al ORM de Django.
+  \item Siempre se recomienda utilizar nuevas tecnologias como Kubernetes, los cuales pueden ser utiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones de los cuales no se los ha podido considerar antes.
   \item Donde hay posibilidad, se recomienda no trabajar con GitLab, a menos de que dispone de los recursos necesarios para ello y tambien que requiere las características avanzadas del mismo. En entornos donde sea posible, lo más recomendable es trabajar con Git sobre SSH, que además de ser más seguro, tiene mayor soporte por parte de Git y mayor inteligencia para la sincronización cuando se trabaja con este protocolo que puede dar como resultado mayor eficiencia en uso de red.
 \end{itemize}
 

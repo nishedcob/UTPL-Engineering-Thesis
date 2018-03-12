@@ -23,11 +23,12 @@ Hoy en día se encuentra una necesidad creciente para programadores, informátic
  
 Actualmente, en el mercado existen varios sistemas que permiten escribir, ejecutar y probar código en línea. Uno de estos es Repl.it que puede integrase con sistemas que disponen del protocolo de integración entre sistemas de aprendizaje LTI \index{LTI} \citep{Repl.it-Home} y puede calificar el código de estudiantes en base a pruebas unitarias pero el mismo tiene un alto coste que no se escala bien y no está orientando tanto al aprendizaje o colaboración si no a evaluación \citep{Lopez-Jorge}. Por otro lado, Io.livecode.ch es un sistema libre que utiliza contenedores de Docker para permitir la ejecución de código en línea, pero el problema de este sistema es que solo está orientado a enseñanza de programación mas no a realizar pruebas en línea y además no implementa nada de seguridad para proteger el servidor contra usuarios maliciosos \citep{io.livecode.ch}. Cloud9 IDE es otra herramienta popular para programar en línea, éste integra máquinas virtuales de Ubuntu con el mismo para permitir hacer pruebas en tiempo real \citep{Cloud9-Home}, pero el mismo tampoco es factible por su falta de interoperabilidad con LTI \index{LTI} y falta de enfoque ni en enseñanza ni en evaluación y calificación. 
 
-
+% TODO: -con fines comerciales-
 Como cualquier otro tipo de institución con fines comerciales, las universidades e instituciones educativas siempre deben estar buscando la manera en que pueden mantener su competitividad para dar la mejor educación posible y al menor costo. La tecnología de hoy en día ha alcanzado una madurez en donde puede apoyar en temas de automatizar algunos procesos dentro de la enseñanza, evaluación y calificación de estudiantes y de la misma forma liberar el tiempo de professores para que estos puedan ayudar a aquellos estudiantes que realmente necesitan un poco más de apoyo.
  
 Frente a este problema, se propone un sistema para editar código en línea que a su vez integra LMS \index{LMS} externos (para autenticación y notas), un servidor de control de versiones externo (para la persistencia de código), y un servicio web de ejecución de código en línea de una forma segura, eficaz y eficiente (para dar un ambiente de ejecución y pruebas tanto para los usuarios del sistema como para calificar de forma automática). A continuación se presenta la problemática para definir el contexto del tema frente al cual se espera resolver dentro de este trabajo de titulación. 
 
+% TODO: "Computación-,- Electrónica, e Informática -especialmente los que estudian a distancia-. pg. 2
 \section{Problemática}
 Dentro de la universidad, existe la necesidad de contar con una mejor forma de enseñar y evaluar conocimientos de programación en los estudiantes de las titulaciones de Sistemas Informáticos y Computación y Electrónica, especialmente quienes estudian a distancia. Para solucionar este problema, existen sistemas alternativos que se analizan en el capítulo 2, pero estos resultan demasiado costosos para su implementación completa con los recursos actualmente disponibles.
  
@@ -35,7 +36,8 @@ Se considera que cualquier sistema implementado como solución debe ser capaz de
 
 \section{Metodología}
 La fase de investigación consiste en realizar una breve recopilación de lo que hay dentro del entorno de despliegue para realizar un estudio del mismo. Además se realiza un estudio de aquellas tecnologías que se utiliza dentro de la solución planteada. Para la investigación de todos los puntos anteriores, se basa en fuentes confiables como: fuentes académicos o comerciales con un fin de explicar alguna tecnología para vender la misma.
- 
+
+% TODO: ERS -> Especificación de Requeriemientos de Software pg. 2
 Después de la fase de investigación, donde se formula buenas bases y entendimiento del contexto del ambiente en el que se encuentra el presente trabajo, se empieza una fase de análisis el cual se basa en un documento de visión que desglosa las necesidades existentes para el sistema, seguidamente un ERS o especificación de requerimientos demuestra de forma más exacta las capacidades que debe tener el sistema.
  
 Una vez que se tiene entendidas las capacidades que debe tener el sistema, se procede a una fase de diseño donde se realiza diagramas para definir la arquitectura, despliegue e interacción que el sistema tendrá con los usuarios.
@@ -53,6 +55,7 @@ El objetivo principal es mejorar la enseñanza y evaluación de estudiantes de p
 %a calificar código que escriben sus estudiantes en base a pruebas unitarias
 e integrar funcionalidades de sistemas LMS \index{LMS} institucionales adicionalmente de servidores de control de versiones institucionales. Para alcanzar este fin, también se plantea cumplir con algunos objetivos específicos en vía al principal. \index{Editar Código|textit}
 
+% TODO: explicaciones de cada objetivo especifico debe ir antes o despues del listado de los mismos, no alli integrado pg. 3
 \begin{itemize}
 	\item Facilitar la autenticación de los estudiantes para que puedan entrar directamente desde sistemas LMS \index{LMS} institucionales a través del protocolo LTI\index{LTI}. Esto es necesario con la finalidad de que los estudiantes puedan tener una transición suave entre sistemas y no tener mayor interrupción en su aprendizaje. \index{Autenticación LTI}
 	\item \index{Ejecutar Código|(} Proveer la capacidad de poder ejecutar código en línea. Con esta funcionalidad, el sistema se acerca más a un entorno completo de desarrollo donde estudiantes requieren un mínimo de programas instalados en sus equipos personales. \index{Ejecutar Código|)}
@@ -63,6 +66,7 @@ e integrar funcionalidades de sistemas LMS \index{LMS} institucionales adicional
 
 \section{Resultados Esperados}
 En el presente trabajo de titulación pretende obtener los siguientes resultados:
+% TODO: eliminar todos los resultados esperados? pg. 3
 \begin{description}
 	\item[Sistema Prototipo para Editar Código en Línea] que permita a los estudiantes y sus docentes tener una herramienta para mejorar el proceso de enseñanza, aprendizaje y evaluación de la programación. \index{Editar Código}  
  \item[Sistema Prototipo para Ejecutar Código en Línea que se integró con lo anterior] y facilita las pruebas que requieren los estudiantes o profesores con respeto a algún código al cual tengan acceso. \index{Ejecutar Código}
@@ -73,6 +77,7 @@ En el presente trabajo de titulación pretende obtener los siguientes resultados
 \end{description}
 
 \section{Organización del Documento}
+% TODO: - se organiza el documento y- pg. 4
 Dentro del capítulo uno, se introduce el tema y problemática, se organiza el documento y se plantea la metodología y objetivos que guían el proyecto desde su inicio hasta su fin.
  
 En el capítulo dos, se ve el estado del arte que contenga un análisis de trabajos relacionados y sistemas similares a la que se plantea desarrollar. También dentro del capítulo dos se encuentra un subsistema del estado del arte en la forma de marco teórico, el cual desglosa la situación actual y permite ver la teoría de las tecnologías de apoyo para el sistema final.

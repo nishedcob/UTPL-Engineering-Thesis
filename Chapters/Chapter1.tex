@@ -23,12 +23,12 @@ Hoy en día se encuentra una necesidad creciente para programadores, informátic
  
 Actualmente, en el mercado existen varios sistemas que permiten escribir, ejecutar y probar código en línea. Uno de estos es Repl.it que puede integrase con sistemas que disponen del protocolo de integración entre sistemas de aprendizaje LTI \index{LTI} \citep{Repl.it-Home} y puede calificar el código de estudiantes en base a pruebas unitarias pero el mismo tiene un alto coste que no se escala bien y no está orientando tanto al aprendizaje o colaboración si no a evaluación \citep{Lopez-Jorge}. Por otro lado, Io.livecode.ch es un sistema libre que utiliza contenedores de Docker para permitir la ejecución de código en línea, pero el problema de este sistema es que solo está orientado a enseñanza de programación mas no a realizar pruebas en línea y además no implementa nada de seguridad para proteger el servidor contra usuarios maliciosos \citep{io.livecode.ch}. Cloud9 IDE es otra herramienta popular para programar en línea, éste integra máquinas virtuales de Ubuntu con el mismo para permitir hacer pruebas en tiempo real \citep{Cloud9-Home}, pero el mismo tampoco es factible por su falta de interoperabilidad con LTI \index{LTI} y falta de enfoque ni en enseñanza ni en evaluación y calificación. 
 
-% TODO: -con fines comerciales-
+% TODO: --con fines comerciales--
 Como cualquier otro tipo de institución con fines comerciales, las universidades e instituciones educativas siempre deben estar buscando la manera en que pueden mantener su competitividad para dar la mejor educación posible y al menor costo. La tecnología de hoy en día ha alcanzado una madurez en donde puede apoyar en temas de automatizar algunos procesos dentro de la enseñanza, evaluación y calificación de estudiantes y de la misma forma liberar el tiempo de professores para que estos puedan ayudar a aquellos estudiantes que realmente necesitan un poco más de apoyo.
  
 Frente a este problema, se propone un sistema para editar código en línea que a su vez integra LMS \index{LMS} externos (para autenticación y notas), un servidor de control de versiones externo (para la persistencia de código), y un servicio web de ejecución de código en línea de una forma segura, eficaz y eficiente (para dar un ambiente de ejecución y pruebas tanto para los usuarios del sistema como para calificar de forma automática). A continuación se presenta la problemática para definir el contexto del tema frente al cual se espera resolver dentro de este trabajo de titulación. 
 
-% TODO: "Computación-,- Electrónica, e Informática -especialmente los que estudian a distancia-. pg. 2
+% TODO: "Computación--,-- Electrónica, e Informática --especialmente los que estudian a distancia--." pg. 2
 \section{Problemática}
 Dentro de la universidad, existe la necesidad de contar con una mejor forma de enseñar y evaluar conocimientos de programación en los estudiantes de las titulaciones de Sistemas Informáticos y Computación y Electrónica, especialmente quienes estudian a distancia. Para solucionar este problema, existen sistemas alternativos que se analizan en el capítulo 2, pero estos resultan demasiado costosos para su implementación completa con los recursos actualmente disponibles.
  
@@ -77,13 +77,22 @@ En el presente trabajo de titulación pretende obtener los siguientes resultados
 \end{description}
 
 \section{Organización del Documento}
-% TODO: - se organiza el documento y- pg. 4
+% TODO: --se organiza el documento y-- pg. 4
 Dentro del capítulo uno, se introduce el tema y problemática, se organiza el documento y se plantea la metodología y objetivos que guían el proyecto desde su inicio hasta su fin.
- 
+
+% TODO: --ve el estado del arte que contenga-- *realiza* pg. 4
+% --dentro del capítulo dos se--
+% --un subsistema del estado del arte en la forma de--
 En el capítulo dos, se ve el estado del arte que contenga un análisis de trabajos relacionados y sistemas similares a la que se plantea desarrollar. También dentro del capítulo dos se encuentra un subsistema del estado del arte en la forma de marco teórico, el cual desglosa la situación actual y permite ver la teoría de las tecnologías de apoyo para el sistema final.
- 
+
 En el capítulo tres, se da un análisis profundo del problema para entenderlo de forma completa previa a las fases siguientes. Dentro del mismo capítulo, en base al análisis, se plantea un diseño para el producto final, el cual se refleja más adelante en el desarrollo durante el curso del capítulo cuatro.
- 
+
+% TODO: --LTI que permite a los estudiantes autenticarse contra sistemas LMS ya existentes, un módulo de -- pg. 4
+% --un módulo de --
+% --institucionales--
+% --un subsistema de--
+% --un módulo de--
+% --para calificaciones automáticas--
 A lo largo del capítulo cuatro, se lleva al lector por el proceso de desarrollo. Por lo tanto el mismo se divide en los varios módulos que se necesitan desarrollar para el proyecto; un módulo de autenticación LTI \index{LTI} que permite a los estudiantes autenticarse contra sistemas LMS \index{LMS} ya existentes, un módulo de editar código en línea, un módulo de persistencia de código en servidores de control de versiones institucionales, un subsistema de ejecución de código en línea, un módulo de pruebas unitarias para calificaciones automáticas y un módulo para sincronizar calificaciones con sistemas LMS \index{LMS} institucionales.
  
 El quinto capítulo se basa en la fase anterior de desarrollo para planificar y realizar pruebas de funcionamiento e integración. De esta manera se encuentran las fallas existentes para resolver los mismos antes de seguir con el despliegue en el sexto capítulo.

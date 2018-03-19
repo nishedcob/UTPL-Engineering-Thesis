@@ -1,6 +1,4 @@
 
-
-
 % Chapter 2
 
 \chapter{Estado del Arte}
@@ -10,14 +8,8 @@ Sin la ciencia, no podría existir la ingeniería. Sin investigación y curiosid
 
 En la sección 2.1 de este capítulo, se presenta el marco teórico donde se realiza una investigación y estudio a las tecnologías y otros aspectos de entorno previo al planteamiento de una solución al problema introducido anteriormente. En la sección 2.2, se encuentra con un estudio de trabajos relacionados a los temas abarcados en este trabajo de titulación, mientras que en la sección 2.3 se realiza un estudio de sistemas similares en funcionalidad. Y finalmente se cierra el capítulo con la sección 2.4 donde se de una discusión y conclusión a todo lo analizado y presentado del capítulo con comparaciones de los mismos. 
 
-% TODO: enumerar las secciones dentro mismo parafo 
-
 \section{Marco Teorico}
-Para llevar a cabo de forma exitosa el trabajo de titulación y entender el contexto del ambiente en que sea implementado es importante establecer una línea base de conocimiento que se ve a continuación y dividido de la siguiente forma:
-\begin{description}
-	\item[Aspectos de Propiedad Intelectual] que se topa con las licencias y culturas de código abierto y libre que se encuentra actualmente en el entorno.
-    \item[Aspectos Ambientales del Entorno de Desarrollo] se trata de dar mejor contexto al entorno en el cual se encuentra la aplicación planteada. Esto incluye pero no está limitado a conceptos teóricos, aplicaciones y protocolos.
-\end{description}
+Para llevar a cabo de forma exitosa el trabajo de titulación y entender el contexto del ambiente en que sea implementado es importante establecer una línea base de conocimiento que se ve a continuación y dividido de la siguiente forma, primero, Aspectos de Propiedad Intelectual que se topa con las licencias y culturas de código abierto y libre que se encuentra actualmente en el entorno, y segundo Aspectos Ambientales del Entorno de Desarrollo se trata de dar mejor contexto al entorno en el cual se encuentra la aplicación planteada. Esto incluye pero no está limitado a conceptos teóricos, aplicaciones y protocolos.
 
 \subsection{Aspectos de Propiedad Intelectual}
 Hoy en día, en un mundo cada vez más conectado y con cada vez más informacion compartida entre personas distintas, es importante conocer bien temas de derechos de autor y propiedad intelectual, no sólo para desarrollar y despues dar licencia a un trabajo de titulación, si no también para entender lo que se puede y no se puede hacer dentro de un entorno de desarrollo que cada vez involucra más algún codigo o trabajo que fue desarrollado alguna licencia abierta o libre.
@@ -33,10 +25,7 @@ Software Libre es un movimiento sociopolítico que busca liberar códigos fuente
   \item La libertad de distribuir copias de sus versiones modificadas a terceros. Un requisito para esta libertad es que el usuario tenga acceso al código fuente original.
 \end{enumerate}
 
-%\citep{GNU-Freedom} \citep{GNU-Free-Software}
-
 Donde el software no cumpla con uno de los anteriores, ya deja de ser considerado libre. Sólo por ser software libre no significa que no puede ser comercializado, únicamente se requiere nuevos modelos de negocio los cuales si se los puede encontrar en uso diario \citep{GNU-Free-Software}. Como sociedad, Stallman argumenta que es importante proteger estas libertades porque con ellas avanza la humanidad, como la libertad de expresión, ya que las libertades que se proponen proteger, buscan sostener una sociedad que trabaja por el bien de todos y no  solo de unos pocos que saben más de la funcionalidad de ciertos aspectos tecnológicos \citep{GNU-Open-vs-Free}. En la época actual de gobiernos y empresas que espían sin vergüenza, se ha revivido el movimiento político y se ha convertido en algo más necesario debido a que todos tenemos y  queremos nuestro derecho a la privacidad \citep{GNU-Freedom}.
-
 
 \paragraph{OAS}
 OAS o Adopción de Software Libre es la tendencia que hay en el mundo empresarial de adoptar soluciones de tecnologías abiertas como los que ofrecen el mundo de software libre ya que las mismas pueden llegar a ser superiores en cuanto su eficacia y costo, que lo que ofrece su competencia comercial. Se estima que más del 78\% de instituciones usan software  de Fuentes Abiertas y menos del 3\% indican que no utilizan nada de software de fuentes abiertas. Eso demuestra un enorme mercado creciente y emergente a nivel mundial \citep{ACCEL-OAS}.
@@ -86,7 +75,6 @@ Según Mindflash, un vendedor de sistemas educativos \citep{MINDFLASH-ABOUT}, lo
     \item Comprobación de conocimiento a alumnos con pruebas y exámenes.
     \item Sistemas de calificación que pueden ser automatizados (en casos objetivos), manuales por parte del docente (para casos más subjetivos) e híbridos cuando un profesor ofrece ambos casos en un curso.
 \end{itemize}\index{LMS}
-%\citep{MINDFLASH-LMS}
 
 \paragraph{Moodle}
 Moodle es un LMS \index{LMS} de software libre, licenciado bajo el GPLv3 \citep{MOODLE-GIT-License},  que ofrece las características típicas de un LMS \index{LMS} como herramientas de colaboración (wikis, foros, glosarios, etc), gestión e interacción con estudiantes (notificaciones, gestión de progreso, notas, etc), en adición a la gestión de usuarios y matrículas \citep{MOODLE-DOCS-Features}. Actualmente es lo que usa la Universidad Técnica Particular de Loja (UTPL) con sus docentes y alumnos a través del Entorno Virtual de Aprendizaje \citep{Lopez-Jorge}.
@@ -187,9 +175,7 @@ GitLab es un servidor de Git ofrecido por GitLab Inc. Se ofrece en dos versiones
 
 \subsubsection{Virtualización\index{Virtualización}}
 \index{Virtualización|(}
-% TODO: "*La* *v*--V--irtualización --permite resolver-- *resuelve* estas deficiencias *al* --en--" pg. 14
-% gestiona *la* virtualización
-Virtualización es la creación de recursos virtuales en software para usar los mismos en lugar de un recurso físico. Este puede ser usado en áreas diversas como aplicaciones, servidores, almacenamiento y redes. Según la empresa VMware, que se dedica a vender productos de virtualización, la misma es la estrategia más efectiva para reducir costos de TI mientras que aumenta la eficiencia y agilidad de un negocio de cualquier tamaño. Llegan a esta conclusión porque es tan común que se ha convertido en estándar industrial que solo se ocupa en entre 5\% y 15\% de la capacidad de los servidores debido a que se les pone solo un sistema operativo y aplicación a la vez. Virtualización permite resolver estas deficiencias en permitir la división lógica de equipos y distribuir estas partes donde más se los necesitan para aumentar la tasa de eficiencia y reducir la cantidad de recursos físicos necesarios. Con esta clase de tecnología, se puede reducir y en algunos casos eliminar tiempo fuera de servicio. Las facilidades de portabilidad y agilidad de ajustar recursos hace que se puede reducir los tiempos y costos de administración. Se domina hipervisor un software que gestiona virtualización \citep{VMWare-Virtualization}. Tholeti y IBM tienen un concepto similar de reducción de recursos físicos y gastos de operación, como se indica en la figura \ref{IBM-Virtualization}, la optimización de recursos físicos después de la virtualización.
+Virtualización es la creación de recursos virtuales en software para usar los mismos en lugar de un recurso físico. Este puede ser usado en áreas diversas como aplicaciones, servidores, almacenamiento y redes. Según la empresa VMware, que se dedica a vender productos de virtualización, la misma es la estrategia más efectiva para reducir costos de TI mientras que aumenta la eficiencia y agilidad de un negocio de cualquier tamaño. Llegan a esta conclusión porque es tan común que se ha convertido en estándar industrial que solo se ocupa en entre 5\% y 15\% de la capacidad de los servidores debido a que se les pone solo un sistema operativo y aplicación a la vez. La virtualización resuelve estas deficiencias al permitir la división lógica de equipos y distribuir estas partes donde más se los necesitan para aumentar la tasa de eficiencia y reducir la cantidad de recursos físicos necesarios. Con esta clase de tecnología, se puede reducir y en algunos casos eliminar tiempo fuera de servicio. Las facilidades de portabilidad y agilidad de ajustar recursos hace que se puede reducir los tiempos y costos de administración. Se domina hipervisor un software que gestiona la virtualización \citep{VMWare-Virtualization}. Tholeti y IBM tienen un concepto similar de reducción de recursos físicos y gastos de operación, como se indica en la figura \ref{IBM-Virtualization}, la optimización de recursos físicos después de la virtualización.
 \index{Virtualización|)}
 
 \begin{figure}
@@ -202,8 +188,7 @@ Virtualización es la creación de recursos virtuales en software para usar los 
 
 \index{Virtualización|(}
 \paragraph{Las Máquinas Virtuales}
-% TODO: aplicaci--ón--*ones* pg. 14
-Una Máquina Virtual es una sistema computacional entero, con sistema operativo y aplicación corriendo sobre recursos virtuales. Por lo tanto cada máquina virtual es completamente aislada e independiente de los demás de tal forma que se puede tener varios sistemas operativos y aplicaciones corriendo sobre un solo servidor físico. Eso permite tener varias características importantes:
+Una Máquina Virtual es una sistema computacional entero, con sistema operativo y aplicaciones corriendo sobre recursos virtuales. Por lo tanto cada máquina virtual es completamente aislada e independiente de los demás de tal forma que se puede tener varios sistemas operativos y aplicaciones corriendo sobre un solo servidor físico. Eso permite tener varias características importantes:
 \begin{description}
 	\item[División de Recursos] Se puede dividir recursos físicos entre varios sistemas operativos corriendo sobre la misma máquina.
     \item[Aislamiento] Proveer mayor seguridad en prevenir o restringir acceso entre las varias máquinas virtuales.
@@ -595,8 +580,7 @@ En el cuadro \ref{comparacion-sistemas-similares-1} se ve las características b
 \end{table}
 
 \index{Editar código}
-% TODO: entre ellos--Ñ-- pg. 31
-En el cuadro \ref{comparacion-sistemas-similares-2} se observa aspectos sociales de cada sistema, entre ellosÑ cómo funcionan las dinámicas de compartir código e interacción entre usuarios. Aqui Repl.it sale perdiendo por el pobre soporte para compartir entre varios usuarios. Los sistemas que son mejores en estos aspectos es por ejemplo GitLab, Overleaf y Google Drive sin embargo no son tan optimizados para escribir código en línea o a ejecutar el mismo.
+En el cuadro \ref{comparacion-sistemas-similares-2} se observa aspectos sociales de cada sistema, entre ellos cómo funcionan las dinámicas de compartir código e interacción entre usuarios. Aqui Repl.it sale perdiendo por el pobre soporte para compartir entre varios usuarios. Los sistemas que son mejores en estos aspectos es por ejemplo GitLab, Overleaf y Google Drive sin embargo no son tan optimizados para escribir código en línea o a ejecutar el mismo.
 
 \begin{table}[h!]
 	\small
@@ -626,6 +610,8 @@ En el cuadro \ref{comparacion-sistemas-similares-3}, se compara las diferencias 
 
 \index{Editar código}
 Adicionalmente, Cloud9 tiene los mismos problemas de falta de usabilidad sin conexión y de no disponer de una solución robusta de documentación. GitLab y Overleaf ofrecen acceso a través de Git de sus contenidos, teniendo la posibilidad de trabajar sin conexión, pero Overleaf no es para código exactamente. GitLab ofrece el mejor solución de documentación a través de sus Wikis, pero estos no se visualizan al mismo tiempo que el código. Y Google Drive ofrece la mejor solución para trabajar sin conexion, pero la plataforma es para documentos, no para código. \index{Editar Código}
+
+
 
 % TODO: agregar critico adicicional; Quien maneja los datos? Los "datos son el oro/petroleo" (y la informacion/conocimiento que se genera con los mismos es lo mas valisioso) de la epoca de la informacion. -- Ing. Piedra, Business Linked Data 2016-2017; Dr. López, Conversaciones de la Tesis y Arquitectura de Aplicaciones (2017-2018, 2016-2017); Ing. Chicaiza y Ing. Piedra, Sistemas Basados en el Conocimiento (2017)
 

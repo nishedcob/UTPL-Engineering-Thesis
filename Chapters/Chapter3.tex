@@ -297,17 +297,6 @@ El módulo de análisis de datos proporciona las herramientas necesarias para qu
 \subsubsection{Ventajas del Diseño de Sistemas, Subsistemas y Módulos}
 La ventaja de un diseño orientado a módulos como se lo presenta aquí es la división de la funcionalidad para ayudar en la extensibilidad y mantenibilidad de los sistemas al largo plazo. Por ejemplo este diseño permite agregar funcionalidad adicional a futuro como autenticación por otros medios (por ejemplo LDAP) o la integración de mecanismos anti-plagio. Esta propiedad puede dar una vida útil mayor a los sistemas desarrollados porque muchas veces no se conoce todo lo que puede requerir un software a futuro para el diseño e implementación inicial. A continuación se presenta la arquitectura de estos dos sistemas, tanto GitEdu como su ambiente de ejecución de código virtualizado, EduNube.
 
-%\begin{itemize}
-%	\item \textbf{Seguridad}, auténtica usuarios y controla el acceso que tiene cada uno de ellos. Esto se realiza con los siguientes componentes:
-%    \begin{itemize}
-%    	\item \textbf{Autenticación por LTI} usa interfaces LTI \index{LTI} de aplicaciones externas como LMS \index{LMS} institucionales para autenticar usuarios.
-%		\item \textbf{Autenticación Clásica}, permite el login (autenticación) de usuarios mediante la forma clásica de un usuario y contraseña.
-%		\item \textbf{Permisos}, permite otorgar o revocar partes específicas del sistema a usuarios específicos. Ejemplos de permisos podrían ser acceso a la administración de una materia, por ejemplo el control que se da a un docente o grupo de docentes sobre una materia.
-%		\item \textbf{Grupos}, permite aplicar el sistema de permisos a grupos de usuarios creados bajo la discreción de usuarios suficientemente privilegiados dentro del sistema. Ejemplos de grupos podrían ser miembros de una cierta materia o tipo de materia, por ejemplo ''Base de Datos''.
-%		\item \textbf{Roles}, permite definir usuarios por su propósito del sistema con el fin de aplicarles un conjunto global de permisos asociados por el tipo de usuario que es. Ejemplos de roles podrían ser Estudiante, Docente y Administrador.
-%    \end{itemize}
-%\end{itemize}
-
 \pagebreak
 
 \begin{landscape}

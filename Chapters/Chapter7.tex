@@ -4,7 +4,6 @@
 \label{capitulo7}
 
 \section{Resultados}
-% TODO: Resultados %% REVIEW
 El principal resultado obtenido es el realizar un prototipo de la plataforma propuesta donde se integra tres servicios cuyas funcionalidades esenciales son:
 \begin{description}
 	\item[GitEDU,] ofrece una autenticación clásica y autenticación de LTI, manejo de namespace y repositorios. Adicionalmente cuenta con un editor de código en línea para gestionar archivos dentro de un repositorio, esto, llevado bajo un sistema de control de versiones interno.
@@ -12,24 +11,12 @@ El principal resultado obtenido es el realizar un prototipo de la plataforma pro
     \item[GitServerHTTPEndpoint,] mediante su API, permite que los cambios realizados en el editor de GitEDU sean persistentes en repositorios de Git externos para su consumo por parte de aplicaciones y usuarios externos.
 \end{description}
 
-% TODO: get input on conclusions (are they okay for the thesis) %% REVIEW
-% Minimo 1 Conclusion frente cada Objetivo Especifico
-% Minimo 1 Conclusion frente cada Linea Problematica
-% Lo que no va en resultados, puede ir a conclusiones
-% Conclusiones tienen que ser declaraciones positivas o negativas, no van preguntas
-% Cuantas Conclusiones poner? 3-5 es acceptable -> 7 conclusiones suele ser demaciado
-% Tipicamente un recomendacion por cada cada conclusion
-
 \section{Conclusiones}
 A lo largo del desarrollo de este trabajo de titulación, se ha llegado a las siguientes conclusiones:
 
 \begin{itemize}
   \item En base a la investigación de trabajos relacionados se puede proyectar que el sistema prototipo desarollado podría convertirse en una herramienta valiosa para la docencia de la Universidad Técnica Particular de Loja, con la finalidad de enseñar y evaluar a los estudiantes de programación. Y por lo tanto el prototipo realizado es el primer paso para cumplir con esta finalidad, pero para ello se requiere de un mayor trabajo a futuro.
   \item Para el desarrollo de sistemas educativos, LTI puede ser una buena solución a tomar en cuenta, para facilitar el flujo de autenticación entre diferentes sistemas de aprendizaje y enseñanza.
-  %\item El servicio del editor de codigo en linea, ''GitEDU'', dispone de una interfaz web llamativa y funcional gracias a una potente combinacion de jQuery, AJAX, plantillas predefinidas de Bootstrap, XTerm.js y Ace Code Editor. % y la implementacion del mismo
-  %forman una combinación potente para definir,
-  %sin mayor esfuerzo, la interfaz adecuada para programar y ejecutar código en linea, y que el mismo tenga un alto nivel de funcionalidad.
-  %\item Un sistema que viene a ser frontend para usuarios finales, como un editor de codigo debe poner bastante desempeño en tratar de ser llamativo y funcional ya que muchos usuarios solo se fijan en la aparencia y no en la funcionalidad que esta por detras, aunque si se dan cuenta eventualmente si falta funcionalidad. Por lo tanto es importante encontrar las herramientas adecuadas para que el editor de código en la plataforma sea tanto llamativa como funcional, porque la primera impresión es lo que más cuenta.
   \item Kubernetes y Docker son herramientas muy potentes y fáciles de implementar en soluciones de mayor complejidad para generar entornos confiables, construir sistemas de producción escalables y portables, así como para ejecutar trabajos por lotes con mayor grado de seguridad y con un alto rendimiento. Estas tecnologías permitieron cumplir con los requerimientos del servicio de EduNube que se encarga de ejecutar el código de usuarios finales.
   \item Para la implementación de control de versiones externo en el presente proyecto se ha concluido que cualquier servidor de Git es altamente pesado, especialmente GitLab que en su estado pasivo consume muchos recursos, y también GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
   \item Para los datos que no bien estructurados o con campos de longitud altamente variable, como en el caso del código escrito por los estudiantes, las bases de datos no-relacionales como MongoDB, son una buena alternativa frente a las bases de datos relacionales además de simplificar el proceso. 
@@ -38,13 +25,7 @@ A lo largo del desarrollo de este trabajo de titulación, se ha llegado a las si
   \item La combinacion de Python 3 con las librerías selecionadas para realizar los respectivos backends, como: Django, PyModm, Bcrypt, PyJWT, Requests y ipython, forman una combinación potente para el desarollo rápido de servicios de producción, siempre y cuando se maneje de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
 \end{itemize}
 
-
-% Previously Chapter 8: Recomendaciones, united with Chapter 7: Conclusiones by recomendation of Ing. Maria del Carmen
-%\chapter{Recommendaciones}
 \section{Recomendaciones}
-%\label{capitulo8}
-% TODO: revisar si recomendations son adecuadas %% REVIEW
-%Tipicamente un recomendacion por cada cada conclusion
 
 En base a lo que se ha aprendido en el camino de este trabajo de titulación, se puede realizar las siguientes recomendaciones:
 
@@ -55,8 +36,6 @@ En base a lo que se ha aprendido en el camino de este trabajo de titulación, se
   \item Siempre se recomienda utilizar nuevas tecnologías como Kubernetes, los cuales pueden ser útiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones que antes no han sido consideradas.
   \item Siempre que se pueda, se recomienda no trabajar con GitLab, a menos que se disponga de los recursos necesarios para ello y tambien de las características avanzadas del mismo. En entornos donde sea posible, lo más recomendable es trabajar con Git sobre SSH, que además de ser más seguro, tiene mayor soporte por parte de Git y mayor inteligencia para la sincronización cuando se trabaja con este protocolo, que puede dar como resultado mayor eficiencia en uso de red.
 \end{itemize}
-
-% TODO: escribir recomendacion general?
 
 \section{Trabajos Futuros}
 Se considera los siguientes aspectos que se podrian y/o se deberian trabajar a futuro, los cuales no esta en ningun orden especifico:

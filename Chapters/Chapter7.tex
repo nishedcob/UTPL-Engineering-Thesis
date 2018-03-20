@@ -7,7 +7,7 @@
 El principal resultado obtenido es el realizar un prototipo de la plataforma propuesta donde se integra tres servicios cuyas funcionalidades esenciales son:
 \begin{description}
 	\item[GitEDU,] ofrece una autenticación clásica y autenticación de LTI, manejo de namespace y repositorios. Adicionalmente cuenta con un editor de código en línea para gestionar archivos dentro de un repositorio, esto, llevado bajo un sistema de control de versiones interno.
-    \item[EduNube,] mediante su API, ofrece toda la funcionalidad necesaria para que cada uno de los usuarios de GitEDU pueda ejecutar el código que desarrolló dentro de la plataforma. El servicio está planteado para extenderse con nuevas funcionalidades a futuro, por ejemplo el dar soporte a la ejecución de más lenguajes de programación (mediante contenedores de Docker), y la calificacion del código escrito por los usuarios.
+    \item[EduNube,] mediante su API, ofrece toda la funcionalidad necesaria para que cada uno de los usuarios de GitEDU pueda ejecutar el código que desarrolló dentro de la plataforma. El servicio está planteado para extenderse con nuevas funcionalidades a futuro, por ejemplo el dar soporte a la ejecución de más lenguajes de programación (mediante contenedores de Docker), y la calificación del código escrito por los usuarios.
     \item[GitServerHTTPEndpoint,] mediante su API, permite que los cambios realizados en el editor de GitEDU sean persistentes en repositorios de Git externos para su consumo por parte de aplicaciones y usuarios externos.
 \end{description}
 
@@ -15,14 +15,14 @@ El principal resultado obtenido es el realizar un prototipo de la plataforma pro
 A lo largo del desarrollo de este trabajo de titulación, se ha llegado a las siguientes conclusiones:
 
 \begin{itemize}
-  \item En base a la investigación de trabajos relacionados se puede proyectar que el sistema prototipo desarollado podría convertirse en una herramienta valiosa para la docencia de la Universidad Técnica Particular de Loja, con la finalidad de enseñar y evaluar a los estudiantes de programación. Y por lo tanto el prototipo realizado es el primer paso para cumplir con esta finalidad, pero para ello se requiere de un mayor trabajo a futuro.
+  \item En base a la investigación de trabajos relacionados se puede proyectar que el sistema prototipo desarrollado podría convertirse en una herramienta valiosa para la docencia de la Universidad Técnica Particular de Loja, con la finalidad de enseñar y evaluar a los estudiantes de programación. Y por lo tanto el prototipo realizado es el primer paso para cumplir con esta finalidad, pero para ello se requiere de un mayor trabajo a futuro.
   \item Para el desarrollo de sistemas educativos, LTI puede ser una buena solución a tomar en cuenta, para facilitar el flujo de autenticación entre diferentes sistemas de aprendizaje y enseñanza.
   \item Kubernetes y Docker son herramientas muy potentes y fáciles de implementar en soluciones de mayor complejidad para generar entornos confiables, construir sistemas de producción escalables y portables, así como para ejecutar trabajos por lotes con mayor grado de seguridad y con un alto rendimiento. Estas tecnologías permitieron cumplir con los requerimientos del servicio de EduNube que se encarga de ejecutar el código de usuarios finales.
   \item Para la implementación de control de versiones externo en el presente proyecto se ha concluido que cualquier servidor de Git es altamente pesado, especialmente GitLab que en su estado pasivo consume muchos recursos, y también GitWeb que tiene inconvenientes cada vez que recibe nuevos objetos de Git sobre HTTP.
   \item Para los datos que no bien estructurados o con campos de longitud altamente variable, como en el caso del código escrito por los estudiantes, las bases de datos no-relacionales como MongoDB, son una buena alternativa frente a las bases de datos relacionales además de simplificar el proceso. 
   \item Es importante que el interfaz de un sistema que se expone frente a los usuarios finales, en este caso, el editor de código en linea, ''GitEDU'', dispone de un fuerte combinación de tecnologías para obtener una interfaz llamativa y funcional en base a jQuery, AJAX, Bootstrap, XTerm.js y Ace Code Editor.
-  \item Django/Python orientado a objetos permite desarollar con mayor rapidez además de hacer referencia al principio DRY (No te repitas) y permite la extensibilidad del código a futuro. 
-  \item La combinacion de Python 3 con las librerías selecionadas para realizar los respectivos backends, como: Django, PyModm, Bcrypt, PyJWT, Requests y ipython, forman una combinación potente para el desarollo rápido de servicios de producción, siempre y cuando se maneje de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
+  \item Django/Python orientado a objetos permite desarrollar con mayor rapidez además de hacer referencia al principio DRY (No te repitas) y permite la extensibilidad del código a futuro. 
+  \item La combinación de Python 3 con las librerías seleccionadas para realizar los respectivos backends, como: Django, PyModm, Bcrypt, PyJWT, Requests y ipython, forman una combinación potente para el desarrollo rápido de servicios de producción, siempre y cuando se maneje de forma adecuada el diseño de los mismos y el manejo de distintos tipos de datos.
 \end{itemize}
 
 \section{Recomendaciones}
@@ -34,49 +34,49 @@ En base a lo que se ha aprendido en el camino de este trabajo de titulación, se
   \item Para las interfaces web, se recomienda reutilizar el trabajo de terceros (siempre y cuando se cuente con la licencia adecuada), con el fin de poder dar mayor enfoque a la funcionalidad del backend.
   \item Para trabajar con cualquier base de datos, sea relacional o no relacional, lo más recomendable es trabajar con un ORM que permita abstraer la base de datos y facilitar el desarrollo y persistencia de datos en la misma. PyMODM es un ORM potente para combinar el poder de Python con MongoDB y un API bastante similar al ORM de Django.
   \item Siempre se recomienda utilizar nuevas tecnologías como Kubernetes, los cuales pueden ser útiles para resolver problemas actuales ya que ofrecen nuevas perspectivas y soluciones que antes no han sido consideradas.
-  \item Siempre que se pueda, se recomienda no trabajar con GitLab, a menos que se disponga de los recursos necesarios para ello y tambien de las características avanzadas del mismo. En entornos donde sea posible, lo más recomendable es trabajar con Git sobre SSH, que además de ser más seguro, tiene mayor soporte por parte de Git y mayor inteligencia para la sincronización cuando se trabaja con este protocolo, que puede dar como resultado mayor eficiencia en uso de red.
+  \item Siempre que se pueda, se recomienda no trabajar con GitLab, a menos que se disponga de los recursos necesarios para ello y también de las características avanzadas del mismo. En entornos donde sea posible, lo más recomendable es trabajar con Git sobre SSH, que además de ser más seguro, tiene mayor soporte por parte de Git y mayor inteligencia para la sincronización cuando se trabaja con este protocolo, que puede dar como resultado mayor eficiencia en uso de red.
 \end{itemize}
 
 \section{Trabajos Futuros}
-Se considera los siguientes aspectos que se podrian y/o se deberian trabajar a futuro, los cuales no esta en ningun orden especifico:
+Se considera los siguientes aspectos que se podrían y/o se deberían trabajar a futuro, los cuales no esta en ningún orden especifico:
 \begin{itemize}
 	\item Arreglar Errores en la funcionalidad existente, por ejemplo:
     \begin{itemize}
-    	\item EduNube no actualiza de forma adecuada repositorios de ejecuccion, lo cual resulta muchas veces en la ejecuccion de una version antigua del mismo.
-        \item EduNube no genera IDs de ejecuccion de forma adecuada.
+    	\item EduNube no actualiza de forma adecuada repositorios de ejecución, lo cual resulta muchas veces en la ejecución de una versión antigua del mismo.
+        \item EduNube no genera IDs de ejecución de forma adecuada.
     \end{itemize}
-    \item Autenticacion en GitEDU y/o otros servicios mediante LDAP.
-    \item Sincronizacion en tiempo real de codigo editado en GitEDU y sus respectivo backends de codigo, posiblemente  mediante el uso de websockets.
-    \item Socializacion de vistas para editar codigo (GitEDU) con la finalidad de promover interaccion y collaboracion entre usuarios sobre los mismos.
-    \item Un sistema de permisos para el editor de codigo (GitEDU).
-    \item Distintas formas de calificacion, incluyendo:
+    \item Autenticación en GitEDU y/o otros servicios mediante LDAP.
+    \item Sincronización en tiempo real de código editado en GitEDU y sus respectivo backends de código, posiblemente  mediante el uso de websockets.
+    \item Socialización de vistas para editar código (GitEDU) con la finalidad de promover interacción y calabacino entre usuarios sobre los mismos.
+    \item Un sistema de permisos para el editor de código (GitEDU).
+    \item Distintas formas de calificación, incluyendo:
     \begin{itemize}
-    	\item Calificacion Manual por parte de professores.
-        \item Calificacion Automatizado por parte del sistema (posiblemente en forma de un servicio nuevo?) en base a pruebas unitarias definidas por profesores.
+    	\item Calificación Manual por parte de profesores.
+        \item Calificación Automatizado por parte del sistema (posiblemente en forma de un servicio nuevo?) en base a pruebas unitarias definidas por profesores.
         \begin{itemize}
         	\item En base a expresiones regulares aplicadas a la salida.
-            \item En base a análisis lexico/semantico de la salida.
+            \item En base a análisis léxico/semántico de la salida.
             \item En base a pruebas unitarias.
-            \item En base a una combinación de los anteriores (pesos respectivos de cada metodo/aspecto de calificación definidos por el profesor; como una rubica).
+            \item En base a una combinación de los anteriores (pesos respectivos de cada método/aspecto de calificación definidos por el profesor; como una rubrica).
         \end{itemize}
-        \item Calificacion Hibrida que combina los anteriores.
+        \item Calificación Híbrida que combina los anteriores.
     \end{itemize}
-    \item Sincronizacion de Notas (generados por la(s) modalidad(es) de calificación anteriores) por LTI con los sistemas adecuadas para el manejo de los mismos, por ejemplo los LMS.
+    \item Sincronización de Notas (generados por la(s) modalidad(es) de calificación anteriores) por LTI con los sistemas adecuadas para el manejo de los mismos, por ejemplo los LMS.
     \item Mas backends de Git para el servicio GitServerHTTPEndpoint, como por ejemplo GitLab o Djacket.
-    \item Mas backends de persistencia de codigo para el servicio GitEDU como Redis o GitLab.
-    \item Mas backends de virtualizacion para EduNube como OpenStack, Docker, etc.
-    \item Aumentar la seguridad de Kubernetes, tal vez con el uso de Namespace (clusters virtuales) dentro de la misma, quotas de recursos (para no dejar a ningun usuario ocupar todo el procesamiento), y limites de tiempo de ejecucción.
+    \item Mas backends de persistencia de código para el servicio GitEDU como Redis o GitLab.
+    \item Mas backends de virtualización para EduNube como OpenStack, Docker, etc.
+    \item Aumentar la seguridad de Kubernetes, tal vez con el uso de Namespace (clusters virtuales) dentro de la misma, cuotas de recursos (para no dejar a ningún usuario ocupar todo el procesamiento), y limites de tiempo de ejecución.
     \item Versionamiento de APIs en todos los servicios.
-    \item Auditoria de Seguridad del Sistema Desarrollado, especialmente en el caso de los APIs que no manejan estados y solo se protegen con API tokens JWT y a lo mucho TLS.
-    \item Mejor gestion de la configuracion, actualmente hay componentes de algunos servicios que dejen de funcionar o que funcionan de forma inadecuada cuando no disponen de sus servicios dependientes. Debe ser configurable cuales servicios existen o no, dinamico la manera en que se encuentran y cada servicio tolerante a fallos en los demas servicios.
-    \item Convertir los servicios en imagenes de Docker para montar los mismos en un cluster de Kubernetes y realizar un estudio de alta disponabilidad/escalabilidad.
+    \item Auditoría de Seguridad del Sistema Desarrollado, especialmente en el caso de los APIs que no manejan estados y solo se protegen con API tokens JWT y a lo mucho TLS.
+    \item Mejor gestión de la configuración, actualmente hay componentes de algunos servicios que dejen de funcionar o que funcionan de forma inadecuada cuando no disponen de sus servicios dependientes. Debe ser configurable cuales servicios existen o no, dinámico la manera en que se encuentran y cada servicio tolerante a fallos en los demás servicios.
+    \item Convertir los servicios en imágenes de Docker para montar los mismos en un cluster de Kubernetes y realizar un estudio de alta disponibilidad/escalabilidad.
     \item Implementar el sistema de plantillas de GitEDU.
-    \item Utilizar realmente el Navbar de GitEDU, que actualmente solo tiene ''Cerrar session'' de forma estatica.
-    \item Migrar servicios a Django 2.x (la proxima version de soporte a largo plazo de Django esta planificado como el 2.3) ya que en realizar esta migracion de version, actualmente se rompe la forma en que se llevan los URIs con un namespace para cada app.
-    \item Automatizar y aumentar las pruebas unitarias de la aplicacion de acuerdo con el plan de pruebas original.
-    \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera codigo de usuarios guardado alli, que obviamente a futuro podria dificultar la interaccion entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro de la plataforma).
-    \item Mayor soporte para caracteristicas de Git como ramas, tags, etc.
-    \item Llevar metadatos de lenguaje de programacion / ejecutor seleccionado para repositorios en GitEDU, para su uso al momento de llamar al API de EduNube, se puede realizar la llamada adecuada (actualmente esta quemada el uso del ejecutor de Python 3).
-    \item Recolleccion de datos para apoyar la toma de decisiones estrategicas.
-    \item Soporte para documentacion en linea, como Wikis basados en Markdown para promover otra manera en que Estudiantes y Profesores pueden expresar problemas y soluciones.
+    \item Utilizar realmente el Navbar de GitEDU, que actualmente solo tiene ''Cerrar sesión'' de forma estática.
+    \item Migrar servicios a Django 2.x (la próxima versión de soporte a largo plazo de Django esta planificado como el 2.3) ya que en realizar esta migración de versión, actualmente se rompe la forma en que se llevan los URIs con un namespace para cada app.
+    \item Automatizar y aumentar las pruebas unitarias de la aplicación de acuerdo con el plan de pruebas original.
+    \item Uso bidireccional del Git (por el momento es unidireccional, GitEDU solo guarda en los repositorios de GitWeb, nunca recupera código de usuarios guardado allí, que obviamente a futuro podría dificultar la interacción entre el usuario y el sistema, en obligarle a siempre editar proyectos dentro de la plataforma).
+    \item Mayor soporte para características de Git como ramas, tags, etc.
+    \item Llevar metadatos de lenguaje de programación / ejecutor seleccionado para repositorios en GitEDU, para su uso al momento de llamar al API de EduNube, se puede realizar la llamada adecuada (actualmente esta quemada el uso del ejecutor de Python 3).
+    \item Recolección de datos para apoyar la toma de decisiones estratégicas.
+    \item Soporte para documentación en linea, como Wikis basados en Markdown para promover otra manera en que Estudiantes y Profesores pueden expresar problemas y soluciones.
 \end{itemize}

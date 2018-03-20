@@ -116,7 +116,7 @@ Como se presenta en la figura \ref{sistema-base}, el sistema base para el desarr
 	tar -axvf nombre.tar.xx -C /opt/ruta/raiz/donde/descomprimir
     	\end{lstlisting}
     \begin{enumerate}
-    	\item PyCharm (Community o Professional Edition\footnote{Se ocupó la versión profesional, en parte por elbuen soporte para el desarrollo con Django) con una licencia estudiantil que actualmente que permite solicitar y renovar año tras año con un correo institucional})
+    	\item PyCharm (Community o Professional Edition\footnote{Se ocupó la versión profesional, en parte por el buen soporte para el desarrollo con Django) con una licencia estudiantil que actualmente que permite solicitar y renovar año tras año con un correo institucional})
         \item DBeaver (Community o Enterprise Edition\footnote{Históricamente siempre han sido gratis ambas versiones con la diferencia que Enterprise Edition no es completamente software libre y agrega soporte para bases de datos no relacionales. Se ocupó la versión Enterprise, de las últimas ofertas gratis antes de que se convierta en un producto de pago, por el mismo motivo de requerir soporte para bases de datos NoSQL como MongoDB y Redis.})
     \end{enumerate}
 \end{enumerate}
@@ -131,7 +131,7 @@ Para dar conexiones hacia el exterior de las maquinas virtuales, se necesita act
 
 \index{Controlar Versiones de Código} \index{Persistir Código}
 \subsubsection{Servidor Local de Git}
-Para gestionar versiones de código escrito y facilitar la integración con sistemas externos y el sistema de virtualización, se levantó un servidor sencillo de Git. La instalacion del mismo se documenta en el Anexo \ref{AnexoC}.
+Para gestionar versiones de código escrito y facilitar la integración con sistemas externos y el sistema de virtualización, se levantó un servidor sencillo de Git. La instalación del mismo se documenta en el Anexo \ref{AnexoC}.
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsubsection{Git Server HTTP Endpoint}
@@ -162,11 +162,11 @@ pipenv lock --requirements | awk '{print $1}' > \
 Se puede encontrar el repositorio para este servicio en \url{https://gitlab.com/nishedcob/GitServerHTTPEndpoint}.
 
 \paragraph{Tokens de Autenticación}
-Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante una interfaz CRUD, construida con formularios de Django. Estos API tokens son construidos bajo el estandar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreta (mediante la función generar sal de bcrypt) y con ello se cifra los  datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente pueda modificar los datos de su API token. El mismo esquema de autenticación para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en la url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creación, lectura, actualización y eliminación de los API Tokens.
+Para el uso del API del servicio de GitServerHTTPEndpoint, se emite tokens mediante una interfaz CRUD, construida con formularios de Django. Estos API tokens son construidos bajo el estándar JWT o JSON Web Tokens donde el servidor (servicio de Django) generar una llave secreta (mediante la función generar sal de bcrypt) y con ello se cifra los  datos sobre el cliente con el fin de poder validar la identidad del mismo mediante el API token sin que el cliente pueda modificar los datos de su API token. El mismo esquema de autenticación para el API se utiliza con el servicio de EduNube. El acceso al mismo se puede encontrar en la url \url{http://10.10.10.1:8020/auth/tokens} y acceder con cualquier cuenta de superusuario para la creación, lectura, actualización y eliminación de los API Tokens.
 
 \paragraph{API externa}
 Los URLs del API de GitServerHTTPEndpoint toman la forma general de: 
-\texttt{/api/<tipo\_de\_objeto>/<accion>/<ruta/de/objeto>}\\
+\texttt{/api/<tipo\_de\_objeto>/<acción>/<ruta/de/objeto>}\\
 donde los tipos de objetos posibles son:
 \begin{itemize}
 	\item \texttt{ns} para los Namespace
@@ -177,7 +177,7 @@ acciones posibles son:
 \begin{itemize}
 	\item \texttt{create} para crear,
 	\item \texttt{edit} para editar y
-    \item Para el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificacion de:
+    \item Para el caso de los archivos, no existe un solo \texttt{edit} si no una subclasificación de:
     \begin{itemize}
     	\item \texttt{edit/mv}
         para alterar la ruta de un archivo y 
@@ -192,7 +192,7 @@ Los URIs del API que operan sobre Namespace, solo aceptan un namespace de parám
 Los URIs del API que operan sobre los repositorios requieren de los parámetros: un namespace y un repositorio igual con un slash de delimitador final por ejemplo: \\
 \texttt{/api/repo/create/nearley/GitEDU/}
 
-Los URIs del API que operan sobre archivos toman de parámetros un namespace, un repositorio y una ruta de archivos que puede llevar cualquier número de slash para indicar los directorios dentro del repositorio selecionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
+Los URIs del API que operan sobre archivos toman de parámetros un namespace, un repositorio y una ruta de archivos que puede llevar cualquier número de slash para indicar los directorios dentro del repositorio seleccionado, pero la misma ruta no puede terminar en un slash, por ejemplo: \\
 \texttt{/api/file/create/nearley/GitEDU/despliegue/Readme.md}
 
 Un cliente ejemplar de todo el API, se puede encontrar con el nombre \\
@@ -201,11 +201,11 @@ Un cliente ejemplar de todo el API, se puede encontrar con el nombre \\
 \index{Sincronizar Notas por LTI} \index{Autenticación LTI}
 \subsection{Ambiente Virtual de LMS \index{LMS} (Moodle)}
 \label{instalacion-moodle}
-Originalmente se planteó trabajar con un LMS como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación de Moodle en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, al final se optó por un levantamiento del mismo en Docker. El levantamento de Moodle en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
+Originalmente se planteó trabajar con un LMS como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma mas liviana y por lo tanto aunque se incluye por este medio la instalación de Moodle en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, al final se optó por un levantamiento del mismo en Docker. El levantamiento de Moodle en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
 
 \index{Persistir Código} \index{Controlar Versiones de Código}
 \subsection{Servidor de Git (GitLab CE)}
-Originalmente se planteó trabajar con GitLab Community Edition como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma más liviana al final se optó por un levantamiento del mismo en Docker. Sin embargo en este documento se incluye la instalación de la primera opción en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, . El levantamento de GitLab en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
+Originalmente se planteó trabajar con GitLab Community Edition como una máquina virtual de Xen, pero con el tiempo, se ha vio la necesidad de consumir todos los servicios posibles de una forma más liviana al final se optó por un levantamiento del mismo en Docker. Sin embargo en este documento se incluye la instalación de la primera opción en una máquina virtual de Xen, detallado en el Anexo \ref{AnexoC}, . El levantamiento de GitLab en Docker se documenta en el capítulo \ref{capitulo6} de Despliegue.
 
 \index{Ejecutar Código}
 \subsection{Servidor de Virtualización}
@@ -291,8 +291,8 @@ Se ha considerado con mayor importancia el Rendimiento y la Seguridad como neces
 En los cuadros \ref{tab:hipervisor-compar-i} y \ref{tab:hipervisor-compar-ii} se presenta las características consideras y un puntaje relativo (sobre 5) dado a cada una de estos de acuerdo a investigaciones, experiencias y opiniones del autor. A continuación se explica el porqué de las valoraciones:
 \begin{description}
 	\item[Xen] como un hipervisor de tipo 1 cuenta con un rendimiento muy alto, especialmente cuando se lo considera la paravirtualización que también soporta sistemas operativos modificados, casi a un nivel nativo. Este hipervisor logra virtualizar todas las capas de un sistema operativo, desde su núcleo hasta el espacio de los usuarios, pero al mismo tiempo dispone de un modelo de seguridad muy bueno. Tiene falla en las herramientas de administración, de los cuales hay muy pocas que están actualizadas. La mejor herramienta de administración es en la Línea de Comandos. Sus cambios frecuentes y documentación desactualizada son un problema para la instalación y mantenimiento. Sin embargo, la experiencia del autor con esta tecnología ha sido muy positiva.
-    \item[KVM] como un hipervisor de tipo uno y medio tiene un nivel más alto que Xen pero no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualización. Aunque es de más alto nivel, se ha xonsiderado otros pasos adicionales para alcanzar un nivel de seguridad equivalente al de Xen. Para su administración cuenta con herramientas muy similares a los de Xen, pero su alto nivel de integración con el API de Libvirt hace que cuente con mejores interfaces para su manejo web. Posiblemente por desconocimiento de las posibilidades para mejorar el rendimiento que se puede aplicar, el autor no ha tenido una experiencia muy positiva con la aplicación de esta tecnología de virtualización.
-    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su técnica de contenerización como un tipo de virtualización, puede dar un mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel Web, por el hecho de que Docker es una tecnología que aún es nueva y que esta en auge. Esto promueve a una gran cantidad de personas en contribuir continuamente con mejoras. La instalación y mantenimiento de Docker es muy sencilla en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
+    \item[KVM] como un hipervisor de tipo uno y medio tiene un nivel más alto que Xen pero no dispone del mismo nivel de rendimiento que ofrece ni la paravirtualización. Aunque es de más alto nivel, se ha considerado otros pasos adicionales para alcanzar un nivel de seguridad equivalente al de Xen. Para su administración cuenta con herramientas muy similares a los de Xen, pero su alto nivel de integración con el API de Libvirt hace que cuente con mejores interfaces para su manejo web. Posiblemente por desconocimiento de las posibilidades para mejorar el rendimiento que se puede aplicar, el autor no ha tenido una experiencia muy positiva con la aplicación de esta tecnología de virtualización.
+    \item[Docker] como un hipervisor de ''tipo tres'' es de muy alto nivel y dispone de una seguridad mucho menor al tener menor aislamiento entre el sistema que provee la virtualización y la virtualizada. Docker tiene mejor rendimiento ya que se virtualiza solo los niveles más altos de un sistema operativo y las aplicaciones que se encuentran por encima. Su técnica de containerización como un tipo de virtualización, puede dar un mejor rendimiento que la paravirtualización. Se considera muy buena las interfaces para utilizar Docker, tanto a nivel de terminal como a nivel Web, por el hecho de que Docker es una tecnología que aún es nueva y que esta en auge. Esto promueve a una gran cantidad de personas en contribuir continuamente con mejoras. La instalación y mantenimiento de Docker es muy sencilla en cualquier plataforma. Debido a su sencillez, alto rendimiento, funcionalidad y utilidad, el autor ha tenido una buena experiencia con el uso de esta tecnología de virtualización. 
 \end{description}
 
 Para calcular los pesos promedio de forma ponderada se aplica la fórmula que se encuentra en la figura \ref{fig:hipervisor-calif-equ}. Las calificaciones promedias se reflejan en el cuadro \ref{tab:hipervisor-compar-promed}. Como se puede observar en el mismo cuadro, frente a los criterios previamente establecidos, Docker se puede considerar la mejor tecnología de virtualización en el proyecto actual con un puntaje de $4.167$, con medio punto más que su competencia mas cercana Xen, $3.667$ y $\frac{5}{6}$ de un punto más que KVM, $3.333$, que está en último lugar.
@@ -326,7 +326,7 @@ Para calcular los pesos promedio de forma ponderada se aplica la fórmula que se
 
 \index{Hipervisor} \index{Virtualización} \index{Contenedor}
 \subsubsection{Servidor de Virtualización Virtualizado}
-Frente las desventajas/problemas que tiene Docker, se ha elegido a Kubernetes como una tecnología complementaria para la orquestación con la nube, y brindar a futuro una mayor independencia a la plataforma EduNube frente a cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube, entre EduNube y los respectivos hipervisores que se puede utilizar, fue OpenStack debido a que es una solución muy completa para el problema actual con más características que de los Kubernetes, pero el mismo, por su gran lista de características es muy pesado y no entraría adecuadamente en la infrastructura actual de la Universidad Técnica Particular de Loja, entonces para ofrecer una solución que cumpla con el contexto actual de la universidad, los Kubernetes ofrecen una buena alternativa que, aunque sea relativamente liviana, ofrece las características necesarias para implementar una solución de ejecucion que sea eficaz y eficiente en la infrastructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y después de forma virtualizada, para ayudar a mitigar algunos de los riesgos asociados con Docker, el servidor. 
+Frente las desventajas/problemas que tiene Docker, se ha elegido a Kubernetes como una tecnología complementaria para la orquestación con la nube, y brindar a futuro una mayor independencia a la plataforma EduNube frente a cualquier hipervisor en particular. El otro candidato considerado para esta capa intermedia de orquestación de nube, entre EduNube y los respectivos hipervisores que se puede utilizar, fue OpenStack debido a que es una solución muy completa para el problema actual con más características que de los Kubernetes, pero el mismo, por su gran lista de características es muy pesado y no entraría adecuadamente en la infraestructura actual de la Universidad Técnica Particular de Loja, entonces para ofrecer una solución que cumpla con el contexto actual de la universidad, los Kubernetes ofrecen una buena alternativa que, aunque sea relativamente liviana, ofrece las características necesarias para implementar una solución de ejecución que sea eficaz y eficiente en la infraestructura actual. Kubernetes ocupa una arquitectura cliente-servidor, motivo por el cual se lo instala en dos fases; primero el cliente y después de forma virtualizada, para ayudar a mitigar algunos de los riesgos asociados con Docker, el servidor. 
 
 \index{Kubernetes}
 \paragraph{Kubernetes}
@@ -337,25 +337,25 @@ La instalación y uso de Kubernetes se encuentra en el Anexo \ref{AnexoC}.
 Para la ejecución de código en Docker, es necesario tener un contenedor de Docker que cumpla con las dependencias requeridas al momento de la ejecución. Los contenedores están basados en Debian y en Alpine Linux.
 
 \subsubsection{Sistema Operativo: Debian GNU/Linux}
-Se considera Debian como una buena base para los contenedores debido a que es bastante conocido, estable, seguro y tiene una amplitd de paquetes que se pueden instalar directamente desde sus repositorios oficiales.
+Se considera Debian como una buena base para los contenedores debido a que es bastante conocido, estable, seguro y tiene una amplitud de paquetes que se pueden instalar directamente desde sus repositorios oficiales.
 
 \subsubsection{Sistema Operativo: Alpine GNU/Linux}
 Alpine Linux es muy utilizado en el mundo de los contenedores (por ejemplo con Docker) y en la nube en general porque es un sistema operativo minimalista que lleva menor peso. Aquí tiene el mismo fin, aunque aveces es mas complicado de manejar y configurar, puede que valga la pena para entornos de producción que necesitan optimizar el uso de sus recursos.
 
 \index{Docker|(}
 \subsubsection{Tipo de Contenedor: Shell-Executor}
-El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes, ya que la imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''Shell-Executor'' es para ejecutar comandos dentro de un contenedor con el shell ''sh'' y forma la base para los otros tipos de contenedores. Tanto en Debian como en Alpine no hay necesidad de instalar más paquetes, ya que la imagen por defecto viene con todo lo necesario. Lo que si se tiene que definir para estos contenedores es un usuario menos privilegiado con el cual se ejecuta los comandos/código dentro del contenedor y una ubicación, un volumen desde el punto de vista de Docker, donde se puede enviar el código a ser ejecutado. La diferencia entre la implementación tanto en Debian y Alpine es la creación de un usuario con menos privilegios en adición a la imagen base que se toma. La implementación del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsubsection{Tipo de Contenedor: Python3-Executor}
-El tipo de contenedor ''Python3-Executor'' es para ejecutar comandos de shell en adición a código de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer de la funcionalidad de ejecutar comandos en un shell. El punto de entrada de ejecución es el archivo ''main.py'' a nivel raíz del repositorio. Tanto Debian como Alpine requieren de la instalación de Python 3, ya que la versión de Python por defecto es 2.7 que actualmente debería considerarsela prácticamente obsoleta. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''Python3-Executor'' es para ejecutar comandos de shell en adición a código de Python 3. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer de la funcionalidad de ejecutar comandos en un shell. El punto de entrada de ejecución es el archivo ''main.py'' a nivel raíz del repositorio. Tanto Debian como Alpine requieren de la instalación de Python 3, ya que la versión de Python por defecto es 2.7 que actualmente debería considerarsela prácticamente obsoleta. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementación del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsubsection{Tipo de Contenedor: PostgreSQL-Executor}
-El tipo de contenedor ''PostgreSQL-Executor'' es para ejecutar comandos de shell en referencia a SQL de PostgreSQL. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer la funcionalidad de ejecutar comandos en un shell. El archivo ''init.sql'' se ejecuta primero y por lo tanto puede ser utilizado para generar y llenar la base de datos. El archivo ''main.sql'' se ejecuta después y por lo tanto podría ser útil para ejecutar comandos SQL definidos por el usuario. Tanto Debian como Alpine requieren de la instalación de PostgreSQL, tanto cliente como servidor. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementacion del mismo se puede encontrar en el Anexo \ref{AnexoD}.
+El tipo de contenedor ''PostgreSQL-Executor'' es para ejecutar comandos de shell en referencia a SQL de PostgreSQL. Se extiende de los contenedores definidos para el ''Shell-Executor'' para proveer la funcionalidad de ejecutar comandos en un shell. El archivo ''init.sql'' se ejecuta primero y por lo tanto puede ser utilizado para generar y llenar la base de datos. El archivo ''main.sql'' se ejecuta después y por lo tanto podría ser útil para ejecutar comandos SQL definidos por el usuario. Tanto Debian como Alpine requieren de la instalación de PostgreSQL, tanto cliente como servidor. Docker requiere que se vuelva a definir los volúmenes y para la adecuada ejecución del código, también se define la ubicación inicial de ejecución como el mismo volumen que se monta desde un sistema de ficheros externo al contenedor. La implementación del mismo se puede encontrar en el Anexo \ref{AnexoD}.
 \index{Docker|)}
 
 \section{GitEDU}
 
-La gestión de dependencias del sistema GitEdu se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado para detectar si es que existe el entorno virtual (lo crea en caso que no exista) y después instala los requerimientos faltantes como son especificados en un archivo aparte ''requirements.txt'' en el que se encuentran las librerías necesarias y sus versiones.
+La gestión de dependencias del sistema GitEDU se maneja con un entorno virtual y el gestor de paquetes de python pip. El siguiente es un script de bash diseñado para detectar si es que existe el entorno virtual (lo crea en caso que no exista) y después instala los requerimientos faltantes como son especificados en un archivo aparte ''requirements.txt'' en el que se encuentran las librerías necesarias y sus versiones.
 
 \begin{lstlisting}
 
@@ -397,7 +397,7 @@ pip freeze > requirements.txt
 Se inicia el proyecto de Django con el comando:
 
 \begin{lstlisting}
-django-admin startproject GitEdu
+django-admin startproject GitEDU
 \end{lstlisting}
 
 También antes de iniciar el desarrollo debe estar configurada la base de datos para proceder a ocuparla.  Esto se documenta en el Anexo \ref{AnexoD}.
@@ -429,10 +429,10 @@ USE_TZ = False
 \end{lstlisting}
 \lstset{language=Bash}
 
-La creacioón de la base de datos NoSQL y su configuración con Django se encuentra en el Anexo \ref{AnexoD}.
+La creación de la base de datos NoSQL y su configuración con Django se encuentra en el Anexo \ref{AnexoD}.
 
 \subsubsection{Automatización del Levantamiento del Servicios / DevStack}
-Para el manejo de dependencias, inicialmente se lo manejó unicamente con Pip y Virtualenv hasta que se descubrió otra herramienta que combina la funcionalidad de ambos en un solo commando: \texttt{pipenv}. El mismo agrega funcionalidades adicionales como validacion del ambiente (sistema operativo / arquitectura / versión exacta de Python) y validación de paquetes (mediante sus hash SHA256). Es por ello que se vio la importancia en cambiar la modalidad con que se llevaba las dependencias del proyecto, aunque también se sigue apoyando el método anterior para quienes no realizan la instalacion de pipenv con pip como root.
+Para el manejo de dependencias, inicialmente se lo manejó únicamente con Pip y Virtualenv hasta que se descubrió otra herramienta que combina la funcionalidad de ambos en un solo comando: \texttt{pipenv}. El mismo agrega funcionalidades adicionales como validación del ambiente (sistema operativo / arquitectura / versión exacta de Python) y validación de paquetes (mediante sus hash SHA256). Es por ello que se vio la importancia en cambiar la modalidad con que se llevaba las dependencias del proyecto, aunque también se sigue apoyando el método anterior para quienes no realizan la instalación de pipenv con pip como root.
 
 Para el fácil levantamiento del DevStack, se realizó dos scripts, de los cuales cada uno detecta la presencia de pipenv para utilizarlo si existe o no existe ocupar la modalidad clásica de virtualenv con pip para gestionar las dependencias. Lo que diferencia los dos scripts es que uno, después de validar/instalar y activar el entorno, ejecuta el servidor en el puerto designado para producción (\texttt{runserver}) mientras que el otro (\texttt{runshell}) abre el shell de Django después de adecuar el entorno.
 
@@ -463,7 +463,7 @@ La máquina virtual de Moodle también debe estar levantada para navegar a \url{
 
 Se da un nombre a la actividad, en este caso ''Prueba 1 Programación''. La mejor forma de poder reutilizar la herramienta externa en varias actividades es de crear una herramienta ''Preconfigurada''. Las opciones elegidas para la misma fueron los siguientes:
 \begin{description}
-	\item[Nombre] GitEdu
+	\item[Nombre] GitEDU
     \item[URL] \url{http://localhost:8000/lti/launch}
     \item[Descripción] Edit Code Online
     \item[Llave de Consumidor] GitEduLMS\_Playground
@@ -492,10 +492,10 @@ Los dos schemas de autenticación implementados, sea la forma clásica con nombr
 
 Se propone tres tablas (EquivalentUser, AuthenticationType, UserAuthentication) en la base de datos expresados como modelos de Django, los mismos que se encargaran de generar las tablas adecuadas en la base de datos a través de su ORM interno.
 
-La tabla EquivalentUser relaciona a los usuarios autenticados de forma clásica con usuarios autenticados por LTI \index{LTI} (porque por cada método de autenticación se crea un nuevo usuario para su uso interno) con el fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. La idea es por ejemplo, si un docente se autentica por LTI \index{LTI} y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catálogo de las formas de autenticación que suporta el sistema y por su naturaleza de catálogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociada con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios. La migracion escrita a mano para llenar la tabla AuthenticationType se puede encontrar en el Anexo \ref{AnexoD}.
+La tabla EquivalentUser relaciona a los usuarios autenticados de forma clásica con usuarios autenticados por LTI \index{LTI} (porque por cada método de autenticación se crea un nuevo usuario para su uso interno) con el fin de permitir relacionar distintos usuarios dentro del sistema quienes representan el mismo individuo natural. La idea es por ejemplo, si un docente se autentica por LTI \index{LTI} y también por usuario y contraseña, para el sistema esta ocupando dos usuarios diferentes pero para el docente esta accediendo el mismo sistema y por lo tanto el comportamiento del sistema, sin tomar en cuenta como se autentica, debe ser igual y debe tener acceso a los mismos contenidos. La tabla AuthenticationType es un catálogo de las formas de autenticación que suporta el sistema y por su naturaleza de catálogo se llena con las migraciones. Y finalmente la tabla UserAuthentication documenta el tipo de autenticación asociada con un usuario para dar el contexto al sistema que necesita para manejar distintos datos de los diferentes tipos de usuarios. La migración escrita a mano para llenar la tabla AuthenticationType se puede encontrar en el Anexo \ref{AnexoD}.
 
 \subsection{Accesibilidad a Datos de Autenticación de LTI}
-Las vistas y settings definidas para exponer datos de la autenticacion por LTI se presenta en el Anexo\ref{AnexoD}.
+Las vistas y settings definidas para exponer datos de la autenticación por LTI se presenta en el Anexo\ref{AnexoD}.
 
 \index{Calificar Código}
 \subsection{Establecer un Modelo de Base de Datos}
@@ -535,9 +535,9 @@ El modelo inicial de academicApp permite a los docentes y administradores defini
   \item AcademicSubCategory
   \item AcademicAssignment
 \end{enumerate}
-ClassSubject define el tipo de materia que es, por ejemplo ''Programación'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducción a la Programación''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en categorías con distintos pesos, por ejemplo ''Exámenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las categorías. AcademicAssignment es la abstracción que se da a los itemes calificadas dentro de una subcatagoría.
+ClassSubject define el tipo de materia que es, por ejemplo ''Programación'' o ''Base de Datos''. Course define una materia ofrecida, por ejemplo ''Introducción a la Programación''. Section define paralelos ofrecidos de forma general, por ejemplo ''A'', ''B'', ''C'', etc\ldots{} Classroom une las dos tablas anteriores de materia de oferta con paralelo para definir aulas de una materia. ClassroomTeacher define el docente asignado a una aula y el peso que tiene el docente en la nota final de los estudiantes de esta aula. Esto es con un fin de permitir varios docentes con varios pesos dentro de la misma aula emitiendo calificaciones distintas para estudiantes previo a un promedio ponderado del estudiante. ClassroomStudent relaciona estudiantes y aulas. AcademicCategory provee docentes con la oportunidad de disponer de una herramienta para organizar las calificaciones de sus estudiantes en categorías con distintos pesos, por ejemplo ''Exámenes'', ''Deberes'', ''Talleres'', etc\ldots{} AcademicSubCategory viene de la misma linea para permitir subdivisiones de las categorías. AcademicAssignment es la abstracción que se da a los ítems calificadas dentro de una subcatagoría.
 
-El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo el modelo de tres niveles definido previamente de categorías, subcatagorías y itemes de subcatagorías con tres tablas:
+El modelo inicial de gradesApp permite persistir notas para cada estudiante bajo el modelo de tres niveles definido previamente de categorías, subcatagorías y ítems de subcatagorías con tres tablas:
 \begin{enumerate}
   \item StudentCategoryGrade
   \item StudentSubCategoryGrade
@@ -567,7 +567,7 @@ Para el editor de código en linea, es necesaria extender la funcionalidad del m
 \item GroupMembership
 \end{enumerate}
 
-Dentro de ideApp se crea cuatro entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y, de forma opcional, un grupo dueño quien esta encargado de la administración del mismo, una representacion de archivos, misma que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/u otras acciones sobre código para usuarios no autorizados. Estas entidades como tablas en la base de datos son:
+Dentro de ideApp se crea cuatro entidades para representar repositorios (una colección de archivos asociados con un proyecto), el mismo tiene capacidad de un usuario y, de forma opcional, un grupo dueño quien esta encargado de la administración del mismo, una representación de archivos, misma que entre sus metadatos esta un lenguaje asociado para ayudar con el manejo del mismo a nivel de editor y a nivel de otros tipo de gestión (como ejecución y compilación), y finalmente membresía de personas y grupos en repositorios con una finalidad de llevar mas adelante un sistema de permisos para restringir acceso y/u otras acciones sobre código para usuarios no autorizados. Estas entidades como tablas en la base de datos son:
 \begin{enumerate}
 \item Repository
 \item File
@@ -583,7 +583,7 @@ Para la Persistencia de Código se considera dos backends con una posibilidad de
     \item GitLab CE, como servidor de Git, manejado con una combinación de la API del mismo y comandos de Git para el manejo de cambios en repositorios.
 \end{itemize}
 
-Para el mismo es necesario manejar una API interna estandarizada. La solución propuesta utiliza programación orientado a objetos y un modelo estándar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos lógicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarización se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objetos de datos con una serie de clases genéricas, las cuales pueden ser sobrescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos también se encuentran en el mismo archivo de generics.py y tambien dentro del Apéndice \ref{AnexoF}.
+Para el mismo es necesario manejar una API interna estandarizada. La solución propuesta utiliza programación orientado a objetos y un modelo estándar de namespace (como usuario o grupo) que contiene repositorios (que representan proyectos o conjuntos lógicos de archivos) y a su vez contienen dichos archivos. La clase base para estandarización se llama CodePersistenceBackend y se encuentra en generics.py del paquete ideApp.CodePersistenceBackends. Para el manejo de datos dentro del API interna, se estandariza los objetos de datos con una serie de clases genéricas, las cuales pueden ser sobrescritas en cualquier backend con una finalidad de agregar o cambiar funcionalidad existente. Los mismos también se encuentran en el mismo archivo de generics.py y también dentro del Apéndice \ref{AnexoF}.
 
 En el settings, hay una necesidad de definir los backends de código y su prioridad:
 \lstset{language=Python}
@@ -613,7 +613,7 @@ GITLAB_CONNECT_TO = 'gitlab'
 
 Por el momento se ha optado por dejar desactivado el backend de GitLab ya que el mismo no esta implementado para ser utilizado.
 
-El gestor de persistencia de código  carga todos los backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado asi mismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos tipos de persistencia:
+El gestor de persistencia de código  carga todos los backends de persistencia de código que encuentra en el settings para gestionar las conexiones a las mismas. El mismo esta implementado así mismo como un CodePersistenceBackend para permitir que se puede remplazar fácilmente a futuro si se da el caso. Implementa dos tipos de persistencia:
 \begin{itemize}
 	\item Lectura (read)
 	\item Escritura (write) 
@@ -731,19 +731,19 @@ GITLAB_SERVERS = {
 \end{lstlisting}
 \lstset{language=Bash}
 
-La implementacion de la conexion al API de GitLab se presenta en el Anexo \ref{AnexoD}.
+La implementación de la conexión al API de GitLab se presenta en el Anexo \ref{AnexoD}.
 
-Aunque originalmente se planifico el uso de GitLab como backend de persistencia de codigo (en repositorios, a diferencia de GitEduERP que ocupó snippets), finalmente no se ocupó el mismo por cinco razones:
+Aunque originalmente se planifico el uso de GitLab como backend de persistencia de código (en repositorios, a diferencia de GitEduERP que ocupó snippets), finalmente no se ocupó el mismo por cinco razones:
 \begin{enumerate}
-  \item La complejidad del API frente la documentación no es tan clara para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso, ni en el ambiente de desarollo, ni de produccion), y eso genera un factor limitante frente al tiempo disponible para la implementacion de la misma.
+  \item La complejidad del API frente la documentación no es tan clara para el community edition (esta mucho mejor documentado el enterprise edition al cual no se tuvo acceso, ni en el ambiente de desarrollo, ni de producción), y eso genera un factor limitante frente al tiempo disponible para la implementación de la misma.
   \item Un gran inestabilidad del servicio, Gitlab CE.
-  \item La falta de recursos en los ambientes de produccion y de desarollo que empeora problemas de estabilidad.
+  \item La falta de recursos en los ambientes de producción y de desarrollo que empeora problemas de estabilidad.
   \item La simplicidad de utilizar el sistema de ficheros local directamente con GitWeb para estar disponible por HTTP.
   \item Frente a las necesidades actual del proyecto, mientras no sea necesario exponer el servidor de Git a los usuarios finales, no hay necesidad de un servidor de Git de tanta complejidad como el Gitlab.
 \end{enumerate}
 
 \subsection{Aspectos Sociales}
-Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir de forma independiente de las funcionalidades principales de la misma aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto, ''socialApp'', como fue creada previamente. A futuro se considera el desarollo del mismo para promover interaccion entre estudiantes y tambien otra herramienta de comunicacion e colaboracion entre estudiantes y sus professores que viene a ser un elemento critico para el proceso educativo.
+Para temas de organización, se ha considerado que aquellos componentes de la aplicación que tienen que ver con interacción social deben existir de forma independiente de las funcionalidades principales de la misma aplicación. Es con este fin que los componentes del mismo se desarrollaron en un ''app'' distinto, ''socialApp'', como fue creada previamente. A futuro se considera el desarrollo del mismo para promover interacción entre estudiantes y también otra herramienta de comunicación e colaboración entre estudiantes y sus profesores que viene a ser un elemento critico para el proceso educativo.
 
 \index{Ejecutar Código}
 \section{EduNube}
@@ -792,7 +792,7 @@ Se inicia el proyecto de Django con el comando:
 django-admin startproject EduNube
 \end{lstlisting}
 
-También antes de iniciar el desarrollo debe estar configurado el base de datos para ser usada. Esta configuracion lo puede encontrar en el Anexo \ref{AnexoE}.
+También antes de iniciar el desarrollo debe estar configurado el base de datos para ser usada. Esta configuración lo puede encontrar en el Anexo \ref{AnexoE}.
 
 Ahora se puede migrar las tablas iniciales de Django:
 \begin{lstlisting}
@@ -820,47 +820,47 @@ USE_TZ = False
 \end{lstlisting}
 \lstset{language=Bash}
 
-La configuracion de base de datos no relacional se encuentra en el Anexo E.
+La configuración de base de datos no relacional se encuentra en el Anexo E.
 
 \subsection{Autenticación}
 El diseño planteado para el sistema EduNube propone dos tipos de autenticación:
 \begin{itemize}
-\item Clasica para usuarios humanas, orientada solo a la administracion del mismo sistema.
+\item Clásica para usuarios humanas, orientada solo a la administración del mismo sistema.
 \item Basada en Criptografía Asimétrica para ofrecer mayor seguridad y permitir integración con otros sistemas como GitEDU.
 \end{itemize}
 
-\subsubsection{Autenticación Clasica}
+\subsubsection{Autenticación Clásica}
 Para la administración del sistema por operador humano se considera necesario la autenticación clásica mediante usuario y contraseña. Para la misma se uso la implementación del framework Django y código reutilizado de GitEDU que tiene el mismo propósito.
 
 \subsubsection{Autenticación basado en Criptografía Asimétrica}
 Para ofrecer mayor seguridad al sistema de ejecución de código, EduNube, se considera más óptimo utilizar una sistema de autenticación basado en criptografía asimétrica de una manera similar a las llaves de SSH, donde el servidor tiene la oportunidad de conocer bien la identidad del cliente. Aunque no se ha logrado encontrar una implementación factible para la solución planteada, se considera como una solución utilizar una especie de API token similar a otros sistemas. Para generar el token, se ha logrado encontrar un estándar, JSON Web Tokens, que tiene la finalidad de ayudar al servidor identificar y verificar la validez de un cliente desconfiable mediante datos que el servidor mismo cifra con un tipo de llave privada.
 
-La logica para gestionar los API tokens se encuentra en el Anexo \ref{AnexoE}.
+La lógica para gestionar los API tokens se encuentra en el Anexo \ref{AnexoE}.
 
 \index{Ejecutar Código}
 \subsection{Ejecución de Código en Linea}
-La ejecucion de codigo se divide en dos componentes principales que se complementan para dar funcionalidad completa frente a las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el codigo y despues en el curso del ciclo de vida del codigo, antes, durante y despues de su ejecuccion se maneja mediante una API externa.
+La ejecución de código se divide en dos componentes principales que se complementan para dar funcionalidad completa frente a las necesidades requeridas. Primero en el sistema de plantillas se define y se controla el ambiente en el cual se ejecuta el código y después en el curso del ciclo de vida del código, antes, durante y después de su ejecución se maneja mediante una API externa.
 
 \subsection{Metadatos de Plantillas}
-Para ofrecer mayor seguridad y funcionalidad a la ejecucion de codigo en el sistema, se basa en lo que son plantillas de ejecucion diseñados especifcamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyiendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recien se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecuccion y tambien la ubicacion del repositorio padre. La herrencia se basa en la creacion de un nuevo repositorio donde se copia uno por uno los contenidos (archivos) de cada repositorio, desde el inicio de la cadena de herrencia (una plantilla hecha por la administracion para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se puede copiar en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de acceso que tiene el usuario final sobre lo que esta ejecutando. 
+Para ofrecer mayor seguridad y funcionalidad a la ejecución de código en el sistema, se basa en lo que son plantillas de ejecución diseñados específicamente para suportar herencia por parte de los usuarios. Estos utilizan varios mecanismos para llegar a este fin, incluyendo listas negras de archivos que no se puede sobre escribir plantillas que extienden la plantillas (\texttt{.edunubeignore} y\\ \texttt{.edunubeignore.children}), listas blancas de que se debe incluir de archivos cuando recién se crea una nueva plantilla o proyecto en base a la plantilla (.templateinclude), y tokens cifrados para validar repositorios frente un registro centralizado en la base de datos que pertenece al servicio de ejecución y también la ubicación del repositorio padre. La herencia se basa en la creación de un nuevo repositorio donde se copia uno por uno los contenidos (archivos) de cada repositorio, desde el inicio de la cadena de herencia (una plantilla hecha por la administración para un lenguaje en especifico) hasta el final con el repositorio del usuario, mediante llamadas de \texttt{rsync} y el uso de las listas negras para controlar lo que no se puede copiar en cada fase. De esta forma no se toca la historia original del repositorio del usuario y se puede controlar con mayor facilidad el nivel de acceso que tiene el usuario final sobre lo que esta ejecutando. 
 \subsubsection{.edunubeignore}
-El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede heredar de ningun otro repositorio que le sigue en la herencia de repositorios. Un ejemplo de los mismos serian archivos propios de Git.
+El \texttt{.edunubeignore} de un repositorio especifica los archivos de un mismo repositorio que no se deben copiar a sus repositorios hijos, y que tampoco se puede heredar de ningún otro repositorio que le sigue en la herencia de repositorios. Un ejemplo de los mismos serian archivos propios de Git.
 \paragraph{.edunubeignore.children}
-El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios hereditarios. Un ejemplo de los mismos que se involucran en este conjunto de metadatos serian los shell scripts base que ocupa el backend de virtualizacion para iniciar la ejecuccion.
+El \texttt{.edunubeignore.children} tiene una funcionalidad similar al \texttt{.edunubeignore} pero permite el copia de archivos desde la repositorio actual, pero no de sus repositorios hereditarios. Un ejemplo de los mismos que se involucran en este conjunto de metadatos serian los shell scripts base que ocupa el backend de virtualización para iniciar la ejecución.
 \subsubsection{.repospec}
-El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede decifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecucion en base a la inyeccion de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavia se puede mejorar, el cual se discuta en trabajos futuros.
+El \texttt{.repospec} es un mecanismo que utiliza JWT para dar mayor seguridad de emitir un token que solo puede descifrar el servidor para determinar el repositorio padre de un repositorio. Esto ayuda prevenir ataques contra plantillas de ejecución en base a la inyección de plantillas maliciosas porque realizar un ataque de este tipo requiere que se rompe la cadena de confianza. Este mecanismo todavía se puede mejorar, el cual se discuta en trabajos futuros.
 \subsubsection{.templateinclude}
-El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecuccion que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el profesor realiza el repositorio de la plantilla determina tanto el entorno de ejecucion (donde atraves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobreescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atraves del \texttt{.templateinclude}). Un ejemplo del mismo, serian los archivos de un cierto lenguaje de programacion que deben ser expuestas al usuario final para que el mismo los puede editar.
+El \texttt{.templateinclude} es un archivo de metadatos exclusivo a las plantillas de ejecución que determine cual archivos de la plantilla se debe copiar al nuevo repositorio. Esto archivo, combinado con la manera en que el profesor realiza el repositorio de la plantilla determina tanto el entorno de ejecución (donde atreves del mecanismo del \texttt{.edunube}/\texttt{.edunubeignore.children} los archivos que un estudiante no puede sobrescribir de la plantilla) y del estado inicial del proyecto/archivos expuestos al estudiante (atreves del \texttt{.templateinclude}). Un ejemplo del mismo, serian los archivos de un cierto lenguaje de programación que deben ser expuestas al usuario final para que el mismo los puede editar.
 % CODE TODO: GitEDU Templates Unimplemented
 
 \subsection{API Externa}
-Similar al servicio de GitServerHTTPEndpoint, EduNube tambien ofrece una API externa que requiere un token de autenticacion para su funcionamiento como se lo detalle a continuacion. Ademas se considera critico tres componentes del API:
+Similar al servicio de GitServerHTTPEndpoint, EduNube también ofrece una API externa que requiere un token de autenticación para su funcionamiento como se lo detalle a continuación. Además se considera critico tres componentes del API:
 \begin{enumerate}
-  \item API de RepoSpec donde se implementa la creacion y actualizacion de los RepoSpecs de tal forma que al momento de enviar un repositorio a ser ejecutado, se puede validar que el repositorio esta autorizado para ejecucion y de donde previene la herencia del mismo de tal forma que el usuario final no tenga mucho libertad a modificar el mismo y realizar cambios indebidos al entorno de ejecucion.
-  \item API de Ejecuccion donde se solita ejecucion de codigo. Esto agrega la solicitud a la cola de trabajo para que el mismo puede ser ejecutado cuando hay disponibilidad de los recursos limitados.
-  \item API de Trabajos (por Lotes) es para soliticar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo.
+  \item API de RepoSpec donde se implementa la creación y actualización de los RepoSpecs de tal forma que al momento de enviar un repositorio a ser ejecutado, se puede validar que el repositorio esta autorizado para ejecución y de donde previene la herencia del mismo de tal forma que el usuario final no tenga mucho libertad a modificar el mismo y realizar cambios indebidos al entorno de ejecución.
+  \item API de Ejecución donde se solicita ejecución de código. Esto agrega la solicitud a la cola de trabajo para que el mismo puede ser ejecutado cuando hay disponibilidad de los recursos limitados.
+  \item API de Trabajos (por Lotes) es para solicitar el estado actual de un trabajo y a lo que finaliza, los resultados del mismo.
 \end{enumerate}
-\subsubsection{Autenticacion para el API}
+\subsubsection{Autenticación para el API}
 Igual que el sistema de GitServerHTTPEndpoint, EduNube utiliza JWT tokens para autorizar y validar llamadas a su API. Estos tokens  los pueden administrar usuarios con los permisos adecuados, o por defecto (si no se crea los permisos), solo por superusuarios, en el URI \texttt{http://10.10.10.1:8010/auth/tokens}. Dentro de aquello interfaz existe la posibilidad de crear tokens, visualizar los mismos \\
 (\texttt{http://10.10.10.1:8010/auth/token/<app\_name>.json}), actualizar un token (\texttt{http://10.10.10.1:8010/auth/token/edit/<app\_name>/}), cambiar el secreto (llave privado) de un token\\
 (\texttt{http://10.10.10.1:8010/auth/token/secret/<app\_name>/}), y eliminar un token (\texttt{http://10.10.10.1:8010/auth/token/delete/<app\_name>/}).
@@ -884,65 +884,65 @@ EDUNUBE_CONFIG = {
 
 \subsubsection{RepoSpec API}
 Los URIs del API de RepoSpecs de EduNube toma la forma general de: \\
-\texttt{POST /api/repospec/<operacion>} \\
+\texttt{POST /api/repospec/<operación>} \\
 donde las operaciones posibles son los siguientes:
 \begin{itemize}
-	\item \texttt{create} para crear un nuevo RepoSpec. Parametros del \texttt{POST} son:
+	\item \texttt{create} para crear un nuevo RepoSpec. Parámetros del \texttt{POST} son:
     \begin{description}
     	\item[token] con el API token que se genera previamente.
-        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, solo se lo persiste internamente, pero a futuro se deberia  agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI a traves del cual se puede acceder al repositorio padre del actual, eso forma la base para la herencia de los repositorios. Solo en el caso de un repositorio plantilla de ejecuccion que no hereda de ninguna otra plantilla,es permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantiles, debe ser obligatorio un valor valido. Pero dicha validacion queda para ser implementada a futuro.
+        \item[repo] con el nombre del repositorio, actualmente no se utiliza este valor, solo se lo persiste internamente, pero a futuro se debería  agregarlos a las validaciones de los RepoSpec para prevenir ataques de robo de RepoSpec de un repositorio para otro.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI a través del cual se puede acceder al repositorio padre del actual, eso forma la base para la herencia de los repositorios. Solo en el caso de un repositorio plantilla de ejecución que no hereda de ninguna otra plantilla,es permitido que este vacío, en cualquier otro caso, incluyendo todos los casos estudiantiles, debe ser obligatorio un valor valido. Pero dicha validación queda para ser implementada a futuro.
     \end{description}
-    \item \texttt{get} para leer un RepoSpec existente. Parametros del \texttt{POST} son:
+    \item \texttt{get} para leer un RepoSpec existente. Parámetros del \texttt{POST} son:
     \begin{description}
     	\item[token] con el API token que se genera previamente.
-        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repospec\_token}.
-        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repo}.
+        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la búsqueda. Dentro de los parámetros del \texttt{POST} debe estar mínimo este parámetro o el \texttt{repospec\_token}.
+        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la búsqueda. Dentro de los parámetros del \texttt{POST} debe estar mínimo este parámetro o el \texttt{repo}.
     \end{description}
-    \item \texttt{get\_or\_create} para leer un RepoSpec existente o si no existe, crearla. Parametros del \texttt{POST} son:
+    \item \texttt{get\_or\_create} para leer un RepoSpec existente o si no existe, crearla. Parámetros del \texttt{POST} son:
     \begin{description}
     	\item[token] con el API token que se genera previamente.
-        \item[repo] con el nombre del repositorio actual para la busqueda/creacion.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro.
-        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda.
+        \item[repo] con el nombre del repositorio actual para la búsqueda/creación.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecución que no hereda de ningún otra plantilla, debe ser permitido que este vacío, en cualquier otro caso, incluyendo todos los casos estudiantiles, debe ser obligado un valor valido aquí. Pero dicho validación queda para ser implementado a futuro.
+        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la búsqueda.
     \end{description}
-    \item \texttt{edit} para modificar un RepoSpec existente. Parametros del \texttt{POST} son:
+    \item \texttt{edit} para modificar un RepoSpec existente. Parámetros del \texttt{POST} son:
     \begin{description}
     	\item[token] con el API token que se genera previamente.
-        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repospec\_token}.
-        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la busqueda. Dentro de los parametros del \texttt{POST} debe estar minimo este parametro o el \texttt{repo}.
-        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecuccion que no hereda de ningun otra plantilla, debe ser permitido que este vacio, en cualquier otro caso, incluyendo todos los casos estudiantils, debe ser obligado un valor valido aqui. Pero dicho validacion queda para ser implementado a futuro. Si se deja este sin valor (considerado como Null o en Python None), el comportamiento por defecto es de sobreescribir el valor anterior.
-        \item[\textit{new\_repo}] \textit{de forma opcional} con el nuevo nombre del repositorio actual para cambiar la misma, no incluir este parametro deja el RepoSpec con el mismo nombre de repositorio que ya tiene.
-        \item[\textit{regen\_secret\_key}] \textit{de forma opcional} con una bandera booleano que indica si se debe generar un nuevo secreto (llave privada) para el RepoSpec. Si no se incluye el parametro o lo deja el valor en false, se lo interpeta como mantener el mismo secreto actual para cifrar el token actualizado, caso contrario se interpreta cualquier otro valor como true, y procede a cambiar el secreto. 
+        \item[\textit{repo}] \textit{de forma opcional} con el nombre del repositorio actual para la búsqueda. Dentro de los parámetros del \texttt{POST} debe estar mínimo este parámetro o el \texttt{repospec\_token}.
+        \item[\textit{repospec\_token}] \textit{de forma opcional} con el token del repospec actual para la búsqueda. Dentro de los parámetros del \texttt{POST} debe estar mínimo este parámetro o el \texttt{repo}.
+        \item[\textit{parent}] \textit{de forma opcional} con el URI con el cual se puede acceder al repositorio padre del repositorio actual, eso forma la base para la herencia de los repositorios. Solo en el caso de una repositorio plantilla de ejecución que no hereda de ningún otra plantilla, debe ser permitido que este vacío, en cualquier otro caso, incluyendo todos los casos estudiantiles, debe ser obligado un valor valido aquí. Pero dicho validación queda para ser implementado a futuro. Si se deja este sin valor (considerado como Null o en Python None), el comportamiento por defecto es de sobrescribir el valor anterior.
+        \item[\textit{new\_repo}] \textit{de forma opcional} con el nuevo nombre del repositorio actual para cambiar la misma, no incluir este parámetro deja el RepoSpec con el mismo nombre de repositorio que ya tiene.
+        \item[\textit{regen\_secret\_key}] \textit{de forma opcional} con una bandera booleano que indica si se debe generar un nuevo secreto (llave privada) para el RepoSpec. Si no se incluye el parámetro o lo deja el valor en false, se lo interpreta como mantener el mismo secreto actual para cifrar el token actualizado, caso contrario se interpreta cualquier otro valor como true, y procede a cambiar el secreto. 
     \end{description}
 \end{itemize}
-\subsubsection{Ejecuccion API}
-Los URIs del API de Ejecuccion de EduNube toma la forma general de: \\
-\texttt{POST /api/execute/create/<lenguage\_ejecutor>/<namespace>/} \\
+\subsubsection{Ejecución API}
+Los URIs del API de Ejecución de EduNube toma la forma general de: \\
+\texttt{POST /api/execute/create/<lenguaje\_ejecutor>/<namespace>/} \\
 \texttt{<repositorio>/} \\
 donde los ejecutores de lenguajes posibles son los siguientes:
 \begin{description}
 	\item[shell] que ejecuta comandos de terminal ocupando el interprete \texttt{/bin/sh} (puede ver el imagen de Docker \texttt{shell-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
-	\item[python3] que ejecuta codigo de Python 3 utilizando \texttt{virtualenv} y \texttt{pip} para manejo de dependencias (puede ver el imagen de Docker \texttt{python3-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
+	\item[python3] que ejecuta código de Python 3 utilizando \texttt{virtualenv} y \texttt{pip} para manejo de dependencias (puede ver el imagen de Docker \texttt{python3-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 	\item[postgresql] que ejecuta sentencias de SQL de PostgreSQL (puede ver el imagen de Docker \texttt{postgresql-code-executor} para entender su funcionamiento) dentro del cluster de Kubernetes.
 \end{description}
-El unico parametro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la peticion de ejecuccion viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parametros contiene el \texttt{id} con el cual se puede realizar consultas del estado de trabajo y ver sus resultados cuando el mismo termina.
+El único parámetro que toma esta parte del API es el token definida previamente ya que con el mismo se valida que la petición de ejecución viene de un fuente autorizado para el mismo. El mismo API devuelva un JSON que dentro de sus parámetros contiene el \texttt{id} con el cual se puede realizar consultas del estado de trabajo y ver sus resultados cuando el mismo termina.
 \subsubsection{Jobs API}
-Una vez que se realiza una peticion de un trabajo, se puede consultar el estatus y al finalizar se puede observar resultados del mismo con su identificador unico devuelto por el API de Ejeccucion. Estas llamadas toman una forma general de: \texttt{POST /api/execute/<operacion\_de\_consulta>/<lenguaje\_ejecutor>/<id>/}
+Una vez que se realiza una petición de un trabajo, se puede consultar el estatus y al finalizar se puede observar resultados del mismo con su identificador único devuelto por el API de Ejecución. Estas llamadas toman una forma general de: \texttt{POST /api/execute/<operación\_de\_consulta>/<lenguaje\_ejecutor>/<id>/}
 Donde operaciones de la consulta son los siguientes:
 \begin{description}
 	\item[status] devuelve en formato JSON si un trabajo existe o no y en caso de que existe, si el mismo ha terminado.
     \item[result] devuelve en formato JSON la salida del trabajo con la finalidad de que se puede presentar el mismo al usuario final.
 \end{description}
-y lenguaje ejecutores son los mismos que se definen para el API anterior. Actualmente el valor de lenguaje no tiene ningun efecto sobre la consulta en el backend, pero seria mala practica de programacion que se solicita el trabajo con un lenguaje y despues consulta su estado o resultado con otro ya que, a futuro, si se implementa otros backends de virtualizacion para distintas lenguaje ejecutores, puede que este parametro se convierte en lo unico que les distingue para realizar la consulta en el backend adecuado. Todo operacion contra este API debe llevar su respectivo \texttt{token} definido anteriormente para validar que realmente puede realizar estas consultas.
-\subsubsection{Passthrough de API de EduNube en GitEDU para su consumo via AJAX}
-Con la finalidad de que el usuario final de GitEDU tenga acceso a los APIs de Ejecuccion y de Trabajos de EduNube, se realiza un mapeo de URIs entre los dos sistemas:
+y lenguaje ejecutores son los mismos que se definen para el API anterior. Actualmente el valor de lenguaje no tiene ningún efecto sobre la consulta en el backend, pero seria mala practica de programación que se solicita el trabajo con un lenguaje y después consulta su estado o resultado con otro ya que, a futuro, si se implementa otros backends de virtualización para distintas lenguaje ejecutores, puede que este parámetro se convierte en lo único que les distingue para realizar la consulta en el backend adecuado. Todo operación contra este API debe llevar su respectivo \texttt{token} definido anteriormente para validar que realmente puede realizar estas consultas.
+\subsubsection{Passthrough de API de EduNube en GitEDU para su consumo con AJAX}
+Con la finalidad de que el usuario final de GitEDU tenga acceso a los APIs de Ejecución y de Trabajos de EduNube, se realiza un mapeo de URIs entre los dos sistemas:
 \begin{description}
-	\item[Ejeccucion] \textit{GitEDU}: \texttt{POST} \texttt{/ide/execute/<namespace>/<repositorio>} \\
+	\item[Ejecución] \textit{GitEDU}: \texttt{POST} \texttt{/ide/execute/<namespace>/<repositorio>} \\
     $\rightarrow$ \textit{EduNube}: \texttt{POST} \texttt{/api/execute/create/<lenguaje\_ejecutor>/} \\
-    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadata (definido con el ayuda del usuario, especificamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio.
+    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadatos (definido con el ayuda del usuario, específicamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio.
     \item[Trabajos] \textit{GitEDU}: \texttt{POST} \texttt{/ide/execute/<op>/<namespace>/<repositorio>} \\
     $\rightarrow$ \textit{EduNube}: \texttt{POST} \texttt{/api/execute/<op>/<lenguaje\_ejecutor>/} \\
-    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadata (definido con el ayuda del usuario, especificamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio y \texttt{<op>} es la operacion \texttt{status} o \texttt{result} como se lo ha definido anteriormente.
+    \texttt{<namespace>/<repositorio>/} donde \texttt{<lenguaje\_ejecutor>} se extrae GitEDU de su metadatos (definido con el ayuda del usuario, específicamente en este caso el lenguaje/ejecutor del proyecto) para el repositorio y \texttt{<op>} es la operación \texttt{status} o \texttt{result} como se lo ha definido anteriormente.
 \end{description}
-Actualmente estas vistas quieren como minimo que el usuario se encuentra logueado, pero a futuro se podria integrar con un sistema de permisos con la finalidad de restringir cuales usuarios y/o grupos pueden ejecutar un proyecto.
+Actualmente estas vistas quieren como mínimo que el usuario se encuentra logueado, pero a futuro se podría integrar con un sistema de permisos con la finalidad de restringir cuales usuarios y/o grupos pueden ejecutar un proyecto.
